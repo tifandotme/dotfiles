@@ -1,30 +1,31 @@
-#!/bin/bash
+#!/bin/sh
 
-alias jobs="jobs -l"
-
-# yadm
-alias yl="yadm list -a"
-
-alias bathelp='bat --plain --language=help'
-help() {
-    "$@" --help 2>&1 | bathelp
-}
-
-#============= ALIASES
-# ls
-# -Gg = long listing like -l, but without group and owner
-# -h = human-readable size
-# -p = add / to directories
-#alias ls='ls -Gghp --time-style=long-iso --color=auto --group-directories-first'
-#alias lsa='ls -Gghpa --time-style=long-iso --color=auto --group-directories-first'
-alias ls='exa -lh --group-directories-first'
-alias lsa='exa -lha --group-directories-first'
-alias cat='bat'
-alias cl='clear'
-alias yd="yt-dlp -S 'ext,res:1080,br,codec' --embed-metadata "
+# core-utils
 alias rm='rm -rf'
 alias npm='npm --no-fund'
 
+# yadm
+alias yadml="yadm list -a"
+alias yadma="yadm add"
+alias yadmu="yadm add -u"
+alias yadmp="yadm commit -m "add/update" && yadm push"
+alias yadms="yadm status"
+
+# exa (needs nerd-fonts)
+alias ls='exa -lhF --group-directories-first --icons -s extension'
+alias lsa='exa -lhFa --group-directories-first --icons -s extension'
+
+# bat
+alias cat='bat'
+# use help [program] instead of [program] --help (this will colorize it)
+help() {
+  "$@" --help 2>&1 | bat --plain --language=help
+}
+
+# yt-dlp
+alias yd="yt-dlp -S 'ext,res:1080,br,codec' --embed-metadata "
+
+# gnome DE
 edit() {
   [ -f "$1" ] && gnome-text-editor -- "$1" &> /dev/null &
 }
