@@ -1,6 +1,6 @@
 [user]
 	name = Tifan
-	email = tifan@proton.me
+	email = ${EMAIL}
 [color]
 	ui = auto
 [init]

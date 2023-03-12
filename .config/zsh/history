@@ -5,8 +5,24 @@
 : 1678584751:0;yadm add .config/git/config
 : 1678584756:0;yadm add .config/npm/npmrc
 : 1678584757:0;clear
-: 1678584760:0;yadm status
-: 1678584765:0;yadm commit -m "add"
-: 1678584766:3;yadm push
-: 1678584823:0;dnf autoremove
 : 1678584885:0;yadm add .config/zsh/history
+: 1678584914:0;yadm commit
+: 1678584931:0;yadm commit -m "add"
+: 1678584934:0;yadm push
+: 1678585238:0;dnf autoremove
+: 1678585269:0;yadm remotes -v
+: 1678585272:0;yadm remote
+: 1678585279:0;yadm remote get-url origin
+: 1678585283:0;yadm status
+: 1678585932:0;echo $EMAIL
+: 1678586000:0;git config user.email
+: 1678586012:0;exec zsh
+: 1678586013:0;git config user.email
+: 1678586022:0;echo $EMAIL
+: 1678586038:0;git config user.email
+: 1678586555:0;git config --global
+: 1678586565:0;git config --global --get-all
+: 1678586569:0;git config list
+: 1678586572:0;git config --list
+: 1678586704:0;yadm status
+: 1678586714:0;yadm add -u

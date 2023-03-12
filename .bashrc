@@ -17,8 +17,9 @@ PS1="\[$(tput setaf 1)\]\W\[$(tput setaf 2)\] $ \[$(tput sgr0)\]"
 # load aliasrc
 [ -f "$HOME/.config/aliasrc" ] && . "$HOME/.config/aliasrc"
 
-# load secret keys
-[ -f "$HOME/.config/envkeys" ] && . "$HOME/.config/envkeys"
+# load environment variables
+[ -f "$HOME/.config/envrc" ] && . "$HOME/.config/envrc"
+[ -f "$HOME/.config/envrc.secret" ] && . "$HOME/.config/envrc.secret"
 
 # pnpm
 export PNPM_HOME="/home/tifan/.local/share/pnpm"
