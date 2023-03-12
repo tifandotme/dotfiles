@@ -1,0 +1,7 @@
+[user]
+	name = Tifan
+	email = tifan@proton.me
+[color]
+	ui = auto
+[init]
+	defaultbranch = main
