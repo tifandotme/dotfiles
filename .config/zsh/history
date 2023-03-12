@@ -1,0 +1,12 @@
+: 1678584623:0;alias
+: 1678584629:9;help git
+: 1678584640:1;tldr git
+: 1678584734:0;git config user.name
+: 1678584751:0;yadm add .config/git/config
+: 1678584756:0;yadm add .config/npm/npmrc
+: 1678584757:0;clear
+: 1678584760:0;yadm status
+: 1678584765:0;yadm commit -m "add"
+: 1678584766:3;yadm push
+: 1678584823:0;dnf autoremove
+: 1678584885:0;yadm add .config/zsh/history
