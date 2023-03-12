@@ -40,14 +40,9 @@
 : 1678589000:0;yadm add .config/autostart/gnome-terminal.desktop
 : 1678589009:0;yadm add .config/envrc
 : 1678589055:0;cat yadm encrypt
-: 1678589564:0;git config --list
-: 1678589814:0;pnpm up
 : 1678590055:0;pnpm list -g
-: 1678591079:0;pn up
 : 1678591161:0;Projects/puri/
 : 1678591307:0;sudo dnf autoremove
-: 1678591327:0;dnf hist userinstalled
-: 1678591345:0;sudo dnf up
 : 1678592331:0;touch hello.ts
 : 1678592366:0;cat /usr/local/bin/tsc
 : 1678592384:0;cat /usr/local/lib
@@ -155,7 +150,6 @@
 : 1678599179:0;curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=7.29 sh -
 : 1678599195:0;curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=7.29.0 sh -
 : 1678599574:0;help pn
-: 1678599576:0;help pnpm
 : 1678599600:0;.local
 : 1678599602:0;share
 : 1678599603:0;pnpm
@@ -176,7 +170,6 @@
 : 1678600076:0;pn remove -g ts-node
 : 1678600087:0;pn -g add ts-node
 : 1678600342:0;pn add -g typescript
-: 1678600353:0;pn -g list
 : 1678600401:0;pn -g i nodemon
 : 1678600430:0;Projects/ts-playground/
 : 1678600495:0;pn list
@@ -184,10 +177,8 @@
 : 1678600556:0;pn -g i @swc/code @swc/cli
 : 1678600563:0;pn -g i @swc/core @swc/cli
 : 1678600613:0;pn i -g firebase-tools
-: 1678600653:0;pn ls -g
 : 1678600654:0;pn ls
 : 1678600664:0;nodemon hello.ts
-: 1678600673:0;swc
 : 1678600678:0;rm hello.js
 : 1678600680:0;swc hello.ts
 : 1678600703:0;swc hello.ts | nodemon
@@ -195,7 +186,6 @@
 : 1678600729:0;tsc hello.ts | nodemon
 : 1678600747:0;nodemon hello.js
 : 1678606051:0;mkdir tss
-: 1678606053:0;tss
 : 1678606063:0;pn create vite
 : 1678606083:0;vite-project
 : 1678606096:0;cat tsconfig.
@@ -215,34 +205,25 @@
 : 1678607974:0;yadm list -a
 : 1678608001:0;cat yadm/encrypt
 : 1678608007:0;yadm encrypt
-: 1678608033:0;code .config/aliasrc
-: 1678608104:0;alias
 : 1678608108:0;yadm status
 : 1678608114:0;ya
 : 1678608194:0;status
-: 1678608200:0;yal
 : 1678608217:0;ys
-: 1678608218:0;yas
-: 1678608224:0;yau
 : 1678608265:0;help git
 : 1678608317:0;git -C ~/Documents/Notes add .
 : 1678608321:0;git -C ~/Documents/Notes status
 : 1678608385:0;git -C ~/Documents/Notes commit -m "save"
 : 1678608390:0;git -C ~/Documents/Notes push
 : 1678608401:0;code aliasrc
-: 1678608552:0;..
 : 1678608556:0;Documents/Notes/
 : 1678608624:0;git status
 : 1678608637:0;obu
 : 1678609200:0;gh
-: 1678609203:0;help gh
-: 1678609216:0;gh repo
 : 1678609230:0;Projects/
 : 1678609233:0;puri
 : 1678609236:0;gh repo view
 : 1678609244:0;gh repo view --web
 : 1678609331:0;asda
-: 1678609336:0;deno run https://deno.land/std/examples/welcome.ts
 : 1678609346:0;curl -fsSL https://deno.land/install.sh | sh
 : 1678609415:0;code .config/envrc
 : 1678609966:0;.deno
@@ -253,25 +234,19 @@
 : 1678610331:0;code ~/config/aliasrc
 : 1678610346:0;code ~/.config/envrc
 : 1678610457:0;mv .deno .local/share/deno
-: 1678610459:0;lsa
 : 1678610466:0;.local/share
 : 1678610478:0;bin
-: 1678610479:0;ls
 : 1678610537:0;deno --help
 : 1678610555:0;/home/tifan/.local/share/deno/bin/deno
-: 1678610572:0;clear
-: 1678610576:0;deno
 : 1678610580:0;echo $PATH
 : 1678610593:0;ts
 : 1678610595:0;tsc
 : 1678610633:0;exec zsh
 : 1678610638:0;deno
-: 1678610648:0;help deno
 : 1678610658:0;help gh
 : 1678610691:0;gh ssh-key
 : 1678610694:0;gh ssh-key list
 : 1678610710:0;gh repo -h
-: 1678610721:0;gh repo list
 : 1678610744:0;gh repo create
 : 1678610773:0;gh repo list
 : 1678610786:0;gh repo view 0h
@@ -285,62 +260,26 @@
 : 1678610887:0;gh delete
 : 1678610895:0;gh browse
 : 1678610901:0;gh repo
-: 1678610906:0;gh repo delete HAHA
 : 1678610928:0;gh auth refresh -h github.com -s delete_repo
 : 1678610954:0;gh repo delete HAHA
-: 1678610961:0;clear
-: 1678610961:0;ls
-: 1678610962:0;clear
-: 1678610964:0;lsa
-: 1678610978:0;yas
-: 1678610983:0;yau
 : 1678611077:0;deno help
-: 1678611080:0;help deno
 : 1678611101:0;deno run https://deno.land/std/examples/welcome.ts
 : 1678611263:0;Projects
-: 1678611264:0;clear
-: 1678611264:0;ls
-: 1678611268:0;tss
-: 1678611268:0;ls
 : 1678611279:0;touch dinosaur.ts
 : 1678611288:0;code dinosaur.ts
-: 1678611303:0;..
 : 1678611304:0;tss
-: 1678611305:0;ls
-: 1678611306:0;clear
 : 1678611548:0;deno run dinosaur.ts ads
-: 1678611621:0;ls
-: 1678611623:0;clear
-: 1678611624:0;ls
 : 1678612143:0;deno run index.ts asd asd asd
 : 1678613410:0;yads
-: 1678613411:0;yas
-: 1678613414:0;clear
-: 1678613416:0;yas
-: 1678613417:0;yal
 : 1678613434:0;cat ~/.config/envrc
 : 1678613505:0;echo $XDG_CONFIG_HOME
 : 1678613873:0;deno repl
-: 1678615146:0;ls
-: 1678615147:0;clear
-: 1678617501:0;yas
-: 1678617503:0;alias
 : 1678617513:0;whence
 : 1678617523:0;whence man
 : 1678617557:0;help yt-dlp
 : 1678617598:0;yt-dlp -U
 : 1678617637:0;yt-dlp --list-extractors
-: 1678617659:0;alias yd
-: 1678617661:0;clear
-: 1678617664:0;alias yd
 : 1678617889:0;Videos
-: 1678617891:0;ls
-: 1678617897:0;YouTube/
-: 1678617898:0;ls
-: 1678618008:0;..
-: 1678618010:0;ls
-: 1678618010:0;clear
-: 1678618011:0;ls
 : 1678618012:0;xattr
 : 1678618022:0;dnf info xattr
 : 1678618091:0;sudo dnf install xattr
@@ -349,19 +288,12 @@
 : 1678618213:0;getfattr -dm- Why-ARROGANCE-is-a-Necessity-_3.mp4
 : 1678618241:0;exa
 : 1678618324:0;exa -F
-: 1678618329:0;ls
 : 1678618343:0;./Jordan-Peterson-life-Hack_5.mp4
-: 1678618405:0;find . -type f -perm /111
 : 1678618419:0;find . -type f -perm /1
 : 1678618421:0;find . -type f -perm /111
 : 1678618433:0;find . -type f -perm /111 -exec chmod -x {} \;
-: 1678618434:0;ls
-: 1678618437:0;clear
-: 1678618440:0;ls
 : 1678618443:0;YouTube/
-: 1678618444:0;ls
 : 1678619506:0;yd https://frontendmasters.com/courses/react-typescript-v2/
-: 1678621592:0;clear
 : 1678622031:0;Videos/YouTube/
 : 1678622033:0;yd https://www.youtube.com/watch?v=d56mG7DezGs
 : 1678622036:0;yd
@@ -369,8 +301,6 @@
 : 1678622058:0;yd "https://www.youtube.com/watch?v=d56mG7DezGs"
 : 1678623010:0;deno --watch
 : 1678623015:0;help deno
-: 1678623030:0;deno run -h
-: 1678623062:0;ls
 : 1678623067:0;deno run --watch index.ts
 : 1678623168:0;deno run --help
 : 1678623172:0;deno run -h
@@ -379,15 +309,122 @@
 : 1678624982:0;flatpak up
 : 1678624986:0;flatpak update
 : 1678625039:0;code .config/aliasrc
-: 1678625045:0;up
 : 1678625086:0;help flatpak
 : 1678625093:0;flatpak update -h
 : 1678625121:0;flatpak update --noninteractive
 : 1678625131:0;dnf up -h
 : 1678625188:0;sudo dnf up -q
 : 1678625273:0;alias
-: 1678625284:0;up
 : 1678625572:0;alias up
-: 1678625575:0;clear
-: 1678625576:0;yas
 : 1678625579:0;yau
+: 1678625701:0;pn up
+: 1678627031:0;help pnpm
+: 1678627053:0;code .zshrc
+: 1678627107:0;pn -g list
+: 1678627118:0;pn rm tsnode
+: 1678627123:0;pn rm ts-node
+: 1678627140:0;pn rm -g ts-node nodemon
+: 1678627154:0;pn ls -g
+: 1678627165:0;wc
+: 1678627167:0;swc
+: 1678627188:0;pn rm -g @swc/cli @swc/core
+: 1678627198:0;pn help
+: 1678627281:0;pnpm up
+: 1678627284:0;pnpm -g up
+: 1678627324:0;pn rm -g typescript
+: 1678627333:0;pn -g ls
+: 1678627343:0;pn up -g pnp
+: 1678627348:0;pn up -g pnpn
+: 1678627353:0;pn up -g pnpm
+: 1678627360:0;pnpm -h
+: 1678627386:0;pnpm run
+: 1678627393:0;pn -v
+: 1678627399:0;dnf info pnpm
+: 1678627406:0;pnpm hist userinstalled
+: 1678627411:0;dnf hist userinstalled
+: 1678627424:0;sudo dnf rm xev
+: 1678627469:0;sudo dnf rm fira-code-fonts
+: 1678627487:0;rm .lesshst .ts_node_repl_history
+: 1678627496:0;Documents/
+: 1678627505:0;lf
+: 1678627510:0;dnf search lf
+: 1678627517:0;dnf info lf
+: 1678627629:0;dnf search thunar
+: 1678627639:0;sudo dnf i thunar
+: 1678627645:0;sudo dnf install thunar
+: 1678627659:0;sudo dnf install thunar pcmanfm
+: 1678627805:0;sudo dnf copr enable atim/joshuto -y
+: 1678627811:0;sudo dnf install joshuto
+: 1678627910:0;sudo dnf rm thunar pcmanfm
+: 1678627961:0;joshuto -h
+: 1678627970:0;man joshuto
+: 1678627974:0;help joshuto
+: 1678627978:0;joshuto
+: 1678628015:0;sudo dnf rm joshuto
+: 1678628022:0;dnf copr -h
+: 1678628057:0;dnf copr remove
+: 1678628067:0;dnf copr remote joshuto
+: 1678628073:0;dnf copr remove joshuto
+: 1678628082:0;dnf copr list
+: 1678628094:0;dnf copr remove atim/joshuto
+: 1678628097:0;sudo dnf copr remove atim/joshuto
+: 1678628285:0;yas
+: 1678628288:0;yal
+: 1678628335:0;up
+: 1678628377:0;rm .quokka/
+: 1678628406:0;.wallaby/
+: 1678628415:0;..
+: 1678628417:0;rm .wallaby/
+: 1678628418:0;clear
+: 1678628418:0;ls
+: 1678628429:0;.config/
+: 1678628437:0;cat nodemon.json
+: 1678628442:0;rm nodemon.json
+: 1678628445:0;cat Trolltech.conf
+: 1678628452:0;rm Trolltech.conf
+: 1678628453:0;lsa
+: 1678628473:0;code user-dirs.
+: 1678628490:0;code user-dirs.dirs
+: 1678628637:0;..
+: 1678628641:0;.config/
+: 1678628647:0;code user-dirs.dirs
+: 1678629088:0;help flatpak
+: 1678629102:0;flatpak config -h
+: 1678629113:0;flatpak config --list
+: 1678629133:0;flatpak repo
+: 1678629138:0;flatpak repo --help
+: 1678629146:0;flatpak remotes
+: 1678629165:0;help flatpak
+: 1678629171:0;flatpak list
+: 1678629183:0;flatpak rm Smile
+: 1678629186:0;flatpak rm smile
+: 1678629191:0;flatpak remove smile
+: 1678629231:0;help flatpak
+: 1678629250:0;flatpak run -h
+: 1678629278:0;flatpak history
+: 1678629291:0;flatpak list
+: 1678629314:0;flatpak clean
+: 1678629318:0;flatpak --help
+: 1678629366:0;flatpak uninstall --unused
+: 1678629409:0;flatpak --installations
+: 1678629423:0;flatpak list
+: 1678629435:0;flatpak uninstall Mesa
+: 1678629441:0;flatpak uninstall gl
+: 1678629474:0;flatpak remove peek
+: 1678629491:0;flatpak list
+: 1678629502:0;flatpak list -h
+: 1678629519:0;flatpak list -d
+: 1678629524:0;flatpak list
+: 1678629528:0;flatpak list -h
+: 1678629540:0;flatpak list -app
+: 1678629543:0;flatpak list --app
+: 1678629550:0;flatpak list --runtimes
+: 1678629552:0;flatpak list --runtime
+: 1678629558:0;flatpak list --list
+: 1678629560:0;flatpak list --app
+: 1678629582:0;code .config/aliasrc
+: 1678629599:0;code ~/.config/aliasrc
+: 1678629685:0;clear
+: 1678629770:0;yadm add .config/user-dirs.dirs
+: 1678629774:0;yas
+: 1678629780:0;yau
