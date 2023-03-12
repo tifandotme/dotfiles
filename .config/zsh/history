@@ -26,3 +26,9 @@
 : 1678586572:0;git config --list
 : 1678586704:0;yadm status
 : 1678586714:0;yadm add -u
+: 1678586716:0;yadm status
+: 1678586726:0;yadm commit -m "add"
+: 1678586728:0;yadm push
+: 1678586856:0;git config --list
+: 1678586885:0;yadm status
+: 1678586889:0;yadm add -u
