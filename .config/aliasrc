@@ -21,7 +21,8 @@ alias ncdu="ncdu -re"
 # arch linux specific?
 # alias makepkg="makepkg -fsri"
 
-alias npm="npm --no-fund"
+alias pn="pnpm"
+alias npm="pnpm"
 
 # exa (needs nerd-fonts)
 alias ls='exa -lhF --group-directories-first --icons -s extension'

@@ -1,5 +1,5 @@
 export XDG_CONFIG_HOME=~/.config
-export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
+export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/rc
 
 # used in zsh (still looking for a better place)
 HISTFILE=~/.config/zsh/history

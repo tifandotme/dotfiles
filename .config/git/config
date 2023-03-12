@@ -4,4 +4,4 @@
 [color]
 	ui = auto
 [init]
-	defaultbranch = main
+	defaultbranch = master
