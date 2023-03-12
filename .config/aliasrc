@@ -1,15 +1,27 @@
 #!/bin/sh
 
 # core-utils
-alias rm='rm -rf'
-alias npm='npm --no-fund'
+alias rm="rm -rf"
+alias mv="mv -i"
+alias cp="cp -ri"
+alias mkdir="mkdir -p"
+alias grep="grep --color=auto"
+alias diff="diff --color=auto"
+alias ping="ping -c 3"
+alias dmesg="dmesg -H"
+alias date="date '+%A, %B %d, %Y [%T]'"
+alias df="df -h"
+alias lsblk="lsblk -o NAME,FSTYPE,LABEL,SIZE,FSUSE%,FSAVAIL,MOUNTPOINT"
+alias du="du -h"
+alias du1="du --max-depth=1"
 
-# yadm
-alias yadml="yadm list -a"
-alias yadma="yadm add"
-alias yadmu="yadm add -u"
-alias yadmp="yadm commit -m "add/update" && yadm push"
-alias yadms="yadm status"
+# needs ncdu
+alias ncdu="ncdu -re"
+
+# arch linux specific?
+# alias makepkg="makepkg -fsri"
+
+alias npm="npm --no-fund"
 
 # exa (needs nerd-fonts)
 alias ls='exa -lhF --group-directories-first --icons -s extension'
@@ -27,5 +39,5 @@ alias yd="yt-dlp -S 'ext,res:1080,br,codec' --embed-metadata "
 
 # gnome DE
 edit() {
-  [ -f "$1" ] && gnome-text-editor -- "$1" &> /dev/null &
+  [ -f "$1" ] && gnome-text-editor -- "$1" &
 }

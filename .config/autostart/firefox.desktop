@@ -1,0 +1,5 @@
+[Desktop Entry]
+Exec=firefox %u
+Terminal=false
+Type=Application
+StartupNotify=false
