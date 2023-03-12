@@ -1,4 +1,3 @@
-: 1678584623:0;alias
 : 1678584629:9;help git
 : 1678584640:1;tldr git
 : 1678584734:0;git config user.name
@@ -226,10 +225,14 @@
 : 1678607974:0;yadm list -a
 : 1678608001:0;cat yadm/encrypt
 : 1678608007:0;yadm encrypt
-: 1678608018:0;yadm status
 : 1678608033:0;code .config/aliasrc
 : 1678608046:0;code aliasrc
-: 1678608103:0;exec zsh
 : 1678608104:0;alias
 : 1678608108:0;yadm status
 : 1678608114:0;ya
+: 1678608191:0;exec zsh
+: 1678608194:0;status
+: 1678608200:0;yal
+: 1678608217:0;ys
+: 1678608218:0;yas
+: 1678608224:0;yau
