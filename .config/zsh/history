@@ -294,3 +294,100 @@
 : 1678610964:0;lsa
 : 1678610978:0;yas
 : 1678610983:0;yau
+: 1678611077:0;deno help
+: 1678611080:0;help deno
+: 1678611101:0;deno run https://deno.land/std/examples/welcome.ts
+: 1678611263:0;Projects
+: 1678611264:0;clear
+: 1678611264:0;ls
+: 1678611268:0;tss
+: 1678611268:0;ls
+: 1678611279:0;touch dinosaur.ts
+: 1678611288:0;code dinosaur.ts
+: 1678611303:0;..
+: 1678611304:0;tss
+: 1678611305:0;ls
+: 1678611306:0;clear
+: 1678611548:0;deno run dinosaur.ts ads
+: 1678611621:0;ls
+: 1678611623:0;clear
+: 1678611624:0;ls
+: 1678612143:0;deno run index.ts asd asd asd
+: 1678613410:0;yads
+: 1678613411:0;yas
+: 1678613414:0;clear
+: 1678613416:0;yas
+: 1678613417:0;yal
+: 1678613434:0;cat ~/.config/envrc
+: 1678613505:0;echo $XDG_CONFIG_HOME
+: 1678613873:0;deno repl
+: 1678615146:0;ls
+: 1678615147:0;clear
+: 1678617501:0;yas
+: 1678617503:0;alias
+: 1678617513:0;whence
+: 1678617523:0;whence man
+: 1678617557:0;help yt-dlp
+: 1678617598:0;yt-dlp -U
+: 1678617637:0;yt-dlp --list-extractors
+: 1678617659:0;alias yd
+: 1678617661:0;clear
+: 1678617664:0;alias yd
+: 1678617889:0;Videos
+: 1678617891:0;ls
+: 1678617897:0;YouTube/
+: 1678617898:0;ls
+: 1678618008:0;..
+: 1678618010:0;ls
+: 1678618010:0;clear
+: 1678618011:0;ls
+: 1678618012:0;xattr
+: 1678618022:0;dnf info xattr
+: 1678618091:0;sudo dnf install xattr
+: 1678618131:0;ls --extended
+: 1678618195:0;getfattr
+: 1678618213:0;getfattr -dm- Why-ARROGANCE-is-a-Necessity-_3.mp4
+: 1678618241:0;exa
+: 1678618324:0;exa -F
+: 1678618329:0;ls
+: 1678618343:0;./Jordan-Peterson-life-Hack_5.mp4
+: 1678618405:0;find . -type f -perm /111
+: 1678618419:0;find . -type f -perm /1
+: 1678618421:0;find . -type f -perm /111
+: 1678618433:0;find . -type f -perm /111 -exec chmod -x {} \;
+: 1678618434:0;ls
+: 1678618437:0;clear
+: 1678618440:0;ls
+: 1678618443:0;YouTube/
+: 1678618444:0;ls
+: 1678619506:0;yd https://frontendmasters.com/courses/react-typescript-v2/
+: 1678621592:0;clear
+: 1678622031:0;Videos/YouTube/
+: 1678622033:0;yd https://www.youtube.com/watch?v=d56mG7DezGs
+: 1678622036:0;yd
+: 1678622045:0;alias yd
+: 1678622058:0;yd "https://www.youtube.com/watch?v=d56mG7DezGs"
+: 1678623010:0;deno --watch
+: 1678623015:0;help deno
+: 1678623030:0;deno run -h
+: 1678623062:0;ls
+: 1678623067:0;deno run --watch index.ts
+: 1678623168:0;deno run --help
+: 1678623172:0;deno run -h
+: 1678623226:0;deno run -q --watch index.ts
+: 1678624973:0;sudo dnf up
+: 1678624982:0;flatpak up
+: 1678624986:0;flatpak update
+: 1678625039:0;code .config/aliasrc
+: 1678625045:0;up
+: 1678625086:0;help flatpak
+: 1678625093:0;flatpak update -h
+: 1678625121:0;flatpak update --noninteractive
+: 1678625131:0;dnf up -h
+: 1678625188:0;sudo dnf up -q
+: 1678625273:0;alias
+: 1678625284:0;up
+: 1678625572:0;alias up
+: 1678625575:0;clear
+: 1678625576:0;yas
+: 1678625579:0;yau
