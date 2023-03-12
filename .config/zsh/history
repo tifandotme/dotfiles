@@ -88,3 +88,15 @@
 : 1678589000:0;yadm add .config/autostart/gnome-terminal.desktop
 : 1678589009:0;yadm add .config/envrc
 : 1678589019:0;yadm add -u
+: 1678589023:0;yadm commit -m "add"
+: 1678589027:0;yadm push
+: 1678589035:0;yadm list -a
+: 1678589055:0;cat yadm encrypt
+: 1678589070:0;yadm encrypt
+: 1678589088:0;yadm status
+: 1678589090:0;clear
+: 1678589093:0;yadm list -a
+: 1678589564:0;git config --list
+: 1678589676:0;clear
+: 1678589680:0;yadm status
+: 1678589686:0;yadm add -u
