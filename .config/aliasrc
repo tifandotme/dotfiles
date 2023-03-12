@@ -24,6 +24,8 @@ alias ncdu="ncdu -re"
 alias pn="pnpm"
 alias npm="pnpm"
 
+alias ya="yadm add -u && yadm commit -m 'add/update' && yadm push"
+
 # exa (needs nerd-fonts)
 alias ls='exa -lhF --group-directories-first --icons -s extension'
 alias lsa='exa -lhFa --group-directories-first --icons -s extension'

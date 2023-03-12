@@ -15,7 +15,6 @@
 : 1678586555:0;git config --global
 : 1678586565:0;git config --global --get-all
 : 1678586569:0;git config list
-: 1678588089:0;cat /etc/npmrc
 : 1678588100:0;ls /usr/local
 : 1678588306:0;npm token list
 : 1678588320:0;npm login
@@ -43,26 +42,15 @@
 : 1678589000:0;yadm add .config/autostart/gnome-terminal.desktop
 : 1678589009:0;yadm add .config/envrc
 : 1678589055:0;cat yadm encrypt
-: 1678589070:0;yadm encrypt
-: 1678589093:0;yadm list -a
 : 1678589564:0;git config --list
-: 1678589680:0;yadm status
-: 1678589686:0;yadm add -u
-: 1678589691:0;yadm commit -m "add"
-: 1678589693:0;yadm push
-: 1678589779:0;help pnpm
-: 1678589810:0;pn
 : 1678589814:0;pnpm up
 : 1678590055:0;pnpm list -g
-: 1678590596:0;pn list
 : 1678591079:0;pn up
 : 1678591161:0;Projects/puri/
-: 1678591278:0;lsa
 : 1678591307:0;sudo dnf autoremove
 : 1678591327:0;dnf hist userinstalled
 : 1678591345:0;sudo dnf up
 : 1678592331:0;touch hello.ts
-: 1678592356:0;which tsc
 : 1678592366:0;cat /usr/local/bin/tsc
 : 1678592384:0;cat /usr/local/lib
 : 1678592388:0;ls /usr/local/lib
@@ -74,14 +62,12 @@
 : 1678592911:0;mv testing-ts/ ts-playground
 : 1678592918:0;ts playground
 : 1678593266:0;alias rm
-: 1678593270:0;rm hello.js
 : 1678593275:0;mv hello.ts ts-playground/
 : 1678593332:0;tsc --noEmitOnError hello.ts
 : 1678593468:0;tsc --all
 : 1678593491:0;man tsc
 : 1678593501:0;tsc --all | grep project
 : 1678593647:0;ts-node
-: 1678593667:0;pn list -g
 : 1678594011:0;help ts-node
 : 1678594200:0;npm -g i@swc/core
 : 1678594205:0;npm -g i @swc/core
@@ -92,8 +78,6 @@
 : 1678594330:0;npm config
 : 1678594437:0;alias md
 : 1678594443:0;alias mkdir
-: 1678594449:0;mkdir tss
-: 1678594451:0;tss
 : 1678594460:0;npm init
 : 1678594482:0;npm i -D swc
 : 1678594489:0;npm i -D @swc/core
@@ -133,34 +117,21 @@
 : 1678596572:0;tsc --target ES2021 hello.ts
 : 1678596603:0;tsc --target ES5 hello.ts hello2.js
 : 1678596711:0;Projects/puri
-: 1678596721:0;..
 : 1678596725:0;ts-playground/
 : 1678596730:0;tsc --target ES5 hello.ts --outFile hel.js
 : 1678596753:0;tsc --swc
-: 1678597160:0;swc
 : 1678597227:0;pnpm run build
-: 1678597254:0;pn -g list
-: 1678597257:0;npm -g list
-: 1678597321:0;ls
-: 1678597571:0;clear
 : 1678597585:0;npm -g install @swc/cli
 : 1678597595:0;sud onpm -g install @swc/cli
 : 1678597599:0;sudo onpm -g install @swc/cli
 : 1678597609:0;sudo npm -g install @swc/cli
 : 1678597673:0;pnpm i -g typescript
-: 1678597679:0;pn setup
-: 1678597695:0;exec zsh
-: 1678597696:0;clear
-: 1678597703:0;~
 : 1678597708:0;pn i -g typescript
-: 1678597724:0;which tsc
-: 1678597729:0;npm -g list
 : 1678597771:0;npm ls -g --depth=0
 : 1678597788:0;npm ls -g --depth=0 | awk -F/ '/node_modules/ && !/\/npm$/ {print $NF}'
 : 1678597799:0;npm ls -g --depth=0 | awk -F/ '/node_modules/ && !/\/npm$/ {printf $NF}'
 : 1678597819:0;npm -g remove firebase-tools
 : 1678597826:0;sudo npm -g remove firebase-tools
-: 1678597837:0;npm -g list
 : 1678597873:0;sudo npm -g remote typescript ts-node pnpm npm nodemon @swc/core @swc/cli
 : 1678597883:0;sudo npm -g remove typescript ts-node pnpm npm nodemon @swc/core @swc/cli
 : 1678597887:0;npm -g list
@@ -170,32 +141,21 @@
 : 1678597908:0;sudo dnf remove npm
 : 1678597920:0;npm
 : 1678597925:0;cler
-: 1678597928:0;clear
-: 1678597931:0;tsc
 : 1678597934:0;which tsc
 : 1678597941:0;p -g list
-: 1678597944:0;pn -g list
 : 1678597957:0;p -g i nodemon
-: 1678597960:0;pn -g i nodemon
 : 1678598026:0;cat $PNPM_HOME
 : 1678598028:0;echo $PNPM_HOME
 : 1678598047:0;rm $PNPM_HOME
 : 1678598056:0;ls .local/share
 : 1678598058:0;ls .local/share/pnpm
-: 1678598061:0;clear
-: 1678598078:0;curl -fsSL https://get.pnpm.io/install.sh | sh -
 : 1678598272:0;sudo curl -fsSL https://get.pnpm.io/install.sh | sh -
 : 1678598432:0;ls .local/share/
 : 1678598435:0;ls pnpm
 : 1678598447:0;which wget
 : 1678598449:0;wget -qO- https://get.pnpm.io/install.sh | sh -
-: 1678598654:0;ls
 : 1678598655:0;lsa
-: 1678598677:0;pnpm
 : 1678598698:0;curl -fsSL https://get.pnpm.io/install.sh
-: 1678598709:0;curl -fsSL https://get.pnpm.io/install.sh | sh -
-: 1678598749:0;clear
-: 1678598750:0;ls
 : 1678598921:0;curl -fsSL https://get.pnpm.io/install.sh | sh -
 : 1678599179:0;curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=7.29 sh -
 : 1678599195:0;curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=7.29.0 sh -
@@ -205,18 +165,12 @@
 : 1678599600:0;.local
 : 1678599602:0;share
 : 1678599603:0;pnpm
-: 1678599604:0;ls
-: 1678599609:0;clear
-: 1678599610:0;..
 : 1678599625:0;p
-: 1678599631:0;pn -g list
 : 1678599637:0;p setup
 : 1678599641:0;pn setup
-: 1678599657:0;pn -g add ts-node
 : 1678599721:0;pnpm config set auto-install-peers true
 : 1678599726:0;pn config -h
 : 1678599731:0;pn config list
-: 1678599748:0;cat .config/npm/npmrc
 : 1678599868:0;pn config
 : 1678599884:0;pn config -g list
 : 1678599917:0;pnpm config -g set auto-install-peers true
@@ -226,30 +180,16 @@
 : 1678600062:0;pn list -g
 : 1678600069:0;pn remote -g ts-node
 : 1678600076:0;pn remove -g ts-node
-: 1678600081:0;pn -g list
 : 1678600087:0;pn -g add ts-node
-: 1678600297:0;clear
-: 1678600297:0;ls
-: 1678600309:0;pn -g list
 : 1678600342:0;pn add -g typescript
 : 1678600353:0;pn -g list
-: 1678600372:0;swc
 : 1678600401:0;pn -g i nodemon
 : 1678600430:0;Projects/ts-playground/
-: 1678600430:0;clear
-: 1678600431:0;ls
-: 1678600462:0;clear
-: 1678600462:0;ls
-: 1678600465:0;swc
 : 1678600467:0;tsc
 : 1678600495:0;pn list
 : 1678600530:0;nodemon
-: 1678600539:0;nodemon hello.ts
 : 1678600556:0;pn -g i @swc/code @swc/cli
 : 1678600563:0;pn -g i @swc/core @swc/cli
-: 1678600596:0;clear
-: 1678600599:0;pn ls -g
-: 1678600604:0;pn ls
 : 1678600613:0;pn i -g firebase-tools
 : 1678600653:0;pn ls -g
 : 1678600654:0;pn ls
@@ -261,31 +201,35 @@
 : 1678600714:0;swc hello.ts | nodemon -
 : 1678600729:0;tsc hello.ts | nodemon
 : 1678600747:0;nodemon hello.js
-: 1678606044:0;..
-: 1678606045:0;ls
 : 1678606051:0;mkdir tss
 : 1678606053:0;tss
 : 1678606063:0;pn create vite
 : 1678606083:0;vite-project
-: 1678606084:0;clear
-: 1678606085:0;ls
 : 1678606096:0;cat tsconfig.
 : 1678606101:0;cat tsconfig.conf
 : 1678606106:0;cat tsconfig.json
-: 1678606115:0;ls
 : 1678606118:0;vite-project/
-: 1678606120:0;ls
-: 1678606260:0;clear
 : 1678607756:0;..
 : 1678607757:0;~
 : 1678607767:0;cat .config/pnpm/rc
-: 1678607773:0;cat .config/npm/npmrc
 : 1678607799:0;yadm add .config/pnpm/rc
 : 1678607814:0;mv .config/npm/npmrc .config/npm/rc
 : 1678607819:0;cat .config/npm/npmrc
-: 1678607823:0;yadm status
 : 1678607837:0;yadm add .config/npm/rc
 : 1678607848:0;code .config/envrc
-: 1678607863:0;yadm status
-: 1678607876:0;code .config/aliasrc
 : 1678607910:0;yadm add -u
+: 1678607922:0;yadm commit -m "add"
+: 1678607925:0;yadm push
+: 1678607946:0;clear
+: 1678607967:0;.config
+: 1678607968:0;ls
+: 1678607974:0;yadm list -a
+: 1678608001:0;cat yadm/encrypt
+: 1678608007:0;yadm encrypt
+: 1678608018:0;yadm status
+: 1678608033:0;code .config/aliasrc
+: 1678608046:0;code aliasrc
+: 1678608103:0;exec zsh
+: 1678608104:0;alias
+: 1678608108:0;yadm status
+: 1678608114:0;ya
