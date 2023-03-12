@@ -1,7 +1,15 @@
-export XDG_CONFIG_HOME=~/.config
+export XDG_CONFIG_HOME=/home/tifan/.config
+
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/rc
 
-# used in zsh (still looking for a better place)
+export DENO_INSTALL="/home/tifan/.local/share/deno"
+export PNPM_HOME="/home/tifan/.local/share/pnpm"
+
+# additional environment variables
+
+export PATH="$PATH:$DENO_INSTALL/bin:$PNPM_HOME"
+
+# used byu zsh (still looking for a better place)
 HISTFILE=~/.config/zsh/history
 HISTSIZE=1000
 SAVEHIST=1000

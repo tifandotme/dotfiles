@@ -1,4 +1,3 @@
-: 1678584629:9;help git
 : 1678584640:1;tldr git
 : 1678584734:0;git config user.name
 : 1678584751:0;yadm add .config/git/config
@@ -146,19 +145,15 @@
 : 1678598026:0;cat $PNPM_HOME
 : 1678598028:0;echo $PNPM_HOME
 : 1678598047:0;rm $PNPM_HOME
-: 1678598056:0;ls .local/share
-: 1678598058:0;ls .local/share/pnpm
 : 1678598272:0;sudo curl -fsSL https://get.pnpm.io/install.sh | sh -
 : 1678598432:0;ls .local/share/
 : 1678598435:0;ls pnpm
 : 1678598447:0;which wget
 : 1678598449:0;wget -qO- https://get.pnpm.io/install.sh | sh -
-: 1678598655:0;lsa
 : 1678598698:0;curl -fsSL https://get.pnpm.io/install.sh
 : 1678598921:0;curl -fsSL https://get.pnpm.io/install.sh | sh -
 : 1678599179:0;curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=7.29 sh -
 : 1678599195:0;curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=7.29.0 sh -
-: 1678599312:0;curl -fsSL https://deno.land/install.sh | sh
 : 1678599574:0;help pn
 : 1678599576:0;help pnpm
 : 1678599600:0;.local
@@ -184,7 +179,6 @@
 : 1678600353:0;pn -g list
 : 1678600401:0;pn -g i nodemon
 : 1678600430:0;Projects/ts-playground/
-: 1678600467:0;tsc
 : 1678600495:0;pn list
 : 1678600530:0;nodemon
 : 1678600556:0;pn -g i @swc/code @swc/cli
@@ -208,31 +202,95 @@
 : 1678606101:0;cat tsconfig.conf
 : 1678606106:0;cat tsconfig.json
 : 1678606118:0;vite-project/
-: 1678607756:0;..
 : 1678607757:0;~
 : 1678607767:0;cat .config/pnpm/rc
 : 1678607799:0;yadm add .config/pnpm/rc
 : 1678607814:0;mv .config/npm/npmrc .config/npm/rc
 : 1678607819:0;cat .config/npm/npmrc
 : 1678607837:0;yadm add .config/npm/rc
-: 1678607848:0;code .config/envrc
 : 1678607910:0;yadm add -u
 : 1678607922:0;yadm commit -m "add"
 : 1678607925:0;yadm push
-: 1678607946:0;clear
 : 1678607967:0;.config
-: 1678607968:0;ls
 : 1678607974:0;yadm list -a
 : 1678608001:0;cat yadm/encrypt
 : 1678608007:0;yadm encrypt
 : 1678608033:0;code .config/aliasrc
-: 1678608046:0;code aliasrc
 : 1678608104:0;alias
 : 1678608108:0;yadm status
 : 1678608114:0;ya
-: 1678608191:0;exec zsh
 : 1678608194:0;status
 : 1678608200:0;yal
 : 1678608217:0;ys
 : 1678608218:0;yas
 : 1678608224:0;yau
+: 1678608265:0;help git
+: 1678608317:0;git -C ~/Documents/Notes add .
+: 1678608321:0;git -C ~/Documents/Notes status
+: 1678608385:0;git -C ~/Documents/Notes commit -m "save"
+: 1678608390:0;git -C ~/Documents/Notes push
+: 1678608401:0;code aliasrc
+: 1678608552:0;..
+: 1678608556:0;Documents/Notes/
+: 1678608624:0;git status
+: 1678608637:0;obu
+: 1678609200:0;gh
+: 1678609203:0;help gh
+: 1678609216:0;gh repo
+: 1678609230:0;Projects/
+: 1678609233:0;puri
+: 1678609236:0;gh repo view
+: 1678609244:0;gh repo view --web
+: 1678609331:0;asda
+: 1678609336:0;deno run https://deno.land/std/examples/welcome.ts
+: 1678609346:0;curl -fsSL https://deno.land/install.sh | sh
+: 1678609415:0;code .config/envrc
+: 1678609966:0;.deno
+: 1678610065:0;ls .local/share/pnpm
+: 1678610073:0;ls .local/share
+: 1678610081:0;ls ~/.local/share/pnpm
+: 1678610320:0;code ~/.zshrc
+: 1678610331:0;code ~/config/aliasrc
+: 1678610346:0;code ~/.config/envrc
+: 1678610457:0;mv .deno .local/share/deno
+: 1678610459:0;lsa
+: 1678610466:0;.local/share
+: 1678610478:0;bin
+: 1678610479:0;ls
+: 1678610537:0;deno --help
+: 1678610555:0;/home/tifan/.local/share/deno/bin/deno
+: 1678610572:0;clear
+: 1678610576:0;deno
+: 1678610580:0;echo $PATH
+: 1678610593:0;ts
+: 1678610595:0;tsc
+: 1678610633:0;exec zsh
+: 1678610638:0;deno
+: 1678610648:0;help deno
+: 1678610658:0;help gh
+: 1678610691:0;gh ssh-key
+: 1678610694:0;gh ssh-key list
+: 1678610710:0;gh repo -h
+: 1678610721:0;gh repo list
+: 1678610744:0;gh repo create
+: 1678610773:0;gh repo list
+: 1678610786:0;gh repo view 0h
+: 1678610789:0;gh repo view -h
+: 1678610799:0;gh repo view tifandotme/HAHA --web
+: 1678610814:0;gh repo view HAHA --web
+: 1678610823:0;gh repo view HAHAa --web
+: 1678610843:0;gh config
+: 1678610845:0;gh config list
+: 1678610856:0;git config --list
+: 1678610887:0;gh delete
+: 1678610895:0;gh browse
+: 1678610901:0;gh repo
+: 1678610906:0;gh repo delete HAHA
+: 1678610928:0;gh auth refresh -h github.com -s delete_repo
+: 1678610954:0;gh repo delete HAHA
+: 1678610961:0;clear
+: 1678610961:0;ls
+: 1678610962:0;clear
+: 1678610964:0;lsa
+: 1678610978:0;yas
+: 1678610983:0;yau

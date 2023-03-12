@@ -21,13 +21,17 @@ alias ncdu="ncdu -re"
 # arch linux specific?
 # alias makepkg="makepkg -fsri"
 
+# pnpm
 alias pn="pnpm"
 alias npm="pnpm"
 
+# yadm
 alias ya="yadm"
 alias yas="yadm status"
 alias yal="yadm list -a"
-alias yau="yadm add -u && yadm commit -m 'add/update' && yadm push"
+alias yau="yadm add -u && yadm commit -m 'update' && yadm push"
+
+alias obu="git -C ~/Documents/Notes commit -am 'update' && git -C ~/Documents/Notes push"
 
 # exa (needs nerd-fonts)
 alias ls='exa -lhF --group-directories-first --icons -s extension'
