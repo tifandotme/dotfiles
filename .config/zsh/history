@@ -32,3 +32,59 @@
 : 1678586856:0;git config --list
 : 1678586885:0;yadm status
 : 1678586889:0;yadm add -u
+: 1678586898:0;yadm commit -m "add"
+: 1678586899:0;yadm push
+: 1678587289:0;npm token list
+: 1678588089:0;cat /etc/npmrc
+: 1678588100:0;ls /usr/local
+: 1678588306:0;npm token list
+: 1678588320:0;npm login
+: 1678588380:0;help npm
+: 1678588391:0;npm -l
+: 1678588395:0;npm whoami
+: 1678588401:0;npm adduser
+: 1678588409:0;clear
+: 1678588436:0;yadm lis t-a
+: 1678588438:0;yadm list -a
+: 1678588451:0;nano .config/yadm/encrypt
+: 1678588492:0;clear
+: 1678588493:0;yadm status
+: 1678588498:0;yadm list -a
+: 1678588551:0;yadm add .config/autostart/gnome-terminal.desktop
+: 1678588572:0;yadm add .config envrc
+: 1678588575:0;yadm add .config/envrc
+: 1678588578:0;yadm list -a
+: 1678588589:0;yadm status
+: 1678588593:0;yadm add -u
+: 1678588597:0;yadm commit -m "add"
+: 1678588600:0;yadm push
+: 1678588615:0;yadm pull
+: 1678588642:0;yadm fetch
+: 1678588653:0;yadm status
+: 1678588671:0;yadm pull
+: 1678588682:0;yadm pull --rebase
+: 1678588689:0;yadm status
+: 1678588717:0;yadm pull
+: 1678588731:0;yadm pull -l
+: 1678588782:0;yadm pull -r interactive
+: 1678588790:0;yadm stash -h
+: 1678588794:0;yadm stash list
+: 1678588807:0;yadm commit -m "add"
+: 1678588813:0;yadm pull -r merge
+: 1678588845:0;yadm reset --soft/hard HEAD~1
+: 1678588852:0;yadm reset --soft HEAD~1
+: 1678588855:0;yadm status
+: 1678588868:0;yadm pull -r interactive
+: 1678588894:0;yadm restore --staged
+: 1678588900:0;yadm restore --staged .config
+: 1678588902:0;yadm status
+: 1678588931:0;yadm pull -r interactive
+: 1678588950:0;yadm pull -h
+: 1678588956:0;yadm pull -f
+: 1678588966:0;yadm status
+: 1678588971:0;yadm prune
+: 1678588974:0;yadm status
+: 1678588983:0;yadm list -a
+: 1678589000:0;yadm add .config/autostart/gnome-terminal.desktop
+: 1678589009:0;yadm add .config/envrc
+: 1678589019:0;yadm add -u

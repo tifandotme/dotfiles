@@ -1,0 +1,7 @@
+export XDG_CONFIG_HOME=~/.config
+export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
+
+# used in zsh (still looking for a better place)
+HISTFILE=~/.config/zsh/history
+HISTSIZE=1000
+SAVEHIST=1000
