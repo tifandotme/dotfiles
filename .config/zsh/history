@@ -714,3 +714,136 @@
 : 1678840710:0;ls
 : 1678840722:0;yas
 : 1678840724:0;yau
+: 1678878761:0;up
+: 1678890983:0;deno task jalan
+: 1678899355:0;pn list
+: 1678899377:0;pn up
+: 1678899492:0;up
+: 1678900594:0;npm
+: 1678900599:0;alias
+: 1678900604:0;clear
+: 1678900613:0;npm add -g dts-gen
+: 1678900682:0;Media/Videos/YouTube/
+: 1678900693:0;yd "https://www.youtube.com/watch?v=dLPgQRbVquo"
+: 1678900943:0;..
+: 1678900946:0;~
+: 1678900950:0;Projects/
+: 1678900952:0;puri
+: 1678900954:0;pn list
+: 1678900964:0;dts-gen -h
+: 1678900990:0;dts-gen -m territory-indonesia
+: 1678900993:0;ls
+: 1678901177:0;pn add -g territory-indonesia
+: 1678901189:0;..
+: 1678901197:0;dts-gen -m territory-indonesi
+: 1678901201:0;dts-gen -m territory-indonesia
+: 1678901209:0;code territory-indonesia.d.ts
+: 1678901224:0;dts-gen -h
+: 1678901238:0;pn list
+: 1678901242:0;pn list -g
+: 1678901254:0;pn rm -g dts-gen territory-indonesia
+: 1678901260:0;ls
+: 1678901264:0;rm territory-indonesia.d.ts
+: 1678901265:0;ls
+: 1678901267:0;puri
+: 1678901269:0;ls
+: 1678901279:0;clear
+: 1678901279:0;ls
+: 1678901280:0;lsa
+: 1678901281:0;clear
+: 1678901282:0;ls
+: 1678901284:0;clear
+: 1678901284:0;ls
+: 1678901287:0;clear
+: 1678901293:0;pn -g up
+: 1678902378:0;node_modules/
+: 1678902379:0;ls
+: 1678902382:0;territory-indonesia/
+: 1678902383:0;;s
+: 1678902385:0;ls
+: 1678902387:0;src
+: 1678902388:0;pwd
+: 1678902391:0;clear
+: 1678902391:0;ls
+: 1678902393:0;..
+: 1678902394:0;ls
+: 1678902397:0;data
+: 1678902397:0;ls
+: 1678902400:0;..
+: 1678902401:0;src
+: 1678902401:0;ls
+: 1678902403:0;clear
+: 1678902404:0;..
+: 1678902407:0;src
+: 1678902407:0;ls
+: 1678902418:0;pnpm dlx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types
+: 1678902430:0;tsc *.js --declaration --allowJs --emitDeclarationOnly --outDir types
+: 1678902600:0;ls
+: 1678902603:0;rm types
+: 1678902604:0;ls
+: 1678902615:0;tsc *.js --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --outDir types
+: 1678902674:0;tsc -h
+: 1678902679:0;tsc -h | grep json
+: 1678902691:0;help tsc
+: 1678903703:0;tsc *.js --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --outDir ../../../types
+: 1678903817:0;ls
+: 1678903820:0;..
+: 1678903822:0;ls
+: 1678903824:0;lsa
+: 1678903829:0;ls
+: 1678903837:0;-
+: 1678903839:0;--
+: 1678903845:0;ls
+: 1678903848:0;lsa
+: 1678903851:0;node_modules/
+: 1678903854:0;territory-indonesia/
+: 1678903854:0;ls
+: 1678903856:0;lsa
+: 1678903858:0;ls ..
+: 1678903863:0;ls ../..
+: 1678903868:0;..
+: 1678903869:0;ls
+: 1678903879:0;node_modules/
+: 1678903880:0;ls
+: 1678903881:0;lsa
+: 1678903882:0;ls
+: 1678903883:0;territory-indonesia/
+: 1678903883:0;ls
+: 1678903887:0;ls ..
+: 1678903890:0;ls ../..
+: 1678903895:0;ls ../../puri
+: 1678903900:0;ls ../../types
+: 1678903948:0;ls
+: 1678903951:0;..
+: 1678903951:0;ls
+: 1678903953:0;..
+: 1678903954:0;ls
+: 1678903961:0;node_modules/
+: 1678903962:0;ls
+: 1678903963:0;territory-indonesia/
+: 1678903964:0;ls
+: 1678903966:0;ls ..
+: 1678903968:0;ls ../..
+: 1678903977:0;lsa ../..
+: 1678903981:0;pwd ../..
+: 1678903985:0;ls ../..
+: 1678903991:0;lsa ../..
+: 1678903997:0;lsa ../../node_modules/
+: 1678904010:0;lsa ../../
+: 1678904028:0;cd ../../types
+: 1678904030:0;ls
+: 1678904039:0;..
+: 1678904040:0;ls
+: 1678904069:0;mv types/ ../../../types
+: 1678904072:0;..
+: 1678904073:0;ls
+: 1678920951:0;up
+: 1678921067:0;clear
+: 1678921123:0;deno task jalan
+: 1678921317:0;alias yd
+: 1678921329:0;help yt-dlp
+: 1678921439:0;alias yd
+: 1678921494:0;yt-dlp "https://www.youtube.com/watch?v=dLPgQRbVquo"
+: 1678925918:0;yal
+: 1678925920:0;yas
+: 1678925921:0;yau
