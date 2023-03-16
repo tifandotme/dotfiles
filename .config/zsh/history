@@ -40,9 +40,7 @@
 : 1678589000:0;yadm add .config/autostart/gnome-terminal.desktop
 : 1678589009:0;yadm add .config/envrc
 : 1678589055:0;cat yadm encrypt
-: 1678590055:0;pnpm list -g
 : 1678591161:0;Projects/puri/
-: 1678591307:0;sudo dnf autoremove
 : 1678592331:0;touch hello.ts
 : 1678592366:0;cat /usr/local/bin/tsc
 : 1678592384:0;cat /usr/local/lib
@@ -51,13 +49,11 @@
 : 1678592545:0;tsc src/main.tsx
 : 1678592636:0;mv hello.ts ..
 : 1678592675:0;cat hello.js
-: 1678592683:0;cat hello.ts
 : 1678592911:0;mv testing-ts/ ts-playground
 : 1678592918:0;ts playground
 : 1678593266:0;alias rm
 : 1678593275:0;mv hello.ts ts-playground/
 : 1678593332:0;tsc --noEmitOnError hello.ts
-: 1678593468:0;tsc --all
 : 1678593491:0;man tsc
 : 1678593501:0;tsc --all | grep project
 : 1678593647:0;ts-node
@@ -100,17 +96,14 @@
 : 1678594982:0;code package.json
 : 1678595269:0;ts-node --swc hello.ts
 : 1678595288:0;helptsc
-: 1678595299:0;tsc --init
 : 1678595980:0;lear
 : 1678596014:0;ts-node hello.ts
 : 1678596021:0;tsc hello.ts
 : 1678596459:0;p10k configure
-: 1678596487:0;help tsc
 : 1678596536:0;tsc --target ES5 hello.ts
 : 1678596572:0;tsc --target ES2021 hello.ts
 : 1678596603:0;tsc --target ES5 hello.ts hello2.js
 : 1678596711:0;Projects/puri
-: 1678596725:0;ts-playground/
 : 1678596730:0;tsc --target ES5 hello.ts --outFile hel.js
 : 1678596753:0;tsc --swc
 : 1678597227:0;pnpm run build
@@ -132,7 +125,6 @@
 : 1678597893:0;which pn
 : 1678597899:0;which pnpm
 : 1678597908:0;sudo dnf remove npm
-: 1678597920:0;npm
 : 1678597925:0;cler
 : 1678597934:0;which tsc
 : 1678597941:0;p -g list
@@ -149,7 +141,6 @@
 : 1678598921:0;curl -fsSL https://get.pnpm.io/install.sh | sh -
 : 1678599179:0;curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=7.29 sh -
 : 1678599195:0;curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=7.29.0 sh -
-: 1678599574:0;help pn
 : 1678599600:0;.local
 : 1678599602:0;share
 : 1678599603:0;pnpm
@@ -165,14 +156,11 @@
 : 1678599999:0;code .config/pnpm/rc
 : 1678600036:0;cat ~/.npmrc
 : 1678600050:0;cat /etc/npmrc
-: 1678600062:0;pn list -g
 : 1678600069:0;pn remote -g ts-node
 : 1678600076:0;pn remove -g ts-node
 : 1678600087:0;pn -g add ts-node
-: 1678600342:0;pn add -g typescript
 : 1678600401:0;pn -g i nodemon
 : 1678600430:0;Projects/ts-playground/
-: 1678600495:0;pn list
 : 1678600530:0;nodemon
 : 1678600556:0;pn -g i @swc/code @swc/cli
 : 1678600563:0;pn -g i @swc/core @swc/cli
@@ -190,10 +178,7 @@
 : 1678606083:0;vite-project
 : 1678606096:0;cat tsconfig.
 : 1678606101:0;cat tsconfig.conf
-: 1678606106:0;cat tsconfig.json
 : 1678606118:0;vite-project/
-: 1678607757:0;~
-: 1678607767:0;cat .config/pnpm/rc
 : 1678607799:0;yadm add .config/pnpm/rc
 : 1678607814:0;mv .config/npm/npmrc .config/npm/rc
 : 1678607819:0;cat .config/npm/npmrc
@@ -202,7 +187,6 @@
 : 1678607922:0;yadm commit -m "add"
 : 1678607925:0;yadm push
 : 1678607967:0;.config
-: 1678607974:0;yadm list -a
 : 1678608001:0;cat yadm/encrypt
 : 1678608007:0;yadm encrypt
 : 1678608108:0;yadm status
@@ -216,11 +200,8 @@
 : 1678608390:0;git -C ~/Documents/Notes push
 : 1678608401:0;code aliasrc
 : 1678608556:0;Documents/Notes/
-: 1678608624:0;git status
 : 1678608637:0;obu
 : 1678609200:0;gh
-: 1678609230:0;Projects/
-: 1678609233:0;puri
 : 1678609236:0;gh repo view
 : 1678609244:0;gh repo view --web
 : 1678609331:0;asda
@@ -240,8 +221,6 @@
 : 1678610555:0;/home/tifan/.local/share/deno/bin/deno
 : 1678610580:0;echo $PATH
 : 1678610593:0;ts
-: 1678610595:0;tsc
-: 1678610633:0;exec zsh
 : 1678610638:0;deno
 : 1678610658:0;help gh
 : 1678610691:0;gh ssh-key
@@ -267,7 +246,6 @@
 : 1678611263:0;Projects
 : 1678611279:0;touch dinosaur.ts
 : 1678611288:0;code dinosaur.ts
-: 1678611304:0;tss
 : 1678611548:0;deno run dinosaur.ts ads
 : 1678612143:0;deno run index.ts asd asd asd
 : 1678613410:0;yads
@@ -276,7 +254,6 @@
 : 1678613873:0;deno repl
 : 1678617513:0;whence
 : 1678617523:0;whence man
-: 1678617557:0;help yt-dlp
 : 1678617598:0;yt-dlp -U
 : 1678617637:0;yt-dlp --list-extractors
 : 1678617889:0;Videos
@@ -297,36 +274,24 @@
 : 1678622031:0;Videos/YouTube/
 : 1678622033:0;yd https://www.youtube.com/watch?v=d56mG7DezGs
 : 1678622036:0;yd
-: 1678622045:0;alias yd
 : 1678622058:0;yd "https://www.youtube.com/watch?v=d56mG7DezGs"
 : 1678623010:0;deno --watch
-: 1678623015:0;help deno
 : 1678623067:0;deno run --watch index.ts
 : 1678623168:0;deno run --help
-: 1678623172:0;deno run -h
-: 1678623226:0;deno run -q --watch index.ts
 : 1678624973:0;sudo dnf up
 : 1678624982:0;flatpak up
 : 1678624986:0;flatpak update
-: 1678625039:0;code .config/aliasrc
-: 1678625086:0;help flatpak
 : 1678625093:0;flatpak update -h
 : 1678625121:0;flatpak update --noninteractive
 : 1678625131:0;dnf up -h
 : 1678625188:0;sudo dnf up -q
-: 1678625273:0;alias
 : 1678625572:0;alias up
-: 1678625579:0;yau
-: 1678625701:0;pn up
-: 1678627031:0;help pnpm
 : 1678627053:0;code .zshrc
 : 1678627107:0;pn -g list
 : 1678627118:0;pn rm tsnode
 : 1678627123:0;pn rm ts-node
 : 1678627140:0;pn rm -g ts-node nodemon
-: 1678627154:0;pn ls -g
 : 1678627165:0;wc
-: 1678627167:0;swc
 : 1678627188:0;pn rm -g @swc/cli @swc/core
 : 1678627198:0;pn help
 : 1678627281:0;pnpm up
@@ -341,7 +306,6 @@
 : 1678627393:0;pn -v
 : 1678627399:0;dnf info pnpm
 : 1678627406:0;pnpm hist userinstalled
-: 1678627411:0;dnf hist userinstalled
 : 1678627424:0;sudo dnf rm xev
 : 1678627469:0;sudo dnf rm fira-code-fonts
 : 1678627487:0;rm .lesshst .ts_node_repl_history
@@ -368,105 +332,58 @@
 : 1678628082:0;dnf copr list
 : 1678628094:0;dnf copr remove atim/joshuto
 : 1678628097:0;sudo dnf copr remove atim/joshuto
-: 1678628285:0;yas
-: 1678628288:0;yal
-: 1678628335:0;up
 : 1678628377:0;rm .quokka/
 : 1678628406:0;.wallaby/
-: 1678628415:0;..
 : 1678628417:0;rm .wallaby/
-: 1678628418:0;clear
-: 1678628418:0;ls
-: 1678628429:0;.config/
 : 1678628437:0;cat nodemon.json
 : 1678628442:0;rm nodemon.json
 : 1678628445:0;cat Trolltech.conf
 : 1678628452:0;rm Trolltech.conf
-: 1678628453:0;lsa
 : 1678628473:0;code user-dirs.
-: 1678628490:0;code user-dirs.dirs
-: 1678628637:0;..
 : 1678628641:0;.config/
 : 1678628647:0;code user-dirs.dirs
-: 1678629088:0;help flatpak
 : 1678629102:0;flatpak config -h
 : 1678629113:0;flatpak config --list
 : 1678629133:0;flatpak repo
 : 1678629138:0;flatpak repo --help
 : 1678629146:0;flatpak remotes
-: 1678629165:0;help flatpak
-: 1678629171:0;flatpak list
 : 1678629183:0;flatpak rm Smile
 : 1678629186:0;flatpak rm smile
 : 1678629191:0;flatpak remove smile
 : 1678629231:0;help flatpak
 : 1678629250:0;flatpak run -h
 : 1678629278:0;flatpak history
-: 1678629291:0;flatpak list
 : 1678629314:0;flatpak clean
 : 1678629318:0;flatpak --help
 : 1678629366:0;flatpak uninstall --unused
 : 1678629409:0;flatpak --installations
-: 1678629423:0;flatpak list
 : 1678629435:0;flatpak uninstall Mesa
 : 1678629441:0;flatpak uninstall gl
 : 1678629474:0;flatpak remove peek
-: 1678629491:0;flatpak list
-: 1678629502:0;flatpak list -h
 : 1678629519:0;flatpak list -d
 : 1678629524:0;flatpak list
 : 1678629528:0;flatpak list -h
 : 1678629540:0;flatpak list -app
-: 1678629543:0;flatpak list --app
 : 1678629550:0;flatpak list --runtimes
 : 1678629552:0;flatpak list --runtime
 : 1678629558:0;flatpak list --list
-: 1678629560:0;flatpak list --app
-: 1678629582:0;code .config/aliasrc
 : 1678629599:0;code ~/.config/aliasrc
-: 1678629685:0;clear
 : 1678629770:0;yadm add .config/user-dirs.dirs
-: 1678629774:0;yas
-: 1678629780:0;yau
-: 1678629785:0;yas
-: 1678629787:0;clear
-: 1678629788:0;ls
-: 1678629791:0;clear
-: 1678629793:0;yal
 : 1678629805:0;code .config/autostart/
-: 1678630038:0;yas
-: 1678630039:0;yau
-: 1678632653:0;up
-: 1678634684:0;clear
-: 1678634686:0;git status
 : 1678634709:0;yadm list -a
 : 1678634722:0;yadm
-: 1678634858:0;clear
-: 1678634859:0;ls
-: 1678634860:0;lsa
 : 1678635078:0;flatpak list --app
 : 1678635771:0;dino -h
-: 1678635780:0;deno run -h
 : 1678635803:0;deno run --watch --quite
 : 1678635806:0;deno run --watch --quiet
 : 1678635813:0;deno run --watch --quiet -
-: 1678635820:0;ls
 : 1678635843:0;deno run -q --watch=*
 : 1678635846:0;deno run -q --watch=
 : 1678635850:0;deno run -q --watch=index.ts
-: 1678635859:0;deno run -q --watch index.ts
 : 1678635879:0;deno run -q --watch *
-: 1678636045:0;clear
 : 1678636071:0;[200~deno run -q --watch index.ts~
-: 1678636072:0;deno run -q --watch index.ts
-: 1678636078:0;ls
-: 1678636082:0;jurassic-land/
-: 1678636084:0;ls
 : 1678636090:0;deno run -q --watch index.ts
 : 1678636232:0;git diff
-: 1678636240:0;clear
-: 1678636244:0;git status
-: 1678636256:0;git add .
 : 1678636278:0;git commit -m "REFACTOR TO TYPESCRIPT" && git push
 : 1678636521:0;firebase-tools
 : 1678636532:0;help firebase
@@ -475,145 +392,67 @@
 : 1678636791:0;firebase deploy
 : 1678636836:0;pnpm build
 : 1678637383:0;eslint: lint whole folder
-: 1678665365:0;up
 : 1678665538:0;sudo dnf autoremove
 : 1678665548:0;dnf hist userinstalled
 : 1678665564:0;dnf repo
 : 1678665566:0;dnf -h
-: 1678665568:0;man dnf
 : 1678665642:0;dnf list --installed
 : 1678665659:0;man dnf
 : 1678665680:0;dnf alias
 : 1678665682:0;dnf alias list
-: 1678665706:0;clear
-: 1678665707:0;ls
-: 1678665708:0;lsa
-: 1678665711:0;clear
-: 1678665712:0;ls
 : 1678665715:0;clea
-: 1678667624:0;git status
 : 1678667629:0;git add .
-: 1678667631:0;git status
 : 1678667639:0;git commit -m "delete old jsx"
 : 1678667640:0;git push
-: 1678667649:0;git status
-: 1678667650:0;clear
 : 1678700113:0;sudo up
-: 1678700118:0;up
 : 1678700462:0;ping 8.8.8.8
-: 1678700465:0;up
-: 1678700762:0;clear
 : 1678702172:0;deno run -q --watch goblok.js
-: 1678702719:0;deno task
-: 1678702752:0;deno task jalan
 : 1678704751:0;deno run -q --watch --config ./deno.json index.ts
 : 1678704965:0;swc
-: 1678704966:0;tsc
-: 1678704968:0;clear
-: 1678704985:0;pn list -g
 : 1678704996:0;pn add -g typescript
 : 1678705073:0;node
-: 1678705080:0;clear
 : 1678705083:0;which node
 : 1678705090:0;dnf info node
 : 1678705232:0;pnpm add -g pnpm
 : 1678705242:0;pnpm -v
 : 1678705260:0;pnpm list -g
-: 1678705358:0;clear
-: 1678705405:0;ls
-: 1678705410:0;tsc index.ts
-: 1678706767:0;node index.js
 : 1678706779:0;node index.ts
-: 1678708994:0;Projects/
-: 1678708995:0;clear
-: 1678708996:0;ls
 : 1678709013:0;help pn
 : 1678709014:0;help pnpm
 : 1678709031:0;pnpm create -h
 : 1678709047:0;pnpm dlx create vite
-: 1678709058:0;pnpm create vite
 : 1678709081:0;cd yolo
-: 1678709085:0;ls
-: 1678709089:0;..
 : 1678709096:0;mv yolo/ puri/yolo
 : 1678714552:0;pnpm create vite
 : 1678717348:0;pn vite build
-: 1678717531:0;yal
-: 1678717533:0;yas
-: 1678717537:0;yal
-: 1678717610:0;clear
-: 1678717610:0;ls
-: 1678717611:0;pwd
-: 1678717612:0;clear
 : 1678720501:0;htop
 : 1678721546:0;deno task
-: 1678721549:0;deno task jalan
-: 1678721734:0;deno run -h
-: 1678721844:0;deno task jalan
-: 1678721915:0;help deno
-: 1678721919:0;clear
-: 1678721921:0;deno run -h
-: 1678721996:0;deno compile index.ts
 : 1678722166:0;help deno
 : 1678722223:0;deno lsp
 : 1678722236:0;deno types
 : 1678722266:0;asdad/
 : 1678722268:0;deno init
 : 1678722393:0;deno bench
-: 1678737064:0;deno task jalan
-: 1678737599:0;clear
-: 1678737624:0;help tsc
 : 1678737636:0;OA
-: 1678737638:0;help tsc
-: 1678737695:0;tsc --showConfig
-: 1678737710:0;tsc -w index.ts
-: 1678737831:0;clear
-: 1678737831:0;ls
-: 1678737852:0;help tsc
-: 1678737907:0;clear
-: 1678737908:0;tsc -h
 : 1678737919:0;tcs -h
-: 1678737924:0;tsc -h
 : 1678737945:0;tsc --all
-: 1678737975:0;Projects/
-: 1678737979:0;ls
 : 1678737984:0;tss
-: 1678737985:0;ls
 : 1678737990:0;tsc --init
-: 1678738003:0;ls
 : 1678738008:0;cat tsconfig.json
-: 1678738028:0;clear
-: 1678738029:0;ls
 : 1678738032:0;cat dinosaur.ts
-: 1678738035:0;..
 : 1678738041:0;rm tss/
-: 1678738041:0;ls
 : 1678738050:0;ts-playground/
-: 1678738051:0;ls
 : 1678738055:0;cat hello.ts
-: 1678738058:0;clear
-: 1678738058:0;..
-: 1678738059:0;ls
 : 1678738067:0;rm ts-playground/
-: 1678738067:0;ls
-: 1678738068:0;clear
 : 1678738069:0;l
-: 1678738070:0;ls
 : 1678738074:0;adopt-me
 : 1678738076:0;git status
-: 1678738091:0;..
-: 1678738091:0;ls
 : 1678738094:0;jurassic-land/
-: 1678738095:0;ls
 : 1678738279:0;tsc -v
-: 1678738287:0;clear
 : 1678738299:0;tsc -w index.ts && node
 : 1678738533:0;deno doc
 : 1678738538:0;deno doc index.ts
-: 1678738541:0;clear
-: 1678738541:0;ls
 : 1678738556:0;mv deno.jsonc deno.json
-: 1678738557:0;ls
 : 1678738563:0;code deno.json
 : 1678738787:0;deno compile -h
 : 1678738816:0;deno --lite
@@ -621,120 +460,49 @@
 : 1678738838:0;deno compile index.ts indexx.js
 : 1678738932:0;deno compile https://deno.land/std/examples/welcome.ts
 : 1678738939:0;./welcome
-: 1678739085:0;ls
 : 1678739087:0;node index.js
-: 1678739118:0;tsc --showConfig
-: 1678739159:0;pn add -g ts-node
 : 1678739203:0;pn rm -g ts-node
 : 1678739211:0;pn add -g nodemon
-: 1678739221:0;pn list -g
 : 1678739228:0;pn up -g
-: 1678739263:0;ls
 : 1678739271:0;rm welcome
-: 1678739275:0;clear
 : 1678739280:0;help nodemon -h
 : 1678739304:0;nodemon --help options
-: 1678739339:0;clear
-: 1678739347:0;tsc -w index.ts
-: 1678739355:0;nodemon index.js
-: 1678739394:0;nodemon index.ts
 : 1678739553:0;pn add -g ts-node
 : 1678739585:0;ts-node index.ts
-: 1678739804:0;nodemon index.ts
 : 1678740010:0;nodemon index.js
-: 1678740019:0;tsc -w index.ts
 : 1678740046:0;nodemon -q index.js
-: 1678740213:0;tsc -w index.ts
 : 1678740231:0;tsc --showConfig
-: 1678740310:0;tsc -w index.ts
 : 1678740349:0;tsc -w index.ts --target es3
-: 1678740358:0;tsc -w index.ts --target esnext
 : 1678740433:0;tsc -w index.ts
 : 1678740548:0;tsc -w index.ts --target esnext
 : 1678740583:0;tsc -w index.ts -p./ tsconfig.json
 : 1678740588:0;tsc -w index.ts -p ./tsconfig.json
 : 1678740597:0;tsc -p ./tsconfig.json
 : 1678740608:0;tsc -p ./tsconfig.json -w
-: 1678740657:0;tsc -w
 : 1678741007:0;nodemon -q *.js
-: 1678741117:0;..
 : 1678741122:0;mv jurassic-land/ playground
 : 1678741126:0;.
-: 1678741127:0;ls
 : 1678742147:0;tsc --noEmit
-: 1678742171:0;clear
-: 1678755027:0;up
-: 1678787812:0;Projects/
-: 1678787812:0;ls
-: 1678787815:0;pwd
-: 1678787817:0;ls
-: 1678787818:0;clear
-: 1678787819:0;ls
 : 1678787821:0;playground/
-: 1678787821:0;ls
-: 1678787831:0;up
-: 1678790268:0;nodemon index.ts
 : 1678790293:0;tsc -w
-: 1678790323:0;tsc
-: 1678790372:0;nodemon index.ts
-: 1678791291:0;deno task jalan
 : 1678793365:0;deno run -h
 : 1678793405:0;tsc index.ts
-: 1678793424:0;clear
 : 1678793428:0;tsc
 : 1678793487:0;nodemon index.ts
-: 1678793500:0;deno task jalan
 : 1678793664:0;deno --showConfig
-: 1678831190:0;deno task jalan
 : 1678835432:0;yadl
-: 1678835433:0;yas
-: 1678839660:0;deno task jalan
-: 1678840287:0;clear
-: 1678840288:0;ls
-: 1678840289:0;clear
-: 1678840293:0;deno task jalan
-: 1678840567:0;yas
-: 1678840569:0;yal
-: 1678840571:0;alias
-: 1678840574:0;yas
-: 1678840576:0;yal
-: 1678840590:0;cat .config/pnpm/rc
 : 1678840603:0;cat .config/npm/rc
 : 1678840618:0;cat .config/pnpm/rc
-: 1678840620:0;yal
-: 1678840627:0;clear
-: 1678840627:0;ls
-: 1678840636:0;lsa
-: 1678840637:0;ls
-: 1678840641:0;lsa
-: 1678840641:0;ls
-: 1678840648:0;lsa
 : 1678840693:0;cat .config/zsh/history
-: 1678840709:0;clear
-: 1678840710:0;ls
-: 1678840722:0;yas
-: 1678840724:0;yau
-: 1678878761:0;up
-: 1678890983:0;deno task jalan
-: 1678899355:0;pn list
 : 1678899377:0;pn up
-: 1678899492:0;up
 : 1678900594:0;npm
 : 1678900599:0;alias
-: 1678900604:0;clear
 : 1678900613:0;npm add -g dts-gen
 : 1678900682:0;Media/Videos/YouTube/
 : 1678900693:0;yd "https://www.youtube.com/watch?v=dLPgQRbVquo"
-: 1678900943:0;..
 : 1678900946:0;~
 : 1678900950:0;Projects/
-: 1678900952:0;puri
-: 1678900954:0;pn list
-: 1678900964:0;dts-gen -h
-: 1678900990:0;dts-gen -m territory-indonesia
-: 1678900993:0;ls
 : 1678901177:0;pn add -g territory-indonesia
-: 1678901189:0;..
 : 1678901197:0;dts-gen -m territory-indonesi
 : 1678901201:0;dts-gen -m territory-indonesia
 : 1678901209:0;code territory-indonesia.d.ts
@@ -742,108 +510,52 @@
 : 1678901238:0;pn list
 : 1678901242:0;pn list -g
 : 1678901254:0;pn rm -g dts-gen territory-indonesia
-: 1678901260:0;ls
 : 1678901264:0;rm territory-indonesia.d.ts
-: 1678901265:0;ls
 : 1678901267:0;puri
-: 1678901269:0;ls
-: 1678901279:0;clear
-: 1678901279:0;ls
-: 1678901280:0;lsa
-: 1678901281:0;clear
-: 1678901282:0;ls
-: 1678901284:0;clear
-: 1678901284:0;ls
-: 1678901287:0;clear
 : 1678901293:0;pn -g up
-: 1678902378:0;node_modules/
-: 1678902379:0;ls
-: 1678902382:0;territory-indonesia/
 : 1678902383:0;;s
-: 1678902385:0;ls
-: 1678902387:0;src
 : 1678902388:0;pwd
-: 1678902391:0;clear
-: 1678902391:0;ls
-: 1678902393:0;..
-: 1678902394:0;ls
 : 1678902397:0;data
-: 1678902397:0;ls
-: 1678902400:0;..
-: 1678902401:0;src
-: 1678902401:0;ls
-: 1678902403:0;clear
-: 1678902404:0;..
 : 1678902407:0;src
-: 1678902407:0;ls
 : 1678902418:0;pnpm dlx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types
 : 1678902430:0;tsc *.js --declaration --allowJs --emitDeclarationOnly --outDir types
-: 1678902600:0;ls
 : 1678902603:0;rm types
-: 1678902604:0;ls
 : 1678902615:0;tsc *.js --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --outDir types
 : 1678902674:0;tsc -h
 : 1678902679:0;tsc -h | grep json
 : 1678902691:0;help tsc
 : 1678903703:0;tsc *.js --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --outDir ../../../types
-: 1678903817:0;ls
-: 1678903820:0;..
-: 1678903822:0;ls
-: 1678903824:0;lsa
-: 1678903829:0;ls
 : 1678903837:0;-
 : 1678903839:0;--
-: 1678903845:0;ls
-: 1678903848:0;lsa
-: 1678903851:0;node_modules/
-: 1678903854:0;territory-indonesia/
-: 1678903854:0;ls
-: 1678903856:0;lsa
-: 1678903858:0;ls ..
-: 1678903863:0;ls ../..
-: 1678903868:0;..
-: 1678903869:0;ls
-: 1678903879:0;node_modules/
-: 1678903880:0;ls
 : 1678903881:0;lsa
-: 1678903882:0;ls
-: 1678903883:0;territory-indonesia/
-: 1678903883:0;ls
-: 1678903887:0;ls ..
-: 1678903890:0;ls ../..
 : 1678903895:0;ls ../../puri
 : 1678903900:0;ls ../../types
-: 1678903948:0;ls
-: 1678903951:0;..
-: 1678903951:0;ls
-: 1678903953:0;..
-: 1678903954:0;ls
 : 1678903961:0;node_modules/
-: 1678903962:0;ls
 : 1678903963:0;territory-indonesia/
-: 1678903964:0;ls
 : 1678903966:0;ls ..
-: 1678903968:0;ls ../..
-: 1678903977:0;lsa ../..
 : 1678903981:0;pwd ../..
 : 1678903985:0;ls ../..
 : 1678903991:0;lsa ../..
 : 1678903997:0;lsa ../../node_modules/
 : 1678904010:0;lsa ../../
 : 1678904028:0;cd ../../types
-: 1678904030:0;ls
-: 1678904039:0;..
-: 1678904040:0;ls
 : 1678904069:0;mv types/ ../../../types
 : 1678904072:0;..
 : 1678904073:0;ls
-: 1678920951:0;up
 : 1678921067:0;clear
 : 1678921123:0;deno task jalan
-: 1678921317:0;alias yd
 : 1678921329:0;help yt-dlp
 : 1678921439:0;alias yd
 : 1678921494:0;yt-dlp "https://www.youtube.com/watch?v=dLPgQRbVquo"
 : 1678925918:0;yal
 : 1678925920:0;yas
 : 1678925921:0;yau
+: 1678965258:0;pnpm up -h
+: 1678965283:0;code .config/aliasrc
+: 1678965344:0;nano .config/aliasrc
+: 1678965398:0;pn ls -g
+: 1678965412:0;up
+: 1678965421:0;exec zsh
+: 1678965424:0;up
+: 1678975211:0;eslint --print-config .
+: 1678982498:0;yau
