@@ -559,3 +559,102 @@
 : 1678965424:0;up
 : 1678975211:0;eslint --print-config .
 : 1678982498:0;yau
+: 1679005852:0;pn up
+: 1679005943:0;pnpm ls
+: 1679006000:0;pnpm up -h
+: 1679006011:0;pnpm up -L
+: 1679007953:0;pnpm -h
+: 1679007957:0;pnpm up -h
+: 1679008400:0;pnpm vite build
+: 1679008436:0;tsc
+: 1679008522:0;git status
+: 1679008638:0;git commit -am "REFACTOR TO TYPESCRIPT CONT. (fixes ts errors)"
+: 1679008643:0;git status
+: 1679008690:0;git reset
+: 1679008692:0;git status
+: 1679008708:0;git reset --soft
+: 1679008710:0;git status
+: 1679008720:0;git reset --soft HEAD~1
+: 1679008724:0;git status
+: 1679008770:0;git add .
+: 1679008772:0;git status
+: 1679008807:0;git commit -am "REFACTOR TO TYPESCRIPT CONT. (fixes ts errors)"
+: 1679008809:0;git status
+: 1679008811:0;git push
+: 1679009066:0;pnpm run build
+: 1679009180:0;tsc -v
+: 1679009193:0;pnpm up -gL
+: 1679009203:0;pnpm ls -g
+: 1679009209:0;pnpm up -g --latest
+: 1679009221:0;pnpm up --latest -g
+: 1679009316:0;pnpm install
+: 1679013353:0;pn run build
+: 1679013402:0;clear
+: 1679013403:0;pn list
+: 1679013411:0;pn up
+: 1679013531:0;pn run build
+: 1679013599:0;pn list
+: 1679013608:0;tsc
+: 1679013631:0;pn vite build
+: 1679046035:0;up
+: 1679046049:0;flatpak update
+: 1679046053:0;pn up -g
+: 1679046113:0;pn ls
+: 1679046116:0;pn ls -g
+: 1679046128:0;pn up -g --latest
+: 1679046144:0;pn up -h
+: 1679046173:0;pn up -g typescript@latest
+: 1679046194:0;pn up typescript
+: 1679046198:0;pn up -g typescript
+: 1679046251:0;pn up -g typescript@5.0.2
+: 1679046260:0;pn add -g typescript@5.0.2
+: 1679046270:0;clear
+: 1679046273:0;pn up -g
+: 1679046293:0;pn run build
+: 1679046306:0;up
+: 1679046439:0;pn run build
+: 1679046727:0;tsc -v
+: 1679046732:0;pn ls
+: 1679046771:0;pn -g ls
+: 1679046784:0;pn add typescript@4.9.5
+: 1679046797:0;pn ls
+: 1679046818:0;pn run build
+: 1679050793:0;help firebase
+: 1679050815:0;firebase -h
+: 1679050851:0;firebase init -h
+: 1679050877:0;man firebase init
+: 1679050883:0;man firebase
+: 1679050888:0;firebase init hosting:github
+: 1679051009:0;pnpm ci
+: 1679051017:0;pn  -h
+: 1679051783:0;pn ci
+: 1679051800:0;tsc
+: 1679051903:0;tsc -v
+: 1679051905:0;ls
+: 1679051908:0;lsa
+: 1679051919:0;ls -h
+: 1679051922:0;pnpm ls
+: 1679051954:0;pwd
+: 1679051958:0;node_modules/
+: 1679051995:0;typescript
+: 1679051996:0;ls
+: 1679051998:0;bin
+: 1679051998:0;clear
+: 1679051999:0;ls
+: 1679052003:0;./tsc
+: 1679052019:0;./tsc -v
+: 1679052519:0;clear
+: 1679052521:0;.config
+: 1679052522:0;ls
+: 1679052539:0;code envrc.secret
+: 1679052614:0;yadm
+: 1679052616:0;clear
+: 1679052619:0;cd yadm
+: 1679052620:0;ls
+: 1679052624:0;..
+: 1679052630:0;cd yadm
+: 1679052632:0;yal
+: 1679052636:0;cat encrypt
+: 1679053676:0;yadm encrypt
+: 1679053690:0;yas
+: 1679053693:0;yau
