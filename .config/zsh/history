@@ -658,3 +658,147 @@
 : 1679053676:0;yadm encrypt
 : 1679053690:0;yas
 : 1679053693:0;yau
+: 1679053714:0;pnpm dev
+: 1679054125:0;clear
+: 1679054125:0;ls
+: 1679054126:0;clear
+: 1679054128:0;tsc -v
+: 1679054145:0;node_modules/typescript/bin/tsc -v
+: 1679054148:0;node_modules/typescript/bin/tsc
+: 1679059180:0;tsc -v
+: 1679059184:0;tsc
+: 1679059423:0;firebase init database
+: 1679059642:0;firebase deploy
+: 1679059711:0;pnpm build
+: 1679059730:0;up
+: 1679059780:0;firebase deploy -h
+: 1679059803:0;firebase deploy -m "deployyyyyyingggg"
+: 1679060575:0;tsc
+: 1679060591:0;tsc -h
+: 1679060612:0;tsc --showConfig
+: 1679060652:0;tsc
+: 1679061070:0;deno -h
+: 1679062832:0;up
+: 1679121916:0;Projects/
+: 1679121917:0;puri
+: 1679121918:0;clear
+: 1679121918:0;ls
+: 1679121922:0;node_modules/
+: 1679121923:0;clear
+: 1679121924:0;fzf
+: 1679132099:0;tsc
+: 1679133145:0;ping 8.8.8.8
+: 1679133151:0;ping google.com
+: 1679133802:0;dnf info gnome-software
+: 1679134438:0;sudo dnf remove gnome-software
+: 1679134454:0;clear
+: 1679134657:0;dnf repo -h
+: 1679134663:0;dnf -h
+: 1679134698:0;dnf repo list
+: 1679134701:0;dnf repolist
+: 1679134705:0;dnf repolist -h
+: 1679134709:0;dnf repolist -all
+: 1679134714:0;dnf repolist --all
+: 1679134734:0;dnf install flatpak
+: 1679134742:0;sudo dnf install flatpak
+: 1679134765:0;sudo dnf remove gnome-software
+: 1679135082:0;sudo dnf install flatpak
+: 1679135185:0;flatpak list
+: 1679135189:0;flatpak list --app
+: 1679135192:0;up
+: 1679141387:0;up --latest
+: 1679141397:0;up --latest --dry-run
+: 1679141410:0;pn up --latest --dry-rnu
+: 1679141413:0;pn up --latest --dry-run
+: 1679141417:0;pn up --latest --dry
+: 1679141421:0;pn up --latest
+: 1679141883:0;up
+: 1679141887:0;pn up
+: 1679142535:0;tsc -v
+: 1679142536:0;tsc
+: 1679143793:0;up
+: 1679144442:0;clear
+: 1679144445:0;pn ls
+: 1679144450:0;pn ls -g
+: 1679144470:0;pn rm -g firebase-tools
+: 1679144484:0;pn ls
+: 1679144522:0;firebase
+: 1679144673:0;pn add -g firebase-tools
+: 1679147089:0;up
+: 1679149098:0;dnf search gpt
+: 1679152223:0;pnpm doctor
+: 1679212101:0;ifconfig
+: 1679212318:0;ping 192.168.1.2
+: 1679212336:0;ping 192.168.1.222
+: 1679212428:0;pn run dev --host
+: 1679213715:0;alias
+: 1679213722:0;obu
+: 1679213727:0;yal
+: 1679213728:0;yas
+: 1679213733:0;clear
+: 1679213735:0;yal
+: 1679213877:0;deno task jalan
+: 1679225436:0;on ls
+: 1679225438:0;pn ls
+: 1679225458:0;pn up --latest
+: 1679246659:0;deno task jalan
+: 1679306261:0;pn ls
+: 1679306265:0;pn ls -g
+: 1679307508:0;flatpak install kooha
+: 1679307658:0;dnf search recorder
+: 1679307677:0;flatpak install peek
+: 1679307698:0;flatpak rm kooha
+: 1679307701:0;flatpak remove kooha
+: 1679307951:0;Videos
+: 1679307956:0;cd Media/Videos
+: 1679307957:0;clear
+: 1679307957:0;ls
+: 1679307959:0;Screencasts/
+: 1679307960:0;clear
+: 1679307960:0;ls
+: 1679307985:0;ffmpeg -i Screencast\ from\ 2023-03-20\ 17-15-23.webm video.mp4
+: 1679308000:0;ffmpeg -i Screencast\ from\ 2023-03-20\ 17-15-23.webm -crf 26 video.mp4
+: 1679308223:0;flatpak list --app
+: 1679308230:0;flatpak remove peek
+: 1679308261:0;flatpak -h
+: 1679308564:0;flatpak install handbrake
+: 1679308661:0;dnf search handbrake
+: 1679308667:0;flatpak remove handbrake
+: 1679308675:0;sudo dnf install handbrake
+: 1679308717:0;dnf install handbrake
+: 1679308720:0;sudo dnf install handbrake
+: 1679308751:0;handbrake
+: 1679308753:0;clear
+: 1679308756:0;dnf info handbrake
+: 1679308865:0;sudo dnf install handbrake
+: 1679308882:0;dnf -h
+: 1679308922:0;dnf provides handbrake
+: 1679308940:0;handbrake
+: 1679308946:0;fzf
+: 1679308966:0;sudo dnf remove handbrake
+: 1679308972:0;flatpak install handbrake
+: 1679309126:0;flatpak remove handbrake
+: 1679309198:0;tldr ffmpeg
+: 1679309674:0;Media/Videos/Screencasts/
+: 1679309675:0;clear
+: 1679309675:0;ls
+: 1679309694:0;ffmpeg -i video.webm -c:v copy -c:a copy output.mp4
+: 1679309699:0;sudo ffmpeg -i video.webm -c:v copy -c:a copy output.mp4
+: 1679309747:0;ffmpeg -i video.webm -c:v libx264 output.mp4
+: 1679309791:0;ffmpeg -i video.webm -c:v libx264 -filter:v "scale=1056:-2" output.mp4
+: 1679309904:0;ls
+: 1679309970:0;flatpak install peek
+: 1679310230:0;dnf search simple screen recorder
+: 1679310240:0;dnf intall  simple screen recorder
+: 1679310245:0;sudo dnf install simple screen recorder
+: 1679310254:0;sudo dnf install simplescreenrecorder
+: 1679311911:0;ping _gateway
+: 1679311951:0;ip route get 1.1.1.1
+: 1679312694:0;fzf
+: 1679312718:0;.config
+: 1679312719:0;ls
+: 1679312729:0;code envrc.secret
+: 1679313238:0;yas
+: 1679313243:0;yadm encrypt
+: 1679313258:0;yas
+: 1679313260:0;yau
