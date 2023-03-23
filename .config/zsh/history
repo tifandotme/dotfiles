@@ -106,7 +106,6 @@
 : 1678596711:0;Projects/puri
 : 1678596730:0;tsc --target ES5 hello.ts --outFile hel.js
 : 1678596753:0;tsc --swc
-: 1678597227:0;pnpm run build
 : 1678597585:0;npm -g install @swc/cli
 : 1678597595:0;sud onpm -g install @swc/cli
 : 1678597599:0;sudo onpm -g install @swc/cli
@@ -165,7 +164,6 @@
 : 1678600556:0;pn -g i @swc/code @swc/cli
 : 1678600563:0;pn -g i @swc/core @swc/cli
 : 1678600613:0;pn i -g firebase-tools
-: 1678600654:0;pn ls
 : 1678600664:0;nodemon hello.ts
 : 1678600678:0;rm hello.js
 : 1678600680:0;swc hello.ts
@@ -186,9 +184,7 @@
 : 1678607910:0;yadm add -u
 : 1678607922:0;yadm commit -m "add"
 : 1678607925:0;yadm push
-: 1678607967:0;.config
 : 1678608001:0;cat yadm/encrypt
-: 1678608007:0;yadm encrypt
 : 1678608108:0;yadm status
 : 1678608114:0;ya
 : 1678608194:0;status
@@ -200,7 +196,6 @@
 : 1678608390:0;git -C ~/Documents/Notes push
 : 1678608401:0;code aliasrc
 : 1678608556:0;Documents/Notes/
-: 1678608637:0;obu
 : 1678609200:0;gh
 : 1678609236:0;gh repo view
 : 1678609244:0;gh repo view --web
@@ -216,7 +211,6 @@
 : 1678610346:0;code ~/.config/envrc
 : 1678610457:0;mv .deno .local/share/deno
 : 1678610466:0;.local/share
-: 1678610478:0;bin
 : 1678610537:0;deno --help
 : 1678610555:0;/home/tifan/.local/share/deno/bin/deno
 : 1678610580:0;echo $PATH
@@ -243,7 +237,6 @@
 : 1678610954:0;gh repo delete HAHA
 : 1678611077:0;deno help
 : 1678611101:0;deno run https://deno.land/std/examples/welcome.ts
-: 1678611263:0;Projects
 : 1678611279:0;touch dinosaur.ts
 : 1678611288:0;code dinosaur.ts
 : 1678611548:0;deno run dinosaur.ts ads
@@ -256,7 +249,6 @@
 : 1678617523:0;whence man
 : 1678617598:0;yt-dlp -U
 : 1678617637:0;yt-dlp --list-extractors
-: 1678617889:0;Videos
 : 1678618012:0;xattr
 : 1678618022:0;dnf info xattr
 : 1678618091:0;sudo dnf install xattr
@@ -273,14 +265,12 @@
 : 1678619506:0;yd https://frontendmasters.com/courses/react-typescript-v2/
 : 1678622031:0;Videos/YouTube/
 : 1678622033:0;yd https://www.youtube.com/watch?v=d56mG7DezGs
-: 1678622036:0;yd
 : 1678622058:0;yd "https://www.youtube.com/watch?v=d56mG7DezGs"
 : 1678623010:0;deno --watch
 : 1678623067:0;deno run --watch index.ts
 : 1678623168:0;deno run --help
 : 1678624973:0;sudo dnf up
 : 1678624982:0;flatpak up
-: 1678624986:0;flatpak update
 : 1678625093:0;flatpak update -h
 : 1678625121:0;flatpak update --noninteractive
 : 1678625131:0;dnf up -h
@@ -297,11 +287,9 @@
 : 1678627281:0;pnpm up
 : 1678627284:0;pnpm -g up
 : 1678627324:0;pn rm -g typescript
-: 1678627333:0;pn -g ls
 : 1678627343:0;pn up -g pnp
 : 1678627348:0;pn up -g pnpn
 : 1678627353:0;pn up -g pnpm
-: 1678627360:0;pnpm -h
 : 1678627386:0;pnpm run
 : 1678627393:0;pn -v
 : 1678627399:0;dnf info pnpm
@@ -335,7 +323,6 @@
 : 1678628377:0;rm .quokka/
 : 1678628406:0;.wallaby/
 : 1678628417:0;rm .wallaby/
-: 1678628437:0;cat nodemon.json
 : 1678628442:0;rm nodemon.json
 : 1678628445:0;cat Trolltech.conf
 : 1678628452:0;rm Trolltech.conf
@@ -359,9 +346,7 @@
 : 1678629409:0;flatpak --installations
 : 1678629435:0;flatpak uninstall Mesa
 : 1678629441:0;flatpak uninstall gl
-: 1678629474:0;flatpak remove peek
 : 1678629519:0;flatpak list -d
-: 1678629524:0;flatpak list
 : 1678629528:0;flatpak list -h
 : 1678629540:0;flatpak list -app
 : 1678629550:0;flatpak list --runtimes
@@ -371,8 +356,6 @@
 : 1678629770:0;yadm add .config/user-dirs.dirs
 : 1678629805:0;code .config/autostart/
 : 1678634709:0;yadm list -a
-: 1678634722:0;yadm
-: 1678635078:0;flatpak list --app
 : 1678635771:0;dino -h
 : 1678635803:0;deno run --watch --quite
 : 1678635806:0;deno run --watch --quiet
@@ -382,30 +365,20 @@
 : 1678635850:0;deno run -q --watch=index.ts
 : 1678635879:0;deno run -q --watch *
 : 1678636071:0;[200~deno run -q --watch index.ts~
-: 1678636090:0;deno run -q --watch index.ts
 : 1678636232:0;git diff
 : 1678636278:0;git commit -m "REFACTOR TO TYPESCRIPT" && git push
 : 1678636521:0;firebase-tools
-: 1678636532:0;help firebase
-: 1678636655:0;pnpm ci
-: 1678636779:0;firebase deploy -h
-: 1678636791:0;firebase deploy
-: 1678636836:0;pnpm build
 : 1678637383:0;eslint: lint whole folder
 : 1678665538:0;sudo dnf autoremove
 : 1678665548:0;dnf hist userinstalled
 : 1678665564:0;dnf repo
-: 1678665566:0;dnf -h
 : 1678665642:0;dnf list --installed
 : 1678665659:0;man dnf
 : 1678665680:0;dnf alias
 : 1678665682:0;dnf alias list
 : 1678665715:0;clea
-: 1678667629:0;git add .
 : 1678667639:0;git commit -m "delete old jsx"
-: 1678667640:0;git push
 : 1678700113:0;sudo up
-: 1678700462:0;ping 8.8.8.8
 : 1678702172:0;deno run -q --watch goblok.js
 : 1678704751:0;deno run -q --watch --config ./deno.json index.ts
 : 1678704965:0;swc
@@ -418,13 +391,11 @@
 : 1678705260:0;pnpm list -g
 : 1678706779:0;node index.ts
 : 1678709013:0;help pn
-: 1678709014:0;help pnpm
 : 1678709031:0;pnpm create -h
 : 1678709047:0;pnpm dlx create vite
 : 1678709081:0;cd yolo
 : 1678709096:0;mv yolo/ puri/yolo
 : 1678714552:0;pnpm create vite
-: 1678717348:0;pn vite build
 : 1678720501:0;htop
 : 1678721546:0;deno task
 : 1678722166:0;help deno
@@ -444,11 +415,8 @@
 : 1678738050:0;ts-playground/
 : 1678738055:0;cat hello.ts
 : 1678738067:0;rm ts-playground/
-: 1678738069:0;l
 : 1678738074:0;adopt-me
-: 1678738076:0;git status
 : 1678738094:0;jurassic-land/
-: 1678738279:0;tsc -v
 : 1678738299:0;tsc -w index.ts && node
 : 1678738533:0;deno doc
 : 1678738538:0;deno doc index.ts
@@ -463,15 +431,12 @@
 : 1678739087:0;node index.js
 : 1678739203:0;pn rm -g ts-node
 : 1678739211:0;pn add -g nodemon
-: 1678739228:0;pn up -g
 : 1678739271:0;rm welcome
 : 1678739280:0;help nodemon -h
 : 1678739304:0;nodemon --help options
 : 1678739553:0;pn add -g ts-node
-: 1678739585:0;ts-node index.ts
 : 1678740010:0;nodemon index.js
 : 1678740046:0;nodemon -q index.js
-: 1678740231:0;tsc --showConfig
 : 1678740349:0;tsc -w index.ts --target es3
 : 1678740433:0;tsc -w index.ts
 : 1678740548:0;tsc -w index.ts --target esnext
@@ -485,52 +450,41 @@
 : 1678742147:0;tsc --noEmit
 : 1678787821:0;playground/
 : 1678790293:0;tsc -w
-: 1678793365:0;deno run -h
 : 1678793405:0;tsc index.ts
-: 1678793428:0;tsc
 : 1678793487:0;nodemon index.ts
 : 1678793664:0;deno --showConfig
 : 1678835432:0;yadl
 : 1678840603:0;cat .config/npm/rc
 : 1678840618:0;cat .config/pnpm/rc
 : 1678840693:0;cat .config/zsh/history
-: 1678899377:0;pn up
 : 1678900594:0;npm
-: 1678900599:0;alias
 : 1678900613:0;npm add -g dts-gen
 : 1678900682:0;Media/Videos/YouTube/
 : 1678900693:0;yd "https://www.youtube.com/watch?v=dLPgQRbVquo"
 : 1678900946:0;~
-: 1678900950:0;Projects/
 : 1678901177:0;pn add -g territory-indonesia
 : 1678901197:0;dts-gen -m territory-indonesi
 : 1678901201:0;dts-gen -m territory-indonesia
 : 1678901209:0;code territory-indonesia.d.ts
 : 1678901224:0;dts-gen -h
-: 1678901238:0;pn list
 : 1678901242:0;pn list -g
 : 1678901254:0;pn rm -g dts-gen territory-indonesia
 : 1678901264:0;rm territory-indonesia.d.ts
-: 1678901267:0;puri
 : 1678901293:0;pn -g up
 : 1678902383:0;;s
-: 1678902388:0;pwd
 : 1678902397:0;data
 : 1678902407:0;src
 : 1678902418:0;pnpm dlx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types
 : 1678902430:0;tsc *.js --declaration --allowJs --emitDeclarationOnly --outDir types
 : 1678902603:0;rm types
 : 1678902615:0;tsc *.js --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --outDir types
-: 1678902674:0;tsc -h
 : 1678902679:0;tsc -h | grep json
 : 1678902691:0;help tsc
 : 1678903703:0;tsc *.js --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --outDir ../../../types
 : 1678903837:0;-
 : 1678903839:0;--
-: 1678903881:0;lsa
 : 1678903895:0;ls ../../puri
 : 1678903900:0;ls ../../types
-: 1678903961:0;node_modules/
 : 1678903963:0;territory-indonesia/
 : 1678903966:0;ls ..
 : 1678903981:0;pwd ../..
@@ -540,84 +494,38 @@
 : 1678904010:0;lsa ../../
 : 1678904028:0;cd ../../types
 : 1678904069:0;mv types/ ../../../types
-: 1678904072:0;..
-: 1678904073:0;ls
-: 1678921067:0;clear
-: 1678921123:0;deno task jalan
-: 1678921329:0;help yt-dlp
-: 1678921439:0;alias yd
 : 1678921494:0;yt-dlp "https://www.youtube.com/watch?v=dLPgQRbVquo"
-: 1678925918:0;yal
-: 1678925920:0;yas
-: 1678925921:0;yau
-: 1678965258:0;pnpm up -h
 : 1678965283:0;code .config/aliasrc
 : 1678965344:0;nano .config/aliasrc
-: 1678965398:0;pn ls -g
-: 1678965412:0;up
-: 1678965421:0;exec zsh
-: 1678965424:0;up
 : 1678975211:0;eslint --print-config .
-: 1678982498:0;yau
-: 1679005852:0;pn up
-: 1679005943:0;pnpm ls
-: 1679006000:0;pnpm up -h
 : 1679006011:0;pnpm up -L
 : 1679007953:0;pnpm -h
 : 1679007957:0;pnpm up -h
 : 1679008400:0;pnpm vite build
-: 1679008436:0;tsc
-: 1679008522:0;git status
-: 1679008638:0;git commit -am "REFACTOR TO TYPESCRIPT CONT. (fixes ts errors)"
-: 1679008643:0;git status
 : 1679008690:0;git reset
-: 1679008692:0;git status
 : 1679008708:0;git reset --soft
-: 1679008710:0;git status
 : 1679008720:0;git reset --soft HEAD~1
-: 1679008724:0;git status
 : 1679008770:0;git add .
-: 1679008772:0;git status
 : 1679008807:0;git commit -am "REFACTOR TO TYPESCRIPT CONT. (fixes ts errors)"
 : 1679008809:0;git status
 : 1679008811:0;git push
 : 1679009066:0;pnpm run build
-: 1679009180:0;tsc -v
 : 1679009193:0;pnpm up -gL
 : 1679009203:0;pnpm ls -g
 : 1679009209:0;pnpm up -g --latest
 : 1679009221:0;pnpm up --latest -g
 : 1679009316:0;pnpm install
-: 1679013353:0;pn run build
-: 1679013402:0;clear
-: 1679013403:0;pn list
-: 1679013411:0;pn up
-: 1679013531:0;pn run build
 : 1679013599:0;pn list
-: 1679013608:0;tsc
 : 1679013631:0;pn vite build
-: 1679046035:0;up
 : 1679046049:0;flatpak update
-: 1679046053:0;pn up -g
-: 1679046113:0;pn ls
-: 1679046116:0;pn ls -g
-: 1679046128:0;pn up -g --latest
 : 1679046144:0;pn up -h
 : 1679046173:0;pn up -g typescript@latest
 : 1679046194:0;pn up typescript
 : 1679046198:0;pn up -g typescript
 : 1679046251:0;pn up -g typescript@5.0.2
 : 1679046260:0;pn add -g typescript@5.0.2
-: 1679046270:0;clear
-: 1679046273:0;pn up -g
-: 1679046293:0;pn run build
-: 1679046306:0;up
-: 1679046439:0;pn run build
-: 1679046727:0;tsc -v
-: 1679046732:0;pn ls
 : 1679046771:0;pn -g ls
 : 1679046784:0;pn add typescript@4.9.5
-: 1679046797:0;pn ls
 : 1679046818:0;pn run build
 : 1679050793:0;help firebase
 : 1679050815:0;firebase -h
@@ -626,167 +534,86 @@
 : 1679050883:0;man firebase
 : 1679050888:0;firebase init hosting:github
 : 1679051009:0;pnpm ci
-: 1679051017:0;pn  -h
 : 1679051783:0;pn ci
-: 1679051800:0;tsc
-: 1679051903:0;tsc -v
-: 1679051905:0;ls
 : 1679051908:0;lsa
 : 1679051919:0;ls -h
 : 1679051922:0;pnpm ls
 : 1679051954:0;pwd
-: 1679051958:0;node_modules/
 : 1679051995:0;typescript
-: 1679051996:0;ls
-: 1679051998:0;bin
-: 1679051998:0;clear
-: 1679051999:0;ls
-: 1679052003:0;./tsc
 : 1679052019:0;./tsc -v
-: 1679052519:0;clear
-: 1679052521:0;.config
-: 1679052522:0;ls
-: 1679052539:0;code envrc.secret
 : 1679052614:0;yadm
-: 1679052616:0;clear
-: 1679052619:0;cd yadm
-: 1679052620:0;ls
-: 1679052624:0;..
 : 1679052630:0;cd yadm
-: 1679052632:0;yal
 : 1679052636:0;cat encrypt
-: 1679053676:0;yadm encrypt
-: 1679053690:0;yas
-: 1679053693:0;yau
 : 1679053714:0;pnpm dev
-: 1679054125:0;clear
-: 1679054125:0;ls
-: 1679054126:0;clear
-: 1679054128:0;tsc -v
 : 1679054145:0;node_modules/typescript/bin/tsc -v
 : 1679054148:0;node_modules/typescript/bin/tsc
-: 1679059180:0;tsc -v
-: 1679059184:0;tsc
 : 1679059423:0;firebase init database
 : 1679059642:0;firebase deploy
 : 1679059711:0;pnpm build
-: 1679059730:0;up
 : 1679059780:0;firebase deploy -h
 : 1679059803:0;firebase deploy -m "deployyyyyyingggg"
-: 1679060575:0;tsc
 : 1679060591:0;tsc -h
 : 1679060612:0;tsc --showConfig
-: 1679060652:0;tsc
 : 1679061070:0;deno -h
-: 1679062832:0;up
 : 1679121916:0;Projects/
 : 1679121917:0;puri
-: 1679121918:0;clear
-: 1679121918:0;ls
 : 1679121922:0;node_modules/
-: 1679121923:0;clear
-: 1679121924:0;fzf
-: 1679132099:0;tsc
-: 1679133145:0;ping 8.8.8.8
-: 1679133151:0;ping google.com
 : 1679133802:0;dnf info gnome-software
-: 1679134438:0;sudo dnf remove gnome-software
-: 1679134454:0;clear
 : 1679134657:0;dnf repo -h
-: 1679134663:0;dnf -h
 : 1679134698:0;dnf repo list
 : 1679134701:0;dnf repolist
 : 1679134705:0;dnf repolist -h
 : 1679134709:0;dnf repolist -all
 : 1679134714:0;dnf repolist --all
 : 1679134734:0;dnf install flatpak
-: 1679134742:0;sudo dnf install flatpak
 : 1679134765:0;sudo dnf remove gnome-software
 : 1679135082:0;sudo dnf install flatpak
 : 1679135185:0;flatpak list
-: 1679135189:0;flatpak list --app
-: 1679135192:0;up
 : 1679141387:0;up --latest
 : 1679141397:0;up --latest --dry-run
 : 1679141410:0;pn up --latest --dry-rnu
 : 1679141413:0;pn up --latest --dry-run
 : 1679141417:0;pn up --latest --dry
-: 1679141421:0;pn up --latest
-: 1679141883:0;up
-: 1679141887:0;pn up
-: 1679142535:0;tsc -v
-: 1679142536:0;tsc
-: 1679143793:0;up
-: 1679144442:0;clear
-: 1679144445:0;pn ls
-: 1679144450:0;pn ls -g
 : 1679144470:0;pn rm -g firebase-tools
-: 1679144484:0;pn ls
 : 1679144522:0;firebase
 : 1679144673:0;pn add -g firebase-tools
-: 1679147089:0;up
-: 1679149098:0;dnf search gpt
 : 1679152223:0;pnpm doctor
 : 1679212101:0;ifconfig
 : 1679212318:0;ping 192.168.1.2
 : 1679212336:0;ping 192.168.1.222
 : 1679212428:0;pn run dev --host
-: 1679213715:0;alias
 : 1679213722:0;obu
-: 1679213727:0;yal
-: 1679213728:0;yas
-: 1679213733:0;clear
-: 1679213735:0;yal
-: 1679213877:0;deno task jalan
 : 1679225436:0;on ls
-: 1679225438:0;pn ls
 : 1679225458:0;pn up --latest
-: 1679246659:0;deno task jalan
-: 1679306261:0;pn ls
 : 1679306265:0;pn ls -g
 : 1679307508:0;flatpak install kooha
 : 1679307658:0;dnf search recorder
-: 1679307677:0;flatpak install peek
 : 1679307698:0;flatpak rm kooha
 : 1679307701:0;flatpak remove kooha
 : 1679307951:0;Videos
 : 1679307956:0;cd Media/Videos
-: 1679307957:0;clear
-: 1679307957:0;ls
 : 1679307959:0;Screencasts/
-: 1679307960:0;clear
-: 1679307960:0;ls
 : 1679307985:0;ffmpeg -i Screencast\ from\ 2023-03-20\ 17-15-23.webm video.mp4
 : 1679308000:0;ffmpeg -i Screencast\ from\ 2023-03-20\ 17-15-23.webm -crf 26 video.mp4
 : 1679308223:0;flatpak list --app
 : 1679308230:0;flatpak remove peek
 : 1679308261:0;flatpak -h
-: 1679308564:0;flatpak install handbrake
 : 1679308661:0;dnf search handbrake
-: 1679308667:0;flatpak remove handbrake
-: 1679308675:0;sudo dnf install handbrake
 : 1679308717:0;dnf install handbrake
-: 1679308720:0;sudo dnf install handbrake
-: 1679308751:0;handbrake
-: 1679308753:0;clear
 : 1679308756:0;dnf info handbrake
 : 1679308865:0;sudo dnf install handbrake
 : 1679308882:0;dnf -h
 : 1679308922:0;dnf provides handbrake
 : 1679308940:0;handbrake
-: 1679308946:0;fzf
 : 1679308966:0;sudo dnf remove handbrake
 : 1679308972:0;flatpak install handbrake
 : 1679309126:0;flatpak remove handbrake
 : 1679309198:0;tldr ffmpeg
 : 1679309674:0;Media/Videos/Screencasts/
-: 1679309675:0;clear
-: 1679309675:0;ls
 : 1679309694:0;ffmpeg -i video.webm -c:v copy -c:a copy output.mp4
 : 1679309699:0;sudo ffmpeg -i video.webm -c:v copy -c:a copy output.mp4
 : 1679309747:0;ffmpeg -i video.webm -c:v libx264 output.mp4
 : 1679309791:0;ffmpeg -i video.webm -c:v libx264 -filter:v "scale=1056:-2" output.mp4
-: 1679309904:0;ls
 : 1679309970:0;flatpak install peek
 : 1679310230:0;dnf search simple screen recorder
 : 1679310240:0;dnf intall  simple screen recorder
@@ -795,17 +622,8 @@
 : 1679311911:0;ping _gateway
 : 1679311951:0;ip route get 1.1.1.1
 : 1679312694:0;fzf
-: 1679312718:0;.config
-: 1679312719:0;ls
 : 1679312729:0;code envrc.secret
-: 1679313238:0;yas
 : 1679313243:0;yadm encrypt
-: 1679313258:0;yas
-: 1679313260:0;yau
-: 1679314655:0;up
-: 1679315112:0;deno task jalan
-: 1679315779:0;clear
-: 1679315779:0;ls
 : 1679315783:0;deno task jalan
 : 1679315893:0;deno run -h
 : 1679315911:0;deno -q --watch index.ts
@@ -813,70 +631,41 @@
 : 1679315928:0;deno run -q --watch index.ts
 : 1679316074:0;ts-node index.ts
 : 1679316081:0;ts-node --watch  index.ts
-: 1679316099:0;nodemon -q index.ts
-: 1679324198:0;..
-: 1679324200:0;clear
-: 1679324208:0;Projects
 : 1679324222:0;help pnpm
-: 1679324234:0;pn -h
 : 1679324348:0;pn dlx create-next-app@latest
-: 1679326324:0;tsc
 : 1679326467:0;node_modules/typescript/
-: 1679326470:0;ls
 : 1679326474:0;bin
-: 1679326475:0;ls
-: 1679326477:0;./tsc
-: 1679326509:0;clear
 : 1679326541:0;./tsc
-: 1679331728:0;tsc
 : 1679400295:0;dnf search gpt
 : 1679400308:0;flatpak search gpt
-: 1679449683:0;up
-: 1679450553:0;yas
 : 1679450556:0;yal
-: 1679450559:0;yas
-: 1679458402:0;nodemon -q index.ts
 : 1679458650:0;cat .config/envrc.secret
 : 1679461588:0;pn add react-firebase-hooks/database
 : 1679461610:0;pn add react-firebase-hooks
 : 1679462113:0;pn remove react-firebase-hooks
-: 1679515601:0;nodemon -q index.ts
 : 1679521540:0;alias pn
 : 1679525551:0;up
 : 1679533596:0;nodemon -q index.ts
-: 1679534451:0;pn ls
 : 1679534454:0;pn ls -gg
 : 1679537820:0;pn -h
 : 1679537989:0;pn remove tanstack-query
 : 1679537998:0;pn remove
 : 1679538014:0;pn remove @tanstack/react-query @tanstack/react-query-devtools
-: 1679538021:0;pn up
-: 1679538255:0;tsc -v
-: 1679538257:0;tsc
 : 1679538330:0;pn ls
 : 1679542315:0;pn up -g
 : 1679542319:0;pn up -g --latest
-: 1679560453:0;Projects
-: 1679560462:0;pn create astro@latest
-: 1679561269:0;ls
 : 1679561300:0;pn run dev
 : 1679561304:0;astro dev
-: 1679561307:0;..
 : 1679561317:0;rm blog
-: 1679561322:0;ls
 : 1679561431:0;Projects
-: 1679561436:0;ls
 : 1679561439:0;pn create astro@latest
-: 1679564339:0;pn dev
 : 1679564347:0;cd blog
 : 1679564348:0;pn dev
 : 1679564736:0;tsc -v
 : 1679564737:0;tsc
 : 1679565811:0;tldr yt-dlp
 : 1679565827:0;yt-dlp --list-formats "https://www.youtube.com/watch?v=YkOSUVzOAA4"
-: 1679568266:0;alias yd
 : 1679568487:0;yt-dlp -Sh
-: 1679568492:0;man yt-dlp
 : 1679570660:0;which tldr
 : 1679570687:0;rpm -rf $(which yt-dlp)
 : 1679570695:0;sudo rpm -rf $(which yt-dlp)
@@ -886,64 +675,34 @@
 : 1679570773:0;dnf info tldr
 : 1679570867:0;rpm -qf $(which tsc)
 : 1679570995:0;.config
-: 1679570996:0;ls
 : 1679571012:0;cat nodemon.json
 : 1679571021:0;mkdir yt-dlp
 : 1679571025:0;cd yt-dlp/
-: 1679571025:0;l
-: 1679571027:0;clear
 : 1679571050:0;touch config
-: 1679571052:0;ls
 : 1679571054:0;code config
-: 1679571170:0;alias yt-dlp
-: 1679571174:0;alias yd
-: 1679571192:0;help yt-dlp
-: 1679571574:0;yt-dlp "https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679571581:0;ls
 : 1679571582:0;..
 : 1679571603:0;alias yt-dlp
-: 1679571606:0;alias yd
 : 1679571658:0;yt-dlp --progress "https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679571678:0;ls
 : 1679571695:0;rm What\ is\ Happening\ with\ Samsung\'s\ Cameraï¼ƒ¿\ \[1afpDuTb-P0\].f313.webm.*
-: 1679571696:0;ls
-: 1679571697:0;clear
-: 1679571697:0;ls
 : 1679571766:0;./Media/Videos/Youtube
 : 1679571770:0;cd Media/Videos/Youtube
 : 1679571777:0;Media/Videos
 : 1679571779:0;YouTube
-: 1679571780:0;ls
-: 1679571781:0;clear
 : 1679571783:0;mkdir test
 : 1679571784:0;cd test
-: 1679571785:0;ls
-: 1679571786:0;clear
 : 1679571794:0;yt-dlp "https://www.youtube.com/watch?v=Tq9qpA2QOTI"
 : 1679571815:0;rm*
-: 1679571815:0;ls
-: 1679571817:0;rm *
-: 1679571823:0;clear
-: 1679571823:0;ls
 : 1679571844:0;yt-dlp --console-title "https://www.youtube.com/watch?v=Tq9qpA2QOTI"
 : 1679572169:0;yt-dlp -F "https://www.youtube.com/watch?v=Tq9qpA2QOTI"
 : 1679572232:0;yt-dlp -q "https://www.youtube.com/watch?v=Tq9qpA2QOTI"
-: 1679572253:0;ls
 : 1679572333:0;yt-dlp -s "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679572393:0;yt-dlp"https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679572397:0;yt-dlp "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679572605:0;help yt-dlp
 : 1679572920:0;l
-: 1679572921:0;ls
 : 1679572926:0;rm * -y
-: 1679572932:0;clear
 : 1679572933:0;rm *
-: 1679572936:0;ls
 : 1679572952:0;yt-dl "https://www.youtube.com/watch?v=R3UnOUj-VvM"
-: 1679572956:0;yt-dlp "https://www.youtube.com/watch?v=R3UnOUj-VvM"
-: 1679572993:0;ls
 : 1679573290:0;yt-dlp "https://www.youtube.com/watch?v=R3UnOUj-VvM"
-: 1679573954:0;ls
 : 1679573993:0;yt-dlp "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679574219:0;clear
 : 1679574413:0;yt-dlp -f - "https://www.youtube.com/watch?v=1afpDuTb-P0"
@@ -951,7 +710,6 @@
 : 1679574623:0;yt-dlp -v
 : 1679574643:0;yt-dlp -v -F "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679574857:0;yt-dlp -f best -S +size,+br,+res,+fps "https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679574879:0;ls
 : 1679574989:0;alias yd
 : 1679575269:0;yt-dlp -S "res:720,codec" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679575339:0;yt-dlp -S "res:800,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
@@ -963,32 +721,64 @@
 : 1679576081:0;yt-dlp -f "(webm)[height<=720]" -S "res:720,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679576089:0;yt-dlp -f "(webm)[height<=720]" -F -S "res:720,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679576117:0;yt-dlp --prefer-free-formats -S "res:720,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679576235:0;yt-dlp --prefer-free-formats -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679576500:0;ls
-: 1679576535:0;yt-dlp --prefer-free-formats -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679576629:0;ping google.com
 : 1679576635:0;alias ping
 : 1679576639:0;alias 8.8.8.8
 : 1679576651:0;ping 8.8.8.8
 : 1679576664:0;ping google.com
 : 1679576669:0;yt-dlp --prefer-free-formats -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679576793:0;yt-dlp -f "mp4 -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679576811:0;yt-dlp -f "mp4[height<=?720]" -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679576972:0;which speedtest
 : 1679577013:0;yt-dlp -f "mp4[height<=?720]" -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679577347:0;yt-dlp -S "res:720,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679577566:0;yt-dlp -S "res:720,codec:avc:m4a" -s "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679577617:0;yt-dlp -S "res:720,codec:avc:m4a" -s -F "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679577654:0;yt-dlp -S "res:720,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679577982:0;yt-dlp -S "codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679578579:0;yt-dlp -S "res:480,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679578667:0;yt-dlp -S "res:480,+codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679578767:0;yt-dlp -S "res:480,-codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679578772:0;yt-dlp -S "res:480,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679578829:0;lsblk
 : 1679579084:0;yt-dlp -S "res:1080,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679579398:0;cat ~/.config/yt-dlp/config
-: 1679579406:0;alias
 : 1679579421:0;ya add ~/.config/yt-dlp/config
 : 1679579423:0;yas
 : 1679579427:0;yau
+: 1679579684:0;pn remove firebase-admin
+: 1679579713:0;pn up
+: 1679580959:0;var="something"
+: 1679580967:0;echo something
+: 1679580979:0;echo $something
+: 1679580984:0;echo '$something'
+: 1679580987:0;echo "$something"
+: 1679581017:0;echo '$var'
+: 1679581020:0;echo "$var"
+: 1679581024:0;echo $var
+: 1679581080:0;echo ${var/}
+: 1679581083:0;echo ${var/some/a}
+: 1679581091:0;echo ${var/some/SOME}
+: 1679581190:0;alias -p
+: 1679581192:0;alias
+: 1679581283:0;read -r anw
+: 1679581291:0;echo $anw
+: 1679581572:0;help read
+: 1679581574:0;read -h
+: 1679581576:0;read --help
+: 1679581578:0;read r
+: 1679581957:0;yt-dlp -S "ba" https://www.youtube.com/watch?v=w3V-rxioJSY
+: 1679581961:0;yt-dlp -S "ba" "https://www.youtube.com/watch?v=w3V-rxioJSY"
+: 1679582023:0;yt-dlp -f "ba" "https://www.youtube.com/watch?v=w3V-rxioJSY"
+: 1679582438:0;mv Difference\ between\ Jr\ and\ Sr\ Software\ Engineer.mp4 Media/Videos/YouTube/test
+: 1679582706:0;ls
+: 1679583003:0;read -r -p "asdasd" choice
+: 1679583007:0;read -r "asdasd" choice
+: 1679583029:0;echo "\nFile has been downloaded to ~/Media/Videos/YouTube"
+: 1679583104:0;yd
+: 1679583201:0;yd -F "https://www.youtube.com/watch?v=w3V-rxioJSY"
+: 1679583208:0;yt-dlp -F "https://www.youtube.com/watch?v=w3V-rxioJSY"
+: 1679583306:0;yt-dlp "https://www.youtube.com/watch?v=XaQiY_Zi5YM" -F
+: 1679583332:0;yd "https://www.youtube.com/watch?v=XaQiY_Zi5YM" -F
+: 1679584080:0;yd "https://www.youtube.com/watch?v=w3V-rxioJSY" --skip-download
+: 1679584404:0;exec zs
+: 1679584413:0;yd "https://www.youtube.com/watch?v=w3V-rxioJSY"
+: 1679584471:0;exec zsh
+: 1679584472:0;yas
+: 1679584477:0;yau

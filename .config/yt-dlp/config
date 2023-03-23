@@ -5,9 +5,8 @@
 
 --sponsorblock-remove sponsor,selfpromo,interaction
 
---progress
 --quiet
+--progress
 
---format-sort "res:720,codec:avc:m4a"
-
---output "%(title)s.%(ext)s"
+--paths "~/Media/Videos/YouTube"
+--output "%(uploader)s/%(title)s.%(ext)s"
