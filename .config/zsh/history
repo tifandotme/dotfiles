@@ -802,3 +802,193 @@
 : 1679313243:0;yadm encrypt
 : 1679313258:0;yas
 : 1679313260:0;yau
+: 1679314655:0;up
+: 1679315112:0;deno task jalan
+: 1679315779:0;clear
+: 1679315779:0;ls
+: 1679315783:0;deno task jalan
+: 1679315893:0;deno run -h
+: 1679315911:0;deno -q --watch index.ts
+: 1679315916:0;deno -q -watch index.ts
+: 1679315928:0;deno run -q --watch index.ts
+: 1679316074:0;ts-node index.ts
+: 1679316081:0;ts-node --watch  index.ts
+: 1679316099:0;nodemon -q index.ts
+: 1679324198:0;..
+: 1679324200:0;clear
+: 1679324208:0;Projects
+: 1679324222:0;help pnpm
+: 1679324234:0;pn -h
+: 1679324348:0;pn dlx create-next-app@latest
+: 1679326324:0;tsc
+: 1679326467:0;node_modules/typescript/
+: 1679326470:0;ls
+: 1679326474:0;bin
+: 1679326475:0;ls
+: 1679326477:0;./tsc
+: 1679326509:0;clear
+: 1679326541:0;./tsc
+: 1679331728:0;tsc
+: 1679400295:0;dnf search gpt
+: 1679400308:0;flatpak search gpt
+: 1679449683:0;up
+: 1679450553:0;yas
+: 1679450556:0;yal
+: 1679450559:0;yas
+: 1679458402:0;nodemon -q index.ts
+: 1679458650:0;cat .config/envrc.secret
+: 1679461588:0;pn add react-firebase-hooks/database
+: 1679461610:0;pn add react-firebase-hooks
+: 1679462113:0;pn remove react-firebase-hooks
+: 1679515601:0;nodemon -q index.ts
+: 1679521540:0;alias pn
+: 1679525551:0;up
+: 1679533596:0;nodemon -q index.ts
+: 1679534451:0;pn ls
+: 1679534454:0;pn ls -gg
+: 1679537820:0;pn -h
+: 1679537989:0;pn remove tanstack-query
+: 1679537998:0;pn remove
+: 1679538014:0;pn remove @tanstack/react-query @tanstack/react-query-devtools
+: 1679538021:0;pn up
+: 1679538255:0;tsc -v
+: 1679538257:0;tsc
+: 1679538330:0;pn ls
+: 1679542315:0;pn up -g
+: 1679542319:0;pn up -g --latest
+: 1679560453:0;Projects
+: 1679560462:0;pn create astro@latest
+: 1679561269:0;ls
+: 1679561300:0;pn run dev
+: 1679561304:0;astro dev
+: 1679561307:0;..
+: 1679561317:0;rm blog
+: 1679561322:0;ls
+: 1679561431:0;Projects
+: 1679561436:0;ls
+: 1679561439:0;pn create astro@latest
+: 1679564339:0;pn dev
+: 1679564347:0;cd blog
+: 1679564348:0;pn dev
+: 1679564736:0;tsc -v
+: 1679564737:0;tsc
+: 1679565811:0;tldr yt-dlp
+: 1679565827:0;yt-dlp --list-formats "https://www.youtube.com/watch?v=YkOSUVzOAA4"
+: 1679568266:0;alias yd
+: 1679568487:0;yt-dlp -Sh
+: 1679568492:0;man yt-dlp
+: 1679570660:0;which tldr
+: 1679570687:0;rpm -rf $(which yt-dlp)
+: 1679570695:0;sudo rpm -rf $(which yt-dlp)
+: 1679570716:0;rpm -qf $(which yt-dlp)
+: 1679570724:0;rpm -qf $(which yadm)
+: 1679570730:0;rpm -qf $(which tldr)
+: 1679570773:0;dnf info tldr
+: 1679570867:0;rpm -qf $(which tsc)
+: 1679570995:0;.config
+: 1679570996:0;ls
+: 1679571012:0;cat nodemon.json
+: 1679571021:0;mkdir yt-dlp
+: 1679571025:0;cd yt-dlp/
+: 1679571025:0;l
+: 1679571027:0;clear
+: 1679571050:0;touch config
+: 1679571052:0;ls
+: 1679571054:0;code config
+: 1679571170:0;alias yt-dlp
+: 1679571174:0;alias yd
+: 1679571192:0;help yt-dlp
+: 1679571574:0;yt-dlp "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679571581:0;ls
+: 1679571582:0;..
+: 1679571603:0;alias yt-dlp
+: 1679571606:0;alias yd
+: 1679571658:0;yt-dlp --progress "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679571678:0;ls
+: 1679571695:0;rm What\ is\ Happening\ with\ Samsung\'s\ Cameraï¼ƒ¿\ \[1afpDuTb-P0\].f313.webm.*
+: 1679571696:0;ls
+: 1679571697:0;clear
+: 1679571697:0;ls
+: 1679571766:0;./Media/Videos/Youtube
+: 1679571770:0;cd Media/Videos/Youtube
+: 1679571777:0;Media/Videos
+: 1679571779:0;YouTube
+: 1679571780:0;ls
+: 1679571781:0;clear
+: 1679571783:0;mkdir test
+: 1679571784:0;cd test
+: 1679571785:0;ls
+: 1679571786:0;clear
+: 1679571794:0;yt-dlp "https://www.youtube.com/watch?v=Tq9qpA2QOTI"
+: 1679571815:0;rm*
+: 1679571815:0;ls
+: 1679571817:0;rm *
+: 1679571823:0;clear
+: 1679571823:0;ls
+: 1679571844:0;yt-dlp --console-title "https://www.youtube.com/watch?v=Tq9qpA2QOTI"
+: 1679572169:0;yt-dlp -F "https://www.youtube.com/watch?v=Tq9qpA2QOTI"
+: 1679572232:0;yt-dlp -q "https://www.youtube.com/watch?v=Tq9qpA2QOTI"
+: 1679572253:0;ls
+: 1679572333:0;yt-dlp -s "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679572393:0;yt-dlp"https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679572397:0;yt-dlp "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679572605:0;help yt-dlp
+: 1679572920:0;l
+: 1679572921:0;ls
+: 1679572926:0;rm * -y
+: 1679572932:0;clear
+: 1679572933:0;rm *
+: 1679572936:0;ls
+: 1679572952:0;yt-dl "https://www.youtube.com/watch?v=R3UnOUj-VvM"
+: 1679572956:0;yt-dlp "https://www.youtube.com/watch?v=R3UnOUj-VvM"
+: 1679572993:0;ls
+: 1679573290:0;yt-dlp "https://www.youtube.com/watch?v=R3UnOUj-VvM"
+: 1679573954:0;ls
+: 1679573993:0;yt-dlp "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679574219:0;clear
+: 1679574413:0;yt-dlp -f - "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679574616:0;yt-dlp -v -F
+: 1679574623:0;yt-dlp -v
+: 1679574643:0;yt-dlp -v -F "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679574857:0;yt-dlp -f best -S +size,+br,+res,+fps "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679574879:0;ls
+: 1679574989:0;alias yd
+: 1679575269:0;yt-dlp -S "res:720,codec" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679575339:0;yt-dlp -S "res:800,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679575574:0;man yt-dlp
+: 1679575713:0;yt-dlp -f mp4 -S "res:720,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679575960:0;yt-dlp -f wemb -S "res:720,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679575981:0;yt-dlp -f webm -S "res:720,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679576051:0;yt-dlp -f "webm" -S "res:720,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679576081:0;yt-dlp -f "(webm)[height<=720]" -S "res:720,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679576089:0;yt-dlp -f "(webm)[height<=720]" -F -S "res:720,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679576117:0;yt-dlp --prefer-free-formats -S "res:720,fps" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679576235:0;yt-dlp --prefer-free-formats -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679576500:0;ls
+: 1679576535:0;yt-dlp --prefer-free-formats -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679576629:0;ping google.com
+: 1679576635:0;alias ping
+: 1679576639:0;alias 8.8.8.8
+: 1679576651:0;ping 8.8.8.8
+: 1679576664:0;ping google.com
+: 1679576669:0;yt-dlp --prefer-free-formats -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679576793:0;yt-dlp -f "mp4 -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679576811:0;yt-dlp -f "mp4[height<=?720]" -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679576972:0;which speedtest
+: 1679577013:0;yt-dlp -f "mp4[height<=?720]" -S "res:720" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679577347:0;yt-dlp -S "res:720,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679577566:0;yt-dlp -S "res:720,codec:avc:m4a" -s "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679577617:0;yt-dlp -S "res:720,codec:avc:m4a" -s -F "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679577654:0;yt-dlp -S "res:720,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679577982:0;yt-dlp -S "codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679578579:0;yt-dlp -S "res:480,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679578667:0;yt-dlp -S "res:480,+codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679578767:0;yt-dlp -S "res:480,-codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679578772:0;yt-dlp -S "res:480,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679578829:0;lsblk
+: 1679579084:0;yt-dlp -S "res:1080,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
+: 1679579398:0;cat ~/.config/yt-dlp/config
+: 1679579406:0;alias
+: 1679579421:0;ya add ~/.config/yt-dlp/config
+: 1679579423:0;yas
+: 1679579427:0;yau

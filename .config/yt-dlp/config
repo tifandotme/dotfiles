@@ -1,0 +1,13 @@
+--embed-metadata
+--embed-chapters
+--embed-subs
+--embed-thumbnail
+
+--sponsorblock-remove sponsor,selfpromo,interaction
+
+--progress
+--quiet
+
+--format-sort "res:720,codec:avc:m4a"
+
+--output "%(title)s.%(ext)s"
