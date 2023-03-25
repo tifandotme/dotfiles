@@ -140,7 +140,6 @@
 : 1678598921:0;curl -fsSL https://get.pnpm.io/install.sh | sh -
 : 1678599179:0;curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=7.29 sh -
 : 1678599195:0;curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=7.29.0 sh -
-: 1678599600:0;.local
 : 1678599602:0;share
 : 1678599603:0;pnpm
 : 1678599625:0;p
@@ -213,7 +212,6 @@
 : 1678610466:0;.local/share
 : 1678610537:0;deno --help
 : 1678610555:0;/home/tifan/.local/share/deno/bin/deno
-: 1678610580:0;echo $PATH
 : 1678610593:0;ts
 : 1678610638:0;deno
 : 1678610658:0;help gh
@@ -460,7 +458,6 @@
 : 1678900594:0;npm
 : 1678900613:0;npm add -g dts-gen
 : 1678900682:0;Media/Videos/YouTube/
-: 1678900693:0;yd "https://www.youtube.com/watch?v=dLPgQRbVquo"
 : 1678900946:0;~
 : 1678901177:0;pn add -g territory-indonesia
 : 1678901197:0;dts-gen -m territory-indonesi
@@ -496,7 +493,6 @@
 : 1678904069:0;mv types/ ../../../types
 : 1678921494:0;yt-dlp "https://www.youtube.com/watch?v=dLPgQRbVquo"
 : 1678965283:0;code .config/aliasrc
-: 1678965344:0;nano .config/aliasrc
 : 1678975211:0;eslint --print-config .
 : 1679006011:0;pnpm up -L
 : 1679007953:0;pnpm -h
@@ -507,7 +503,6 @@
 : 1679008720:0;git reset --soft HEAD~1
 : 1679008770:0;git add .
 : 1679008807:0;git commit -am "REFACTOR TO TYPESCRIPT CONT. (fixes ts errors)"
-: 1679008809:0;git status
 : 1679008811:0;git push
 : 1679009066:0;pnpm run build
 : 1679009193:0;pnpm up -gL
@@ -556,7 +551,6 @@
 : 1679060612:0;tsc --showConfig
 : 1679061070:0;deno -h
 : 1679121916:0;Projects/
-: 1679121917:0;puri
 : 1679121922:0;node_modules/
 : 1679133802:0;dnf info gnome-software
 : 1679134657:0;dnf repo -h
@@ -634,7 +628,6 @@
 : 1679324222:0;help pnpm
 : 1679324348:0;pn dlx create-next-app@latest
 : 1679326467:0;node_modules/typescript/
-: 1679326474:0;bin
 : 1679326541:0;./tsc
 : 1679400295:0;dnf search gpt
 : 1679400308:0;flatpak search gpt
@@ -657,7 +650,6 @@
 : 1679561300:0;pn run dev
 : 1679561304:0;astro dev
 : 1679561317:0;rm blog
-: 1679561431:0;Projects
 : 1679561439:0;pn create astro@latest
 : 1679564347:0;cd blog
 : 1679564348:0;pn dev
@@ -674,13 +666,11 @@
 : 1679570730:0;rpm -qf $(which tldr)
 : 1679570773:0;dnf info tldr
 : 1679570867:0;rpm -qf $(which tsc)
-: 1679570995:0;.config
 : 1679571012:0;cat nodemon.json
 : 1679571021:0;mkdir yt-dlp
 : 1679571025:0;cd yt-dlp/
 : 1679571050:0;touch config
 : 1679571054:0;code config
-: 1679571582:0;..
 : 1679571603:0;alias yt-dlp
 : 1679571658:0;yt-dlp --progress "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679571695:0;rm What\ is\ Happening\ with\ Samsung\'s\ Cameraï¼ƒ¿\ \[1afpDuTb-P0\].f313.webm.*
@@ -700,11 +690,9 @@
 : 1679572605:0;help yt-dlp
 : 1679572920:0;l
 : 1679572926:0;rm * -y
-: 1679572933:0;rm *
 : 1679572952:0;yt-dl "https://www.youtube.com/watch?v=R3UnOUj-VvM"
 : 1679573290:0;yt-dlp "https://www.youtube.com/watch?v=R3UnOUj-VvM"
 : 1679573993:0;yt-dlp "https://www.youtube.com/watch?v=1afpDuTb-P0"
-: 1679574219:0;clear
 : 1679574413:0;yt-dlp -f - "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679574616:0;yt-dlp -v -F
 : 1679574623:0;yt-dlp -v
@@ -740,8 +728,6 @@
 : 1679579084:0;yt-dlp -S "res:1080,codec:avc:m4a" "https://www.youtube.com/watch?v=1afpDuTb-P0"
 : 1679579398:0;cat ~/.config/yt-dlp/config
 : 1679579421:0;ya add ~/.config/yt-dlp/config
-: 1679579423:0;yas
-: 1679579427:0;yau
 : 1679579684:0;pn remove firebase-admin
 : 1679579713:0;pn up
 : 1679580959:0;var="something"
@@ -767,7 +753,6 @@
 : 1679581961:0;yt-dlp -S "ba" "https://www.youtube.com/watch?v=w3V-rxioJSY"
 : 1679582023:0;yt-dlp -f "ba" "https://www.youtube.com/watch?v=w3V-rxioJSY"
 : 1679582438:0;mv Difference\ between\ Jr\ and\ Sr\ Software\ Engineer.mp4 Media/Videos/YouTube/test
-: 1679582706:0;ls
 : 1679583003:0;read -r -p "asdasd" choice
 : 1679583007:0;read -r "asdasd" choice
 : 1679583029:0;echo "\nFile has been downloaded to ~/Media/Videos/YouTube"
@@ -778,7 +763,120 @@
 : 1679583332:0;yd "https://www.youtube.com/watch?v=XaQiY_Zi5YM" -F
 : 1679584080:0;yd "https://www.youtube.com/watch?v=w3V-rxioJSY" --skip-download
 : 1679584404:0;exec zs
-: 1679584413:0;yd "https://www.youtube.com/watch?v=w3V-rxioJSY"
-: 1679584471:0;exec zsh
 : 1679584472:0;yas
 : 1679584477:0;yau
+: 1679584519:0;yd "https://www.youtube.com/watch?v=w3V-rxioJSY&t=10s"
+: 1679584554:0;yd "https://www.youtube.com/watch?v=w3V-rxioJSY"
+: 1679584582:0;yd "https://www.youtube.com/watch?v=YkOSUVzOAA4&t=4782s"
+: 1679586487:0;yd "https://www.youtube.com/watch?v=omhL30QBib0"
+: 1679586561:0;yd "https://www.youtube.com/watch?v=fBayRA8o3yQ"
+: 1679586624:0;yd "https://www.youtube.com/watch?v=JjHFubUPLV0"
+: 1679586654:0;yd "https://www.youtube.com/watch?v=Nusg5dUjR0A"
+: 1679586922:0;yd "https://www.youtube.com/watch?v=dLPgQRbVquo"
+: 1679586956:0;yd "https://www.youtube.com/watch?v=RrO_ahijc4g"
+: 1679653333:0;pn i -g opencommit
+: 1679653347:0;opencommit config set OPENAI_API_KEY=
+: 1679653394:0;opencommit config set OPENAI_API_KEY=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
+: 1679653398:0;oc -h
+: 1679653405:0;oc config -h
+: 1679653424:0;oc config set emoji=true
+: 1679653550:0;oc config set emoji=false
+: 1679653752:0;Projects
+: 1679653754:0;puri
+: 1679653769:0;git status
+: 1679653796:0;oc
+: 1679656953:0;git
+: 1679656956:0;git ssh
+: 1679657089:0;python -m ensurepip --upgrade
+: 1679657113:0;ls /home/tifan/.local/bin
+: 1679662947:0;python -m
+: 1679662950:0;python -h
+: 1679663042:0;echo PATH
+: 1679663044:0;echo $PATH
+: 1679663057:0;cat ~/.local/bin
+: 1679663062:0;ls ~/.local/bin
+: 1679663075:0;pip
+: 1679664185:0;dnf install pip
+: 1679664189:0;dnf search pip
+: 1679665051:0;dnf search pip python
+: 1679665060:0;dnf install python3-pip
+: 1679665063:0;sudo dnf install python3-pip
+: 1679665467:0;pip install sgpt
+: 1679665484:0;.local
+: 1679665487:0;bin
+: 1679665497:0;rm *
+: 1679665500:0;ls
+: 1679665505:0;..
+: 1679665508:0;.config
+: 1679665514:0;nano .config/aliasrc
+: 1679665521:0;nano aliasrc
+: 1679665528:0;nano envrc
+: 1679666514:0;pip install shell-gpt
+: 1679666544:0;pip install --upgrade pup
+: 1679666547:0;pip install --upgrade pip
+: 1679666556:0;sgpt -h
+: 1679666584:0;sgpt introduce yourself
+: 1679666589:0;sgpt "introduce yourself"
+: 1679666726:0;sgpt "update my system"
+: 1679666768:0;sgpt -s "update my system"
+: 1679666777:0;sgpt -s "update my system, not just dnf"
+: 1679666792:0;sgpt "what does the --refresh do?"
+: 1679666810:0;sgpt "do you not remember our last conversation?"
+: 1679666843:0;sgpt
+: 1679666847:0;sgpt --help
+: 1679666886:0;sgpt --show-chat
+: 1679666890:0;sgpt --chat
+: 1679666898:0;sgpt --chat "hello\
+"
+: 1679666903:0;sgpt --chat "hello"
+: 1679666932:0;sgpt --chat "english improver" "hello"
+: 1679666956:0;sgpt --show-chat "english improver"
+: 1679667058:0;sgpt --chat english "I want you to act as an English translator, spelling corrector and improver. I will speak to you in any language and you will detect the language, translate it and answer in the corrected and improved version of my text, in English. Keep the meaning same. I want you to only reply the correction, the improvements and nothing else, do not write explanations."
+: 1679667075:0;sgpt --list-chat
+: 1679667139:0;s
+: 1679667265:0;clear
+: 1679667267:0;exec zsh
+: 1679667269:0;s -h
+: 1679667271:0;s --help
+: 1679667287:0;s --list-chat
+: 1679667398:0;s --chat en --no-cache "I want you to act as an English translator, spelling corrector and improver. I will speak to you in any language and you will detect the language, translate it and answer in the corrected and improved version of my text, in English. Keep the meaning same. I want you to only reply the correction, the improvements and nothing else, do not write explanations."
+: 1679667409:0;s --list-chat
+: 1679667429:0;s -chat en "hello word"
+: 1679667434:0;s --chat en "hello word"
+: 1679667448:0;s --chat en "whhy did the ckinen cross the road?"
+: 1679667543:0;s "when my openai free trial ends, will I still be able to use the API?"
+: 1679667731:0;cat .config/envrc.secret
+: 1679667863:0;oc
+: 1679667892:0;gh repo -h
+: 1679667896:0;gh repo view --web
+: 1679692833:0;yd "https://www.youtube.com/watch?v=7ZTsqm1ilp0"
+: 1679724375:0;gh repo view --web
+: 1679724388:0;up
+: 1679724960:0;help pip
+: 1679724968:0;pip list
+: 1679724987:0;s "is babel written in python?"
+: 1679725061:0;pip list -h
+: 1679725071:0;pip list --user
+: 1679725083:0;pip show click
+: 1679725091:0;pip show typer
+: 1679725122:0;pip update
+: 1679725132:0;s "how can I update app installed with pip"
+: 1679725149:0;pip install
+: 1679725155:0;pip install --upgrade
+: 1679725159:0;pip install --upgrade shell-gpt
+: 1679725164:0;clear
+: 1679725168:0;pip config
+: 1679725171:0;pip check
+: 1679725202:0;rpm -rf $(which sgpt)
+: 1679725205:0;rpm -qf $(which sgpt)
+: 1679725213:0;clear
+: 1679725237:0;s --chat api "what is .env.local file"
+: 1679725282:0;env
+: 1679725286:0;printenv
+: 1679725288:0;env
+: 1679725304:0;env HOME
+: 1679725307:0;printenv HOME
+: 1679725382:0;cat .config
+: 1679725390:0;cat .config/envrc.secret
+: 1679755722:0;yas
+: 1679755724:0;yau

@@ -38,11 +38,11 @@ alias obu="git -C ~/Documents/Notes commit -am 'update' && git -C ~/Documents/No
 alias up="clear && sudo dnf up -y && flatpak update --noninteractive && pnpm update -g"
 
 # exa (needs nerd-fonts)
-alias ls='exa -lhF --group-directories-first --icons -s extension'
-alias lsa='exa -lhFa --group-directories-first --icons -s extension'
+alias ls="exa -lhF --group-directories-first --icons -s extension"
+alias lsa="exa -lhFa --group-directories-first --icons -s extension"
 
 # bat
-alias cat='bat'
+alias cat="bat"
 # use help [program] instead of [program] --help (this will colorize it)
 help() {
   "$@" --help 2>&1 | bat --plain --language=help
@@ -78,3 +78,6 @@ yd() {
 edit() {
   [ -f "$1" ] && gnome-text-editor -- "$1" &
 }
+
+# shell-gpt
+alias s="sgpt"
