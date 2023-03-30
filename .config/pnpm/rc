@@ -1,1 +1,2 @@
+# changed to true by default in version 8
 auto-install-peers=true
