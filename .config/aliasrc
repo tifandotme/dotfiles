@@ -18,7 +18,7 @@ alias du1="du --max-depth=1"
 # needs ncdu
 alias ncdu="ncdu -re"
 
-# arch linux specific?
+# arch linux specific
 # alias makepkg="makepkg -fsri"
 
 # pnpm
