@@ -78,6 +78,3 @@ yd() {
 edit() {
   [ -f "$1" ] && gnome-text-editor -- "$1" &
 }
-
-# shell-gpt
-alias s="sgpt"
