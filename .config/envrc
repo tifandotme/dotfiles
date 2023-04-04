@@ -5,10 +5,11 @@ export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/rc
 export DENO_INSTALL="/home/tifan/.local/share/deno"
 export PNPM_HOME="/home/tifan/.local/share/pnpm"
 export WAKATIME_HOME="/home/tifan/.config/wakatime"
+export GNUPGHOME="/home/tifan/.config/gnupg"
 
 # additional environment variables
 
-export PATH="$PATH:$DENO_INSTALL/bin:$PNPM_HOME:$WAKATIME_HOME"
+export PATH="$PATH:$DENO_INSTALL/bin:$PNPM_HOME:$WAKATIME_HOME:$GNUPGHOME"
 
 # used byu zsh (still looking for a better place)
 HISTFILE=~/.config/zsh/history

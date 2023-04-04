@@ -1,7 +1,10 @@
 [user]
 	name = Tifan
 	email = 33323177+tifandotme@users.noreply.github.com
+	signingkey = 8176B95EE30E7784659E6FDE5990920CB0E97F1E
 [color]
 	ui = auto
 [init]
 	defaultbranch = master
+[commit]
+	gpgsign = true
