@@ -1,0 +1,5 @@
+[Desktop Entry]
+Exec=code %u
+Type=Application
+StartupNotify=false
+Terminal=false
