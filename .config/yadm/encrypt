@@ -2,3 +2,5 @@
 .config/zsh/history
 .ssh/id_ed25519
 .ssh/id_ed25519.pub
+.config/gnupg/backup/tifan@proton.me.private.gpg
+.config/gnupg/backup/trustdb-backup.txt
