@@ -6,5 +6,7 @@
 	ui = auto
 [init]
 	defaultbranch = master
+[commit]
+	gpgsign = true
 [gpg]
 	format = ssh
