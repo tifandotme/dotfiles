@@ -23,10 +23,6 @@
     [
       "timestamp",
       false
-    ],
-    [
-      "timestamp",
-      false
     ]
   ],
   "welcome_wizard_device": "default",
