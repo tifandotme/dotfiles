@@ -1,0 +1,170 @@
+{
+  "geometry-of-main_window_geometry": {
+    "frame_geometry": {
+      "height": 768,
+      "width": 1366,
+      "x": 0,
+      "y": 0
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 731,
+      "width": 1366,
+      "x": 0,
+      "y": 37
+    },
+    "maximized": true,
+    "normal_geometry": {
+      "height": 512,
+      "width": 455,
+      "x": 455,
+      "y": 146
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAAAAAAAAAAABVUAAAL/AAABxwAAAJIAAAONAAACkQAAAAACAAAABVYAAAAAAAAAJQAABVUAAAL/"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "main_window_state": {
+    "__class__": "bytearray",
+    "__value__": "AAAA/wAAAAH9AAAAAgAAAAAAAAAAAAAAAPwCAAAAAvsAAAAQAHQAbwBjAC0AZABvAGMAawAAAAAA/////wAAAIcA////+wAAABYAcwBlAGEAcgBjAGgALQBkAG8AYwBrAAAAAAD/////AAAAkwD///8AAAABAAAAAAAAAAD8AgAAAAT7AAAAFgBsAG8AbwBrAHUAcAAtAGQAbwBjAGsAAAAAAP////8AAAB7AP////sAAAAcAGIAbwBvAGsAbQBhAHIAawBzAC0AZABvAGMAawAAAAAA/////wAAAOQA////+wAAABwAaQBuAHMAcABlAGMAdABvAHIALQBkAG8AYwBrAAAAAAD/////AAAAEwD////7AAAAHgBoAGkAZwBoAGwAaQBnAGgAdABzAC0AZABvAGMAawAAAAAA/////wAAAMYA////AAAFVgAAAtsAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAAAAAAAAQAAAB4AYQBjAHQAaQBvAG4AcwBfAHQAbwBvAGwAYgBhAHICAAAAAP////8AAAAAAAAAAA=="
+  },
+  "old_prefs_migrated": true,
+  "session_data": {
+    "controls_help_shown_count": 2,
+    "standalone_font_settings": {},
+    "standalone_misc_settings": {
+      "remember_last_read": true,
+      "remember_window_geometry": false,
+      "save_annotations_in_ebook": true,
+      "singleinstance": false
+    },
+    "standalone_recently_opened": [
+      {
+        "authors": [
+          "Morgan Housel"
+        ],
+        "key": "/home/tifan/Documents/Books/calibre-library/Morgan Housel/The Psychology of Money (20)/The Psychology of Money - Morgan Housel.epub",
+        "pathtoebook": "/home/tifan/Documents/Books/calibre-library/Morgan Housel/The Psychology of Money (20)/The Psychology of Money - Morgan Housel.epub",
+        "timestamp": "2023-04-09T15:53:27.753Z",
+        "title": "The Psychology of Money: Timeless Lessons on Wealth, Greed, and Happiness"
+      },
+      {
+        "authors": [
+          "Olivia Fox Cabane"
+        ],
+        "key": "/home/tifan/Documents/Books/calibre-library/Olivia Fox Cabane/The Charisma Myth (19)/The Charisma Myth - Olivia Fox Cabane.epub",
+        "pathtoebook": "/home/tifan/Documents/Books/calibre-library/Olivia Fox Cabane/The Charisma Myth (19)/The Charisma Myth - Olivia Fox Cabane.epub",
+        "timestamp": "2023-04-09T15:48:20.228Z",
+        "title": "The Charisma Myth"
+      },
+      {
+        "authors": [
+          "Viktor E. Frankl"
+        ],
+        "key": "/home/tifan/Documents/calibre-library/Viktor E. Frankl/Man's Search for Meaning (14)/Man's Search for Meaning - Viktor E. Frankl.epub",
+        "pathtoebook": "/home/tifan/Documents/calibre-library/Viktor E. Frankl/Man's Search for Meaning (14)/Man's Search for Meaning - Viktor E. Frankl.epub",
+        "timestamp": "2023-04-09T15:23:59.453Z",
+        "title": "Man's Search for Meaning"
+      },
+      {
+        "authors": [
+          "Ichiro Kishimi",
+          "Fumitake Koga"
+        ],
+        "key": "/home/tifan/Documents/calibre-library/Ichiro Kishimi/The Courage to Be Disliked (16)/The Courage to Be Disliked - Ichiro Kishimi.epub",
+        "pathtoebook": "/home/tifan/Documents/calibre-library/Ichiro Kishimi/The Courage to Be Disliked (16)/The Courage to Be Disliked - Ichiro Kishimi.epub",
+        "timestamp": "2023-04-09T15:22:32.623Z",
+        "title": "The Courage to Be Disliked"
+      },
+      {
+        "authors": [
+          "Nina Power"
+        ],
+        "key": "/home/tifan/Documents/calibre-library/Nina Power/What Do Men Want_ (15)/What Do Men Want_ - Nina Power.epub",
+        "pathtoebook": "/home/tifan/Documents/calibre-library/Nina Power/What Do Men Want_ (15)/What Do Men Want_ - Nina Power.epub",
+        "timestamp": "2023-04-09T15:19:04.980Z",
+        "title": "What Do Men Want?"
+      },
+      {
+        "authors": [
+          "Friedrich Nietzsche"
+        ],
+        "key": "/home/tifan/Documents/calibre-library/Friedrich Nietzsche/Beyond Good and Evil (18)/Beyond Good and Evil - Friedrich Nietzsche.epub",
+        "pathtoebook": "/home/tifan/Documents/calibre-library/Friedrich Nietzsche/Beyond Good and Evil (18)/Beyond Good and Evil - Friedrich Nietzsche.epub",
+        "timestamp": "2023-04-09T15:18:09.462Z",
+        "title": "Beyond Good and Evil"
+      },
+      {
+        "authors": [
+          "Randy J. Paterson"
+        ],
+        "key": "/home/tifan/Documents/calibre-library/Randy J. Paterson/How to Be Miserable in Your Twenties (13)/How to Be Miserable in Your Twenties - Randy J. Paterson.epub",
+        "pathtoebook": "/home/tifan/Documents/calibre-library/Randy J. Paterson/How to Be Miserable in Your Twenties (13)/How to Be Miserable in Your Twenties - Randy J. Paterson.epub",
+        "timestamp": "2023-04-09T15:08:43.562Z",
+        "title": "How to Be Miserable in Your Twenties"
+      },
+      {
+        "authors": [
+          "Eric Jorgenson"
+        ],
+        "key": "/home/tifan/Documents/calibre-library/Eric Jorgenson/The Almanack of Naval Ravikant_ A Guide to Wealth and Happiness (8)/The Almanack of Naval Ravikant_ A Guide to - Eric Jorgenson.epub",
+        "pathtoebook": "/home/tifan/Documents/calibre-library/Eric Jorgenson/The Almanack of Naval Ravikant_ A Guide to Wealth and Happiness (8)/The Almanack of Naval Ravikant_ A Guide to - Eric Jorgenson.epub",
+        "timestamp": "2023-04-09T14:29:55.811Z",
+        "title": "The Almanack of Naval Ravikant: A Guide to Wealth and Happiness"
+      },
+      {
+        "authors": [
+          "Dan Vanderkam"
+        ],
+        "key": "/home/tifan/Documents/Calibre Library/Dan Vanderkam/Effective TypeScript_ 62 Specific Ways to Improve Your TypeScript (3)/Effective TypeScript_ 62 Specific Ways to - Dan Vanderkam.epub",
+        "pathtoebook": "/home/tifan/Documents/Calibre Library/Dan Vanderkam/Effective TypeScript_ 62 Specific Ways to Improve Your TypeScript (3)/Effective TypeScript_ 62 Specific Ways to - Dan Vanderkam.epub",
+        "timestamp": "2023-04-09T13:36:57.750Z",
+        "title": "Effective TypeScript: 62 Specific Ways to Improve Your TypeScript"
+      },
+      {
+        "authors": [
+          "Dan Vanderkam"
+        ],
+        "key": "/home/tifan/Documents/Calibre Library/Dan Vanderkam/Effective TypeScript (3)/Effective TypeScript - Dan Vanderkam.epub",
+        "pathtoebook": "/home/tifan/Documents/Calibre Library/Dan Vanderkam/Effective TypeScript (3)/Effective TypeScript - Dan Vanderkam.epub",
+        "timestamp": "2023-04-09T12:36:36.060Z",
+        "title": "Effective TypeScript"
+      },
+      {
+        "authors": [
+          "Adam M. Grant"
+        ],
+        "key": "/home/tifan/Documents/Books/Calibre Backup/Library2/Adam M. Grant/Give and Take_ A Revolutionary Approach to Success (35)/Give and Take_ A Revolutionary Approach to - Adam M. Grant.epub",
+        "pathtoebook": "/home/tifan/Documents/Books/Calibre Backup/Library2/Adam M. Grant/Give and Take_ A Revolutionary Approach to Success (35)/Give and Take_ A Revolutionary Approach to - Adam M. Grant.epub",
+        "timestamp": "2023-04-09T12:18:48.180Z",
+        "title": "Give and Take: A Revolutionary Approach to Success"
+      }
+    ]
+  }
+}

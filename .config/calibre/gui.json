@@ -1,0 +1,1309 @@
+{
+  "CustomProgressBar": {
+    "__class__": "bytearray",
+    "__value__": "AdnQywADAAAAAAI4AAABPgAAAx0AAAHBAAACOAAAAWMAAAMdAAABwQAAAAAAAAAABVYAAAI4AAABYwAAAx0AAAHB"
+  },
+  "Prettify Cover plugin: cover options dialog": {
+    "__class__": "bytearray",
+    "__value__": "AdnQywADAAAAAAFbAAAAGAAAA/sAAALoAAABWwAAAD0AAAP7AAAC6AAAAAAAAAAABVYAAAFbAAAAPQAAA/sAAALo"
+  },
+  "action-layout-context-menu": [
+    "Edit Metadata",
+    "Copy To Library",
+    null,
+    "Convert Books",
+    "View",
+    "Open Folder",
+    "Show Book Details",
+    "Tweak ePub",
+    null,
+    "Remove Books"
+  ],
+  "action-layout-toolbar": [
+    "Add Books",
+    "Remove Books",
+    "Edit Metadata",
+    null,
+    "Convert Books",
+    "View",
+    "Embed Metadata",
+    "Polish Books",
+    null,
+    "Choose Library",
+    "Save To Disk",
+    "Connect Share",
+    "Tweak ePub",
+    "Preferences",
+    "Resize Cover",
+    "Prettify Cover"
+  ],
+  "action-layout-toolbar-device": [
+    "Add Books",
+    "Remove Books",
+    "Edit Metadata",
+    null,
+    "Convert Books",
+    "View",
+    null,
+    "Send To Device",
+    "Location Manager",
+    null,
+    "Preferences"
+  ],
+  "basic_metadata_widget_splitter_state": {
+    "__class__": "bytearray",
+    "__value__": "AAAA/wAAAAEAAAADAAAA6wAAAXQAAAEKAf////8BAAAAAQA="
+  },
+  "book_details_splitter_horizontal_state": [
+    true,
+    200
+  ],
+  "book_details_splitter_vertical_state": [
+    true,
+    100
+  ],
+  "book_details_widget_splitter_state": {
+    "__class__": "bytearray",
+    "__value__": "AAAA/wAAAAEAAAACAAAAuwAABJcB/////wEAAAABAA=="
+  },
+  "book_info_dialog_fit_cover": true,
+  "book_info_dialog_splitter_state": {
+    "__class__": "bytearray",
+    "__value__": "AAAA/wAAAAEAAAACAAABXgAAAV4B/////wEAAAABAA=="
+  },
+  "book_info_dialog_splitter_state_1": {
+    "__class__": "bytearray",
+    "__value__": "AAAA/wAAAAEAAAACAAABXgAAAV4B/////wEAAAABAA=="
+  },
+  "book_list_extra_row_spacing": 5,
+  "book_list_pin_splitter_state": {
+    "__class__": "bytearray",
+    "__value__": "AAAA/wAAAAEAAAACAAABAAAAAEYA/////wEAAAABAA=="
+  },
+  "book_list_tooltips": false,
+  "choose_icon_theme_initial_tab": 2,
+  "cover_browser_splitter_horizontal_state": [
+    false,
+    550
+  ],
+  "cover_browser_splitter_vertical_state": [
+    false,
+    300
+  ],
+  "cover_grid_color": [
+    80,
+    80,
+    80
+  ],
+  "cover_grid_texture": null,
+  "custom_colors_for_color_dialog": [
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ],
+    [
+      255,
+      255,
+      255,
+      255
+    ]
+  ],
+  "default_author_link": null,
+  "dnd_merge": false,
+  "font": [
+    "Liberation Sans",
+    10,
+    400,
+    false
+  ],
+  "font_stretch": 0,
+  "geometry-of-Plugin Updater plugin:plugin updater dialog": {
+    "frame_geometry": {
+      "height": 515,
+      "width": 923,
+      "x": 222,
+      "y": 127
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 478,
+      "width": 923,
+      "x": 222,
+      "y": 164
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 478,
+      "width": 923,
+      "x": 222,
+      "y": 164
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAADeAAAAfwAABHgAAAKBAAAA3gAAAKQAAAR4AAACgQAAAAAAAAAABVYAAADeAAAApAAABHgAAAKB"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-book-details-popup-conf-geometry": {
+    "frame_geometry": {
+      "height": 537,
+      "width": 580,
+      "x": 383,
+      "y": 84
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 500,
+      "width": 580,
+      "x": 383,
+      "y": 121
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 500,
+      "width": 580,
+      "x": 383,
+      "y": 121
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAF/AAAAVAAAA8IAAAJsAAABfwAAAHkAAAPCAAACbAAAAAAAAAAABVYAAAF/AAAAeQAAA8IAAAJs"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-book_details_image_view": {
+    "frame_geometry": {
+      "height": 122,
+      "width": 718,
+      "x": 314,
+      "y": 283
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 122,
+      "width": 718,
+      "x": 314,
+      "y": 283
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 122,
+      "width": 718,
+      "x": 314,
+      "y": 283
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAE6AAABGwAABAcAAAGUAAABOgAAARsAAAQHAAABlAAAAAAAAAAABVYAAAE6AAABGwAABAcAAAGU"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-book_info_dialog_geometry": {
+    "frame_geometry": {
+      "height": 705,
+      "width": 700,
+      "x": 323,
+      "y": 0
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 668,
+      "width": 700,
+      "x": 323,
+      "y": 37
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 668,
+      "width": 700,
+      "x": 323,
+      "y": 37
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAFDAAAAAAAAA/4AAALAAAABQwAAACUAAAP+AAACwAAAAAAAAAAABVYAAAFDAAAAJQAAA/4AAALA"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-book_info_dialog_geometry_1": {
+    "frame_geometry": {
+      "height": 705,
+      "width": 700,
+      "x": 323,
+      "y": 0
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 668,
+      "width": 700,
+      "x": 323,
+      "y": 37
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 668,
+      "width": 700,
+      "x": 323,
+      "y": 37
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAFDAAAAAAAAA/4AAALAAAABQwAAACUAAAP+AAACwAAAAAAAAAAABVYAAAFDAAAAJQAAA/4AAALA"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-calibre_main_window_geometry": {
+    "frame_geometry": {
+      "height": 768,
+      "width": 1366,
+      "x": 0,
+      "y": 0
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 731,
+      "width": 1366,
+      "x": 0,
+      "y": 37
+    },
+    "maximized": true,
+    "normal_geometry": {
+      "height": 731,
+      "width": 1366,
+      "x": 0,
+      "y": 37
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAAAAAAAAAAABVUAAAL/AAAAAAAAACUAAAVVAAAC/wAAAAACAAAABVYAAAAAAAAAJQAABVUAAAL/"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LG Display",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-choose-icon-theme-dialog-geometry": {
+    "frame_geometry": {
+      "height": 730,
+      "width": 900,
+      "x": 233,
+      "y": 19
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 693,
+      "width": 900,
+      "x": 233,
+      "y": 56
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 693,
+      "width": 900,
+      "x": 233,
+      "y": 56
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAADpAAAAEwAABGwAAALsAAAA6QAAADgAAARsAAAC7AAAAAAAAAAABVYAAADpAAAAOAAABGwAAALs"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-config_widget_dialog_geometry_Sharing_Metadata download": {
+    "frame_geometry": {
+      "height": 533,
+      "width": 503,
+      "x": 432,
+      "y": 118
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 496,
+      "width": 503,
+      "x": 432,
+      "y": 155
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 496,
+      "width": 503,
+      "x": 432,
+      "y": 155
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAGwAAAAdgAAA6YAAAKKAAABsAAAAJsAAAOmAAACigAAAAAAAAAABVYAAAGwAAAAmwAAA6YAAAKK"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-convert_single_dialog_geom": {
+    "frame_geometry": {
+      "height": 705,
+      "width": 1296,
+      "x": 35,
+      "y": 32
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 668,
+      "width": 1296,
+      "x": 35,
+      "y": 69
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 668,
+      "width": 1296,
+      "x": 35,
+      "y": 69
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAAjAAAAIAAABTIAAALgAAAAIwAAAEUAAAUyAAAC4AAAAAAAAAAABVYAAAAjAAAARQAABTIAAALg"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-duplicates-question-dialog-geometry": {
+    "frame_geometry": {
+      "height": 415,
+      "width": 514,
+      "x": 426,
+      "y": 177
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 378,
+      "width": 514,
+      "x": 426,
+      "y": 214
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 378,
+      "width": 514,
+      "x": 426,
+      "y": 214
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAGqAAAAsQAAA6sAAAJPAAABqgAAANYAAAOrAAACTwAAAAAAAAAABVYAAAGqAAAA1gAAA6sAAAJP"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-image-trim-dialog-geometry": {
+    "frame_geometry": {
+      "height": 637,
+      "width": 900,
+      "x": 233,
+      "y": 66
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 600,
+      "width": 900,
+      "x": 233,
+      "y": 103
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 600,
+      "width": 900,
+      "x": 233,
+      "y": 103
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAADpAAAAQgAABGwAAAK+AAAA6QAAAGcAAARsAAACvgAAAAAAAAAABVYAAADpAAAAZwAABGwAAAK+"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-jobs_dialog_geometry": {
+    "frame_geometry": {
+      "height": 368,
+      "width": 562,
+      "x": 483,
+      "y": 160
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 331,
+      "width": 562,
+      "x": 483,
+      "y": 197
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 331,
+      "width": 562,
+      "x": 483,
+      "y": 197
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAHjAAAAoAAABBQAAAIPAAAB4wAAAMUAAAQUAAACDwAAAAAAAAAABVYAAAHjAAAAxQAABBQAAAIP"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-metadata_single_gui_geom": {
+    "frame_geometry": {
+      "height": 637,
+      "width": 850,
+      "x": 258,
+      "y": 66
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 600,
+      "width": 850,
+      "x": 258,
+      "y": 103
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 600,
+      "width": 850,
+      "x": 258,
+      "y": 103
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAECAAAAQgAABFMAAAK+AAABAgAAAGcAAARTAAACvgAAAAAAAAAABVYAAAECAAAAZwAABFMAAAK+"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-metasingle_window_geometry3": {
+    "frame_geometry": {
+      "height": 755,
+      "width": 1296,
+      "x": 35,
+      "y": 7
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 718,
+      "width": 1296,
+      "x": 35,
+      "y": 44
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 718,
+      "width": 1296,
+      "x": 35,
+      "y": 44
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAAjAAAABwAABTIAAAL5AAAAIwAAACwAAAUyAAAC+QAAAAAAAAAABVYAAAAjAAAALAAABTIAAAL5"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-plugin config dialog:User interface action:Prettify Cover": {
+    "frame_geometry": {
+      "height": 349,
+      "width": 554,
+      "x": 406,
+      "y": 210
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 312,
+      "width": 554,
+      "x": 406,
+      "y": 247
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 312,
+      "width": 554,
+      "x": 406,
+      "y": 247
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAGWAAAA0gAAA78AAAIuAAABlgAAAPcAAAO/AAACLgAAAAAAAAAABVYAAAGWAAAA9wAAA78AAAIu"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-plugin config dialog:User interface action:Resize Cover": {
+    "frame_geometry": {
+      "height": 350,
+      "width": 756,
+      "x": 305,
+      "y": 209
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 313,
+      "width": 756,
+      "x": 305,
+      "y": 246
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 313,
+      "width": 756,
+      "x": 305,
+      "y": 246
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAExAAAA0QAABCQAAAIuAAABMQAAAPYAAAQkAAACLgAAAAAAAAAABVYAAAExAAAA9gAABCQAAAIu"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-preferences dialog geometry": {
+    "frame_geometry": {
+      "height": 757,
+      "width": 1190,
+      "x": 88,
+      "y": 6
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 720,
+      "width": 1190,
+      "x": 88,
+      "y": 43
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 720,
+      "width": 1190,
+      "x": 88,
+      "y": 43
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAABYAAAABgAABP0AAAL6AAAAWAAAACsAAAT9AAAC+gAAAAAAAAAABVYAAABYAAAAKwAABP0AAAL6"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LG Display",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-quickview_dialog_geometry": {
+    "frame_geometry": {
+      "height": 264,
+      "width": 1078,
+      "x": 134,
+      "y": 212
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 264,
+      "width": 1078,
+      "x": 134,
+      "y": 212
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 264,
+      "width": 1078,
+      "x": 134,
+      "y": 212
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAACGAAAA1AAABLsAAAHbAAAAhgAAANQAAAS7AAAB2wAAAAAAAAAABVYAAACGAAAA1AAABLsAAAHb"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-single-cover-fetch-dialog-geometry": {
+    "frame_geometry": {
+      "height": 540,
+      "width": 690,
+      "x": 338,
+      "y": 114
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 503,
+      "width": 690,
+      "x": 338,
+      "y": 151
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 503,
+      "width": 690,
+      "x": 338,
+      "y": 151
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAFSAAAAcgAABAMAAAKNAAABUgAAAJcAAAQDAAACjQAAAAAAAAAABVYAAAFSAAAAlwAABAMAAAKN"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-tag_editor_geometry": {
+    "frame_geometry": {
+      "height": 360,
+      "width": 600,
+      "x": 383,
+      "y": 204
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 323,
+      "width": 600,
+      "x": 383,
+      "y": 241
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 323,
+      "width": 600,
+      "x": 383,
+      "y": 241
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAF/AAAAzAAAA9YAAAIzAAABfwAAAPEAAAPWAAACMwAAAAAAAAAABVYAAAF/AAAA8QAAA9YAAAIz"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "gpm_template_editor_font": "Liberation Sans",
+  "gpm_template_editor_word_wrap_mode": true,
+  "grid view visible": false,
+  "jobs view column layout3": {
+    "__class__": "bytearray",
+    "__value__": "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlcAAAAFAQEBAAAAAAAAAAAAAAAAAGT/////AAAAhAAAAAAAAAAFAAAAxwAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAAD6AAAAAAAAAAAAA=="
+  },
+  "library_usage_stats": {
+    "/home/tifan/Documents/Books/Calibre Backup/Library2": 7,
+    "/home/tifan/Documents/Books/calibre-library": 29,
+    "/home/tifan/Documents/Calibre Library": 14,
+    "/home/tifan/Documents/calibre-library": 9
+  },
+  "metadata-download-identify-widget-splitter-state": {
+    "__class__": "bytearray",
+    "__value__": "AAAA/wAAAAEAAAACAAACSQAAAN0A/////wEAAAABAA=="
+  },
+  "polish_settings": {
+    "haha": {
+      "add_soft_hyphens": false,
+      "compress_images": false,
+      "do_cover": true,
+      "embed": true,
+      "jacket": false,
+      "metadata": true,
+      "remove_jacket": false,
+      "remove_soft_hyphens": false,
+      "remove_unused_css": true,
+      "smarten_punctuation": true,
+      "subset": true,
+      "upgrade_book": true
+    }
+  },
+  "polish_show_reports": false,
+  "polishing_settings": {
+    "add_soft_hyphens": false,
+    "compress_images": false,
+    "do_cover": true,
+    "embed": true,
+    "jacket": false,
+    "metadata": true,
+    "remove_jacket": false,
+    "remove_soft_hyphens": false,
+    "remove_unused_css": true,
+    "smarten_punctuation": true,
+    "subset": true,
+    "upgrade_book": true
+  },
+  "previous_sort_order_BooksView": {
+    "#fk": false,
+    "pubdate": true,
+    "publisher": false,
+    "timestamp": false
+  },
+  "quick_start_guide_added": true,
+  "quickview visible": false,
+  "quickview_dialog_books_table_widths": [
+    267,
+    267,
+    267
+  ],
+  "recently_used_languages": [
+    "English"
+  ],
+  "row_numbers_in_book_list": false,
+  "search bar visible": false,
+  "server3_warning_done": true,
+  "show_emblems": false,
+  "tag browser search box visible": false,
+  "tag_browser_show_counts": true,
+  "tag_browser_splitter_horizontal_state": [
+    true,
+    182
+  ],
+  "tb_search_order": {
+    "0": 1,
+    "1": 2,
+    "2": 3,
+    "3": 4,
+    "4": 0
+  },
+  "template_functions_prefs_st_show_help": true,
+  "template_functions_prefs_tf_show_help": true
+}

@@ -1,0 +1,16 @@
+{
+  "Options": {
+    "sizes": [
+      {
+        "default": true,
+        "height": 1024,
+        "width": 758
+      },
+      {
+        "default": false,
+        "height": 2200,
+        "width": 1429
+      }
+    ]
+  }
+}
