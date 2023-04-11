@@ -1,7 +1,7 @@
 {
   "check-book-splitter-state": {
     "__class__": "bytearray",
-    "__value__": "AAAA/wAAAAEAAAAC//////////8A/////wEAAAABAA=="
+    "__value__": "AAAA/wAAAAEAAAACAAAARgAAAEYA/////wEAAAABAA=="
   },
   "custom_colors_for_color_dialog": [
     [
@@ -176,14 +176,14 @@
     },
     "maximized": true,
     "normal_geometry": {
-      "height": 292,
-      "width": 850,
+      "height": 731,
+      "width": 1366,
       "x": 0,
-      "y": 0
+      "y": 37
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAAAAAAAAAAAABVUAAAL/AAAAAAAAAAAAAANRAAABIwAAAAACAAAABVYAAAAAAAAAJQAABVUAAAL/"
+      "__value__": "AdnQywADAAAAAAAAAAAAAAAABVUAAAL/AAAAAAAAACUAAAVVAAAC/wAAAAACAAAABVYAAAAAAAAAJQAABVUAAAL/"
     },
     "screen": {
       "depth": 24,
@@ -195,7 +195,7 @@
         "y": 0
       },
       "index_in_screens_list": 0,
-      "manufacturer": "LGD",
+      "manufacturer": "LG Display",
       "model": "",
       "name": "LVDS-1",
       "serial": "",
@@ -216,6 +216,7 @@
     "__value__": "AAAA/wAAAAD9AAAABAAAAAAAAAEAAAACivwCAAAABfsAAAAkAGYAaQBsAGUAcwAtAGIAcgBvAHcAcwBlAHIALQBkAG8AYwBrAQAAADsAAAKKAAAAWQD////7AAAAHgB0AG8AYwAtAHYAaQBlAHcAZQByAC0AZABvAGMAawAAAAAA/////wAAAFkA////+wAAACAAdABlAHgAdAAtAHMAZQBhAHIAYwBoAC0AZABvAGMAawAAAAAA/////wAAAHcA////+wAAACAAYwBoAGUAYwBrAHAAbwBpAG4AdABzAC0AZABvAGMAawAAAAAA/////wAAAIkA////+wAAACYAcwBhAHYAZQBkAC0AcwBlAGEAcgBjAGgAZQBzAC0AZABvAGMAawAAAAAA/////wAAAesA////AAAAAQAAAccAAAKK/AIAAAAC+wAAABgAcAByAGUAdgBpAGUAdwAtAGQAbwBjAGsBAAAAOwAAAooAAABPAP////sAAAAaAGwAaQB2AGUALQBjAHMAcwAtAGQAbwBjAGsAAAAAAP////8AAABZAP///wAAAAIAAAAAAAAAAPwBAAAAAfsAAAAeAGMAaABlAGMAawAtAGIAbwBvAGsALQBkAG8AYwBrAAAAAAD/////AAAAkAD///8AAAADAAAAAAAAAAD8AQAAAAH7AAAAHABpAG4AcwBwAGUAYwB0AG8AcgAtAGQAbwBjAGsAAAAAAP////8AAAA6AP///wAAAoMAAAKKAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAMAAAAUAGcAbABvAGIAYQBsAC0AYgBhAHIBAAAAAP////8AAAAAAAAAAAAAABIAdABvAG8AbABzAC0AYgBhAHIBAAABJv////8AAAAAAAAAAAAAABYAcABsAHUAZwBpAG4AcwAtAGIAYQByAAAAAAD/////AAAAAAAAAAA="
   },
   "recent-books": [
+    "/home/tifan/Documents/Books/calibre-library/Michael Digiacomo/The English Grammar Workbook for Adults (24)/The English Grammar Workbook for Adults - Michael Digiacomo.epub",
     "/home/tifan/Documents/Books/Calibre Backup/Library2/Adam M. Grant/Give and Take_ A Revolutionary Approach to Success (35)/Give and Take_ A Revolutionary Approach to - Adam M. Grant.epub"
   ],
   "reports-ui-state": {},

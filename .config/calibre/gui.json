@@ -52,7 +52,7 @@
   ],
   "basic_metadata_widget_splitter_state": {
     "__class__": "bytearray",
-    "__value__": "AAAA/wAAAAEAAAADAAAA6wAAAXQAAAEKAf////8BAAAAAQA="
+    "__value__": "AAAA/wAAAAEAAAADAAABVgAAAgsAAAF7Af////8BAAAAAQA="
   },
   "book_details_splitter_horizontal_state": [
     true,
@@ -60,11 +60,11 @@
   ],
   "book_details_splitter_vertical_state": [
     true,
-    100
+    109
   ],
   "book_details_widget_splitter_state": {
     "__class__": "bytearray",
-    "__value__": "AAAA/wAAAAEAAAACAAAAuwAABJcB/////wEAAAABAA=="
+    "__value__": "AAAA/wAAAAEAAAACAAAAtQAABJ0B/////wEAAAABAA=="
   },
   "book_info_dialog_fit_cover": true,
   "book_info_dialog_splitter_state": {
@@ -391,7 +391,7 @@
         "y": 0
       },
       "index_in_screens_list": 0,
-      "manufacturer": "LGD",
+      "manufacturer": "LG Display",
       "model": "",
       "name": "LVDS-1",
       "serial": "",
@@ -563,27 +563,27 @@
   "geometry-of-config_widget_dialog_geometry_Sharing_Metadata download": {
     "frame_geometry": {
       "height": 533,
-      "width": 503,
-      "x": 432,
+      "width": 827,
+      "x": 270,
       "y": 118
     },
     "full_screened": false,
     "geometry": {
       "height": 496,
-      "width": 503,
-      "x": 432,
+      "width": 827,
+      "x": 270,
       "y": 155
     },
     "maximized": false,
     "normal_geometry": {
       "height": 496,
-      "width": 503,
-      "x": 432,
+      "width": 827,
+      "x": 270,
       "y": 155
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAAGwAAAAdgAAA6YAAAKKAAABsAAAAJsAAAOmAAACigAAAAAAAAAABVYAAAGwAAAAmwAAA6YAAAKK"
+      "__value__": "AdnQywADAAAAAAEOAAAAdgAABEgAAAKKAAABDgAAAJsAAARIAAACigAAAAAAAAAABVYAAAEOAAAAmwAABEgAAAKK"
     },
     "screen": {
       "depth": 24,
@@ -698,6 +698,57 @@
       },
       "index_in_screens_list": 0,
       "manufacturer": "LGD",
+      "model": "",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-edit-open-with-programs-geometry": {
+    "frame_geometry": {
+      "height": 437,
+      "width": 600,
+      "x": 383,
+      "y": 166
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 400,
+      "width": 600,
+      "x": 383,
+      "y": 203
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 400,
+      "width": 600,
+      "x": 383,
+      "y": 203
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAF/AAAApgAAA9YAAAJaAAABfwAAAMsAAAPWAAACWgAAAAAAAAAABVYAAAF/AAAAywAAA9YAAAJa"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LG Display",
       "model": "",
       "name": "LVDS-1",
       "serial": "",
@@ -850,7 +901,7 @@
         "y": 0
       },
       "index_in_screens_list": 0,
-      "manufacturer": "LGD",
+      "manufacturer": "LG Display",
       "model": "",
       "name": "LVDS-1",
       "serial": "",
@@ -1232,8 +1283,8 @@
   },
   "library_usage_stats": {
     "/home/tifan/Documents/Books/Calibre Backup/Library2": 7,
-    "/home/tifan/Documents/Books/Library": 5,
-    "/home/tifan/Documents/Books/calibre-library": 31,
+    "/home/tifan/Documents/Books/Library": 9,
+    "/home/tifan/Documents/Books/calibre-library": 33,
     "/home/tifan/Documents/Calibre Library": 14,
     "/home/tifan/Documents/calibre-library": 9
   },
@@ -1257,7 +1308,7 @@
       "upgrade_book": true
     }
   },
-  "polish_show_reports": false,
+  "polish_show_reports": true,
   "polishing_settings": {
     "add_soft_hyphens": false,
     "compress_images": false,
@@ -1270,7 +1321,7 @@
     "remove_unused_css": true,
     "smarten_punctuation": true,
     "subset": true,
-    "upgrade_book": true
+    "upgrade_book": false
   },
   "previous_sort_order_BooksView": {
     "#fk": false,

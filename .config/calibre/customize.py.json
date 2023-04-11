@@ -15,7 +15,6 @@
   "filetype_mapping": {},
   "plugin_customization": {},
   "plugins": {
-    "Kindle hi-res covers": "/home/tifan/.var/app/com.calibre_ebook.calibre/config/calibre/plugins/Kindle hi-res covers.zip",
-    "Prettify Cover": "/home/tifan/.var/app/com.calibre_ebook.calibre/config/calibre/plugins/Prettify Cover.zip"
+    "Kindle hi-res covers": "/home/tifan/.var/app/com.calibre_ebook.calibre/config/calibre/plugins/Kindle hi-res covers.zip"
   }
 }

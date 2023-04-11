@@ -15,6 +15,9 @@ alias lsblk="lsblk -o NAME,FSTYPE,LABEL,SIZE,FSUSE%,FSAVAIL,MOUNTPOINT"
 alias du="du -h"
 alias du1="du --max-depth=1"
 
+# needs nautilus/other file manager (open in current working dir)
+alias .="nautilus -w . &"
+
 # needs ncdu
 alias ncdu="ncdu -re"
 

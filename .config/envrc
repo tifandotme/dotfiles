@@ -10,6 +10,7 @@ export CALIBRE_CONFIG_DIRECTORY="$XDG_CONFIG_HOME/calibre"
 export DENO_INSTALL="$HOME/.local/share/deno"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 
+# so that we can use the binaries
 export PATH="$PATH:$DENO_INSTALL/bin:$PNPM_HOME"
 
 # used byu zsh (still looking for a better place)

@@ -6,8 +6,12 @@
   "choose library location": "/home/tifan/Documents/Books/Library",
   "database location dialog": "/home/tifan/Documents/Calibre Library",
   "library_delete_books_again": false,
-  "save to disk dialog": "/home/tifan/Downloads/asd",
+  "save to disk dialog": "/home/tifan/Documents/Books",
   "sort_history": [
+    [
+      "pubdate",
+      true
+    ],
     [
       "publisher",
       false
@@ -15,10 +19,6 @@
     [
       "pubdate",
       true
-    ],
-    [
-      "timestamp",
-      false
     ],
     [
       "timestamp",
