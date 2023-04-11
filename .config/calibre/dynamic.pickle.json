@@ -3,11 +3,23 @@
   "add books dialog dir-last-used-filter-spec-all-files": false,
   "add formats dialog": "/home/tifan/Downloads",
   "add formats dialog-last-used-filter-spec-all-files": false,
-  "choose library location": "/home/tifan/Documents/Books/calibre-library",
+  "choose library location": "/home/tifan/Documents/Books/Library",
   "database location dialog": "/home/tifan/Documents/Calibre Library",
   "library_delete_books_again": false,
   "save to disk dialog": "/home/tifan/Downloads/asd",
   "sort_history": [
+    [
+      "publisher",
+      false
+    ],
+    [
+      "pubdate",
+      true
+    ],
+    [
+      "timestamp",
+      false
+    ],
     [
       "timestamp",
       false

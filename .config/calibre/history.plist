@@ -4,6 +4,7 @@
 <dict>
 	<key>lineedit_history_choose_library_dialog</key>
 	<array>
+		<string>/home/tifan/Documents/Books/Library</string>
 		<string>/home/tifan/Documents/Books/calibre-library</string>
 		<string>/home/tifan/Documents/calibre-library</string>
 		<string>/home/tifan/Documents/Books/Calibre Backup/Library2</string>
