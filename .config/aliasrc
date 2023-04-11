@@ -32,7 +32,7 @@ alias yal="yadm list -a"
 alias yau="yadm add -u && yadm commit -m 'update' && yadm push"
 
 # push Notes
-alias obu="git -C ~/Documents/Notes commit -am 'update' && git -C ~/Documents/Notes push"
+alias obu="git -C ~/Documents/Notes add . && git -C ~/Documents/Notes commit -m 'update' && git -C ~/Documents/Notes push"
 
 # update
 alias up="clear && sudo dnf up -y && flatpak update --noninteractive && pnpm update -g --latest"
