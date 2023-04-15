@@ -27,6 +27,7 @@ alias ncdu="ncdu -re"
 # pnpm
 alias pn="pnpm"
 alias npm="pnpm"
+alias npx="pnpm dlx"
 
 # yadm
 alias ya="yadm"
