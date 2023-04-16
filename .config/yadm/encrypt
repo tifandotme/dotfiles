@@ -5,3 +5,4 @@
 .config/gnupg/backup/tifan@proton.me.private.gpg
 .config/gnupg/backup/trustdb-backup.txt
 .config/wakatime/.wakatime.cfg
+.config/gh/hosts.yml
