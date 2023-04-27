@@ -93,3 +93,7 @@ k() {
   echo "---"
   echo "Process on port $1 killed."
 }
+
+# https://www.npmjs.com/package/@githubnext/github-copilot-cli
+# install the ??, git?, and gh? commands in the shell
+eval "$(github-copilot-cli alias -- "$0")"
