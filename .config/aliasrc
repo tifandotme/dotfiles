@@ -88,12 +88,24 @@ alias p="lsof -i -P -n | grep LISTEN"
 
 # kill port
 k() {
-  echo "> $1"
-  kill -9 $(lsof -t -i:"$1")
-  echo "---"
-  echo "Process on port $1 killed."
-}
+  if [[ ! "$1" =~ ^[0-9]+$ && "$1" != "all" ]]; then
+    echo "Usage: k [port] or \"all\""
+    echo "Hint: p to check ports."
+    return
+  fi
 
-# https://www.npmjs.com/package/@githubnext/github-copilot-cli
-# install the ??, git?, and gh? commands in the shell
-eval "$(github-copilot-cli alias -- "$0")"
+  echo "> $1"
+  echo "---"
+
+  if [[ "$1" == "all" ]]; then
+    kill -9 $(lsof -t -i)
+    echo "All processes killed."
+  else
+    if lsof -i:"$1" | grep -q LISTEN; then
+      kill -9 $(lsof -t -i:"$1")
+      echo "Process on port $1 killed."
+    else
+      echo "No process on port $1."
+    fi
+  fi
+}
