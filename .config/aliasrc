@@ -39,7 +39,7 @@ alias yau="yadm add -u && yadm commit -m 'update' && yadm push"
 alias obu="git -C ~/Documents/Notes add . && git -C ~/Documents/Notes commit -m 'update' && git -C ~/Documents/Notes push"
 
 # update
-alias up="clear && sudo dnf up -y && flatpak update --noninteractive && pnpm up -gLi"
+alias up="clear && sudo dnf up -y && flatpak update --noninteractive && pnpm outdated -g"
 
 # exa (needs nerd-fonts)
 alias ls="exa -lhF --group-directories-first --icons -s extension"
