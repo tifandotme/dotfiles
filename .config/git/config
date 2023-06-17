@@ -10,3 +10,6 @@
 	gpgsign = true
 [gpg]
 	format = ssh
+[alias]
+	un = reset --soft HEAD~1
+	s = status
