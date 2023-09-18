@@ -11,5 +11,7 @@
 [gpg]
 	format = ssh
 [alias]
-	un = reset --soft HEAD~1
-	s = status
+	r = reset --soft HEAD~1 # undo last 1 commit
+	s = status --show-stash --short --branch
+	c = commit --no-edit
+	l = log --oneline --graph --decorate --all

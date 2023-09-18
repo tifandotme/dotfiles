@@ -24,8 +24,11 @@ alias ncdu="ncdu -re"
 # arch linux specific
 # alias makepkg="makepkg -fsri"
 
+# git
+alias g="git"
+
 # pnpm
-alias pn="pnpm"
+alias p="pnpm"
 alias npm="pnpm"
 alias npx="pnpm dlx"
 
@@ -36,7 +39,7 @@ alias yal="yadm list -a"
 alias yau="yadm add -u && yadm commit -m 'update' && yadm push"
 
 # push Notes
-alias obu="git -C ~/Documents/Notes add . && git -C ~/Documents/Notes commit -m 'update' && git -C ~/Documents/Notes push"
+alias obu="git -C ~/Documents/Notes add . && git -C ~/Documents/Notes commit -m 'backup vault' && git -C ~/Documents/Notes push"
 
 # update
 alias up="clear && sudo dnf up -y && flatpak update --noninteractive && pnpm up -g"
@@ -51,6 +54,9 @@ alias cat="bat"
 help() {
   "$@" --help 2>&1 | bat --plain --language=help
 }
+
+# speedtest
+alias sp="speedtest-cli --no-upload"
 
 # yt-dlp
 yd() {
@@ -78,34 +84,29 @@ yd() {
   echo "\nDownloaded and stored at ~/Media/Videos/YouTube"
 }
 
-# gnome DE
-edit() {
-  [ -f "$1" ] && gnome-text-editor -- "$1" &
-}
-
 # check ports that are listening
-alias p="lsof -i -P -n | grep LISTEN"
+alias po="lsof -i -P -n | grep LISTEN"
 
 # kill port
-k() {
-  if [[ ! "$1" =~ ^[0-9]+$ && "$1" != "all" ]]; then
-    echo "Usage: k [port] or \"all\""
-    echo "Hint: p to check ports."
-    return
-  fi
+# ki() {
+#   if [[ ! "$1" =~ ^[0-9]+$ && "$1" != "all" ]]; then
+#     echo "Usage: k [port] or \"all\""
+#     echo "Hint: p to check ports."
+#     return
+#   fi
 
-  echo "> $1"
-  echo "---"
+#   echo "> $1"
+#   echo "---"
 
-  if [[ "$1" == "all" ]]; then
-    kill -9 $(lsof -t -i)
-    echo "All processes killed."
-  else
-    if lsof -i:"$1" | grep -q LISTEN; then
-      kill -9 $(lsof -t -i:"$1")
-      echo "Process on port $1 killed."
-    else
-      echo "No process on port $1."
-    fi
-  fi
-}
+#   if [[ "$1" == "all" ]]; then
+#     kill -9 $(lsof -t -i)
+#     echo "All processes killed."
+#   else
+#     if lsof -i:"$1" | grep -q LISTEN; then
+#       kill -9 $(lsof -t -i:"$1")
+#       echo "Process on port $1 killed."
+#     else
+#       echo "No process on port $1."
+#     fi
+#   fi
+# }

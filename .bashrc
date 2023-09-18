@@ -19,7 +19,7 @@ PS1="\[$(tput setaf 1)\]\W\[$(tput setaf 2)\] $ \[$(tput sgr0)\]"
 
 # load environment variables
 [ -f "$HOME/.config/envrc" ] && . "$HOME/.config/envrc"
-[ -f "$HOME/.config/envrc.secret" ] && . "$HOME/.config/envrc.secret"
+# [ -f "$HOME/.config/envrc.secret" ] && . "$HOME/.config/envrc.secret"
 
 # pnpm
 export PNPM_HOME="/home/tifan/.local/share/pnpm"

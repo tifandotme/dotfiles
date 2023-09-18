@@ -6,6 +6,14 @@
   "choose library location": "/home/tifan/Documents/Books/Library",
   "database location dialog": "/home/tifan/Documents/Calibre Library",
   "library_delete_books_again": false,
+  "notified-version-updates": {
+    "__class__": "set",
+    "__value__": [
+      "6.24",
+      "6.25",
+      "6.21"
+    ]
+  },
   "save to disk dialog": "/home/tifan/Documents/Books/Saved to disk/asdasd",
   "sort_history": [
     [
