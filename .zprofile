@@ -5,7 +5,7 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 
 # Custom config path
-export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/rc
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/rc"
 export WAKATIME_HOME="$XDG_CONFIG_HOME/wakatime"
 export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
 export CALIBRE_CONFIG_DIRECTORY="$XDG_CONFIG_HOME/calibre"

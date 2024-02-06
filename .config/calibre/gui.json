@@ -463,28 +463,28 @@
       "height": 768,
       "width": 1366,
       "x": 0,
-      "y": 0
+      "y": -38
     },
     "full_screened": false,
     "geometry": {
+      "height": 730,
+      "width": 1366,
+      "x": 0,
+      "y": 0
+    },
+    "maximized": true,
+    "normal_geometry": {
       "height": 731,
       "width": 1366,
       "x": 0,
       "y": 37
     },
-    "maximized": true,
-    "normal_geometry": {
-      "height": 616,
-      "width": 1221,
-      "x": 0,
-      "y": 74
-    },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAAAAAAAAAAAABVUAAAL/AAAAAAAAAEoAAATEAAACsQAAAAACAAAABVYAAAAAAAAAJQAABVUAAAL/"
+      "__value__": "AdnQywADAAAAAAAA////2gAABVUAAALZAAAAAAAAACUAAAVVAAAC/wAAAAACAAAABVYAAAAAAAAAAAAABVUAAALZ"
     },
     "screen": {
-      "depth": 24,
+      "depth": 32,
       "device_pixel_ratio": 1.0,
       "geometry_in_logical_pixels": {
         "height": 768,
@@ -493,8 +493,8 @@
         "y": 0
       },
       "index_in_screens_list": 0,
-      "manufacturer": "LG Display",
-      "model": "",
+      "manufacturer": "LGD",
+      "model": "0x037a",
       "name": "LVDS-1",
       "serial": "",
       "size_in_logical_pixels": {
@@ -1276,7 +1276,7 @@
   },
   "gpm_template_editor_font": "Liberation Sans",
   "gpm_template_editor_word_wrap_mode": true,
-  "grid view visible": false,
+  "grid view visible": true,
   "jobs view column layout3": {
     "__class__": "bytearray",
     "__value__": "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlcAAAAFAQEBAAAAAAAAAAAAAAAAAGT/////AAAAhAAAAAAAAAAFAAAAxwAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAAD6AAAAAAAAAAAAA=="
@@ -1284,9 +1284,38 @@
   "library_usage_stats": {
     "/home/tifan/Documents/Books/Calibre Backup/Library2": 7,
     "/home/tifan/Documents/Books/Library": 9,
-    "/home/tifan/Documents/Books/calibre-library": 49,
+    "/home/tifan/Documents/Books/calibre-library": 51,
     "/home/tifan/Documents/Calibre Library": 14,
     "/home/tifan/Documents/calibre-library": 9
+  },
+  "main_window_central_widget_state": {
+    "layout": "narrow",
+    "narrow_desires": {
+      "book_details_height": 0.1379746835443038,
+      "cover_browser_width": 0.40263543191800877,
+      "quick_view_height": 0.2873417721518987,
+      "tag_browser_width": 0.15373352855051245
+    },
+    "narrow_visibility": {
+      "book_details": true,
+      "book_list": true,
+      "cover_browser": false,
+      "quick_view": false,
+      "tag_browser": true
+    },
+    "wide_desires": {
+      "book_details_width": 0.14641288433382138,
+      "cover_browser_height": 0.3058103975535168,
+      "quick_view_height": 0.23139653414882771,
+      "tag_browser_width": 0.13323572474377746
+    },
+    "wide_visibility": {
+      "book_details": true,
+      "book_list": true,
+      "cover_browser": false,
+      "quick_view": false,
+      "tag_browser": true
+    }
   },
   "metadata-download-identify-widget-splitter-state": {
     "__class__": "bytearray",

@@ -1,0 +1,91 @@
+#!/bin/bash
+
+DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
+
+echo "==> Updating the yadm repo origin URL"
+yadm remote set-url origin "$DOTFILES_REPO_URL"
+
+echo "==> Configuring /etc/dnf/dnf.conf"
+sudo tee /etc/dnf/dnf.conf <<EOF >/dev/null
+[main]
+gpgcheck=True
+installonly_limit=3
+clean_requirements_on_remove=True
+best=False
+skip_if_unavailable=True
+defaultyes=True
+keepcache=False
+deltarpm=False
+fastestmirror=True
+minrate=200k
+EOF
+
+echo "==> Installing NVM"
+if [[ -d $NVM_DIR ]]; then
+  echo "NVM is already installed. Skipping..."
+else
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+fi
+
+echo "==> Removing bloats"
+sudo dnf remove -y gnome-maps gnome-weather gnome-tour gnome-contacts gnome-boxes simple-scan gnome-abrt gnome-calendar gnome-characters rhythmbox totem connections yelp libreoffice* anaconda-install-env-deps ibus-typing-booster
+sudo dnf autoremove
+
+echo "==> Installing utilities"
+sudo dnf install -y zsh code htop neofetch ncdu bat exa tealdeer gnome-extensions-app gnome-tweaks dconf-editor gparted
+
+echo "==> Installing extras"
+sudo dnf install -y yt-dlp gh calibre
+
+echo "==> Installing VirtualBox"
+sudo rpm --import https://www.virtualbox.org/download/oracle_vbox.asc
+sudo wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -P /etc/yum.repos.d/
+sudo dnf install @development-tools dkms
+sudo dnf install VirtualBox-7.0
+
+echo "==> Installing VSCode"
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+
+echo "==> Installing Ungoogled Chromium"
+flatpak install com.github.Eloston.UngoogledChromium
+
+echo "==> Configuring GNOME"
+# GSettings (use Dconf Editor for GUI experience)
+gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Control>Tab'
+gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ prev-tab '<Control><Shift>Tab'
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+gsettings set org.gnome.desktop.interface enable-animations false
+
+# keybindings
+gsettings set org.gnome.desktop.wm.keybindings maximize ['<Super>k']
+gsettings set org.gnome.desktop.wm.keybindings unmaximize ['<Super>j']
+gsettings set org.gnome.mutter.keybindings toggle-tiled-right ['<Super>l']
+gsettings set org.gnome.mutter.keybindings toggle-tiled-left ['<Super>h']
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right ['<Control><Super>l']
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left ['<Control><Super>h']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 ['<Super>1']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 ['<Super>2']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
+gsettings set org.gnome.TextEditor keybindings vim
+
+echo "==> Installing Oh My Zsh"
+ZSH="$XDG_CONFIG_HOME/oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+cat <<EOF
+
+Bootstrap succesfull. Lastly, do these steps manually:
+1. Install the following GNOME extensions:
+   - Caffeine (https://extensions.gnome.org/extension/517/caffeine/)
+   - Clipboard History (https://extensions.gnome.org/extension/4839/clipboard-history/)
+   - Just Perfection (https://extensions.gnome.org/extension/3843/just-perfection/)
+2. Install the latest Node.js LTS version using NVM:
+   nvm install --lts
+   nvm use --lts
+   nvm alias default stable
+3. Instal global NPM packages:
+   bun install --global typescript npm-check-updates vercel 
+4. Upgrade the system:
+   sudo dnf upgrade --refresh
+EOF
