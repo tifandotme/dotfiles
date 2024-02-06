@@ -1,5 +1,0 @@
-[Desktop Entry]
-Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=obsidian.sh --file-forwarding md.obsidian.Obsidian @@u %u 
-Type=Application
-StartupNotify=false
-Terminal=false

@@ -8,5 +8,5 @@
 --quiet
 --progress
 
---paths "~/Media/Videos/YouTube"
+--paths "~/Videos/YouTube"
 --output "%(uploader)s/%(title)s.%(ext)s"

@@ -1,4 +1,0 @@
-[Desktop Entry]
-Exec=gnome-terminal --maximize
-Type=Application
-StartupNotify=false
