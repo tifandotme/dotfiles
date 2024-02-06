@@ -10,8 +10,3 @@
 	gpgsign = true
 [gpg]
 	format = ssh
-[alias]
-	r = reset --soft HEAD~1 # undo last 1 commit
-	s = status --show-stash --short --branch
-	c = commit --no-edit
-	l = log --oneline --graph --decorate --all
