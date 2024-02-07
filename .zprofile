@@ -14,5 +14,7 @@ export ZSH="$XDG_CONFIG_HOME/oh-my-zsh"
 # Custom data/bin path
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
 
+export npm_config_cache="$XDG_CACHE_HOME/npm"
+
 export PATH="$BUN_INSTALL/bin:$PATH"
 
