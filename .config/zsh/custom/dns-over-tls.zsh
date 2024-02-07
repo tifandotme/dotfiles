@@ -34,47 +34,10 @@ EOF
   fi
 
   sudo systemctl restart systemd-resolved
-  if [ $? -ne 0 ]; then
-    echo "Failed to restart systemd-resolved"
-    return 1
-  fi
-
   sudo systemctl restart NetworkManager
-  if [ $? -ne 0 ]; then
-    echo "Failed to restart NetworkManager"
-    return 1
-  fi
 
   echo "/etc/systemd/resolved.conf has been updated"
   echo ""
 
   resolvectl
-  if [ $? -ne 0 ]; then
-    echo "Failed to run resolvectl"
-    return 1
-  fi
 }
-
-# dns() {
-#   if [ -z "$1" ] || [ "$1" != "on" ] && [ "$1" != "off" ]; then
-#     echo "Usage: dns on|off"
-#     return 1
-#   fi
-
-#   local action=$1
-#   local config_options=("DNS" "FallbackDNS" "Domains" "DNSSEC" "DNSOverTLS")
-
-#   for option in "${config_options[@]}"; do
-#     if [ "$action" = "on" ]; then
-#       sudo sed -i "s/^# *$option=/$option=/g" /etc/systemd/resolved.conf
-#     elif [ "$action" = "off" ]; then
-#       sudo sed -i "s/^$option=/#$option=/g" /etc/systemd/resolved.conf
-#     fi
-#   done
-
-#   sudo systemctl restart systemd-resolved
-#   sudo systemctl restart NetworkManager
-
-#   echo "DNS over TLS is now $action"
-#   resolvectl
-# }
