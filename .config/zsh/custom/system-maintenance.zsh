@@ -77,12 +77,12 @@ clean() {
     return 0
   fi
 
-  if [[ -n $1 && $1 != "--remove-old-kernels" && $1 != "--remove-retired-packages" && $1 != "--remove-old-symlinks" ]]; then
+  if [[ -n $1 && $1 != "--old-kernels" && $1 != "--retired-packages" && $1 != "--old-symlinks" ]]; then
     echo "Invalid option: $1"
     return 1
   fi
 
-  if [[ $1 == "--remove-old-kernels" ]]; then
+  if [[ $1 == "--old-kernels" ]]; then
     local old_kernels=($(dnf repoquery --installonly --latest-limit=-2 -q))
     if [ "${#old_kernels[@]}" -eq 0 ]; then
       echo "No old kernels found"
@@ -99,7 +99,7 @@ clean() {
     return 0
   fi
 
-  if [[ $1 == "--remove-retired-packages" ]]; then
+  if [[ $1 == "--retired-packages" ]]; then
     if ! command -v remove-retired-packages >/dev/null 2>&1; then
       sudo dnf install remove-retired-packages
     fi
@@ -110,7 +110,7 @@ clean() {
     return 0
   fi
 
-  if [[ $1 == "--remove-old-symlinks" ]]; then
+  if [[ $1 == "--old-symlinks" ]]; then
     if ! command -v symlinks >/dev/null 2>&1; then
       sudo dnf install symlinks
     fi
@@ -131,7 +131,7 @@ clean() {
     return 0
   fi
 
-  if [[ $1 == "--remove-systemd-journal" ]]; then
+  if [[ $1 == "--systemd-journal" ]]; then
     echo "==> Removing systemd journal logs"
     sudo journalctl --vacuum-size=100M
     return 0
