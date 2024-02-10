@@ -460,10 +460,10 @@
   },
   "geometry-of-calibre_main_window_geometry": {
     "frame_geometry": {
-      "height": 768,
-      "width": 1366,
-      "x": 0,
-      "y": -38
+      "height": 790,
+      "width": 1388,
+      "x": -11,
+      "y": -49
     },
     "full_screened": false,
     "geometry": {
@@ -474,14 +474,14 @@
     },
     "maximized": true,
     "normal_geometry": {
-      "height": 731,
+      "height": 730,
       "width": 1366,
       "x": 0,
-      "y": 37
+      "y": 0
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAAAA////2gAABVUAAALZAAAAAAAAACUAAAVVAAAC/wAAAAACAAAABVYAAAAAAAAAAAAABVUAAALZ"
+      "__value__": "AdnQywADAAD////1////zwAABWAAAALkAAAAAAAAAAAAAAVVAAAC2QAAAAACAAAABVYAAAAAAAAAAAAABVUAAALZ"
     },
     "screen": {
       "depth": 32,
@@ -1284,7 +1284,7 @@
   "library_usage_stats": {
     "/home/tifan/Documents/Books/Calibre Backup/Library2": 7,
     "/home/tifan/Documents/Books/Library": 9,
-    "/home/tifan/Documents/Books/calibre-library": 51,
+    "/home/tifan/Documents/Books/calibre-library": 53,
     "/home/tifan/Documents/Calibre Library": 14,
     "/home/tifan/Documents/calibre-library": 9
   },

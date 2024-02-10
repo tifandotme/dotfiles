@@ -77,7 +77,7 @@ clean() {
     return 0
   fi
 
-  if [[ -n $1 && $1 != "--old-kernels" && $1 != "--retired-packages" && $1 != "--old-symlinks" ]]; then
+  if [[ -n $1 && $1 != "--old-kernels" && $1 != "--retired-packages" && $1 != "--old-symlinks" && $1 != "--systemd-journal" ]]; then
     echo "Invalid option: $1"
     return 1
   fi
