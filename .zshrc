@@ -78,3 +78,6 @@ else
   export EDITOR='nvim'
 fi
 
+
+# bun completions
+[ -s "/home/tifan/.local/share/bun/_bun" ] && source "/home/tifan/.local/share/bun/_bun"
