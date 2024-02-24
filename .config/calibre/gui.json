@@ -203,6 +203,7 @@
     false
   ],
   "font_stretch": 0,
+  "general_category_editor_row_height": 30,
   "geometry-of-Plugin Updater plugin:plugin updater dialog": {
     "frame_geometry": {
       "height": 515,
@@ -866,6 +867,57 @@
       }
     }
   },
+  "geometry-of-manage_authors_dialog_geometry": {
+    "frame_geometry": {
+      "height": 385,
+      "width": 758,
+      "x": 294,
+      "y": 114
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 325,
+      "width": 736,
+      "x": 305,
+      "y": 163
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 325,
+      "width": 736,
+      "x": 305,
+      "y": 163
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAEmAAAAcgAABBsAAAHyAAABMQAAAKMAAAQQAAAB5wAAAAAAAAAABVYAAAExAAAAowAABBAAAAHn"
+    },
+    "screen": {
+      "depth": 32,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "0x037a",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
   "geometry-of-metadata_single_gui_geom": {
     "frame_geometry": {
       "height": 637,
@@ -919,31 +971,31 @@
   },
   "geometry-of-metasingle_window_geometry3": {
     "frame_geometry": {
-      "height": 755,
-      "width": 1296,
-      "x": 35,
-      "y": 7
+      "height": 768,
+      "width": 1366,
+      "x": 0,
+      "y": -38
     },
     "full_screened": false,
     "geometry": {
-      "height": 718,
-      "width": 1296,
-      "x": 35,
-      "y": 44
+      "height": 730,
+      "width": 1366,
+      "x": 0,
+      "y": 0
     },
-    "maximized": false,
+    "maximized": true,
     "normal_geometry": {
       "height": 718,
       "width": 1296,
-      "x": 35,
-      "y": 44
+      "x": 0,
+      "y": 0
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAAAjAAAABwAABTIAAAL5AAAAIwAAACwAAAUyAAAC+QAAAAAAAAAABVYAAAAjAAAALAAABTIAAAL5"
+      "__value__": "AdnQywADAAAAAAAA////2gAABVUAAALZAAAAAAAAAAAAAAUPAAACzQAAAAACAAAABVYAAAAAAAAAAAAABVUAAALZ"
     },
     "screen": {
-      "depth": 24,
+      "depth": 32,
       "device_pixel_ratio": 1.0,
       "geometry_in_logical_pixels": {
         "height": 768,
@@ -952,8 +1004,8 @@
         "y": 0
       },
       "index_in_screens_list": 0,
-      "manufacturer": "LG Display",
-      "model": "",
+      "manufacturer": "LGD",
+      "model": "0x037a",
       "name": "LVDS-1",
       "serial": "",
       "size_in_logical_pixels": {
@@ -1284,7 +1336,7 @@
   "library_usage_stats": {
     "/home/tifan/Documents/Books/Calibre Backup/Library2": 7,
     "/home/tifan/Documents/Books/Library": 9,
-    "/home/tifan/Documents/Books/calibre-library": 53,
+    "/home/tifan/Documents/Books/calibre-library": 55,
     "/home/tifan/Documents/Calibre Library": 14,
     "/home/tifan/Documents/calibre-library": 9
   },
@@ -1317,6 +1369,12 @@
       "tag_browser": true
     }
   },
+  "manage_authors_table_widths": [
+    172,
+    172,
+    172,
+    172
+  ],
   "metadata-download-identify-widget-splitter-state": {
     "__class__": "bytearray",
     "__value__": "AAAA/wAAAAEAAAACAAACSQAAAN0A/////wEAAAABAA=="
@@ -1354,7 +1412,7 @@
   },
   "previous_sort_order_BooksView": {
     "#fk": false,
-    "pubdate": true,
+    "pubdate": false,
     "publisher": false,
     "timestamp": false
   },
