@@ -10,12 +10,16 @@
     "__class__": "set",
     "__value__": [
       "6.24",
-      "6.25",
-      "6.21"
+      "6.21",
+      "6.25"
     ]
   },
   "save to disk dialog": "/home/tifan/Documents/Books/Saved to disk/asdasd",
   "sort_history": [
+    [
+      "pubdate",
+      false
+    ],
     [
       "pubdate",
       true
