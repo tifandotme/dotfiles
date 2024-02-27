@@ -9,9 +9,9 @@
   "notified-version-updates": {
     "__class__": "set",
     "__value__": [
+      "6.25",
       "6.24",
-      "6.21",
-      "6.25"
+      "6.21"
     ]
   },
   "save to disk dialog": "/home/tifan/Documents/Books/Saved to disk/asdasd",
@@ -19,10 +19,6 @@
     [
       "pubdate",
       false
-    ],
-    [
-      "pubdate",
-      true
     ],
     [
       "publisher",

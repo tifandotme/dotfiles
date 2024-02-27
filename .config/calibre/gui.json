@@ -461,28 +461,28 @@
   },
   "geometry-of-calibre_main_window_geometry": {
     "frame_geometry": {
-      "height": 790,
-      "width": 1388,
+      "height": 706,
+      "width": 1241,
       "x": -11,
       "y": -49
     },
     "full_screened": false,
     "geometry": {
-      "height": 730,
-      "width": 1366,
+      "height": 646,
+      "width": 1219,
       "x": 0,
       "y": 0
     },
-    "maximized": true,
+    "maximized": false,
     "normal_geometry": {
-      "height": 730,
-      "width": 1366,
+      "height": 646,
+      "width": 1219,
       "x": 0,
       "y": 0
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAD////1////zwAABWAAAALkAAAAAAAAAAAAAAVVAAAC2QAAAAACAAAABVYAAAAAAAAAAAAABVUAAALZ"
+      "__value__": "AdnQywADAAD////1////zwAABM0AAAKQAAAAAAAAAAAAAATCAAAChQAAAAAAAAAABVYAAAAAAAAAAAAABMIAAAKF"
     },
     "screen": {
       "depth": 32,
@@ -1175,31 +1175,31 @@
   },
   "geometry-of-quickview_dialog_geometry": {
     "frame_geometry": {
-      "height": 264,
-      "width": 1078,
-      "x": 134,
-      "y": 212
+      "height": 324,
+      "width": 1100,
+      "x": -11,
+      "y": -49
     },
     "full_screened": false,
     "geometry": {
       "height": 264,
       "width": 1078,
-      "x": 134,
-      "y": 212
+      "x": 0,
+      "y": 0
     },
     "maximized": false,
     "normal_geometry": {
       "height": 264,
       "width": 1078,
-      "x": 134,
-      "y": 212
+      "x": 0,
+      "y": 0
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAACGAAAA1AAABLsAAAHbAAAAhgAAANQAAAS7AAAB2wAAAAAAAAAABVYAAACGAAAA1AAABLsAAAHb"
+      "__value__": "AdnQywADAAD////1////zwAABEAAAAESAAAAAAAAAAAAAAQ1AAABBwAAAAAAAAAABVYAAAAAAAAAAAAABDUAAAEH"
     },
     "screen": {
-      "depth": 24,
+      "depth": 32,
       "device_pixel_ratio": 1.0,
       "geometry_in_logical_pixels": {
         "height": 768,
@@ -1209,7 +1209,7 @@
       },
       "index_in_screens_list": 0,
       "manufacturer": "LGD",
-      "model": "",
+      "model": "0x037a",
       "name": "LVDS-1",
       "serial": "",
       "size_in_logical_pixels": {
@@ -1328,7 +1328,7 @@
   },
   "gpm_template_editor_font": "Liberation Sans",
   "gpm_template_editor_word_wrap_mode": true,
-  "grid view visible": false,
+  "grid view visible": true,
   "jobs view column layout3": {
     "__class__": "bytearray",
     "__value__": "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlcAAAAFAQEBAAAAAAAAAAAAAAAAAGT/////AAAAhAAAAAAAAAAFAAAAxwAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAAD6AAAAAAAAAAAAA=="
@@ -1345,15 +1345,14 @@
     "narrow_desires": {
       "book_details_height": 0.1379746835443038,
       "cover_browser_width": 0.40263543191800877,
-      "quick_view_height": 0.2873417721518987,
-      "tag_browser_width": 0.15373352855051245
+      "quick_view_height": 0.2873417721518987
     },
     "narrow_visibility": {
       "book_details": true,
       "book_list": true,
       "cover_browser": false,
       "quick_view": false,
-      "tag_browser": true
+      "tag_browser": false
     },
     "wide_desires": {
       "book_details_width": 0.14641288433382138,
