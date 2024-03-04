@@ -1336,7 +1336,7 @@
   "library_usage_stats": {
     "/home/tifan/Documents/Books/Calibre Backup/Library2": 7,
     "/home/tifan/Documents/Books/Library": 9,
-    "/home/tifan/Documents/Books/calibre-library": 57,
+    "/home/tifan/Documents/Books/calibre-library": 59,
     "/home/tifan/Documents/Calibre Library": 14,
     "/home/tifan/Documents/calibre-library": 9
   },
@@ -1345,7 +1345,8 @@
     "narrow_desires": {
       "book_details_height": 0.1379746835443038,
       "cover_browser_width": 0.40263543191800877,
-      "quick_view_height": 0.2873417721518987
+      "quick_view_height": 0.2873417721518987,
+      "tag_browser_width": 0.25
     },
     "narrow_visibility": {
       "book_details": true,
