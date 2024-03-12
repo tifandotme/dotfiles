@@ -160,6 +160,57 @@
       }
     }
   },
+  "geometry-of-import-foreign-geometry": {
+    "frame_geometry": {
+      "height": 230,
+      "width": 544,
+      "x": 401,
+      "y": 210
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 170,
+      "width": 522,
+      "x": 412,
+      "y": 259
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 170,
+      "width": 522,
+      "x": 412,
+      "y": 259
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAGRAAAA0gAAA7AAAAG3AAABnAAAAQMAAAOlAAABrAAAAAAAAAAABVYAAAGcAAABAwAAA6UAAAGs"
+    },
+    "screen": {
+      "depth": 32,
+      "device_pixel_ratio": 1.0,
+      "geometry_in_logical_pixels": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "LGD",
+      "model": "0x037a",
+      "name": "LVDS-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 768,
+        "width": 1366
+      },
+      "virtual_geometry": {
+        "height": 768,
+        "width": 1366,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
   "geometry-of-main_window_geometry": {
     "frame_geometry": {
       "height": 768,
