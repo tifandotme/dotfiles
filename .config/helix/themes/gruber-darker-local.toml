@@ -1,0 +1,4 @@
+inherits = "gruber-darker"
+
+"ui.background" = {}
+"comment" = { fg = "gray" }
