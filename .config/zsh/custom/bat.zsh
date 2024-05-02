@@ -1,6 +1,6 @@
 command -v bat &> /dev/null || return
 
-alias cat="bat -p"
+alias cat="bat"
 
 # use help [program] instead of [program] --help (this will colorize it)
 help() {
