@@ -33,7 +33,6 @@
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-ZSH_THEME=""
 ZSH_CUSTOM="$XDG_CONFIG_HOME/zsh/custom"
 
 if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
@@ -73,9 +72,9 @@ source "$ZSH/oh-my-zsh.sh"
 bindkey '^ ' autosuggest-accept
 
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+  export EDITOR='vi'
 else
-  export EDITOR='nvim'
+  export EDITOR='hx'
 fi
 
 

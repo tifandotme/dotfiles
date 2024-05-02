@@ -18,3 +18,8 @@ export npm_config_cache="$XDG_CACHE_HOME/npm"
 
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+
+
+# Added by Toolbox App
+export PATH="$PATH:/home/tifan/.local/share/JetBrains/Toolbox/scripts"
+

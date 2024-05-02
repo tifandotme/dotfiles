@@ -38,28 +38,29 @@ else
 fi
 
 echo "==> Removing bloats"
-sudo dnf remove -y gnome-maps gnome-weather gnome-tour gnome-contacts gnome-boxes simple-scan gnome-abrt gnome-calendar gnome-characters gnome-software rhythmbox totem connections yelp libreoffice* anaconda-install-env-deps ibus-typing-booster
+sudo dnf remove -y gnome-maps gnome-weather gnome-tour gnome-contacts gnome-boxes simple-scan gnome-abrt gnome-calendar gnome-characters gnome-software gnome-terminal rhythmbox connections yelp libreoffice* anaconda-install-env-deps ibus-typing-booster
 sudo dnf remove -y PackageKit-gstreamer-plugin PackageKit PackageKit-command-not-found # PackageKit is a dependency of GNOME Software
 sudo dnf autoremove
 
 echo "==> Installing utilities"
-sudo dnf install -y zsh code htop neofetch ncdu bat exa tealdeer gnome-extensions-app gnome-tweaks dconf-editor gparted java-latest-openjdk
+sudo dnf install -y zsh htop fastfetch ncdu bat eza tealdeer gh yt-dlp qbitorrent gnome-extensions-app gnome-tweaks dconf-editor gparted
 
-echo "==> Installing extras"
-sudo dnf install -y yt-dlp gh calibre qbittorrent
+echo "==> Installing development tools"
+sudo dnf install -y helix java-latest-openjdk
+curl -fsSL https://bun.sh/install | bash
+bun add -g bash-language-server typescript-language-server yaml-language-server vscode-langservers-extracted # language servers for helix
+bun add -g typescript vercel npm-check-updates
 
 echo "==> Installing VirtualBox"
 sudo rpm --import https://www.virtualbox.org/download/oracle_vbox.asc
 sudo wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -P /etc/yum.repos.d/
-sudo dnf install @development-tools dkms
+sudo dnf install @develoment-tools dkms
 sudo dnf install VirtualBox-7.0
 
 echo "==> Installing VSCode"
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
-
-echo "==> Installing Ungoogled Chromium"
-flatpak install com.github.Eloston.UngoogledChromium
+sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+sudo dnf install -y code
 
 echo "==> Configuring GNOME"
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Control>Tab'
@@ -107,10 +108,11 @@ Bootstrap succesfull. Lastly, do these steps manually:
    gvm install go1.17.13
    gvm use go1.17.13
    export GOROOT_BOOTSTRAP=$GOROOT
-   gvm install go1.21.7 # also check the latest version
-   gvm use go1.21.7 --default
-4. Instal global NPM packages:
-   bun install --global typescript npm-check-updates vercel 
+   gvm install go1.20
+   gvm use go1.20
+   export GOROOT_BOOTSTRAP=$GOROOT
+   gvm install go1.22.2 # check the latest version
+   gvm use go1.22.2 --default
 5. Upgrade the system:
    sudo dnf upgrade --refresh
 EOF

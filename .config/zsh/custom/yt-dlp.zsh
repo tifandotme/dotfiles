@@ -3,8 +3,6 @@
 command -v yt-dlp &> /dev/null || return
 
 yd() {
-  
-
   if [[ "$1" == "" ]]; then
     echo "Usage: yd \"[url]\""
     return
