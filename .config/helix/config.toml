@@ -1,3 +1,5 @@
+# https://docs.helix-editor.com/configuration.html
+
 theme = "gruber-darker-local"
 
 [keys.insert]
@@ -33,3 +35,6 @@ hidden = false
 mode.normal = "NORMAL"
 mode.insert = "INSERT"
 mode.select = "SELECT"
+
+[editor.lsp]
+display-messages = true

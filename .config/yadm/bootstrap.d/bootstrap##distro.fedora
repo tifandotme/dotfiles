@@ -46,10 +46,12 @@ echo "==> Installing utilities"
 sudo dnf install -y zsh htop fastfetch ncdu bat eza tealdeer gh yt-dlp qbitorrent gnome-extensions-app gnome-tweaks dconf-editor gparted
 
 echo "==> Installing development tools"
-sudo dnf install -y helix java-latest-openjdk
+sudo dnf install -y helix cargo java-latest-openjdk
 curl -fsSL https://bun.sh/install | bash
-bun add -g bash-language-server typescript-language-server yaml-language-server vscode-langservers-extracted # language servers for helix
 bun add -g typescript vercel npm-check-updates
+# language servers
+bun add -g bash-language-server typescript-language-server yaml-language-server vscode-langservers-extracted
+cargo install taplo-cli --locked --features lsp
 
 echo "==> Installing VirtualBox"
 sudo rpm --import https://www.virtualbox.org/download/oracle_vbox.asc

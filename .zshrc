@@ -47,19 +47,12 @@ fi
 plugins=(
 	zsh-autosuggestions	# add autosuggestions
 	zsh-syntax-highlighting # add fish-like syntax highlithing to commands
-	
+
 	vi-mode		# extend zsh vi mode
-	
 	aliases		# add alias aliases
-	
-	git		# add git aliases
-	vscode		# add vscode aliases
 	history		# add history aliases
-	
 	dirhistory	# Alt+Arrow to navigate directory history
 
-	jsontools	# pp_json (pretty prints json), is_json (is json valid)
-	
 	bun		# cache completions for bun
 	nvm		# source and add autocompletions for nvm
 	
@@ -68,7 +61,7 @@ plugins=(
 
 source "$ZSH/oh-my-zsh.sh"
 
-# Ctrl+Space to accept autosuggestion
+# C-space to accept autosuggestion
 bindkey '^ ' autosuggest-accept
 
 if [[ -n $SSH_CONNECTION ]]; then
