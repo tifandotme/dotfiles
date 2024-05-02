@@ -12,4 +12,4 @@ export ZSH="$XDG_CONFIG_HOME/oh-my-zsh"
 # Custom data/bin path
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
 
-export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="$BUN_INSTALL/bin:$HOME/.cargo/bin:$PATH"
