@@ -3,9 +3,17 @@
 theme = "gruber-darker-local"
 
 [keys.insert]
+up = "no_op"
+down = "no_op"
+left = "no_op"
+right = "no_op"
 j = { j = "normal_mode" }
 
 [keys.normal]
+up = "no_op"
+down = "no_op"
+left = "no_op"
+right = "no_op"
 C-j = [
   "keep_primary_selection",
   "move_line_down",

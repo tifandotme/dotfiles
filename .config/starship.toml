@@ -1,5 +1,3 @@
-# used preset: https://starship.rs/presets/plain-text
-
 [character]
 success_symbol = "[>](bold green)"
 error_symbol = "[x](bold red)"
