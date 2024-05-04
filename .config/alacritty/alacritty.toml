@@ -1,15 +1,21 @@
 # browse base16 themes: https://glitchbone.github.io/vscode-base16-term/#/irblack
 import = [
   # source https://github.com/aarowill/base16-alacritty/blob/master/colors/base16-irblack.toml
-  "~/.config/alacritty/base16-irblack.toml"
+  "~/.config/alacritty/base16-irblack.toml",
 ]
 
 [window]
-decorations = "Full"  # change to None when using tiling wm
+decorations = "Full" # change to None when using tiling wm
 opacity = 1.0
 
 [font]
 normal = { family = "CommitMono Nerd Font", style = "Regular" }
 
-[colors]
-transparent_background_colors = true # TODO finds out what this does
+#[colors]
+#transparent_background_colors = true # TODO finds out what this does
+
+[keyboard]
+# ctrl|shift + enter to spawn a new instance in the same directory
+bindings = [
+  { key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" },
+]
