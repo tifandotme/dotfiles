@@ -1,0 +1,36 @@
+# docs: https://docs.helix-editor.com/languages.html
+# default: https://github.com/helix-editor/helix/blob/master/languages.toml
+
+# WARN there is plan to replace the language from toml to "scheme" idk wtf that is
+# https://github.com/helix-editor/helix/issues/10389
+# https://github.com/helix-editor/helix/issues/8853
+
+[[language]]
+name = "toml"
+indent = { tab-width = 2, unit = "\t" }
+formatter = { command = "taplo", args = ["fmt", "-"] }
+auto-format = true
+
+[[language]]
+name = "bash"
+indent = { tab-width = 4, unit = "\t" }
+formatter = { command = 'shfmt', args = [
+  "-i",
+  "0",
+] } # 0 for tabs, 1..4 for N of spaces
+auto-format = true
+
+[[language]]
+name = "kdl"
+indent = { tab-width = 4, unit = "    " }
+
+[[language]]
+name = "javascript"
+formatter = { command = "prettier", args = [
+  "--config-precedence",
+  "prefer-file",
+  "--no-semi",
+  "--parser",
+  "typescript",
+] }
+auto-format = true
