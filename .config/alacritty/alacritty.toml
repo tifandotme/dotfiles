@@ -4,18 +4,11 @@ import = [
   "~/.config/alacritty/base16-irblack.toml",
 ]
 
-[window]
-decorations = "Full" # change to None when using tiling wm
-opacity = 1.0
-
 [font]
 normal = { family = "CommitMono Nerd Font", style = "Regular" }
 
-#[colors]
-#transparent_background_colors = true # TODO finds out what this does
-
 [keyboard]
-# ctrl|shift + enter to spawn a new instance in the same directory
+# C-S-enter to spawn a new instance in the same directory
 bindings = [
   { key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" },
 ]
