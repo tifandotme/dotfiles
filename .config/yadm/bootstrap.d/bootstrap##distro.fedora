@@ -20,39 +20,23 @@ fastestmirror=False
 minrate=200k
 EOF
 
-echo "==> Installing NVM"
-if [[ -d $NVM_DIR ]]; then
-	echo "NVM is already installed. Skipping..."
-else
-	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-fi
-
-echo "==> Installing GVM"
-if [[ -d "$XDG_CONFIG_HOME/gvm" ]]; then
-	echo "GVM is already installed. Skipping..."
-else
-	curl -s "https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer" -o gvm-installer
-	chmod +x gvm-installer
-	GVM_NO_UPDATE_PROFILE=true ./gvm-installer "" $XDG_CONFIG_HOME
-	rm -rf gvm-installer
-fi
-
 echo "==> Removing bloats"
 sudo dnf remove -y gnome-maps gnome-weather gnome-tour gnome-contacts gnome-boxes simple-scan gnome-abrt gnome-calendar gnome-characters gnome-software gnome-terminal rhythmbox connections yelp libreoffice* anaconda-install-env-deps ibus-typing-booster
 sudo dnf remove -y PackageKit-gstreamer-plugin PackageKit PackageKit-command-not-found # PackageKit is a dependency of GNOME Software
-sudo dnf autoremove
+sudo dnf autoremove -y
 
 echo "==> Installing utilities"
-sudo dnf install -y zsh htop fastfetch ncdu bat eza tealdeer gh yt-dlp qbitorrent gnome-extensions-app gnome-tweaks dconf-editor gparted
+sudo dnf install -y fastfetch ncdu bat tealdeer gh yt-dlp qbitorrent gnome-extensions-app gnome-tweaks dconf-editor gparted
 
 echo "==> Installing development tools"
-sudo dnf install -y helix java-latest-openjdk cargo ShellCheck
+sudo dnf install -y helix cargo ShellCheck
 curl -fsSL https://bun.sh/install | bash
 bun add -g typescript vercel npm-check-updates
 # language servers
 sudo dnf install -y shfmt
-bun add -g bash-language-server typescript-language-server yaml-language-server vscode-langservers-extracted
+bun add -g bash-language-server typescript-language-server yaml-language-server vscode-langservers-extracted @tailwindcss/language-server
 cargo install taplo-cli --locked --features lsp # there is actually a js wrapper @taplo/cli but it seems to be slow
+# cargo zoxide
 
 echo "==> Installing VirtualBox"
 sudo rpm --import https://www.virtualbox.org/download/oracle_vbox.asc
@@ -83,9 +67,6 @@ gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3'
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
 gsettings set org.gnome.TextEditor keybindings vim
 
-echo "==> Installing Oh My Zsh"
-ZSH="$XDG_CONFIG_HOME/oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
 echo "==> Disabling GNOME Software"
 mkdir -pv "$XDG_CONFIG_HOME/autostart" && cp /etc/xdg/autostart/org.gnome.Software.desktop "$XDG_CONFIG_HOME/autostart"
 echo "X-GNOME-Autostart-enabled=false" >>"$XDG_CONFIG_HOME/autostart/org.gnome.Software.desktop"
@@ -100,22 +81,6 @@ Bootstrap succesfull. Lastly, do these steps manually:
    - Caffeine (https://extensions.gnome.org/extension/517/caffeine/)
    - Clipboard History (https://extensions.gnome.org/extension/4839/clipboard-history/)
    - Just Perfection (https://extensions.gnome.org/extension/3843/just-perfection/)
-2. Install the latest Node.js LTS version using NVM:
-   nvm install --lts
-   nvm use --lts
-   nvm alias default stable
-3. Install Go
-   gvm install go1.4 -B
-   gvm use go1.4
-   export GOROOT_BOOTSTRAP=$GOROOT
-   gvm install go1.17.13
-   gvm use go1.17.13
-   export GOROOT_BOOTSTRAP=$GOROOT
-   gvm install go1.20
-   gvm use go1.20
-   export GOROOT_BOOTSTRAP=$GOROOT
-   gvm install go1.22.2 # check the latest version
-   gvm use go1.22.2 --default
-5. Upgrade the system:
+2. Upgrade the system:
    sudo dnf upgrade --refresh
 EOF
