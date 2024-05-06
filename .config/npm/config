@@ -1,4 +1,5 @@
 # https://docs.npmjs.com/cli/v9/using-npm/config
 
 fund = false
-cache = ${XDG_CACHE_HOME}/npm
+# TODO check if working
+cache = "${XDG_CACHE_HOME}/npm"
