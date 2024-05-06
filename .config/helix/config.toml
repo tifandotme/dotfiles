@@ -19,7 +19,7 @@ right = "no_op"
 
 [editor]
 line-number = "relative"
-bufferline = "always"
+bufferline = "multiple"
 rulers = [80]
 color-modes = true
 

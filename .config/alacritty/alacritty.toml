@@ -12,3 +12,6 @@ normal = { family = "CommitMono Nerd Font", style = "Regular" }
 bindings = [
   { key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" },
 ]
+
+[window]
+decorations = "None"
