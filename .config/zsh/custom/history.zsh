@@ -1,3 +1,0 @@
-HIST_STAMPS="dd.mm.yyyy"
-HISTFILE="${XDG_CONFIG_HOME}/zsh/history"
-SAVEHIST="20000"
