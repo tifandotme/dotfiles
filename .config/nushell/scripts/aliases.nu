@@ -3,6 +3,16 @@
 
 # coreutils
 export alias rm = rm -rf
+export alias lsblk = lsblk -o NAME,FSTYPE,LABEL,SIZE,FSUSE%,FSAVAIL,MOUNTPOINT
+export alias grep = grep --color=auto
+export alias diff = diff --color=auto
+export def po [] {
+  lsof -i -P -n | grep LISTEN
+}
+export alias df = df --human-readable --si
+
+# git
+export alias g = git
 
 # bun
 export alias b = ^bun
@@ -14,15 +24,33 @@ export alias zrf = ^zellij run --floating --
 # helix deez
 export alias h = ^hx
 
-export alias core-ls = ls
-def old-ls [
+# ncdu
+export alias ncdu = ncdu --enable-delete --si
+
+# bat
+export alias bhelp = bat --plain --language=help
+
+# podman
+export alias docker = podman
+
+# yadm (soon to be replaced?)
+export alias ya = yadm
+export alias yas = yadm status
+export alias yal = yadm list -a
+export def yau [] {
+  yadm add -u; yadm commit -m 'update'; yadm push
+}
+
+# ls
+export alias _ls = ls
+def print_grid_ls [
   --all
   path
 ] {
     let lses = if $all {
-      core-ls --all --mime-type $path
+      _ls --all --mime-type $path
     } else {
-      core-ls --mime-type $path
+      _ls --mime-type $path
     }
     let dirs = $lses | where type == dir | sort-by --ignore-case name
     let files = $lses | where type !~ dir | sort-by --ignore-case type name
@@ -30,15 +58,15 @@ def old-ls [
 }
 export def ls [path?] {
   if $path == null {
-    old-ls .
+    print_grid_ls .
   } else {
-    old-ls $path
+    print_grid_ls $path
   }
 }
 export def lsa [path?] {
   if $path == null {
-    old-ls --all .
+    print_grid_ls --all .
   } else {
-    old-ls --all $path
+    print_grid_ls --all $path
   }
 }
