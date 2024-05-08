@@ -92,4 +92,5 @@ $env.config = {
 
 use mise.nu
 use aliases.nu *
+use youtube.nu *
 source zoxide.nu

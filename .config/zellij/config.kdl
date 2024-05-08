@@ -33,7 +33,6 @@ keybinds clear-defaults=true {
     // SCROLL
     scroll {
         bind "o" { EditScrollback; SwitchToMode "Normal"; }
-        bind "/" { SwitchToMode "EnterSearch"; SearchInput 0; }
         bind "j" "Down" { ScrollDown; }
         bind "k" "Up" { ScrollUp; }
         bind "Ctrl f" "PageDown" "Right" "l" { PageScrollDown; }
@@ -41,6 +40,7 @@ keybinds clear-defaults=true {
         bind "d" { HalfPageScrollDown; }
         bind "u" { HalfPageScrollUp; }
         bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
+        bind "/" { SwitchToMode "EnterSearch"; SearchInput 0; }
         // uncomment this and adjust key if using copy_on_select=false
         // bind "Alt c" { Copy; }
     }
@@ -60,7 +60,7 @@ keybinds clear-defaults=true {
         bind "o" { SearchToggleOption "WholeWord"; }
     }
 
-    // serba modifier, an alternative, but still experimenting
+    // an alternative, but still experimenting
     locked {
         bind "Ctrl g" { SwitchToMode "Normal"; }
     }
