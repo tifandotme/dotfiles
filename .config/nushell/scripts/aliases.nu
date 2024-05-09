@@ -40,6 +40,17 @@ export def yau [] {
   yadm add -u; yadm commit -m 'update'; yadm push
 }
 
+# yazi
+export def --env y [...args] {
+  let tmp = (mktemp -t "yazi-cwd.XXXXXX")
+  yazi ...$args --cwd-file $tmp
+  let cwd = (open $tmp)
+  if $cwd != "" and $cwd != $env.PWD {
+    cd $cwd
+  }
+  rm -fp $tmp
+}
+
 # npm-check-updats
 export alias _ncu = ncu
 export alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME)/.ncu-cache.json" --packageManager bun

@@ -7,8 +7,8 @@ j = { j = "normal_mode" }
 
 [keys.normal]
 esc = ["collapse_selection", "keep_primary_selection"]
-H = ":buffer-previous"
-L = ":buffer-next"
+C-h = ":buffer-previous"
+C-l = ":buffer-next"
 A-j = "scroll_down"
 A-k = "scroll_up"
 up = "no_op"
