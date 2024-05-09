@@ -19,7 +19,7 @@ export alias b = bun
 
 # zellij
 export alias z = zellij
-export alias zrf = ^zellij run --floating --
+export alias zrf = zellij run --floating --
 
 # helix deez
 export alias h = hx

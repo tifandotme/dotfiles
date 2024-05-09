@@ -1,0 +1,25 @@
+"$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
+
+[manager]
+prepend_keymap = [
+	# disable keymaps
+	{ on = ["<Enter>"], run = "," },
+	{ on = ["<C-Enter>"], run = "," },
+	{ on = ["t"], run = "," },
+
+	# wraparound navigation
+	{ on = ["j"], run = "plugin --sync arrow --args=1" },
+	{ on = ["k"], run = "plugin --sync arrow --args=-1" },
+
+	# smart enter with l
+	{ on = ["l"], run = "plugin --sync smart-enter", desc = "Enter the child directory, or open the file" },
+
+	# force delete to trash with d
+	{ on = ["d"], run = "remove --force", desc = "Move the files to the trash" },
+
+	# open shell
+	{ on = ["<C-s>"], run = 'shell "$SHELL" --block --confirm', desc = "Open shell here" },
+]
+
+[input]
+prepend_keymap = [{ on = ["<Esc>"], run = "close", desc = "Cancel input" }]

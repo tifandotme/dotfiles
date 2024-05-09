@@ -1,0 +1,17 @@
+"$schema" = "https://yazi-rs.github.io/schemas/theme.json"
+
+[manager]
+border_style = { fg = "#212121" }
+preview_hovered = {}
+
+[status]
+separator_open = ""
+separator_close = ""
+separator_style = { fg = "reset", bg = "reset" }
+
+mode_normal = { bg = "white", bold = true }
+mode_select = { bg = "yellow", bold = true }
+mode_unset = { bg = "white", bold = true }
+
+[icon]
+rules = [{ name = "*", text = "" }, { name = "*/", text = "" }]
