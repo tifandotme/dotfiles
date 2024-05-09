@@ -34,17 +34,19 @@ $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = { create_character normal }
 # =============================== PATH ========================================
 
 def --env add_path [path: string] {
-    $env.PATH = ($env.PATH | split row (char esep) | prepend $path)
+    $env.PATH = ($env.PATH | split row (char esep) | prepend $path | uniq)
 }
 
 add_path ($env.HOME | path join .local bin)
 add_path ($env.HOME | path join .cargo bin)
+add_path ($env.HOME | path join .local share bun bin)
 
 hide add_path
 
 $env.EDITOR = "hx"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
+$env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
 
 # colorizes manpages using bat
 $env.MANPAGER = "sh -c 'col -bx | bat -l man -p'"

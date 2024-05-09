@@ -15,14 +15,14 @@ export alias df = df --human-readable --si
 export alias g = git
 
 # bun
-export alias b = ^bun
+export alias b = bun
 
 # zellij
-export alias z = ^zellij
+export alias z = zellij
 export alias zrf = ^zellij run --floating --
 
 # helix deez
-export alias h = ^hx
+export alias h = hx
 
 # ncdu
 export alias ncdu = ncdu --enable-delete --si
@@ -34,12 +34,15 @@ export alias bhelp = bat --plain --language=help
 export alias docker = podman
 
 # yadm (soon to be replaced?)
-export alias ya = yadm
 export alias yas = yadm status
 export alias yal = yadm list -a
 export def yau [] {
   yadm add -u; yadm commit -m 'update'; yadm push
 }
+
+# npm-check-updats
+export alias _ncu = ncu
+export alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME)/.ncu-cache.json" --packageManager bun
 
 # ls
 export alias _ls = ls

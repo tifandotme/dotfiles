@@ -14,3 +14,5 @@
 	path = ~/personal/gitlab/.gitconfig
 [includeIf "gitdir:~/work"]
 	path = ~/work/.gitconfig
+[maintenance]
+	repo = /home/tifan/personal/website

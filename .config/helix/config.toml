@@ -7,6 +7,8 @@ j = { j = "normal_mode" }
 
 [keys.normal]
 esc = ["collapse_selection", "keep_primary_selection"]
+H = ":buffer-previous"
+L = ":buffer-next"
 A-j = "scroll_down"
 A-k = "scroll_up"
 up = "no_op"
@@ -14,7 +16,9 @@ down = "no_op"
 left = "no_op"
 right = "no_op"
 
-[keys.normal.g]
+# file picker using yazi (workaround until helix plugin is implemented)
+[keys.normal."space"]
+e = [":sh zellij run --floating -x 10% -y 10% --width 80% --height 80% -- nu ~/.config/nushell/scripts/yazi-picker.nu"]
 "[" = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
 
 [editor]
@@ -22,6 +26,8 @@ line-number = "relative"
 bufferline = "multiple"
 rulers = [80]
 color-modes = true
+# soft-wrap.enable = true
+# soft-wrap.max-indent-retain = 80
 
 [editor.whitespace.render]
 space = "all"

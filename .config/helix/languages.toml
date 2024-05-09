@@ -8,17 +8,19 @@
 [[language]]
 name = "toml"
 indent = { tab-width = 2, unit = "\t" }
-formatter = { command = "taplo", args = ["fmt", "-"] }
-auto-format = true
+formatter = { command = "taplo", args = [
+	"fmt",
+	"-o",
+	"indent_string=\t",
+	"-o",
+	"inline_table_expand=false",
+	"-",
+] }
 
 [[language]]
 name = "bash"
 indent = { tab-width = 4, unit = "\t" }
-formatter = { command = 'shfmt', args = [
-  "-i",
-  "0",
-] } # 0 for tabs, 1..4 for N of spaces
-auto-format = true
+formatter = { command = 'shfmt', args = ["-i", "0"] } # 0 for tabs, 1..4 for N of spaces
 
 [[language]]
 name = "kdl"
@@ -27,10 +29,14 @@ indent = { tab-width = 4, unit = "    " }
 [[language]]
 name = "javascript"
 formatter = { command = "prettier", args = [
-  "--config-precedence",
-  "prefer-file",
-  "--no-semi",
-  "--parser",
-  "typescript",
+	"--config-precedence",
+	"prefer-file",
+	"--no-semi",
+	"--parser",
+	"typescript",
 ] }
 auto-format = true
+
+[[language]]
+name = "lua"
+formatter = { command = "stylua", args = ["-"] }
