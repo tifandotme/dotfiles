@@ -1,10 +1,8 @@
 # https://github.com/helix-editor/helix/blob/master/runtime/themes/gruber-darker.toml
 inherits = "gruber-darker"
 
-# removes background
 "ui.background" = {}
 
-# customize status line (needs color-mode to be enabled in config.toml)
 "ui.statusline" = { fg = "fg0", bg = "bg0" }
 "ui.statusline.normal" = { fg = "black", bg = "quartz", modifiers = ["bold"] }
 "ui.statusline.insert" = { fg = "black", bg = "niagara0", modifiers = ["bold"] }
@@ -16,9 +14,8 @@ inherits = "gruber-darker"
 
 "ui.virtual.ruler" = { bg = "bg0" }
 
-"ui.virtual.whitespace" = "bg8"
+"ui.virtual.whitespace" = "#595959"
 
-# colorize 2 character combinations when pressing
-"ui.virtual.jump-label" = { fg = "yellow0", modifiers = ["bold"] }
+"ui.virtual.jump-label" = { fg = "brown0", modifiers = ["bold"] }
 
 "comment" = { fg = "gray" }

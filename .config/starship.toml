@@ -98,7 +98,7 @@ symbol = "kt "
 symbol = "lua "
 
 [nodejs]
-symbol = "nodejs "
+symbol = "node "
 
 [memory_usage]
 symbol = "memory "

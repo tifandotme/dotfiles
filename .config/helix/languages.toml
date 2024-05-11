@@ -8,14 +8,19 @@
 [[language]]
 name = "toml"
 indent = { tab-width = 2, unit = "\t" }
-formatter = { command = "taplo", args = [
-	"fmt",
-	"-o",
-	"indent_string=\t",
-	"-o",
-	"inline_table_expand=false",
-	"-",
-] }
+formatter = { command = "taplo", args = ["fmt", "-o", "indent_string=\t", "-o", "inline_table_expand=false", "-o", "column_width=120", "-"] }
+
+[[language]]
+name = "yaml"
+formatter = { command = "prettier", args = ["--parser", "yaml"] }
+
+[[language]]
+name = "kdl"
+indent = { tab-width = 4, unit = "    " }
+
+[[language]]
+name = "nu"
+indent = { tab-width = 4, unit = "    " }
 
 [[language]]
 name = "bash"
@@ -23,20 +28,23 @@ indent = { tab-width = 4, unit = "\t" }
 formatter = { command = 'shfmt', args = ["-i", "0"] } # 0 for tabs, 1..4 for N of spaces
 
 [[language]]
-name = "kdl"
-indent = { tab-width = 4, unit = "    " }
+name = "lua"
+formatter = { command = "stylua", args = ["-"] }
 
 [[language]]
 name = "javascript"
-formatter = { command = "prettier", args = [
-	"--config-precedence",
-	"prefer-file",
-	"--no-semi",
-	"--parser",
-	"typescript",
-] }
-auto-format = true
+formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--parser", "typescript"] }
 
 [[language]]
-name = "lua"
-formatter = { command = "stylua", args = ["-"] }
+name = "typescript"
+formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--parser", "typescript"] }
+
+[[language]]
+name = "jsx"
+formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--parser", "typescript"] }
+language-servers = ["typescript-language-server", "tailwindcss-ls"]
+
+[[language]]
+name = "tsx"
+formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--parser", "typescript"] }
+language-servers = ["typescript-language-server", "tailwindcss-ls"]

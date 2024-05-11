@@ -2,32 +2,49 @@
 
 theme = "gruber-darker-local"
 
-[keys.insert]
-j = { j = "normal_mode" }
 
 [keys.normal]
+A-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+A-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 esc = ["collapse_selection", "keep_primary_selection"]
-C-h = ":buffer-previous"
-C-l = ":buffer-next"
-A-j = "scroll_down"
-A-k = "scroll_up"
 up = "no_op"
 down = "no_op"
 left = "no_op"
 right = "no_op"
 
-# file picker using yazi (workaround until helix plugin is implemented)
-[keys.normal."space"]
-e = [":sh zellij run --floating -x 10% -y 10% --width 80% --height 80% -- nu ~/.config/nushell/scripts/yazi-picker.nu"]
-"[" = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
+[keys.normal.space]
+x = ":buffer-close-others"
+i = [":sh zellij run -f -x 10% -y 10% --width 80% --height 80% -c -- lazygit"]
+# until plugin system is implemented
+e = [":sh zellij run -f -x 10% -y 10% --width 80% --height 80% -- nu ~/.config/helix/yazi-picker.nu"]
+"[" = ":format"
+
+[keys.insert]
+C-h = "move_char_left"
+C-l = "move_char_right"
+C-space = "completion"
+up = "no_op"
+down = "no_op"
+left = "no_op"
+right = "no_op"
+
+[keys.insert.j]
+j = "normal_mode"
+
+[keys.select]
+A-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+A-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+
 
 [editor]
+shell = ["nu", "-c"]
 line-number = "relative"
 bufferline = "multiple"
 rulers = [80]
 color-modes = true
-# soft-wrap.enable = true
-# soft-wrap.max-indent-retain = 80
+
+[editor.soft-wrap]
+enable = true
 
 [editor.whitespace.render]
 space = "all"
@@ -38,11 +55,6 @@ insert = "bar"
 
 [editor.file-picker]
 hidden = false
-
-[editor.statusline]
-mode.normal = "NORMAL"
-mode.insert = "INSERT"
-mode.select = "SELECT"
 
 [editor.lsp]
 display-messages = true
