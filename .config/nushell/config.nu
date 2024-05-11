@@ -93,11 +93,45 @@ let ir_black = {
     cursor: "#b5b3aa"
 }
 
+let zoxide_completer = {|spans|
+    $spans | skip 1 | zoxide query -l ...$in | lines | where {|x| $x != $env.PWD}
+}
+
+let fish_completer = {|spans|
+    fish --command $'complete "--do-complete=($spans | str join " ")"'
+    | $"value(char tab)description(char newline)" + $in
+    | from tsv --flexible --no-infer
+}
+
+let external_completer = {|spans|
+    let expanded_alias = scope aliases
+    | where name == $spans.0
+    | get -i 0.expansion
+
+    let spans = if $expanded_alias != null {
+        $spans
+        | skip 1
+        | prepend ($expanded_alias | split row ' ' | take 1)
+    } else {
+        $spans
+    }
+
+    match $spans.0 {
+        __zoxide_z | __zoxide_zi => $zoxide_completer
+        _ => $fish_completer
+    } | do $in $spans
+}
+
 $env.config = {
     # themes: https://github.com/nushell/nu_scripts/tree/main/themes
     color_config: $ir_black
 
-    show_banner: false
+    completions: {
+        external: {
+            enable: true
+            completer: $external_completer
+        }
+    }
 
     table: {
         mode: light
@@ -131,8 +165,9 @@ $env.config = {
         vi_normal: block
     }
 
+    show_banner: false
     use_grid_icons: false # show icons for command grid --color
-    footer_mode: "30" # always, never, number_of_rows, auto
+    footer_mode: "30"
     edit_mode: vi
     highlight_resolved_externals: true
 

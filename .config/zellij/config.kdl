@@ -74,6 +74,8 @@ keybinds clear-defaults=true {
         bind "Alt w" { ToggleFloatingPanes; }
         bind "Alt h" { MoveFocusOrTab "Left"; }
         bind "Alt l" { MoveFocusOrTab "Right"; }
+        bind "Alt j" { MoveFocus "Down"; }
+        bind "Alt k" { MoveFocus "Up"; }
         bind "Alt =" "Alt +" { Resize "Increase"; }
         bind "Alt -" { Resize "Decrease"; }
     }
@@ -98,17 +100,17 @@ keybinds clear-defaults=true {
 
 themes {
     default {
-        fg "#b5b3aa"
+        fg "#7b786b"
         bg "#000000"
         black "#000000"
         red "#ff6c60"
-        green "#a8ff60"
+        green "#b5b3aa" // green form irblack: "#a8ff60"
         yellow "#ffffb6"
         blue "#96cbfe"
         magenta "#ff73fd"
         cyan "#c6c5fe"
-        white "#b5b3aa"
-        orange "#d08770" // still nord
+        white "#525047"
+        orange "#d08770" // still nord from the default
     }
 }
 
