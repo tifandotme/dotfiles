@@ -1,9 +1,10 @@
+# default: https://github.com/sxyazi/yazi/blob/latest/yazi-config/preset/keymap.toml
+
 "$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
 
 [manager]
 prepend_keymap = [
 	# disable keymaps
-	{ on = ["<Enter>"], run = "," },
 	{ on = ["<C-Enter>"], run = "," },
 	{ on = ["t"], run = "," },
 
@@ -11,8 +12,9 @@ prepend_keymap = [
 	{ on = ["j"], run = "plugin --sync arrow --args=1" },
 	{ on = ["k"], run = "plugin --sync arrow --args=-1" },
 
-	# smart enter with l
+	# smart enter
 	{ on = ["l"], run = "plugin --sync smart-enter", desc = "Enter the child directory, or open the file" },
+	{ on = ["<Enter>"], run = "plugin --sync smart-enter", desc = "Enter the child directory, or open the file" },
 
 	# force delete to trash with d
 	{ on = ["d"], run = "remove --force", desc = "Move the files to the trash" },

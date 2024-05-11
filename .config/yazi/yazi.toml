@@ -1,3 +1,5 @@
+# default: https://github.com/sxyazi/yazi/blob/latest/yazi-config/preset/yazi.toml
+
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
 [manager]
