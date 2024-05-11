@@ -7,10 +7,6 @@ import = [
 [font]
 normal = { family = "CommitMono Nerd Font", style = "Regular" }
 
-[keyboard]
-# C-S-enter to spawn a new instance in the same directory
-bindings = [{ key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" }]
-
 [window]
 decorations = "None"
 opacity = 0.9

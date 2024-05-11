@@ -39,6 +39,7 @@ export alias docker = podman
 # yadm (soon to be replaced?)
 export alias yas = yadm status
 export alias yal = yadm list -a
+export alias yag = yadm enter lazygit --work-tree ~
 export def yau [] {
   yadm add -u; yadm commit -m 'update'; yadm push
 }
