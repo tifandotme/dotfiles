@@ -47,6 +47,8 @@ $env.EDITOR = "hx"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
+$env.ZELLIJ_AUTO_ATTACH = true
+$env.ZELLIJ_AUTO_EXIT = false # if true, at a point, half-dead sessions will prevent any more session creation
 
 # colorizes manpages using bat
 $env.MANPAGER = "sh -c 'col -bx | bat -l man -p'"
@@ -54,8 +56,8 @@ $env.MANROFFOPT = "-c"
 
 # ========================== INITIALIZATION ===================================
 
-let mise_path = $nu.default-config-dir | path join scripts mise.nu
-^mise activate nu | save --force $mise_path
+let mise_path = $nu.default-config-dir | path join scripts mise.gen.nu
+mise activate nu | save --force $mise_path
 
-let zoxide_path = $nu.default-config-dir | path join scripts zoxide.nu
-^zoxide init --cmd cd nushell | save --force $zoxide_path
+let zoxide_path = $nu.default-config-dir | path join scripts zoxide.gen.nu
+zoxide init --cmd cd nushell | save --force $zoxide_path

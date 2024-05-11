@@ -1,4 +1,10 @@
 gui:
   showBottomLine: false
   expandFocusedSidePanel: true
-notARepository: 'quit'
+os:
+  edit: "hx {{filename}}"
+  editAtLine: "hx -- {{filename}}:{{line}}"
+  editAtLineAndWait: "hx -- {{filename}}:{{line}}"
+  openDirInEditor: "hx -- {{dir}}"
+notARepository: "quit"
+promptToReturnFromSubprocess: false

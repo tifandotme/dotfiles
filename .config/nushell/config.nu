@@ -146,14 +146,14 @@ $env.config = {
         }
         {
             name: move_history_up
-            modifier: alt
+            modifier: control
             keycode: char_k
             mode: [emacs, vi_normal, vi_insert]
             event: { send: up }
         }
         {
             name: move_history_down
-            modifier: alt
+            modifier: control
             keycode: char_j
             mode: [emacs, vi_normal, vi_insert]
             event: { send: down }
@@ -165,7 +165,7 @@ $env.config = {
             mode: [emacs, vi_normal, vi_insert]
             event: [
                 { edit: clear }
-                { edit: insertstring, value: "lsa" }   
+                { edit: insertstring, value: "lsa" }
                 { send: enter }
             ]
         }
@@ -186,7 +186,19 @@ $env.config = {
     ]
 }
 
-use mise.nu
 use aliases.nu *
 use youtube.nu *
-source zoxide.nu
+use mise.gen.nu
+source zoxide.gen.nu
+
+if "ZELLIJ" not-in ($env | columns) {
+    if $env.ZELLIJ_AUTO_ATTACH == true {
+        ^(mise which zellij) attach -c
+    } else {
+    	^(mise which zellij)
+    }
+
+    if $env.ZELLIJ_AUTO_EXIT == true {
+        exit
+    }
+}

@@ -30,6 +30,9 @@ export alias ncdu = ncdu --enable-delete --si
 # bat
 export alias bhelp = bat --plain --language=help
 
+# bottom
+export alias btm = btm -g
+
 # podman
 export alias docker = podman
 
@@ -41,9 +44,10 @@ export def yau [] {
 }
 
 # yazi
-export def --env y [...args] {
+export def y [...args] {
   let tmp = (mktemp -t "yazi-cwd.XXXXXX")
   yazi ...$args --cwd-file $tmp
+
   let cwd = (open $tmp)
   if $cwd != "" and $cwd != $env.PWD {
     cd $cwd
