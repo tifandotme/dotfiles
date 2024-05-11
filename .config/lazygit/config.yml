@@ -1,0 +1,4 @@
+gui:
+  showBottomLine: false
+  expandFocusedSidePanel: true
+notARepository: 'quit'
