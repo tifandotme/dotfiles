@@ -33,18 +33,42 @@ formatter = { command = "stylua", args = ["-"] }
 
 [[language]]
 name = "javascript"
-formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--parser", "typescript"] }
+formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--experimental-ternaries", "--parser", "typescript"] }
 
 [[language]]
 name = "typescript"
-formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--parser", "typescript"] }
+formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--experimental-ternaries", "--parser", "typescript"] }
 
 [[language]]
 name = "jsx"
-formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--parser", "typescript"] }
+formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--experimental-ternaries", "--parser", "typescript"] }
 language-servers = ["typescript-language-server", "tailwindcss-ls"]
 
 [[language]]
 name = "tsx"
-formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--parser", "typescript"] }
+formatter = { command = "prettier", args = ["--config-precedence", "file-override", "--no-semi", "--experimental-ternaries", "--parser", "typescript"] }
 language-servers = ["typescript-language-server", "tailwindcss-ls"]
+
+[[language]]
+name = "css"
+formatter = { command = "prettier", args = ["--parser", "css"] }
+
+[[language]]
+name = "scss"
+formatter = { command = "prettier", args = ["--parser", "scss"] }
+
+[[language]]
+name = "json"
+formatter = { command = "prettier", args = ["--parser", "json"] }
+
+[[language-server.vscode-json-language-server.config.json.schemas]]
+fileMatch = ["tsconfig.json", "tsconfig.*.json"]
+url = "https://json.schemastore.org/tsconfig.json"
+
+[[language-server.vscode-json-language-server.config.json.schemas]]
+fileMatch = ["package.json"]
+url = "https://json.schemastore.org/package.json"
+
+[[language-server.vscode-json-language-server.config.json.schemas]]
+fileMatch = ["vercel.json"]
+url = "https://openapi.vercel.sh/vercel.json"
