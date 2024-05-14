@@ -5,21 +5,21 @@ layout {
 
     pane size=1 borderless=true {
         plugin location="https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" {
-            format_left  "#[fg=#e4e4ef,bg=#181818]  {tabs}"
-            format_space "#[bg=#181818]"
+            format_left  "#[fg=#e4e4ef,bg=#282828]  {tabs}"
+            format_space "#[bg=#282828]"
             format_right "{mode}"
 
-            mode_locked       "#[fg=#e4e4ef,bg=#181818]    "
-            mode_scroll       "#[fg=#e4e4ef,bg=#181818]    "
-            mode_enter_search "#[fg=#e4e4ef,bg=#181818]    "
-            mode_search       "#[fg=#e4e4ef,bg=#181818]    "
-            mode_rename_tab   "#[fg=#e4e4ef,bg=#181818]    "
-            mode_rename_pane  "#[fg=#e4e4ef,bg=#181818]    "
-            mode_prompt       "#[fg=#e4e4ef,bg=#181818]    "
-            mode_tmux         "#[fg=#e4e4ef,bg=#181818] ?   "
+            mode_locked       "#[fg=#e4e4ef,bg=#282828]    "
+            mode_scroll       "#[fg=#e4e4ef,bg=#282828]    "
+            mode_enter_search "#[fg=#e4e4ef,bg=#282828]    "
+            mode_search       "#[fg=#e4e4ef,bg=#282828]    "
+            mode_rename_tab   "#[fg=#e4e4ef,bg=#282828]    "
+            mode_rename_pane  "#[fg=#e4e4ef,bg=#282828]    "
+            mode_prompt       "#[fg=#e4e4ef,bg=#282828]    "
+            mode_tmux         "#[fg=#e4e4ef,bg=#282828] ?   "
 
-            tab_normal               "#[fg=#747272,bg=#181818]  {name} {fullscreen_indicator}{sync_indicator}  "
-            tab_active               "#[fg=#e4e4ef,bg=#181818]  {name} {fullscreen_indicator}{sync_indicator}  "
+            tab_normal               "#[fg=#747272,bg=#282828]  {name} {fullscreen_indicator}{sync_indicator}  "
+            tab_active               "#[fg=#e4e4ef,bg=#282828]  {name} {fullscreen_indicator}{sync_indicator}  "
             tab_fullscreen_indicator " "
             tab_sync_indicator       " "
         }
