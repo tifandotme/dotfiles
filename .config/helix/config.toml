@@ -1,7 +1,7 @@
-# docs: https://docs.helix-editor.com/configuration.html
-
 theme = "gruber-darker-local"
 
+
+# https://docs.helix-editor.com/keymap.html or space+?
 
 [keys.normal]
 A-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
@@ -13,11 +13,14 @@ left = "no_op"
 right = "no_op"
 
 [keys.normal.space]
-x = ":buffer-close-others"
-i = [":sh zellij run -f -x 10% -y 10% --width 80% --height 80% -c -- lazygit"]
-# until plugin system is implemented
+P = "no_op"
+p = ":format"
+o = ":write"
+x = ":buffer-close-all"
+q = ":quit"
+"`" = [":config-reload", ":lsp-restart"]
 e = [":sh zellij run -f -x 10% -y 10% --width 80% --height 80% -- nu ~/.config/helix/yazi-picker.nu"]
-"[" = ":format"
+i = [":sh zellij run -f -x 10% -y 10% --width 80% --height 80% -c -- lazygit"]
 
 [keys.insert]
 C-h = "move_char_left"
@@ -27,6 +30,10 @@ up = "no_op"
 down = "no_op"
 left = "no_op"
 right = "no_op"
+pageup = "no_op"
+pagedown = "no_op"
+home = "no_op"
+end = "no_op"
 
 [keys.insert.j]
 j = "normal_mode"
@@ -36,15 +43,14 @@ A-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_befor
 A-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 
 
+# https://docs.helix-editor.com/configuration.html
+
 [editor]
 shell = ["nu", "-c"]
 line-number = "relative"
 bufferline = "multiple"
 rulers = [80]
-color-modes = true
-
-[editor.soft-wrap]
-enable = true
+# color-modes = true
 
 [editor.whitespace.render]
 space = "all"
@@ -56,5 +62,13 @@ insert = "bar"
 [editor.file-picker]
 hidden = false
 
-[editor.lsp]
-display-messages = true
+# [editor.statusline]
+# mode.normal = "NORMAL"
+# mode.insert = "INSERT"
+# mode.select = "SELECT"
+
+# [editor.soft-wrap]
+# enable = true
+
+# [editor.lsp]
+# display-messages = true
