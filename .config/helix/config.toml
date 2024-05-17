@@ -7,6 +7,8 @@ theme = "gruber-darker-local"
 A-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
 A-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 esc = ["collapse_selection", "keep_primary_selection"]
+tab = ":buffer-next"
+S-tab = ":buffer-previous"
 up = "no_op"
 down = "no_op"
 left = "no_op"
@@ -16,7 +18,7 @@ right = "no_op"
 P = "no_op"
 p = ":format"
 o = ":write"
-x = ":buffer-close-all"
+x = ":buffer-close"
 q = ":quit"
 "`" = [":config-reload", ":lsp-restart"]
 e = [":sh zellij run -f -x 10% -y 10% --width 80% --height 80% -- nu ~/.config/helix/yazi-picker.nu"]
@@ -62,7 +64,8 @@ insert = "bar"
 [editor.file-picker]
 hidden = false
 
-# [editor.statusline]
+[editor.statusline]
+left = ["mode", "spinner", "file-absolute-path", "read-only-indicator", "file-modification-indicator"]
 # mode.normal = "NORMAL"
 # mode.insert = "INSERT"
 # mode.select = "SELECT"

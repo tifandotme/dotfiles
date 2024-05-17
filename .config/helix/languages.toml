@@ -1,10 +1,10 @@
-# docs: https://docs.helix-editor.com/languages.html
-# default: https://github.com/helix-editor/helix/blob/2cadec0b1182332338a5a1cc3062776f834d8835/languages.toml
-
 # WARN there is plan to replace the language from toml to scheme/steel
 # https://github.com/helix-editor/helix/issues/10389
 # https://github.com/helix-editor/helix/issues/8853
 
+
+# docs: https://docs.helix-editor.com/languages.html
+# default: https://github.com/helix-editor/helix/blob/2cadec0b1182332338a5a1cc3062776f834d8835/languages.toml
 
 [language-server.vscode-eslint-language-server]
 command = "vscode-eslint-language-server" # NOTE v4.9.0-v4.10.0 is buggy with eslint diagnostics
