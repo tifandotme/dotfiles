@@ -44,6 +44,9 @@ export def yau [] {
   yadm add -u; yadm commit -m 'update'; yadm push
 }
 
+# lazygit
+export alias lg = lazygit
+
 # yazi
 export def --env y [...args] {
   let tmp = (mktemp -t "yazi-cwd.XXXXXX")
