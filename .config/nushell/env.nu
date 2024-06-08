@@ -47,6 +47,7 @@ $env.EDITOR = "hx"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
+$env.DENO_INSTALL = ($env.XDG_DATA_HOME | path join deno)
 $env.ZELLIJ_AUTO_ATTACH = true
 $env.ZELLIJ_AUTO_EXIT = false # if true, at a point, half-dead sessions will prevent any more session creation
 

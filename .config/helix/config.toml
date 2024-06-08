@@ -70,8 +70,8 @@ left = ["mode", "spinner", "file-absolute-path", "read-only-indicator", "file-mo
 # mode.insert = "INSERT"
 # mode.select = "SELECT"
 
-# [editor.soft-wrap]
-# enable = true
+[editor.soft-wrap]
+enable = true
 
 # [editor.lsp]
 # display-messages = true

@@ -20,6 +20,7 @@ symbol = "aws "
 symbol = "az "
 
 [bun]
+disabled = true
 symbol = "bun "
 
 [c]
@@ -68,6 +69,7 @@ symbol = "fnl "
 symbol = "fossil "
 
 [gcloud]
+disabled = true
 symbol = "gcp "
 
 [git_branch]
