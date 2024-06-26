@@ -1,0 +1,1 @@
+[ -x /opt/homebrew/bin/nu ] && SHELL=/opt/homebrew/bin/nu exec nu

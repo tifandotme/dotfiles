@@ -4,9 +4,8 @@ import = [
 	"~/.config/alacritty/base16-irblack.toml",
 ]
 
-[font]
-normal = { family = "CommitMono Nerd Font", style = "Regular" }
+# [font]
+# normal = { family = "CommitMono Nerd Font", style = "Regular" }
 
 [window]
-decorations = "None"
 opacity = 0.9
