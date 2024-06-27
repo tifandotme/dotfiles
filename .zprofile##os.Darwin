@@ -1,6 +1,9 @@
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# Fix `yadm encrypt` error in MacOS
+# https://yadm.io/docs/faq#encryption
 export GPG_TTY=$(tty)
+
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
