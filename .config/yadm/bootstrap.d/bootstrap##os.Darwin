@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# will need to set up git with ssh first
+
+DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
+
+echo "==> Updating the yadm repo origin URL"
+yadm remote set-url origin "$DOTFILES_REPO_URL"
+
+echo "==> Install Homebrew & packages"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install gnupg bun yadm nushell tealdeer lazygit gh
+brew install -cask discord pritunl slack visual-studio-code
