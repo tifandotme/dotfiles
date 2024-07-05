@@ -11,6 +11,11 @@ export def po [] {
 }
 export alias df = df --human-readable --si
 
+# up (macos)
+export def up [] {
+  brew upgrade; mise self-update --yes; mise upgrade --yes
+}
+
 # git
 export alias g = git
 
@@ -65,30 +70,32 @@ export alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CAC
 
 # ls
 export alias _ls = ls
-def print_grid_ls [
-  --all
-  path
-] {
-    let lses = if $all {
-      _ls --all --mime-type $path
-    } else {
-      _ls --mime-type $path
-    }
-    let dirs = $lses | where type == dir | sort-by --ignore-case name
-    let files = $lses | where type !~ dir | sort-by --ignore-case type name
-    $dirs | append $files | grid --color --separator '   '
-}
-export def ls [path?] {
-  if $path == null {
-    print_grid_ls .
-  } else {
-    print_grid_ls $path
-  }
-}
-export def lsa [path?] {
-  if $path == null {
-    print_grid_ls --all .
-  } else {
-    print_grid_ls --all $path
-  }
-}
+# def print_grid_ls [
+#   --all
+#   path
+# ] {
+#     let lses = if $all {
+#       _ls --all --mime-type $path
+#     } else {
+#       _ls --mime-type $path
+#     }
+#     let dirs = $lses | where type == dir | sort-by --ignore-case name
+#     let files = $lses | where type !~ dir | sort-by --ignore-case type name
+#     $dirs | append $files | grid --color --separator '   '
+# }
+# export def ls [path?] {
+#   if $path == null {
+#     print_grid_ls .
+#   } else {
+#     print_grid_ls $path
+#   }
+# }
+# export def lsa [path?] {
+#   if $path == null {
+#     print_grid_ls --all .
+#   } else {
+#     print_grid_ls --all $path
+#   }
+# }
+export alias ls = eza --group-directories-first --classify=auto --sort=extension --oneline
+export alias lsa = eza --group-directories-first --classify=auto --sort=extension --oneline --all

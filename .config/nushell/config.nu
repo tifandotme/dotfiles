@@ -203,11 +203,9 @@ source zoxide.gen.nu
 
 if "ZELLIJ" not-in ($env | columns) {
     if $env.ZELLIJ_AUTO_ATTACH == true {
-        # ^(mise which zellij) attach -c
-        ^zellij attach -c
+        zellij attach -c
     } else {
-        # ^(mise which zellij)
-        ^zellij
+        zellij
     }
 
     if $env.ZELLIJ_AUTO_EXIT == true {
