@@ -13,4 +13,5 @@ opacity = 0.8
 blur = true
 padding = { x = 5, y = 5 }
 option_as_alt = "Both"
-startup_mode = "Fullscreen"
+startup_mode = "SimpleFullscreen"
+decorations = "Buttonless"
