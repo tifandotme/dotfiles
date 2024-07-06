@@ -9,5 +9,7 @@ yadm remote set-url origin "$DOTFILES_REPO_URL"
 
 echo "==> Install Homebrew & packages"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install gnupg bun yadm nushell tealdeer lazygit gh
-brew install -cask discord pritunl slack visual-studio-code
+# brew ls --installed-on-request
+brew install bat bottom bun difftastic eza fish gh gnupg jq lazygit mise ncdu nushell starship tealdeer yadm yt-dlp zellij zoxide
+brew install --cask alacritty discord font-commit-mono-nerd-font raycast slack spotify telegram visual-studio-code whatsapp zed
+brew install --cask pritunl
