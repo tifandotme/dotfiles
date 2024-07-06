@@ -13,7 +13,7 @@ export alias df = df --human-readable --si
 
 # up (macos)
 export def up [] {
-  brew upgrade; mise self-update --yes; mise upgrade --yes
+  brew upgrade; mise upgrade --yes; gh extension upgrade --all; bun update -g
 }
 
 # git
@@ -25,6 +25,10 @@ export alias b = bun
 # zellij
 export alias z = zellij
 export alias zrf = zellij run --floating --
+
+# copilot cli
+export alias cos = gh copilot suggest
+export alias coe = gh copilot explain
 
 # helix deez
 export alias h = hx

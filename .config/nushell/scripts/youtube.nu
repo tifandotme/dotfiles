@@ -1,4 +1,6 @@
-alias _yt-dlp = ^yt-dlp --extractor-args="youtube:player_client=web" --embed-metadata --embed-chapters --embed-subs --embed-thumbnail --sponsorblock-remove="sponsor,selfpromo,interaction" --progress --quiet --paths="~/videos/youtube" --output="%(uploader)s - %(title)s.%(ext)s"
+# TODO use constant for the path
+
+alias _yt-dlp = ^yt-dlp --extractor-args="youtube:player_client=web" --embed-metadata --embed-chapters --embed-subs --embed-thumbnail --sponsorblock-remove="sponsor,selfpromo,interaction" --progress --quiet --paths="~/Downloads" --output="%(uploader)s - %(title)s.%(ext)s"
 
 export def yd [
   --audio(-a) # Download audio only
@@ -11,6 +13,6 @@ export def yd [
   }
 
   if $env.LAST_EXIT_CODE == 0 {
-    print "Saved in ~/videos/youtube"
+    print "Saved in ~/Downloads"
   }
 }
