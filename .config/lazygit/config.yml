@@ -2,7 +2,7 @@ git:
   paging:
     externalDiffCommand: difft --color=always --display=inline --syntax-highlight=off
 gui:
-  showBottomLine: false
+  showBottomLine: true
   expandFocusedSidePanel: true
 os:
   edit: "hx {{filename}}"
