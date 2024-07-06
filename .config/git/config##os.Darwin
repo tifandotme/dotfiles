@@ -1,5 +1,5 @@
 [user]
-	name = Tifan
+	name = Tifan Dwi Avianto
 	email = 33323177+tifandotme@users.noreply.github.com
 	signingkey = /Users/tifandwiavianto/.ssh/id_ed25519.pub
 [color]
@@ -10,5 +10,10 @@
 	gpgsign = true
 [gpg]
 	format = ssh
+[alias]
+	undo = reset --soft HEAD^
+	logg = log --oneline --graph
+	stashh = stash --all
+	status = status --short
 [includeIf "gitdir:~/work"]
 	path = ~/work/.gitconfig
