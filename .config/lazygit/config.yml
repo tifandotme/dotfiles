@@ -4,10 +4,8 @@ git:
 gui:
   showBottomLine: true
   expandFocusedSidePanel: true
+  border: "single"
 os:
-  edit: "hx {{filename}}"
-  editAtLine: "hx -- {{filename}}:{{line}}"
-  editAtLineAndWait: "hx -- {{filename}}:{{line}}"
-  openDirInEditor: "hx -- {{dir}}"
+  editPreset: "vscode"
 notARepository: "quit"
 promptToReturnFromSubprocess: false

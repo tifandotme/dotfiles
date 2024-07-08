@@ -9,7 +9,7 @@ normal = { family = "CommitMono Nerd Font", style = "Regular" }
 size = 12
 
 [window]
-opacity = 0.8
+opacity = 0.85
 blur = true
 padding = { x = 5, y = 5 }
 option_as_alt = "Both"
