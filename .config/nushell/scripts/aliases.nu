@@ -13,7 +13,7 @@ export alias df = df --human-readable --si
 
 # up (macos)
 export def up [] {
-  brew upgrade; mise upgrade --yes; gh extension upgrade --all; bun update -g
+  brew upgrade; mise upgrade --yes; gh extension upgrade --all; bun update --global --latest
 }
 
 # git

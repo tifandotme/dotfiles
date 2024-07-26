@@ -10,9 +10,5 @@
 	gpgsign = true
 [gpg]
 	format = ssh
-[includeIf "gitdir:~/personal/gitlab"]
-	path = ~/personal/gitlab/.gitconfig
-[includeIf "gitdir:~/work"]
+[includeIf "gitdir:~/work/"]
 	path = ~/work/.gitconfig
-[maintenance]
-	repo = /home/tifan/personal/website

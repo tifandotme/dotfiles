@@ -13,7 +13,11 @@
 [alias]
 	undo = reset --soft HEAD^
 	logg = log --oneline --graph
-	stashh = stash --all
-	status = status --short
-[includeIf "gitdir:~/work"]
+	statuss = status --short
+[includeIf "gitdir:~/work/"]
 	path = ~/work/.gitconfig
+[maintenance]
+	repo = /Users/tifandwiavianto/personal/website
+	repo = /Users/tifandwiavianto/work/aquahero-web
+[pull]
+	rebase = true
