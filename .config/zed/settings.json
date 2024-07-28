@@ -1,0 +1,69 @@
+{
+  // Telemetry
+  "tab_bar": {
+    "show": true
+  },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+
+  "theme": "Gruber Darker",
+
+  "format_on_save": "off",
+
+  // Vim Experience
+  "vim_mode": true,
+  "relative_line_numbers": true,
+  "cursor_blink": false,
+
+  // Editor
+  "buffer_font_family": "CommitMono Nerd Font",
+  "buffer_font_size": 14,
+  "buffer_line_height": "standard",
+  "wrap_guides": [80],
+  "scrollbar": {
+    "git_diff": false,
+    "cursors": false
+  },
+
+  // Panels
+  "project_panel": {
+    "default_width": 300,
+    "dock": "right",
+    "auto_fold_dirs": true,
+    "folder_icons": false,
+    "file_icons": false
+  },
+  "chat_panel": {
+    "button": false
+  },
+  "collaboration_panel": {
+    "button": false
+  },
+  "terminal": {
+    "button": false
+  },
+  "outline_panel": {
+    "dock": "right"
+  },
+  "toolbar": {
+    "quick_actions": false,
+    "selections_menu": false
+  },
+
+  // Git
+  "git": {
+    "inline_blame": {
+      "enabled": false
+    }
+  },
+
+  "lsp": {
+    "tailwindcss-language-server": {
+      "settings": {
+        "classAttributes": ["class", "className", "ngClass", "styles"]
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+[
+  {
+    "context": "ContextEditor > Editor",
+    "bindings": {
+      "cmd-s": "workspace::ToggleRightDock"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-b": "workspace::ToggleLeftDock",
+      "cmd-s": "workspace::ToggleRightDock"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "alt-k": "editor::MoveLineUp",
+      "alt-j": "editor::MoveLineDown",
+      "alt-[": "editor::Fold",
+      "alt-]": "editor::UnfoldLines"
+    }
+  },
+  {
+    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
+    "bindings": {
+      "space w": "workspace::SaveWithoutFormat",
+      "space p": "editor::Format",
+      "space z": "editor::ToggleSoftWrap",
+      "space c": "vim::ToggleComments",
+      "space k": "editor::Hover",
+      "g e": "vim::EndOfDocument",
+      "g h": "vim::FirstNonWhitespace",
+      "g l": "vim::EndOfLine",
+      "U": "editor::Redo"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == normal && !VimWaiting && !menu",
+    "bindings": {
+      // only in normal mode
+    }
+  },
+  {
+    "context": "Editor && vim_mode == visual && !VimWaiting && !menu",
+    "bindings": {
+      // visual, visual line & visual block modes
+    }
+  },
+  {
+    // "context": "Editor && vim_mode == insert && !menu",
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      // insert mode
+      "j j": "vim::NormalBefore"
+    }
+  },
+  {
+    "context": "EmptyPane || SharedScreen",
+    "bindings": {
+      // when no editor exists
+    }
+  }
+]
