@@ -45,7 +45,7 @@ export alias btm = btm -g
 # podman
 export alias docker = podman
 
-# yadm (soon to be replaced?)
+# yadm
 export alias yas = yadm status
 export alias yal = yadm list -a
 export alias yag = yadm enter lazygit --work-tree ~
