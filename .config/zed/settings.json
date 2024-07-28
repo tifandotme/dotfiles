@@ -1,8 +1,5 @@
 {
   // Telemetry
-  "tab_bar": {
-    "show": true
-  },
   "telemetry": {
     "diagnostics": false,
     "metrics": false
