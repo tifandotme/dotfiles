@@ -10,7 +10,7 @@ size = 12
 
 [window]
 opacity = 0.85
-blur = true
+blur = false
 padding = { x = 5, y = 5 }
 option_as_alt = "Both"
 startup_mode = "SimpleFullscreen"

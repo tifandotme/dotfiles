@@ -6,6 +6,6 @@ gui:
   expandFocusedSidePanel: true
   border: "single"
 os:
-  editPreset: "vscode"
+  editPreset: "vim"
 notARepository: "quit"
 promptToReturnFromSubprocess: false
