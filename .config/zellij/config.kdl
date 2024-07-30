@@ -7,7 +7,7 @@ keybinds clear-defaults=true {
     tmux {
         bind "[" { SwitchToMode "Scroll"; }
         bind "Ctrl e" { Write 2; SwitchToMode "Normal"; }
-        // only allow vertical pane for now because we can only move pane/tab focus horizontaly 
+        // only allow vertical pane for now because we can only move pane/tab focus horizontaly
         // bind "-" { NewPane "Down"; SwitchToMode "Normal"; }
         bind "|" "n" { NewPane "Right"; SwitchToMode "Normal"; }
         bind "z" { ToggleFocusFullscreen; SwitchToMode "Normal"; }

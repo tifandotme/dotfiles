@@ -1,30 +1,43 @@
 layout {
-    pane split_direction="horizontal" {
+    tab name="aquahero/" cwd="~/work/aquahero-web" focus=true {
         pane
     }
+    tab name="aquahero/~git" cwd="~/work/aquahero-web" {
+        pane command="lazygit"
+    }
+    tab name="btm" cwd="~" {
+        pane command="btm"
+    }
 
-    
-    pane size=1 borderless=true {
-        // zjstatus v0.16.0
-        // On MacOS, the plugin location cannot be https and should be local
-        plugin location="file:~/.config/zellij/zjstatus.wasm" {
-            format_left  "#[fg=#e4e4ef,bg=#282828]  {tabs}"
-            format_space "#[bg=#282828]"
-            format_right "{mode}"
+    default_tab_template split_direction="horizontal" {
+        children
 
-            mode_locked       "#[fg=#e4e4ef,bg=#282828]    "
-            mode_scroll       "#[fg=#e4e4ef,bg=#282828]    "
-            mode_enter_search "#[fg=#e4e4ef,bg=#282828]    "
-            mode_search       "#[fg=#e4e4ef,bg=#282828]    "
-            mode_rename_tab   "#[fg=#e4e4ef,bg=#282828]    "
-            mode_rename_pane  "#[fg=#e4e4ef,bg=#282828]    "
-            mode_prompt       "#[fg=#e4e4ef,bg=#282828]    "
-            mode_tmux         "#[fg=#e4e4ef,bg=#282828] ?   "
+        pane size=1 borderless=true {
+            // zjstatus v0.17.0
+            // On MacOS, the plugin location cannot be https and should be local
+            plugin location="file:~/.config/zellij/zjstatus.wasm" {
+                color_fg_muted "#747272"
+                color_fg       "#e4e4ef"
+                color_bg       "#002633"
 
-            tab_normal               "#[fg=#747272,bg=#282828]  {name} {fullscreen_indicator}{sync_indicator}  "
-            tab_active               "#[fg=#e4e4ef,bg=#282828]  {name} {fullscreen_indicator}{sync_indicator}  "
-            tab_fullscreen_indicator " "
-            tab_sync_indicator       " "
+                format_left  "#[fg=$fg,bg=$bg]  {tabs}"
+                format_space "#[bg=$bg]"
+                format_right "{mode}"
+
+                mode_locked       "#[fg=$fg_muted,bg=$bg]    "
+                mode_scroll       "#[fg=$fg_muted,bg=$bg]    "
+                mode_enter_search "#[fg=$fg_muted,bg=$bg]    "
+                mode_search       "#[fg=$fg_muted,bg=$bg]    "
+                mode_rename_tab   "#[fg=$fg_muted,bg=$bg]    "
+                mode_rename_pane  "#[fg=$fg_muted,bg=$bg]    "
+                mode_prompt       "#[fg=$fg_muted,bg=$bg]    "
+                mode_tmux         "#[fg=$fg_muted,bg=$bg] ?   "
+
+                tab_normal               "#[fg=$fg_muted,bg=$bg,bold]  {name} {fullscreen_indicator}{sync_indicator}  "
+                tab_active               "#[fg=$fg,bg=$bg,bold]  {name} {fullscreen_indicator}{sync_indicator}  "
+                tab_fullscreen_indicator " "
+                tab_sync_indicator       " "
+            }
         }
     }
 }

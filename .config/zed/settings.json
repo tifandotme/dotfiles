@@ -15,7 +15,7 @@
   // Editor
   "format_on_save": "off",
   "buffer_font_family": "CommitMono Nerd Font",
-  "buffer_font_size": 12.5,
+  "buffer_font_size": 13,
   "buffer_line_height": "standard",
   "search_wrap": false,
   "wrap_guides": [80],
@@ -23,6 +23,10 @@
     "git_diff": false,
     "cursors": false
   },
+  "indent_guides": {
+    "enabled": false
+  },
+  "show_whitespaces": "boundary",
 
   // UI
   "tab_bar": {
@@ -64,7 +68,6 @@
   "git": {
     "inline_blame": {
       "delay_ms": 1000
-      // "enabled": false
     }
   },
 
