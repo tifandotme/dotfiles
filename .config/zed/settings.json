@@ -1,4 +1,6 @@
 {
+  "auto_update": false,
+
   // Telemetry
   "telemetry": {
     "diagnostics": false,

@@ -30,9 +30,6 @@ export alias zrf = zellij run --floating --
 export alias cos = gh copilot suggest
 export alias coe = gh copilot explain
 
-# helix deez
-export alias h = hx
-
 # ncdu
 export alias ncdu = ncdu --enable-delete --si
 
