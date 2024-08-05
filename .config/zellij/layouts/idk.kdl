@@ -3,7 +3,9 @@ layout {
         pane
     }
     tab name="aquahero/~git" cwd="~/work/aquahero-web" {
-        pane command="lazygit"
+        pane command="nu" {
+            args "-c lazygit"
+        }
     }
 
     default_tab_template split_direction="horizontal" {
