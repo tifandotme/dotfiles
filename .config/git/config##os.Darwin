@@ -21,3 +21,5 @@
 	repo = /Users/tifandwiavianto/work/aquahero-web
 [pull]
 	rebase = true
+[rebase]
+	autoStash = true
