@@ -129,7 +129,7 @@ $env.config = {
             selected_column: {},
         },
     }
-  
+
     filesize: {
         metric: true # true => KB, MB, GB (ISO standard), false => KiB, MiB, GiB (Windows standard)
     }
@@ -196,10 +196,13 @@ $env.config = {
     ]
 }
 
-use aliases.nu *
-use youtube.nu *
 use mise.gen.nu
 source zoxide.gen.nu
+
+# Source scripts/*
+source aliases.nu
+source zellij-actions.nu
+source youtube.nu
 
 if "ZELLIJ" not-in ($env | columns) {
     if $env.ZELLIJ_AUTO_ATTACH == true {

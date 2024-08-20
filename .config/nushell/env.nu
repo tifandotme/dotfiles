@@ -31,7 +31,7 @@ $env.PROMPT_INDICATOR_VI_NORMAL = { create_character normal }
 $env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = { create_character insert }
 $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = { create_character normal }
 
-# =============================== PATH ========================================
+# =============================== ENVS ========================================
 
 def --env add_path [path: string] {
     $env.PATH = ($env.PATH | split row (char esep) | prepend $path | uniq)

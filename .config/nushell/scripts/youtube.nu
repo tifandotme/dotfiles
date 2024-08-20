@@ -1,8 +1,8 @@
 # TODO use constant for the path
 
-alias _yt-dlp = ^yt-dlp --extractor-args="youtube:player_client=web" --embed-metadata --embed-chapters --embed-subs --embed-thumbnail --sponsorblock-remove="sponsor,selfpromo,interaction" --progress --quiet --paths="~/Downloads" --output="%(uploader)s - %(title)s.%(ext)s"
+alias _yt-dlp = yt-dlp --extractor-args="youtube:player_client=web" --embed-metadata --embed-chapters --embed-subs --embed-thumbnail --sponsorblock-remove="sponsor,selfpromo,interaction" --progress --quiet --paths="~/Downloads" --output="%(uploader)s - %(title)s.%(ext)s"
 
-export def yd [
+def yd [
   --audio(-a) # Download audio only
   url: string # URL of the thing
 ] {
