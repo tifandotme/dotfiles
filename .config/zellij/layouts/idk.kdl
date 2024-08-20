@@ -1,13 +1,4 @@
 layout {
-    tab name="aquahero/" cwd="~/work/aquahero-web" focus=true {
-        pane
-    }
-    tab name="aquahero/~git" cwd="~/work/aquahero-web" {
-        pane command="nu" {
-            args "-c lazygit"
-        }
-    }
-
     default_tab_template split_direction="horizontal" {
         children
 
