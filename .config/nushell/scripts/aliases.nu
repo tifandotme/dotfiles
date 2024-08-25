@@ -28,6 +28,7 @@ alias b = bun
 # zellij
 alias z = zellij
 alias zrf = zellij run --floating --
+def zka [] { zellij delete-all-sessions --force --yes; zellij kill-all-sessions --yes }
 
 # copilot cli
 alias cos = gh copilot suggest

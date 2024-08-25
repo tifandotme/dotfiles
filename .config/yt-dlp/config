@@ -1,0 +1,12 @@
+--extractor-args "youtube:player_client=all"
+
+--embed-metadata
+--embed-chapters
+--embed-subs
+--embed-thumbnail
+
+--sponsorblock-remove "sponsor,selfpromo,interaction"
+
+--progress
+--quiet
+--output "%(uploader)s - %(title)s.%(ext)s"

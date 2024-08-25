@@ -1,10 +1,22 @@
 git:
   paging:
-    externalDiffCommand: difft --color=always --display=inline --syntax-highlight=off
+    externalDiffCommand: difft --color=always --display=side-by-side --syntax-highlight=off
 gui:
   expandFocusedSidePanel: true
+  expandedSidePanelWeight: 99
   border: "single"
+  showPanelJumps: false
+  showFileTree: false
+  sidePanelWidth: 0.22
+  # showBottomLine: false
+  theme:
+    selectedLineBgColor:
+      - "#282828"
 os:
-  editPreset: "vim"
+  editPreset: "vi"
 notARepository: "quit"
 promptToReturnFromSubprocess: false
+customCommands:
+  - key: "<c-r>"
+    context: global
+    command: "gh repo view --web"
