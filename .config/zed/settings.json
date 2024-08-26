@@ -1,5 +1,17 @@
 {
-  "auto_update": false,
+  "theme": {
+    "dark": "Gruber Darker",
+    "light": "Gruvbox Light Hard",
+    "mode": "system"
+  },
+  "restore_on_startup": "last_workspace",
+
+  "features": {
+    "inline_completion_provider": "supermaven"
+  },
+
+  // Rawdog keymaps lol
+  "base_keymap": "None",
 
   // Telemetry
   "telemetry": {
@@ -7,12 +19,11 @@
     "metrics": false
   },
 
-  "theme": "Gruber Darker",
-
-  // Vim Experience
+  // Vim-my stuff
   "vim_mode": true,
   "relative_line_numbers": true,
   "cursor_blink": false,
+  "current_line_highlight": "none",
 
   // Editor
   "format_on_save": "off",
@@ -21,14 +32,9 @@
   "buffer_line_height": "standard",
   "search_wrap": false,
   "wrap_guides": [80],
-  "scrollbar": {
-    "git_diff": false,
-    "cursors": false
-  },
   "indent_guides": {
     "enabled": false
   },
-  "show_whitespaces": "boundary",
 
   // UI
   "tab_bar": {
@@ -46,8 +52,11 @@
     "dock": "right"
   },
   "assistant": {
-    "version": "1",
-    "button": false
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4"
+    },
+    "version": "2"
   },
   "chat_panel": {
     "button": false
@@ -73,6 +82,7 @@
     }
   },
 
+  // LSP
   "lsp": {
     "tailwindcss-language-server": {
       "settings": {
