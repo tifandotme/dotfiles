@@ -13,7 +13,7 @@ def open_project [
     zellij action new-pane --cwd $absolute_path -- nu
     zellij action focus-previous-pane; zellij action close-pane
 
-    zellij action new-tab --layout idk --name $"($dir_name)\(lazygit\)"
+    zellij action new-tab --layout idk --name $"($dir_name)\(git\)"
     zellij action new-pane --cwd $absolute_path -- lazygit
     zellij action focus-previous-pane; zellij action close-pane
 
