@@ -1,6 +1,8 @@
 git:
+  branchPrefix: "tifan/"
   paging:
-    externalDiffCommand: difft --color=always --display=side-by-side --syntax-highlight=off
+    colorArg: always
+    pager: delta --paging=never # other configs in gitconfig
 gui:
   expandFocusedSidePanel: true
   expandedSidePanelWeight: 99
@@ -8,7 +10,7 @@ gui:
   showPanelJumps: false
   showFileTree: false
   sidePanelWidth: 0.22
-  # showBottomLine: false
+  showBottomLine: false
   theme:
     selectedLineBgColor:
       - "#282828"
