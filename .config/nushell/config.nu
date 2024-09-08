@@ -22,20 +22,20 @@ $env.config = {
 
     # TODO customize, see ansi -l
     explore: {
-        status_bar_background: { fg: "#1D1F21", bg: "dark_gray" },
-        command_bar_text: { fg: "#C4C9C6" },
-        highlight: { fg: "black", bg: "yellow" },
+        status_bar_background: { fg: "#1D1F21", bg: "dark_gray" }
+        command_bar_text: { fg: "#C4C9C6" }
+        highlight: { fg: "black", bg: "yellow" }
         status: {
-            error: { fg: "white", bg: "red" },
+            error: { fg: "white", bg: "red" }
             warn: {}
             info: {}
-        },
+        }
         table: {
             split_line: { fg: "#404040" },
-            selected_cell: { bg: light_blue },
-            selected_row: {},
-            selected_column: {},
-        },
+            selected_cell: { bg: light_blue }
+            selected_row: {}
+            selected_column: {}
+        }
     }
 
     filesize: {
