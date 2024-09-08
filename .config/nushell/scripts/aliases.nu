@@ -31,6 +31,7 @@ def up [] {
   brew upgrade
   mise upgrade --yes
   gh extension upgrade --all
+  ya pack --upgrade
   bun update --global --latest
 }
 
@@ -73,7 +74,6 @@ def --env y [...args] {
   }
   rm -fp $tmp
 }
-alias yazi = y
 
 def nufzf [] {
   # https://github.com/nushell/nushell/discussions/10859#discussioncomment-7413476

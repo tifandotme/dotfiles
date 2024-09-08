@@ -43,7 +43,7 @@ add_path ($env.HOME | path join .local share bun bin)
 
 hide add_path
 
-$env.EDITOR = "vi"
+$env.EDITOR = "zed"
 $env.TERM = "alacritty"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
