@@ -1,3 +1,6 @@
+alias _yt-dlp = yt-dlp
+alias yt-dlp = yt-dlp --extractor-args="youtube:player_client=all" --embed-metadata --embed-chapters --embed-subs --embed-thumbnail --sponsorblock-remove="sponsor,selfpromo,interaction" --progress --quiet --output="%(uploader)s - %(title)s.%(ext)s"
+
 def yd [
   --audio(-a) # Download audio only
   --cwd # Save to current directory (default: ~/Downloads)
