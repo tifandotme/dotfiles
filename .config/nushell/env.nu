@@ -38,13 +38,13 @@ def --env add_path [path: string] {
 }
 
 add_path ($env.HOME | path join .local bin)
-add_path ($env.HOME | path join .cargo bin)
+# add_path ($env.HOME | path join .cargo bin)
 add_path ($env.HOME | path join .local share bun bin)
 
 hide add_path
 
 $env.EDITOR = "zed"
-$env.TERM = "xterm-256color"
+$env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fully functional"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
