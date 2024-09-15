@@ -10,19 +10,15 @@
 	gpgsign = true
 [gpg]
 	format = ssh
-[alias]
-	undo = reset --soft HEAD^
-	logg = log --oneline --graph
-	statuss = status --short
 [includeIf "gitdir:~/work/"]
 	path = ~/work/.gitconfig
-[maintenance]
-	repo = /Users/tifandwiavianto/personal/website
-	repo = /Users/tifandwiavianto/work/aquahero-web
 [pull]
 	rebase = true
 [rebase]
 	autoStash = true
+[maintenance]
+	repo = /Users/tifandwiavianto/personal/website
+	repo = /Users/tifandwiavianto/work/aquahero-web
 
 [core]
     pager = delta
