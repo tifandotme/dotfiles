@@ -49,7 +49,6 @@ $env.config = {
     }
 
     show_banner: false
-    use_grid_icons: false # show icons for command grid --color
     footer_mode: "30"
     edit_mode: vi
     highlight_resolved_externals: true
