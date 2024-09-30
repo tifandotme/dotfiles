@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# will need to set up git with ssh first
+# prerequisites: need to have git with ssh set up and working
 
 DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
 
@@ -9,7 +9,6 @@ yadm remote set-url origin "$DOTFILES_REPO_URL"
 
 echo "==> Install Homebrew & packages"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-# brew ls --installed-on-request
-brew install bat bottom bun difftastic eza fish gh gnupg jq lazygit mise ncdu nushell starship tealdeer yadm yt-dlp zellij zoxide
-brew install --cask alacritty discord font-commit-mono-nerd-font raycast slack spotify telegram visual-studio-code whatsapp zed
+brew install --formulae bat bottom bun eza fastfetch fd ffmpeg ffmpegthumbnailer fish fzf gh git-delta gnupg imagemagick jq lazygit libgit2 mise monolith ncdu nushell podman ripgrep sevenzip starship tealdeer yadm yazi yt-dlp zellij zoxide
+brew install --casks alacritty discord font-commit-mono font-commit-mono-nerd-font librewolf linearmouse localsend raycast slack spotify telegram transmission visual-studio-code vlc whatsapp zed
 brew install --cask pritunl

@@ -7,7 +7,7 @@
   "restore_on_startup": "last_workspace",
 
   "features": {
-    "inline_completion_provider": "supermaven"
+    "inline_completion_provider": "copilot"
   },
 
   // Rawdog keymaps lol
@@ -24,6 +24,9 @@
   "relative_line_numbers": true,
   "cursor_blink": false,
   "current_line_highlight": "none",
+  "vim": {
+    "toggle_relative_line_numbers": true
+  },
 
   // Editor
   "format_on_save": "off",
@@ -40,6 +43,10 @@
   "tab_bar": {
     "show_nav_history_buttons": false
   },
+  "toolbar": {
+    "quick_actions": false,
+    "selections_menu": false
+  },
   "project_panel": {
     "default_width": 300,
     "dock": "right",
@@ -54,7 +61,7 @@
   "assistant": {
     "default_model": {
       "provider": "copilot_chat",
-      "model": "gpt-4"
+      "model": "gpt-4o"
     },
     "version": "2"
   },
@@ -69,10 +76,6 @@
   },
   "notification_panel": {
     "button": false
-  },
-  "toolbar": {
-    "quick_actions": false,
-    "selections_menu": false
   },
 
   // Git

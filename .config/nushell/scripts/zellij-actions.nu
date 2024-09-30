@@ -10,14 +10,14 @@ def open_project [
     let absolute_path = $"($env.HOME)/($chosen_project)"
 
     zellij action new-tab --layout idk --name $dir_name
-    zellij action new-pane --cwd $absolute_path -- nu
+    zellij action new-pane --cwd $absolute_path -- nu -i
     zellij action focus-previous-pane; zellij action close-pane
 
     zellij action new-tab --layout idk --name $"($dir_name)\(git\)"
-    zellij action new-pane --cwd $absolute_path -- nu -c lazygit
+    zellij action new-pane --cwd $absolute_path -- nu -i -c lazygit
     zellij action focus-previous-pane; zellij action close-pane
 
-    zellij action go-to-tab-name $dir_name
+    zellij action go-to-previous-tab
     if $replace {
        zellij action go-to-previous-tab
        zellij action close-tab
