@@ -2,26 +2,51 @@
 
 "$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
 
-[manager]
-prepend_keymap = [
-	# disable keymaps
-	{ on = ["<C-Enter>"], run = "," },
-	{ on = ["t"], run = "," },
+# Note:
+# arrow.yazi and smart-enter.yazi are custom plugins that I manually installed
+# therefore they are not managed by `ya pack` and are pushed to dotfiles git repo
 
-	# wraparound navigation
-	{ on = ["j"], run = "plugin --sync arrow --args=1" },
-	{ on = ["k"], run = "plugin --sync arrow --args=-1" },
+# disable default keymaps
+[[manager.prepend_keymap]]
+on = ["<C-Enter>"]
+run = ","
+[[manager.prepend_keymap]]
+on = ["t"]
+run = ","
 
-	# smart enter
-	{ on = ["l"], run = "plugin --sync smart-enter", desc = "Enter the child directory, or open the file" },
-	{ on = ["<Enter>"], run = "plugin --sync smart-enter", desc = "Enter the child directory, or open the file" },
+# https://yazi-rs.github.io/docs/tips#dropping-to-shell
+[[manager.prepend_keymap]]
+on = "<C-s>"
+run = 'shell "$SHELL" --block --confirm'
+desc = "Open shell here"
 
-	# force delete to trash with d
-	{ on = ["d"], run = "remove --force", desc = "Move the files to the trash" },
+# https://yazi-rs.github.io/docs/tips#close-input-by-esc
+[[input.prepend_keymap]]
+on = "<Esc>"
+run = "close"
+desc = "Cancel input"
 
-	# open shell
-	{ on = ["<C-s>"], run = 'shell "$SHELL" --block --confirm', desc = "Open shell here" },
-]
+# https://yazi-rs.github.io/docs/tips#navigation-wraparound
+[[manager.prepend_keymap]]
+on = "k"
+run = "plugin --sync arrow --args=-1"
+[[manager.prepend_keymap]]
+on = "j"
+run = "plugin --sync arrow --args=1"
 
-[input]
-prepend_keymap = [{ on = ["<Esc>"], run = "close", desc = "Cancel input" }]
+# https://yazi-rs.github.io/docs/tips/#smart-enter
+[[manager.prepend_keymap]]
+on = "l"
+run = "plugin --sync smart-enter"
+desc = "Enter the child directory, or open the file"
+# [[manager.prepend_keymap]]
+# on = "<Enter>"
+# run = "plugin --sync smart-enter"
+# desc = "Enter the child directory, or open the file"
+
+# force delete to trash with d
+# { on = ["d"], run = "remove --force", desc = "Move the files to the trash" },
+
+# open shell
+# { on = ["<C-s>"], run = 'shell "$SHELL" --block --confirm', desc = "Open shell here" },
+# ]

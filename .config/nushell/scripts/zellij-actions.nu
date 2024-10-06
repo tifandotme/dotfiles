@@ -1,6 +1,4 @@
-def open_project [
-  --replace(-r) # Replace current tab
-] {
+def open_project [] {
     let project_dirs = _ls ~/personal ~/work | where type =~ dir | get name
 
     # Prompt user to choose a project directory
@@ -8,6 +6,9 @@ def open_project [
 
     let dir_name = $chosen_project | split row "/" | get 1
     let absolute_path = $"($env.HOME)/($chosen_project)"
+
+    let last_tab_index = zellij action query-tab-names | split row "\n" | length
+    zellij action go-to-tab $last_tab_index
 
     zellij action new-tab --layout idk --name $dir_name
     zellij action new-pane --cwd $absolute_path -- nu -i
@@ -18,11 +19,6 @@ def open_project [
     zellij action focus-previous-pane; zellij action close-pane
 
     zellij action go-to-previous-tab
-    if $replace {
-       zellij action go-to-previous-tab
-       zellij action close-tab
-    }
 }
 
 alias op = open_project
-alias opr = open_project --replace

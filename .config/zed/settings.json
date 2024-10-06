@@ -7,7 +7,7 @@
   "restore_on_startup": "last_workspace",
 
   "features": {
-    "inline_completion_provider": "copilot"
+    "inline_completion_provider": "supermaven"
   },
 
   // Rawdog keymaps lol
