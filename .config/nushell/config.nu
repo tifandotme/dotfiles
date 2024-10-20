@@ -49,7 +49,7 @@ $env.config = {
     }
 
     show_banner: false
-    footer_mode: "30"
+    footer_mode: 30
     edit_mode: vi
     highlight_resolved_externals: true
 
@@ -114,9 +114,9 @@ source ir-black.nu # https://github.com/nushell/nu_scripts/blob/f74b2aa7770a4c78
 
 if "ZELLIJ" not-in ($env | columns) {
     if $env.ZELLIJ_AUTO_ATTACH == true {
-        zellij attach -c
+        ^zellij attach -c
     } else {
-        zellij
+        ^zellij
     }
 
     if $env.ZELLIJ_AUTO_EXIT == true {

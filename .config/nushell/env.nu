@@ -38,8 +38,9 @@ def --env add_path [path: string] {
 }
 
 add_path ($env.HOME | path join .local bin)
-# add_path ($env.HOME | path join .cargo bin)
 add_path ($env.HOME | path join .local share bun bin)
+add_path ($env.HOME | path join .local share mise shims)
+# add_path ($env.HOME | path join .cargo bin)
 
 hide add_path
 
@@ -47,10 +48,10 @@ $env.EDITOR = "zed"
 $env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fully functional"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
-$env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
-$env.DENO_INSTALL = ($env.XDG_DATA_HOME | path join deno)
+# $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
+# $env.DENO_INSTALL = ($env.XDG_DATA_HOME | path join deno)
 $env.ZELLIJ_AUTO_ATTACH = true
-$env.ZELLIJ_AUTO_EXIT = false # if true, at a point, half-dead sessions will prevent any more session creation
+$env.ZELLIJ_AUTO_EXIT = true # if true, at a point, half-dead sessions will prevent any more session creation
 
 # colorizes manpages using bat
 $env.MANPAGER = "sh -c 'col -bx | bat -l man -p'"
@@ -58,8 +59,9 @@ $env.MANROFFOPT = "-c"
 
 # ========================== INITIALIZATION ===================================
 
-let mise_path = $nu.default-config-dir | path join scripts mise.gen.nu
-mise activate nu | save --force $mise_path
+# https://github.com/jdx/mise/issues/2768
+# let mise_path = $nu.default-config-dir | path join scripts mise.gen.nu
+# ^mise activate nu | save --force $mise_path
 
 let zoxide_path = $nu.default-config-dir | path join scripts zoxide.gen.nu
-zoxide init --cmd cd nushell | save --force $zoxide_path
+^zoxide init --cmd cd nushell | save --force $zoxide_path
