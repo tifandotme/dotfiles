@@ -14,8 +14,6 @@ gui:
   theme:
     selectedLineBgColor:
       - "#282828"
-os:
-  editPreset: "zed"
 notARepository: "quit"
 promptToReturnFromSubprocess: false
 customCommands:

@@ -1,7 +1,3 @@
-import = [
-    "~/.config/alacritty/base16-irblack.toml", # https://github.com/aarowill/base16-alacritty/blob/c95c200b3af739708455a03b5d185d3d2d263c6e/colors/base16-irblack-256.toml
-    "~/.config/alacritty/keybindings.toml",
-]
 
 [font]
 normal = { family = "CommitMono Nerd Font", style = "Regular" }
@@ -14,3 +10,9 @@ padding = { x = 2, y = 0 }
 option_as_alt = "Both"
 startup_mode = "Maximized"
 decorations = "None"
+
+[general]
+import = [
+    "~/.config/alacritty/base16-irblack.toml", # https://github.com/aarowill/base16-alacritty/blob/c95c200b3af739708455a03b5d185d3d2d263c6e/colors/base16-irblack-256.toml
+    "~/.config/alacritty/keybindings.toml",
+]

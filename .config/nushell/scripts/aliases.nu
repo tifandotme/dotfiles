@@ -14,12 +14,12 @@ alias lsa = eza --group-directories-first --classify=auto --sort=extension --one
 alias _cat = cat
 alias cat = bat --plain --theme=base16
 
-alias bhelp = bat --plain --language=help
-def h [arg] {
-    ^($arg) -h | bhelp
+alias bhelp = bat --language=help --paging=never --decorations=never --wrap=never
+def h [command: string, ...args: string] {
+    ^($command) ...$args -h | bhelp
 }
-def hh [arg] {
-    ^($arg) --help | bhelp
+def hh [command: string, ...args: string] {
+    ^($command) ...$args --help | bhelp
 }
 
 alias ncdu = ncdu --enable-delete --si
@@ -29,21 +29,31 @@ def up [] {
     mise upgrade --yes
     gh extension upgrade --all
     ya pack --upgrade
-    bun update --global --latest
+    pnpm update --global --latest
+    # bun update --global --latest
+}
+
+# do this rarely, caches are good
+def clean [] {
+    mise prune
+    brew cleanup --prune=all
+    pnpm store prune
 }
 
 alias g = git
 
 alias lg = lazygit
 
-alias b = bun
+# alias b = bun
+
+alias p = pnpm
 
 alias _ncu = ncu
 alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME)/.ncu-cache.json" --packageManager bun
 
 alias btm = btm -g
 
-alias docker = podman
+# alias docker = podman
 
 alias cos = gh copilot suggest
 alias coe = gh copilot explain
