@@ -1227,6 +1227,14 @@
       // visual, visual line & visual block modes
     }
   },
+
+  {
+    "context": "VimControl && !menu",
+    "bindings": {
+      "alt-h": ["workspace::ActivatePaneInDirection", "Left"],
+      "alt-l": ["workspace::ActivatePaneInDirection", "Right"]
+    }
+  },
   {
     // "context": "Editor && vim_mode == insert && !menu",
     "context": "Editor && vim_mode == insert",

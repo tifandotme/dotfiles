@@ -1,38 +1,51 @@
 {
-  "theme": {
-    "dark": "Gruber Darker",
-    "light": "Gruvbox Light Hard",
-    "mode": "system"
-  },
-  "restore_on_startup": "last_workspace",
-
-  "features": {
-    "inline_completion_provider": "supermaven"
-  },
-
-  // Rawdog keymaps lol
-  "base_keymap": "None",
-
-  // Telemetry
   "telemetry": {
     "diagnostics": false,
     "metrics": false
   },
 
-  // Vim-my stuff
-  "vim_mode": true,
-  "relative_line_numbers": true,
-  "cursor_blink": false,
-  "current_line_highlight": "none",
-  "vim": {
-    "toggle_relative_line_numbers": true
+  "base_keymap": "None",
+
+  "theme": {
+    "dark": "Gruber Darker",
+    "light": "Gruvbox Light Hard",
+    "mode": "system"
   },
 
-  // Editor
+  // AI
+  "features": {
+    "inline_completion_provider": "supermaven"
+  },
+  "assistant": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o"
+    },
+    "version": "2"
+  },
+
+  "restore_on_startup": "last_workspace",
   "format_on_save": "off",
+
+  "lsp": {
+    "tailwindcss-language-server": {
+      "settings": {
+        "classAttributes": ["class", "className", "ngClass", "styles"]
+      }
+    }
+  },
+
+  // EDITOR
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 13,
   "buffer_line_height": "standard",
+  "current_line_highlight": "none",
+  "relative_line_numbers": true,
+  "cursor_blink": false,
+  "vim_mode": true,
+  "vim": {
+    "toggle_relative_line_numbers": true
+  },
   "search_wrap": false,
   "wrap_guides": [80],
   "indent_guides": {
@@ -47,6 +60,14 @@
     "edit_debounce_ms": 700,
     "scroll_debounce_ms": 50
   },
+  "git": {
+    "inline_blame": {
+      "delay_ms": 1000
+    }
+  },
+  // "buffer_font_features": {
+  //   "calt": false
+  // }
 
   // UI
   "tab_bar": {
@@ -67,13 +88,6 @@
     "default_width": 300,
     "dock": "right"
   },
-  "assistant": {
-    "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4o"
-    },
-    "version": "2"
-  },
   "chat_panel": {
     "button": false
   },
@@ -85,24 +99,5 @@
   },
   "notification_panel": {
     "button": false
-  },
-
-  "git": {
-    "inline_blame": {
-      "delay_ms": 1000
-    }
-  },
-
-  // LSP
-  "lsp": {
-    "tailwindcss-language-server": {
-      "settings": {
-        "classAttributes": ["class", "className", "ngClass", "styles"]
-      }
-    }
   }
-
-  // "buffer_font_features": {
-  //   "calt": false
-  // }
 }
