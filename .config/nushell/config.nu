@@ -146,18 +146,7 @@ if "ZELLIJ" not-in ($env | columns) {
     }
 }
 
-# print "- use h or hh for help."
-
 if $nu.is-interactive {
-  $"
-My custom banner
-Startup-time: ($nu.startup-time)
-"
-  show_banner
-}
-
-# show a slightly different banner
-def show_banner [] {
     let ellie = [
         "     __  ,"
         " .--()°'.'"
@@ -166,8 +155,13 @@ def show_banner [] {
     ]
     let s_mem = (sys mem)
     let s_ho = (sys host)
+
+    let notable_commands = [
+        "h", "hh", "op", "cdi", "coe", "cos", "yd"
+    ]
+
     print $"(ansi reset)(ansi green)($ellie.0)"
     print $"(ansi green)($ellie.1)  (ansi light_blue)  (ansi light_blue_bold)RAM (ansi reset)(ansi light_blue)($s_mem.used) / ($s_mem.total)(ansi reset)"
     print $"(ansi green)($ellie.2)  (ansi light_purple)  (ansi light_purple_bold)Uptime (ansi reset)(ansi light_purple)($s_ho.uptime)(ansi reset)"
-    print $"(ansi green)($ellie.3)  (ansi yellow)  (ansi yellow_bold)v(version | get version)(ansi reset)"
+    print $"(ansi green)($ellie.3)  (ansi yellow)  (ansi yellow_bold)Utils (ansi reset)(ansi yellow)($notable_commands | str join ', ')(ansi reset)"
 }

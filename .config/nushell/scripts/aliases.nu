@@ -40,14 +40,16 @@ def up [] {
     print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)bun(ansi reset) global packages"
     bun update --global --latest
 
+    # print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)pnpm(ansi reset) global packages"
     # pnpm update --global --latest
 }
 
 # do this rarely, caches are good aight
 def clean [] {
     mise prune
-    brew cleanup --prune=all
     pnpm store prune
+    brew cleanup --prune=all
+    brew autoremove
 }
 
 alias g = git
@@ -74,7 +76,6 @@ def zka [] {
     zellij delete-all-sessions --force --yes; zellij kill-all-sessions --yes
 }
 
-alias yas = yadm status
 alias yal = yadm list -a
 alias yag = yadm enter lazygit --work-tree ~
 def yau [] {
