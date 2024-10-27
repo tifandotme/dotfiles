@@ -25,15 +25,25 @@ def hh [command: string, ...args: string] {
 alias ncdu = ncdu --enable-delete --si
 
 def up [] {
+    print $"(ansi green_bold)==>(ansi reset) Upgrading (ansi green)brew(ansi reset) packages"
     brew upgrade
+
+    print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)mise(ansi reset) packages"
     mise upgrade --yes
+
+    print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)gh(ansi reset) extensions"
     gh extension upgrade --all
+
+    print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)yazi(ansi reset) packages"
     ya pack --upgrade
-    pnpm update --global --latest
-    # bun update --global --latest
+
+    print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)bun(ansi reset) global packages"
+    bun update --global --latest
+
+    # pnpm update --global --latest
 }
 
-# do this rarely, caches are good
+# do this rarely, caches are good aight
 def clean [] {
     mise prune
     brew cleanup --prune=all
@@ -44,7 +54,7 @@ alias g = git
 
 alias lg = lazygit
 
-# alias b = bun
+alias b = bun
 
 alias p = pnpm
 
@@ -58,7 +68,8 @@ alias btm = btm -g
 alias cos = gh copilot suggest
 alias coe = gh copilot explain
 
-alias z = zellij
+alias z = zed
+
 def zka [] {
     zellij delete-all-sessions --force --yes; zellij kill-all-sessions --yes
 }

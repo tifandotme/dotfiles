@@ -7,7 +7,7 @@
   "restore_on_startup": "last_workspace",
 
   "features": {
-    "inline_completion_provider": "copilot"
+    "inline_completion_provider": "supermaven"
   },
 
   // Rawdog keymaps lol
@@ -50,7 +50,7 @@
   "project_panel": {
     "default_width": 300,
     "dock": "right",
-    "auto_fold_dirs": true,
+    // "auto_fold_dirs": true,
     "folder_icons": false
     // "file_icons": false
   },
@@ -93,4 +93,8 @@
       }
     }
   }
+
+  // "buffer_font_features": {
+  //   "calt": false
+  // }
 }
