@@ -1,0 +1,7 @@
+[tools]
+java = "openjdk-17"
+go = "latest"
+node = "lts"
+
+[settings]
+disable_hints = ["outdated_bump"]
