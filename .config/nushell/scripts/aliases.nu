@@ -3,6 +3,8 @@ alias lsblk = lsblk -o NAME,FSTYPE,LABEL,SIZE,FSUSE%,FSAVAIL,MOUNTPOINT # linux 
 alias grep = grep --color=auto
 alias diff = diff --color=auto
 alias df = df --human-readable --si
+
+# Show all open ports
 def po [] {
     lsof -i -P -n | grep LISTEN
 }
@@ -15,15 +17,22 @@ alias _cat = cat
 alias cat = bat --plain --theme=base16
 
 alias bhelp = bat --language=help --paging=never --decorations=never --wrap=never
+
+# Run a colored [cmd] -h
 def h [command: string, ...args: string] {
     ^($command) ...$args -h | bhelp
 }
+
+# Run a colored [cmd] --help
 def hh [command: string, ...args: string] {
     ^($command) ...$args --help | bhelp
 }
 
+hide bhelp
+
 alias ncdu = ncdu --enable-delete --si
 
+# Update all packages
 def up [] {
     print $"(ansi green_bold)==>(ansi reset) Upgrading (ansi green)brew(ansi reset) packages"
     brew upgrade
@@ -44,7 +53,7 @@ def up [] {
     # pnpm update --global --latest
 }
 
-# do this rarely, caches are good aight
+# Clean caches and uninstall unused packages (do this rarely)
 def clean [] {
     mise prune
     pnpm store prune
@@ -72,16 +81,20 @@ alias coe = gh copilot explain
 
 alias z = zed
 
+# Delete all zellij sessions (will close terminal window)
 def zka [] {
     zellij delete-all-sessions --force --yes; zellij kill-all-sessions --yes
 }
 
 alias yal = yadm list -a
 alias yag = yadm enter lazygit --work-tree ~
+
+# Add and commit all changes in yadm
 def yau [] {
     yadm add -u; yadm commit -m "update"; yadm push
 }
 
+# Run yazi (will cd into last directory when closed)
 def --env y [...args] {
     let tmp = (mktemp -t "yazi-cwd.XXXXXX")
     yazi ...$args --cwd-file $tmp
@@ -94,7 +107,16 @@ def --env y [...args] {
     rm -fp $tmp
 }
 
-def nufzf [] {
-    # https://github.com/nushell/nushell/discussions/10859#discussioncomment-7413476
-    $in | each {|i| $i | to json --raw} | str join "\n" | fzf | from json
+# List all custom commands and aliases (filtered by noteworthiness)
+def cmds [] {
+    let custom_excludes = [
+        "drop", "banner", "lsblk", "update terminal", "_", "main", "pwd", "show", "next"
+    ]
+
+    help commands | where command_type =~ 'custom|alias' | reject params input_output search_terms category command_type | where name !~ ($custom_excludes | str join "|") | sort-by description
 }
+
+# def nufzf [] {
+#     # https://github.com/nushell/nushell/discussions/10859#discussioncomment-7413476
+#     $in | each {|i| $i | to json --raw} | str join "\n" | fzf | from json
+# }

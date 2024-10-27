@@ -1,4 +1,5 @@
-def open_project [] {
+# Setup project environment
+def op [] {
     let project_dirs = _ls ~/personal ~/work | where type =~ dir | get name
 
     # Prompt user to choose a project directory
@@ -20,5 +21,3 @@ def open_project [] {
 
     zellij action go-to-previous-tab
 }
-
-alias op = open_project
