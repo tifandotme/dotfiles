@@ -38,6 +38,15 @@
   "indent_guides": {
     "enabled": false
   },
+  "inlay_hints": {
+    "enabled": false,
+    "show_type_hints": false,
+    "show_parameter_hints": true,
+    "show_other_hints": false,
+    "show_background": false,
+    "edit_debounce_ms": 700,
+    "scroll_debounce_ms": 50
+  },
 
   // UI
   "tab_bar": {
@@ -78,7 +87,6 @@
     "button": false
   },
 
-  // Git
   "git": {
     "inline_blame": {
       "delay_ms": 1000

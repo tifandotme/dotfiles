@@ -91,7 +91,10 @@ $env.config = {
             modifier: control
             keycode: char_n
             mode: [emacs, vi_normal, vi_insert]
-            event: { send: clearscrollback }
+            event: [
+                { send: clearscrollback }
+                { send: executehostcommand, cmd: "banner" }
+            ]
         }
         {
             name: insert_newline
@@ -146,7 +149,7 @@ if "ZELLIJ" not-in ($env | columns) {
     }
 }
 
-if $nu.is-interactive {
+def banner [] {
     let ellie = [
         "     __  ,"
         " .--()°'.'"
@@ -160,4 +163,8 @@ if $nu.is-interactive {
     print $"(ansi green)($ellie.1)  (ansi light_blue)  (ansi light_blue_bold)RAM (ansi reset)(ansi light_blue)($s_mem.used) / ($s_mem.total)(ansi reset)"
     print $"(ansi green)($ellie.2)  (ansi light_purple)  (ansi light_purple_bold)Uptime (ansi reset)(ansi light_purple)($s_ho.uptime)(ansi reset)"
     print $"(ansi green)($ellie.3)  (ansi yellow)  (ansi yellow_italic)cmds, ctrl-z \(zed\), ctrl-h \(help\), ctrl-r \(hist\)(ansi reset)"
+}
+
+if $nu.is-interactive {
+    banner
 }
