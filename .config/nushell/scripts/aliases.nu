@@ -145,7 +145,7 @@ def op [] {
     zellij action go-to-previous-tab
 }
 
-# Diff two files
+# Diff two files located anywhere within the current directory (MUST be inside a git repository)
 def dif [] {
     try {
         use std
