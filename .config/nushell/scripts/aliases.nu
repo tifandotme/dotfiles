@@ -120,3 +120,42 @@ def cmds [] {
 #     # https://github.com/nushell/nushell/discussions/10859#discussioncomment-7413476
 #     $in | each {|i| $i | to json --raw} | str join "\n" | fzf | from json
 # }
+
+# Setup project environment
+def op [] {
+    let project_dirs = _ls ~/personal ~/work | where type =~ dir | get name
+
+    # Prompt user to choose a project directory
+    let chosen_project = $project_dirs | str join "\n" | str replace --all $"($env.HOME)/" '' | str join "\n" | fzf
+
+    let dir_name = $chosen_project | split row "/" | get 1
+    let absolute_path = $"($env.HOME)/($chosen_project)"
+
+    let last_tab_index = zellij action query-tab-names | split row "\n" | length
+    zellij action go-to-tab $last_tab_index
+
+    zellij action new-tab --layout idk --name $dir_name
+    zellij action new-pane --cwd $absolute_path -- nu -i
+    zellij action focus-previous-pane; zellij action close-pane
+
+    zellij action new-tab --layout idk --name $"($dir_name)\(git\)"
+    zellij action new-pane --cwd $absolute_path -- nu -i -c lazygit
+    zellij action focus-previous-pane; zellij action close-pane
+
+    zellij action go-to-previous-tab
+}
+
+# Diff two files
+def dif [] {
+    try {
+        use std
+        let files = git ls-files err> (std null-device)
+
+        let file_1 = $files | fzf --header="Choose a file"
+        let file_2 = $files | split row "\n" | filter {|x| $x != $file_1 } | str join "\n" | fzf --header="Choose another file to diff"
+
+        difft $file_1 $file_2
+    } catch {
+        print "Failed to get files. Current directory is not a git repository."
+    }
+}
