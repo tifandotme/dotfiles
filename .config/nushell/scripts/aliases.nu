@@ -154,7 +154,7 @@ def dif [] {
         let file_1 = $files | fzf --header="Choose a file"
         let file_2 = $files | split row "\n" | filter {|x| $x != $file_1 } | str join "\n" | fzf --header="Choose another file to diff"
 
-        difft $file_1 $file_2
+        difft $file_1 $file_2 --syntax-highlight="off"
     } catch {
         print "Failed to get files. Current directory is not a git repository."
     }
