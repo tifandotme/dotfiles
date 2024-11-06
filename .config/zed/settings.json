@@ -18,8 +18,8 @@
   },
   "assistant": {
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4o"
+      "provider": "zed.dev",
+      "model": "claude-3-5-sonnet-latest"
     },
     "version": "2"
   },
@@ -48,9 +48,9 @@
   },
   "search_wrap": false,
   "wrap_guides": [80],
-  "indent_guides": {
-    "enabled": false
-  },
+  // "indent_guides": {
+  //   "enabled": false
+  // },
   "inlay_hints": {
     "enabled": false,
     "show_type_hints": false,
@@ -67,7 +67,7 @@
   },
   // "buffer_font_features": {
   //   "calt": false
-  // }
+  // },
 
   // UI
   "tab_bar": {
@@ -78,11 +78,14 @@
     "selections_menu": false
   },
   "project_panel": {
+    // "indent_guides": {
+    // "show": "never"
+    // },
     "default_width": 300,
     "dock": "right",
     // "auto_fold_dirs": true,
-    "folder_icons": false
-    // "file_icons": false
+    "folder_icons": false,
+    "file_icons": false
   },
   "outline_panel": {
     "default_width": 300,
