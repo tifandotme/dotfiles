@@ -114,6 +114,16 @@ $env.config = {
             }
         },
         {
+            name: open_vscode
+            modifier: control
+            keycode: char_v
+            mode: [emacs, vi_normal, vi_insert]
+            event: {
+                send: executehostcommand
+                cmd: "code ."
+            }
+        },
+        {
             name: history_menu
             modifier: control
             keycode: char_h
@@ -161,6 +171,7 @@ def banner [] {
     let tips = [
         "`cmds` to see all custom commands and aliases",
         "Ctrl-Z to open Zed in current directory",
+        "Ctrl-V to open VSCode in current directory",
         "Ctrl-R to open history menu",
         "Ctrl-H to open help menu",
         "Inside lazygit, Ctrl+R to open repo in the browser",
