@@ -16,6 +16,8 @@
 	rebase = true
 [rebase]
 	autoStash = true
+[remote "origin"]
+	prune = true
 [maintenance]
 	repo = /Users/tifandwiavianto/personal/website
 	repo = /Users/tifandwiavianto/work/aquahero-web

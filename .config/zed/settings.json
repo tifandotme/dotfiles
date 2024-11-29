@@ -31,7 +31,7 @@
     "default_width": 600,
     "default_model": {
       "provider": "copilot_chat",
-      "model": "o1-mini"
+      "model": "claude-3-5-sonnet"
     },
     "version": "2"
   },
@@ -86,6 +86,7 @@
     "dock": "right",
     "auto_fold_dirs": true,
     "folder_icons": false,
+    "indent_size": 15,
     "file_icons": false
   },
   "outline_panel": {
