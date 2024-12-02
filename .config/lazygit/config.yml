@@ -7,7 +7,7 @@ gui:
   expandFocusedSidePanel: true
   expandedSidePanelWeight: 99
   border: "single"
-  showPanelJumps: false
+  showPanelJumps: true
   showFileTree: false
   sidePanelWidth: 0.22
   showBottomLine: false

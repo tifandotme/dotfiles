@@ -7,7 +7,7 @@
   "base_keymap": "None",
 
   "theme": {
-    "dark": "Gruber Darker",
+    "dark": "Gruber Darker - Dimmed",
     "light": "Gruvbox Light Hard",
     "mode": "system"
   },
@@ -23,7 +23,7 @@
     }
   },
 
-  // AI
+  // AI ✨
   "features": {
     "inline_completion_provider": "supermaven"
   },
@@ -40,6 +40,7 @@
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 12.4,
   "buffer_line_height": "standard",
+  "use_autoclose": false,
   "current_line_highlight": "none",
   "relative_line_numbers": true,
   "cursor_blink": false,
@@ -70,23 +71,26 @@
     "calt": false // ligatures
   },
 
-  // UI
   "tab_bar": {
+    // "show": false,
     "show_nav_history_buttons": false
   },
   "toolbar": {
     "quick_actions": false,
     "selections_menu": false
   },
+  "file_finder": {
+    "file_icons": false
+  },
   "project_panel": {
-    "indent_guides": {
-      "show": "never"
-    },
+    // "indent_guides": {
+    //   "show": "never"
+    // },
     "default_width": 300,
     "dock": "right",
     "auto_fold_dirs": true,
     "folder_icons": false,
-    "indent_size": 15,
+    "indent_size": 20,
     "file_icons": false
   },
   "outline_panel": {

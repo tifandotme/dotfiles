@@ -1,8 +1,8 @@
 [plugin]
 deps = [
-    { use = "Rolv-Apneseth/starship", rev = "77a65f5" },
-    { use = "yazi-rs/plugins:full-border", rev = "d85bfd6" },
-    { use = "yazi-rs/plugins:git", rev = "d85bfd6" },
+    { use = "Rolv-Apneseth/starship", rev = "247f49d" },
+    { use = "yazi-rs/plugins:full-border", rev = "a53d544" },
+    { use = "yazi-rs/plugins:git", rev = "a53d544" },
 ]
 
 [flavor]
