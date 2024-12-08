@@ -82,7 +82,7 @@ $env.config = {
             mode: [emacs, vi_normal, vi_insert]
             event: {
                 send: executehostcommand
-                cmd: "zellij run -f -c -n 'Open project' -- nu --login -c op"
+                cmd: "zellij run -f -c -n 'Open project' -- nu -l -c op"
             }
         }
         {
