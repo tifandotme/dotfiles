@@ -76,15 +76,14 @@ $env.config = {
             event: { send: down }
         }
         {
-            name: ls
+            name: open_project
             modifier: control
             keycode: char_p
             mode: [emacs, vi_normal, vi_insert]
-            event: [
-                { edit: clear }
-                { edit: insertstring, value: "lsa" }
-                { send: enter }
-            ]
+            event: {
+                send: executehostcommand
+                cmd: "zellij run -f -c -n 'Open project' -- nu --login -c op"
+            }
         }
         {
             name: clear_scroll_back
