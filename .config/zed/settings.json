@@ -12,18 +12,11 @@
     "mode": "system"
   },
 
+  // GENERAL
   "restore_on_startup": "last_workspace",
   "format_on_save": "off",
 
-  "lsp": {
-    "tailwindcss-language-server": {
-      "settings": {
-        "classAttributes": ["class", "className", "ngClass", "styles"]
-      }
-    }
-  },
-
-  // AI ✨
+  // AI
   "features": {
     "inline_completion_provider": "supermaven"
   },
@@ -71,6 +64,16 @@
     "calt": false // ligatures
   },
 
+  // LSP
+  "lsp": {
+    "tailwindcss-language-server": {
+      "settings": {
+        "classAttributes": ["class", "className", "ngClass", "styles"]
+      }
+    }
+  },
+
+  // UI
   "tab_bar": {
     // "show": false,
     "show_nav_history_buttons": false

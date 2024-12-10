@@ -3,6 +3,16 @@
 keybinds clear-defaults=true {
     shared_except "tmux" "locked" {
         bind "Ctrl e" { SwitchToMode "Tmux"; }
+        bind "Ctrl p" {
+            Run "nu" "-l" "-c" "op" {
+                // These are undocumented, so we had to RTFC :)
+                // https://github.com/zellij-org/zellij/blob/ea57d9a73026bbc6f9c7f1a7803067ad365584cb/zellij-utils/src/kdl/mod.rs#L1497
+                name "Open project"
+                floating true
+                close_on_exit true
+            };
+        };
+
     }
     tmux {
         bind "[" { SwitchToMode "Scroll"; }

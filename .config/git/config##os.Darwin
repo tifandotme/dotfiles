@@ -36,6 +36,6 @@
     hyperlinks = true
     hyperlinks-file-link-format = "zed://file/{path}:{line}"
 [merge]
-    conflictstyle = diff3
+    conflictstyle = zdiff3
 [diff]
     colorMoved = default

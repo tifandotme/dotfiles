@@ -1204,6 +1204,7 @@
     "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
     "bindings": {
       "space w": "workspace::SaveWithoutFormat",
+      "space o": "editor::ToggleCodeActions",
       "space p": "editor::Format",
       "space z": "editor::ToggleSoftWrap",
       "space c": "vim::ToggleComments",
