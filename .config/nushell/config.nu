@@ -93,16 +93,6 @@ $env.config = {
             event: { edit: insertnewline }
         },
         {
-            name: open_zed
-            modifier: control
-            keycode: char_z
-            mode: [emacs, vi_normal, vi_insert]
-            event: {
-                send: executehostcommand
-                cmd: "zed ."
-            }
-        },
-        {
             name: open_vscode
             modifier: control
             keycode: char_v

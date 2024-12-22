@@ -3,7 +3,7 @@
 keybinds clear-defaults=true {
     shared_except "tmux" "locked" {
         bind "Ctrl e" { SwitchToMode "Tmux"; }
-        bind "Ctrl p" {
+        bind "Ctrl \\" {
             Run "nu" "-l" "-c" "op" {
                 // These are undocumented, so we had to RTFC :)
                 // https://github.com/zellij-org/zellij/blob/ea57d9a73026bbc6f9c7f1a7803067ad365584cb/zellij-utils/src/kdl/mod.rs#L1497
@@ -12,7 +12,12 @@ keybinds clear-defaults=true {
                 close_on_exit true
             };
         };
-
+        bind "Ctrl z" {
+            Run "nu" "-l" "-c" "zed ." {
+                close_on_exit true
+                in_place true
+            }
+        }
     }
     tmux {
         bind "[" { SwitchToMode "Scroll"; }
@@ -75,10 +80,12 @@ keybinds clear-defaults=true {
     shared_except "locked" {
         bind "Ctrl g" { SwitchToMode "Locked"; }
         bind "Ctrl q" { Quit; } // or just press Ctrl d
-        bind "Alt h" { MoveFocusOrTab "Left"; } // NOTE helix uses A-kj
-        bind "Alt l" { MoveFocusOrTab "Right"; }
         bind "Alt =" "Alt +" { Resize "Increase"; }
         bind "Alt -" { Resize "Decrease"; }
+        bind "Shift Super [" { MoveFocusOrTab "Left"; } // NOTE helix uses A-kj
+        bind "Shift Super ]" { MoveFocusOrTab "Right"; }
+        bind "Alt h" { MoveFocusOrTab "Left"; } // NOTE helix uses A-kj
+        bind "Alt l" { MoveFocusOrTab "Right"; }
     }
 
     entersearch {
