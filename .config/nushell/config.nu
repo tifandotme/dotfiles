@@ -10,8 +10,8 @@ $env.config = {
             enable: true
             completer: {|spans|
                 fish --command $'complete "--do-complete=($spans | str join " ")"'
-                | $"value(char tab)description(char newline)" + $in
-                | from tsv --flexible --no-infer
+                    | from tsv --flexible --noheaders --no-infer
+                    | rename value description
             }
         }
     }
