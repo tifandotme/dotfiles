@@ -18,3 +18,5 @@
 	autoStash = true
 [remote "origin"]
 	prune = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/

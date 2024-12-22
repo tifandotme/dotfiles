@@ -30,7 +30,7 @@ def hh [command: string, ...args: string] {
 
 hide bhelp
 
-alias ncdu = ncdu --enable-delete --si
+alias ncdu = ncdu --enable-delete --si --threads 6
 
 # Update all packages
 def up [] {
