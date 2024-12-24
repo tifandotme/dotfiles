@@ -9,8 +9,8 @@ normal = { family = "CommitMono Nerd Font", style = "Regular" }
 size = 13
 
 [window]
-opacity = 0.85
-blur = false
+opacity = 0.80
+blur = true
 padding = { x = 2, y = 0 }
 option_as_alt = "Both"
 startup_mode = "SimpleFullscreen"
