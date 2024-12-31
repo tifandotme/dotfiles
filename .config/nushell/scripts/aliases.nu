@@ -65,6 +65,8 @@ alias g = git
 
 alias lg = lazygit
 
+alias ldo = lazydocker
+
 alias b = bun
 
 alias p = pnpm
