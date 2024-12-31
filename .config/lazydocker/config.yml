@@ -1,0 +1,5 @@
+gui:
+  border: "single"
+  theme:
+    selectedLineBgColor:
+      - "#282828"
