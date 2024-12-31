@@ -1,19 +1,26 @@
-# default: https://github.com/sxyazi/yazi/blob/latest/yazi-config/preset/theme.toml
+# default: https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/theme-dark.toml
 
 "$schema" = "https://yazi-rs.github.io/schemas/theme.json"
 
 [manager]
-border_style = { fg = "#212121" }
+border_style = { fg = "gray" }
 preview_hovered = {}
+count_selected = { fg = "black", bg = "yellow", bold = true }
+count_copied = { fg = "black", bg = "yellow", blink_rapid = true, bold = true }
 
 [status]
 separator_open = ""
 separator_close = ""
-separator_style = { fg = "reset", bg = "reset" }
+# separator_style = { fg = "reset", bg = "reset" }
 
-mode_normal = { bg = "white", bold = true }
-mode_select = { bg = "yellow", bold = true }
-mode_unset = { bg = "white", bold = true }
 
 [icon]
-rules = [{ name = "*", text = "" }, { name = "*/", text = "" }]
+# rules = [{ name = "*", text = "" }, { name = "*/", text = "" }]
+
+[mode]
+normal_main = { fg = "black", bg = "blue", bold = true }
+normal_alt = { fg = "blue", bg = "reset" }
+select_main = { fg = "black", bg = "yellow", bold = true }
+select_alt = { fg = "yellow", bg = "reset" }
+unset_main = { fg = "yellow", bg = "reset", bold = true }
+unset_alt = { fg = "blue", bg = "reset" }

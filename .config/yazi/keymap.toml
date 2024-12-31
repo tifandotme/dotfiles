@@ -3,8 +3,7 @@
 "$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
 
 # Note:
-# arrow.yazi and smart-enter.yazi are custom plugins that I manually installed
-# therefore they are not managed by `ya pack` and are pushed to dotfiles git repo
+# arrow.yazi are custom plugins and not available in `ya pack`
 
 # disable default keymaps
 [[manager.prepend_keymap]]
@@ -16,8 +15,8 @@ run = ","
 
 # https://yazi-rs.github.io/docs/tips#dropping-to-shell
 [[manager.prepend_keymap]]
-on = "<C-s>"
-run = 'shell "$SHELL" --block --confirm'
+on = "!"
+run = 'shell "$SHELL" --block'
 desc = "Open shell here"
 
 # https://yazi-rs.github.io/docs/tips#close-input-by-esc
@@ -26,6 +25,12 @@ on = "<Esc>"
 run = "close"
 desc = "Cancel input"
 
+# https://github.com/yazi-rs/plugins/tree/main/smart-enter.yazi
+[[manager.prepend_keymap]]
+on = "l"
+run = "plugin smart-enter"
+desc = "Enter the child directory, or open the file"
+
 # https://yazi-rs.github.io/docs/tips#navigation-wraparound
 [[manager.prepend_keymap]]
 on = "k"
@@ -33,16 +38,3 @@ run = "plugin arrow --args=-1"
 [[manager.prepend_keymap]]
 on = "j"
 run = "plugin arrow --args=1"
-
-# https://github.com/yazi-rs/plugins/tree/main/smart-enter.yazi
-[[manager.prepend_keymap]]
-on = "l"
-run = "plugin smart-enter"
-desc = "Enter the child directory, or open the file"
-
-# force delete to trash with d
-# { on = ["d"], run = "remove --force", desc = "Move the files to the trash" },
-
-# open shell
-# { on = ["<C-s>"], run = 'shell "$SHELL" --block --confirm', desc = "Open shell here" },
-# ]
