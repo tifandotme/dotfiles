@@ -48,10 +48,16 @@ hide add_path
 $env.EDITOR = "zed"
 $env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fully functional"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
+
+$env.DOCKER_CONFIG = ($env.XDG_CONFIG_HOME | path join docker)
+$env.COLIMA_HOME = ($env.XDG_CONFIG_HOME | path join colima)
+$env.DOCKER_HOST = $"unix://($env.COLIMA_HOME)/default/docker.sock"
+
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
 $env.DENO_INSTALL = ($env.XDG_DATA_HOME | path join deno)
 $env.PNPM_HOME = ($env.XDG_DATA_HOME | path join pnpm)
+
 $env.ZELLIJ_AUTO_ATTACH = true
 $env.ZELLIJ_AUTO_EXIT = true
 

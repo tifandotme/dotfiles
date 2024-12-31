@@ -67,6 +67,8 @@ alias lg = lazygit
 
 alias ldo = lazydocker
 
+alias co = colima
+
 alias b = bun
 
 alias p = pnpm
