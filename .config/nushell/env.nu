@@ -50,8 +50,8 @@ $env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fu
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 
 $env.DOCKER_CONFIG = ($env.XDG_CONFIG_HOME | path join docker)
-$env.COLIMA_HOME = ($env.XDG_CONFIG_HOME | path join colima)
-$env.DOCKER_HOST = $"unix://($env.COLIMA_HOME)/default/docker.sock"
+# $env.COLIMA_HOME = ($env.XDG_CONFIG_HOME | path join colima) # https://github.com/abiosoft/colima/issues/1236
+$env.DOCKER_HOST = $"unix://($env.HOME | path join .colima)/default/docker.sock"
 
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
