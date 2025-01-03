@@ -45,7 +45,7 @@ add_path ($env.HOME | path join .local share pnpm)
 
 hide add_path
 
-$env.EDITOR = "zed"
+$env.EDITOR = "vi"
 $env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fully functional"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 
