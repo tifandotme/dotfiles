@@ -62,3 +62,8 @@ set hlsearch
 
 " Set the commands to save in history default number is 20.
 set history=1000
+
+" Set line cursor in insert mode, block cursor for normal mode
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
+

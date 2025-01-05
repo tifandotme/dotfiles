@@ -65,7 +65,8 @@ alias g = git
 
 alias lg = lazygit
 
-alias ldo = lazydocker
+alias ld = lazydocker
+alias _ld = ^ld
 
 alias co = colima
 
