@@ -1,0 +1,149 @@
+" Allow for folding with {{{ and }}} in comments.
+" `zo` - Open a fold
+" `zc` - Close a fold
+" `zR` - Open all folds
+" `zM` - Close all folds
+" `za` - Toggle fold (open if closed, close if open)
+set foldmethod=marker
+
+" :PlugInstall  - Install plugins
+" :PlugUpdate   - Update plugins
+" :PlugUpgrade  - Upgrade vim-plug itself
+" :PlugClean    - Remove unlisted plugins
+" :PlugStatus   - Check status of plugins
+" PLUGINS ------------------------------------------------------------ {{{
+
+" Install vim-plug if it doesn't exist.
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.config/vim'
+let config_file = '~/.config/vim/vimrc'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | execute 'source ' . config_file
+endif
+
+call plug#begin()
+
+Plug 'tpope/vim-sensible'
+Plug 'machakann/vim-highlightedyank'
+Plug 'tpope/vim-commentary'
+
+call plug#end()
+
+" vim-highlightedyank configs
+let g:highlightedyank_highlight_duration = 200
+
+" Disable sytax hl (vim-sensible enables it)
+" syntax off
+
+" }}}
+
+" GENERAL ------------------------------------------------------------ {{{
+
+set viminfofile=$XDG_CONFIG_HOME/vim/viminfo
+
+" Enable mouse
+:set mouse=a
+
+" Highlight current line
+set cursorline
+highlight CursorLine cterm=NONE ctermbg=237
+highlight CursorLineNr cterm=NONE ctermbg=237 ctermfg=yellow
+
+" Use system clipboard
+set clipboard=unnamed
+
+" Enable relative number
+set relativenumber
+
+" Set shift width to 4 spaces.
+set shiftwidth=4
+
+" Set tab width to 4 columns.
+set tabstop=4
+
+" Use space characters instead of tabs.
+set expandtab
+
+" Do not save backup files.
+set nobackup
+
+" Do not let cursor scroll below or above N number of lines when scrolling.
+set scrolloff=5
+
+" Do not wrap lines. Allow long lines to extend as far as the line goes.
+set nowrap
+
+" While searching though a file incrementally highlight matching characters as you type.
+set incsearch
+
+" Ignore capital letters during search.
+set ignorecase
+
+" Override the ignorecase option if searching for capital letters.
+" This will allow you to search specifically for capital letters.
+set smartcase
+
+" Show partial command you type in the last line of the screen.
+set showcmd
+
+" Show the mode you are on the last line.
+set showmode
+
+" Show matching words during a search.
+set showmatch
+
+" Use highlighting when doing a search.
+set hlsearch
+
+" Set the commands to save in history default number is 20.
+set history=1000
+
+" Set line cursor in insert mode, block cursor for normal mode
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
+
+" }}}
+
+" KEYMAP ------------------------------------------------------------ {{{
+
+" Set space as leader key
+let mapleader = " "
+
+" Remap in insert mode
+inoremap jj <Esc>
+
+" Remap in normal mode
+nnoremap ge G
+nnoremap gl $
+nnoremap gh 0
+nnoremap <Esc> :noh<CR>
+nnoremap <leader>w :w<CR>
+nnoremap <leader>c :Commentary<CR>
+" prevent accidentally openning command history list
+nnoremap q: :
+
+" Remap in visual mode
+vnoremap gl $
+vnoremap gh 0
+vnoremap <leader>c :Commentary<CR>
+
+" }}}
+
+" STATUS LINE ------------------------------------------------------------ {{{
+
+" Clear status line when vimrc is reloaded.
+set statusline=
+
+" Status line left side.
+set statusline+=\ %F\ %M\ %Y\ %R
+
+" Use a divider to separate the left side from the right side.
+set statusline+=%=
+
+" Status line right side.
+set statusline+=\ ascii:\ %b\ hex:\ 0x%B\ row:\ %l\ col:\ %c\ percent:\ %p%%
+
+" Show the status on the second to last line.
+set laststatus=2
+
+" }}}
