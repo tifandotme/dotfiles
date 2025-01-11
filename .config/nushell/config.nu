@@ -93,16 +93,6 @@ $env.config = {
             event: { edit: insertnewline }
         },
         {
-            name: open_vscode
-            modifier: control
-            keycode: char_v
-            mode: [emacs, vi_normal, vi_insert]
-            event: {
-                send: executehostcommand
-                cmd: "code ."
-            }
-        },
-        {
             name: history_menu
             modifier: control
             keycode: char_h

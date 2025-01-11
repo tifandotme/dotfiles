@@ -18,6 +18,12 @@ keybinds clear-defaults=true {
                 in_place true
             }
         }
+        bind "Ctrl v" {
+            Run "nu" "-l" "-c" "code ." {
+                close_on_exit true
+                in_place true
+            }
+        }
     }
     tmux {
         bind "[" { SwitchToMode "Scroll"; }
