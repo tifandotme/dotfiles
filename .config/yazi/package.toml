@@ -1,6 +1,6 @@
 [plugin]
 deps = [
-    { use = "Rolv-Apneseth/starship", rev = "9c37d37" },
+    { use = "Rolv-Apneseth/starship", rev = "4053c8c" },
     { use = "yazi-rs/plugins:full-border", rev = "600614a" },
     { use = "yazi-rs/plugins:git", rev = "600614a" },
     { use = "yazi-rs/plugins:smart-enter", rev = "600614a" },

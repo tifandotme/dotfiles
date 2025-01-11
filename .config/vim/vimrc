@@ -42,7 +42,7 @@ let g:highlightedyank_highlight_duration = 200
 set viminfofile=$XDG_CONFIG_HOME/vim/viminfo
 
 " Enable mouse
-:set mouse=a
+set mouse=a
 
 " Highlight current line
 set cursorline
