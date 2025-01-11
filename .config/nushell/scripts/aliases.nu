@@ -53,6 +53,22 @@ def up [] {
     # pnpm update --global --latest
 }
 
+# Schedule update scheduler every 24 hours
+def up-daily [
+    --by-spawner (-s) # Is the command being run by `task spawn`
+] {
+  use std
+
+  if $by_spawner {
+    up
+  }
+
+  task spawn --delay 1day --label update { up-daily -s } e+o> (std null-device)
+  if $env.LAST_EXIT_CODE == 0 {
+    print "Scheduled"
+  }
+}
+
 # Clean caches and uninstall unused packages (do this rarely)
 def clean [] {
     mise prune
