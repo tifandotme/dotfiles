@@ -1,0 +1,37 @@
+layout {
+    default_tab_template split_direction="horizontal" {
+        children
+
+        pane size=1 borderless=true {
+            // zjstatus v0.19.2
+            // On MacOS, the plugin location cannot be https and should be local
+            plugin location="file:~/.config/zellij/zjstatus.wasm" {
+                color_fg_muted "#747272"
+                color_fg       "#e4e4ef"
+                color_bg       "#002633"
+
+                format_left  "#[fg=$fg,bg=$bg]  {tabs}"
+                format_space "#[bg=$bg]"
+                format_right "{mode}"
+
+                mode_locked       "#[fg=$fg,bg=$bg]    "
+                mode_scroll       "#[fg=$fg,bg=$bg]    "
+                mode_enter_search "#[fg=$fg,bg=$bg]    "
+                mode_search       "#[fg=$fg,bg=$bg]    "
+                mode_rename_tab   "#[fg=$fg,bg=$bg]    "
+                mode_rename_pane  "#[fg=$fg,bg=$bg]    "
+                mode_prompt       "#[fg=$fg,bg=$bg]    "
+                mode_tmux         "#[fg=$fg,bg=$bg] ?   "
+
+                hide_frame_except_for_search true
+                // hide_frame_for_single_pane true
+
+                tab_normal               "#[fg=$fg_muted,bg=$bg,bold]  {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}  "
+                tab_active               "#[fg=$fg,bg=$bg,bold]  {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}  "
+                tab_fullscreen_indicator " "
+                tab_sync_indicator       " "
+                tab_floating_indicator   "󰉈 "
+            }
+        }
+    }
+}
