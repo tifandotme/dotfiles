@@ -31,52 +31,6 @@ def hh [command: string, ...args: string] {
 hide bhelp
 
 alias ncdu = ncdu --enable-delete --si --threads 6
-
-# Update all packages
-def up [] {
-    print $"(ansi green_bold)==>(ansi reset) Upgrading (ansi green)brew(ansi reset) packages"
-    brew upgrade
-
-    print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)mise(ansi reset) packages"
-    mise upgrade --yes
-
-    print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)gh(ansi reset) extensions"
-    gh extension upgrade --all
-
-    print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)yazi(ansi reset) packages"
-    ya pack --upgrade
-
-    print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)bun(ansi reset) global packages"
-    bun update --global --latest
-
-    # print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)pnpm(ansi reset) global packages"
-    # pnpm update --global --latest
-}
-
-# Schedule update scheduler every 24 hours
-def up-daily [
-    --by-spawner (-s) # Is the command being run by `task spawn`
-] {
-  use std
-
-  if $by_spawner {
-    up
-  }
-
-  task spawn --delay 1day --label update { up-daily -s } e+o> (std null-device)
-  if $env.LAST_EXIT_CODE == 0 {
-    print "Scheduled"
-  }
-}
-
-# Clean caches and uninstall unused packages (do this rarely)
-def clean [] {
-    mise prune
-    pnpm store prune
-    brew cleanup --prune=all
-    brew autoremove
-}
-
 alias g = git
 
 alias lg = lazygit
@@ -101,11 +55,6 @@ alias cos = gh copilot suggest
 alias coe = gh copilot explain
 
 alias z = zed
-
-# Delete all zellij sessions (will close terminal window)
-def zka [] {
-    zellij delete-all-sessions --force --yes; zellij kill-all-sessions --yes
-}
 
 alias yal = yadm list -a
 alias yag = yadm enter lazygit --work-tree ~
@@ -137,10 +86,10 @@ def cmds [] {
     help commands | where command_type =~ 'custom|alias' | reject params input_output search_terms category command_type | where name !~ ($custom_excludes | str join "|") | sort-by description
 }
 
-# def nufzf [] {
-#     # https://github.com/nushell/nushell/discussions/10859#discussioncomment-7413476
-#     $in | each {|i| $i | to json --raw} | str join "\n" | fzf | from json
-# }
+# Delete all zellij sessions (will close terminal window)
+def zka [] {
+    zellij delete-all-sessions --force --yes; zellij kill-all-sessions --yes
+}
 
 # Setup project environment
 def op [] {
@@ -156,11 +105,11 @@ def op [] {
         let last_tab_index = zellij action query-tab-names | split row "\n" | length
         zellij action go-to-tab $last_tab_index
 
-        zellij action new-tab --layout idk --name $dir_name
+        zellij action new-tab --name $dir_name
         zellij action new-pane --cwd $absolute_path -- nu -i
         zellij action focus-previous-pane; zellij action close-pane
 
-        zellij action new-tab --layout idk --name $"($dir_name)\(git\)"
+        zellij action new-tab --name $"($dir_name)\(git\)"
         zellij action new-pane --cwd $absolute_path -- nu -i -c lazygit
         zellij action focus-previous-pane; zellij action close-pane
 
@@ -184,3 +133,8 @@ def dif [] {
         print "Failed to get files. Current directory is not a git repository."
     }
 }
+
+# def nufzf [] {
+#     # https://github.com/nushell/nushell/discussions/10859#discussioncomment-7413476
+#     $in | each {|i| $i | to json --raw} | str join "\n" | fzf | from json
+# }

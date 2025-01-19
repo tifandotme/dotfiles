@@ -3,7 +3,7 @@ layout {
         children
 
         pane size=1 borderless=true {
-            // zjstatus v0.19.2
+            // zjstatus v0.20.0
             // On MacOS, the plugin location cannot be https and should be local
             plugin location="file:~/.config/zellij/zjstatus.wasm" {
                 color_fg_muted "#747272"
@@ -17,13 +17,14 @@ layout {
                 mode_locked       "#[fg=$fg,bg=$bg]    " // ctrl-g (in all mode)
                 mode_scroll       "#[fg=$fg,bg=$bg]    " // [ (in tmux mode)
                 mode_enter_search "#[fg=$fg,bg=$bg]    " // / (in scroll mode)
-                mode_search       "#[fg=$fg,bg=$bg]    "
+                mode_search       "#[fg=$fg,bg=$bg] [c: case-sensitivity, w: wrap, o: wholeworld]    "
                 mode_rename_tab   "#[fg=$fg,bg=$bg]    " // , (in tmux mode)
                 mode_rename_pane  "#[fg=$fg,bg=$bg]    "
                 mode_prompt       "#[fg=$fg,bg=$bg]    "
                 mode_tmux         "#[fg=$fg,bg=$bg] ?   " // ctrl-e (in normal mode)
 
                 hide_frame_except_for_search true
+                hide_frame_except_for_scroll true
 
                 tab_normal               "#[fg=$fg_muted,bg=$bg,bold]  {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}  "
                 tab_active               "#[fg=$fg,bg=$bg,bold]  {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}  "

@@ -112,6 +112,7 @@ source zoxide.gen.nu
 
 # Source scripts/*
 use task.nu
+use updater.nu
 source aliases.nu
 source youtube.nu
 source ir-black.nu # https://github.com/nushell/nu_scripts/blob/f74b2aa7770a4c78ac7cb13fe2015f23ed9c597c/themes/nu-themes/ir-black.nu
