@@ -1,9 +1,9 @@
 [plugin]
 deps = [
-    { use = "Rolv-Apneseth/starship", rev = "4053c8c" },
-    { use = "yazi-rs/plugins:full-border", rev = "e4aaf43" },
-    { use = "yazi-rs/plugins:git", rev = "e4aaf43" },
-    { use = "yazi-rs/plugins:smart-enter", rev = "e4aaf43" },
+    { use = "Rolv-Apneseth/starship", rev = "af8bf6f" },
+    { use = "yazi-rs/plugins:full-border", rev = "8ed2537" },
+    { use = "yazi-rs/plugins:git", rev = "8ed2537" },
+    { use = "yazi-rs/plugins:smart-enter", rev = "8ed2537" },
 ]
 
 [flavor]

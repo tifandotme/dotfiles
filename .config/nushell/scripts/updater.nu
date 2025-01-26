@@ -25,11 +25,11 @@ export def schedule [
 ] {
     use std
 
-    if not $by_spawner {
-        task kill --group updater
-        task clean --group updater
-        task start --group updater
-    }
+    # if not $by_spawner {
+    #     task kill --group updater
+    #     task clean --group updater
+    #     task start --group updater
+    # }
 
     if $by_spawner {
         try {

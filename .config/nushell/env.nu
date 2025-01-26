@@ -49,14 +49,15 @@ $env.EDITOR = "vi"
 $env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fully functional"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 
-$env.DOCKER_CONFIG = ($env.XDG_CONFIG_HOME | path join docker)
 # $env.COLIMA_HOME = ($env.XDG_CONFIG_HOME | path join colima) # https://github.com/abiosoft/colima/issues/1236
+$env.DOCKER_CONFIG = ($env.XDG_CONFIG_HOME | path join docker)
 $env.DOCKER_HOST = $"unix://($env.HOME | path join .colima)/default/docker.sock"
 
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
 $env.DENO_INSTALL = ($env.XDG_DATA_HOME | path join deno)
 $env.PNPM_HOME = ($env.XDG_DATA_HOME | path join pnpm)
+$env.NU_LIB_DIRS = ($nu.default-config-dir | path join scripts)
 
 $env.ZELLIJ_AUTO_ATTACH = true
 $env.ZELLIJ_AUTO_EXIT = true

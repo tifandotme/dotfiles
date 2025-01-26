@@ -45,7 +45,7 @@ alias b = bun
 alias p = pnpm
 
 alias _ncu = ncu
-alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME)/.ncu-cache.json" --packageManager bun
+alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME)/.ncu-cache.json"
 
 alias btm = btm -g
 
