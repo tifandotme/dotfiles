@@ -6,6 +6,7 @@
 ratio = [0, 3, 3]
 show_hidden = true
 sort_by = "extension"
+linemode = "size_and_mtime"
 
 [preview]
 max_width = 1000
