@@ -31,6 +31,7 @@ def hh [command: string, ...args: string] {
 hide bhelp
 
 alias ncdu = ncdu --enable-delete --si --threads 6
+
 alias g = git
 
 alias lg = lazygit
@@ -47,9 +48,6 @@ alias p = pnpm
 alias _ncu = ncu
 alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME)/.ncu-cache.json"
 
-alias btm = btm -g
-
-# alias docker = podman
 
 alias cos = gh copilot suggest
 alias coe = gh copilot explain
@@ -67,7 +65,7 @@ def yau [] {
 # Run yazi (will cd into last directory when closed)
 def --env y [...args] {
     let tmp = (mktemp -t "yazi-cwd.XXXXXX")
-    yazi ...$args --cwd-file $tmp
+    run-with-tab-rename --name yazi yazi ...$args --cwd-file $tmp
 
     let cwd = (open $tmp)
     if $cwd != "" and $cwd != $env.PWD {
@@ -121,18 +119,52 @@ def op [] {
 
 # Diff two files located anywhere within the current directory (MUST be inside a git repository)
 def dif [] {
-    try {
-        use std
-        let files = git ls-files err> (std null-device)
+    use std
 
+    let is_git_repo = (do { git rev-parse --is-inside-work-tree } | complete).exit_code == 0
+
+    let files = if $is_git_repo {
+        # If in git repo, use git ls-files for untracked and tracked, excluding .gitignore
+        do {
+            git ls-files --others --exclude-standard --cached
+        } | complete | if $in.exit_code == 0 { $in.stdout } else { "" }
+    } else {
+        # Otherwise, get all files recursively
+        _ls **/* | where type == file | get name | str join "\n"
+    }
+
+    if ($files | is-empty) {
+        print "No files found in the current directory."
+        return
+    }
+
+    try {
         let file_1 = $files | fzf --header="Choose a file"
-        let file_2 = $files | split row "\n" | filter {|x| $x != $file_1 } | str join "\n" | fzf --header="Choose another file to diff"
+        let file_2 = $files
+            | split row "\n"
+            | filter {|x| $x != $file_1 }
+            | str join "\n"
+            | fzf --header="Choose another file to diff"
 
         difft $file_1 $file_2 --syntax-highlight="off"
     } catch {
-        print "Failed to get files. Current directory is not a git repository."
+        print "Failed to select files for diff."
     }
 }
+
+# Run a command and rename the tab (does not work with command that require an certain argument like `ncdu ~`)
+def --wrapped run-with-tab-rename [
+    --name: string
+    command: string
+    ...args: string
+] {
+    zellij action rename-tab $name
+    do { ^$command ...$args }
+    zellij action undo-rename-tab
+}
+
+alias _btm = btm
+def btm [] { run-with-tab-rename --name bottom btm -g }
 
 # def nufzf [] {
 #     # https://github.com/nushell/nushell/discussions/10859#discussioncomment-7413476
