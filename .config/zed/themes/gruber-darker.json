@@ -12,9 +12,7 @@
                 "#f5f5f5",
                 "#ffffff",
 
-                "#757575", // text fg muted againt #000000, passed AA contrast ratio for normal text
                 "#828282", // text fg muted againt #181818, passed AA contrast ratio for normal text
-                "#504945", // new from icon.foreground: https://github.com/AnksioXD/Tsoding-Gruber-Minimal-For-VSCode/blob/main/themes/Tsoding%20Emacs%20Gruber%20Minimal-color-theme.json
 
                 "#000000", // 0
                 "#101010", // 6,3
@@ -53,30 +51,25 @@
                 "border.transparent": "#00000000",
                 "border.disabled": "#242424ff",
 
-                "elevated_surface.background": "#212121ff", // button in assistant, popup
-                "surface.background": "#101010ff", // scrollbar in project panel
+                "elevated_surface.background": "#212121ff", // button in assistant, popup bg
+                "surface.background": "#212121ff", // scrollbar in project panel
                 "background": "#181818ff",
 
-                // TODO restyle
-                // "element.background": "#1f2127ff",
-                // "element.hover": "#2d2f34ff",
-                // "element.active": "#3e4043ff",
-                // "element.selected": "#3e4043ff",
-                // "element.disabled": "#1f2127ff",
+                // project panel
                 "element.background": "#212121ff",
-                "element.hover": "#181818",
-                "element.active": "#181818",
-                "element.selected": "#181818",
-                "element.disabled": "#181818",
+                "element.hover": "#181818ff",
+                "element.active": "#212121ff",
+                "element.selected": "#212121ff",
+                "element.disabled": "#101010ff",
 
-                "drop_target.background": "#8a898680",
+                "drop_target.background": "#383b3d80",
 
                 // dropdown menus
                 "ghost_element.background": "#00000000",
                 "ghost_element.hover": "#282828ff",
-                "ghost_element.active": "#181818ff",
-                "ghost_element.selected": "#181818ff",
-                "ghost_element.disabled": "#ff0000", // TODO confirm
+                "ghost_element.active": "#303030ff",
+                "ghost_element.selected": "#303030ff",
+                "ghost_element.disabled": "#101010ff", // TODO confirm
 
                 "text": "#e4e4efff",
                 "text.muted": "#828282ff",
@@ -92,7 +85,7 @@
 
                 "status_bar.background": "#101010ff",
                 "title_bar.background": "#101010ff",
-                // "title_bar.inactive_background": "#1f2127ff", // WHAT
+                "title_bar.inactive_background": "#ff0000ff", // WHAT
 
                 "toolbar.background": "#181818ff",
 
@@ -101,7 +94,6 @@
                 "tab.inactive_background": "#101010ff",
                 "tab.active_background": "#181818ff",
 
-                // "search.match_background": "#95a99f73", // make sure match with player 1
                 "search.match_background": "#ffdd333d", // make sure match with player 1
 
                 "panel.background": "#101010ff",
@@ -110,7 +102,7 @@
                 "pane.focused_border": null,
 
                 "scrollbar.thumb.background": "#30303080",
-                "scrollbar.thumb.hover_background": "#30303080", // doesnt seem to work
+                "scrollbar.thumb.hover_background": null, // doesnt seem to work
                 "scrollbar.thumb.border": null,
                 "scrollbar.track.background": "#00000000",
                 "scrollbar.track.border": "#00000000",
