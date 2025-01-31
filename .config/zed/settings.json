@@ -134,9 +134,9 @@
     "file_icons": false
   },
   "project_panel": {
-    // "indent_guides": {
-    //   "show": "never"
-    // },
+    "indent_guides": {
+      "show": "never"
+    },
     "default_width": 300,
     "dock": "right",
     "auto_fold_dirs": false,
