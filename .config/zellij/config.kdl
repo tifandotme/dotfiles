@@ -54,7 +54,7 @@ keybinds clear-defaults=true {
 
     // SCROLL
     scroll {
-        bind "o" { EditScrollback; SwitchToMode "Normal"; }
+        bind "e" { EditScrollback; SwitchToMode "Normal"; } // SCROLLBACK MODE, DONT FORGET THIS FEATURE
         bind "j" { ScrollDown; }
         bind "k" { ScrollUp; }
         bind "l" { PageScrollDown; }
@@ -129,3 +129,4 @@ themes {
 }
 
 pane_frames false
+
