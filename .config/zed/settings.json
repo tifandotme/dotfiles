@@ -4,7 +4,7 @@
     "metrics": false
   },
 
-  "base_keymap": "None",
+  "base_keymap": "VSCode",
 
   "theme": {
     "dark": "Neo Gruber Darker",
@@ -24,27 +24,19 @@
     "terminal.ansi.dim_green": "#a8ff60",
     "terminal.ansi.yellow": "#ffffb6",
     "terminal.ansi.bright_yellow": "#ffffb6",
-    "terminal.ansi.dim.yellow": "#ffffb6",
+    "terminal.ansi.dim_yellow": "#ffffb6",
     "terminal.ansi.blue": "#96cbfe",
     "terminal.ansi.bright_blue": "#96cbfe",
-    "terminal.ansi.dim.blue": "#96cbfe",
+    "terminal.ansi.dim_blue": "#96cbfe",
     "terminal.ansi.magenta": "#ff73fd",
     "terminal.ansi.bright_magenta": "#ff73fd",
-    "terminal.ansi.dim.magenta": "#ff73fd",
+    "terminal.ansi.dim_magenta": "#ff73fd",
     "terminal.ansi.cyan": "#c6c5fe",
     "terminal.ansi.bright_cyan": "#c6c5fe",
-    "terminal.ansi.dim.cyan": "#c6c5fe",
+    "terminal.ansi.dim_cyan": "#c6c5fe",
     "terminal.ansi.white": "#b5b3aa",
     "terminal.ansi.bright_white": "#fdfbee",
     "terminal.ansi.dim_white": "#b5b3aa"
-    // "syntax": {
-    //   "comment": {
-    //     "color": "#828282ff"
-    //   },
-    //   "comment.doc": {
-    //     "color": "#828282ff"
-    //   }
-    // },
   },
 
   // GENERAL
@@ -77,7 +69,7 @@
 
   // EDITOR
   "buffer_font_family": "CommitMono Nerd Font",
-  "buffer_font_size": 12.4,
+  "buffer_font_size": 12.5,
   "buffer_line_height": "standard",
   "use_autoclose": false,
   "current_line_highlight": "all",
@@ -148,12 +140,9 @@
     "default_width": 300,
     "dock": "right"
   },
-  // "chat_panel": {
-  //   "button": false
-  // },
-  // "collaboration_panel": {
-  //   "button": false
-  // },
+  "chat_panel": {
+    "button": "when_in_call"
+  },
   "terminal": {
     "button": false
   },
