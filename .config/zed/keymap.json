@@ -1,5 +1,22 @@
 [
   {
+    "context": "Workspace",
+    "bindings": {
+      "alt-g": [
+        "task::Spawn",
+        { "task_name": "start lazygit", "reveal_target": "center" }
+      ]
+    }
+  },
+  {
+    "use_key_equivalents": true,
+    "bindings": {
+      "cmd-j": null,
+      "cmd-s": null,
+      "cmd-shift-e": "project_panel::ToggleFocus"
+    }
+  },
+  {
     "context": "(ProjectPanel && not_editing) || OutlinePanel",
     "bindings": {
       "g e": "menu::SelectLast"
@@ -25,7 +42,7 @@
     }
   },
   {
-    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
+    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting",
     "bindings": {
       "space w": "workspace::SaveWithoutFormat",
       "space o": "editor::ToggleCodeActions",
@@ -39,34 +56,35 @@
     }
   },
   {
-    "context": "Editor && vim_mode == normal && !VimWaiting && !menu",
+    "context": "Editor && vim_mode == normal && !VimWaiting",
     "bindings": {
       "[": "editor::Fold",
       "]": "editor::UnfoldLines",
       "U": "editor::Redo"
     }
   },
+  // {
+  //   "context": "Editor && vim_mode == visual && !VimWaiting && !menu",
+  //   "bindings": {}
+  // },
   {
-    "context": "Editor && vim_mode == visual && !VimWaiting && !menu",
-    "bindings": {}
-  },
-  {
-    "context": "Editor && vim_mode == insert && !menu",
+    "context": "Editor && vim_mode == insert",
     "bindings": {
       "cmd-\\": "copilot::Suggest",
-      "j j": "vim::NormalBefore"
+      "j j": ["workspace::SendKeystrokes", "escape"]
     }
   },
   {
     "context": "VimControl && !menu",
     "bindings": {
       "alt-h": ["workspace::ActivatePaneInDirection", "Left"],
-      "alt-l": ["workspace::ActivatePaneInDirection", "Right"]
+      "alt-l": ["workspace::ActivatePaneInDirection", "Right"],
+      "ctrl-\\": "pane::AlternateFile"
     }
-  },
-  {
-    // when no editor exists
-    "context": "EmptyPane || SharedScreen",
-    "bindings": {}
   }
+  // {
+  //   // when no editor exists
+  //   "context": "EmptyPane || SharedScreen",
+  //   "bindings": {}
+  // }
 ]

@@ -6,44 +6,45 @@
         {
             "name": "Neo Gruber Darker",
             "appearance": "dark",
-            "accents": [
-                "#e4e4ef",
-                "#f4f4ff",
-                "#f5f5f5",
-                "#ffffff",
-
-                "#828282", // text fg muted againt #181818, passed AA contrast ratio for normal text
-
-                "#000000", // 0
-                "#101010", // 6,3
-                "#181818", // 9,4
-                "#212121", // 13 (new)
-                "#282828", // 15,7
-                "#303030", // 18,8 (new)
-                "#453d41",
-                "#484848",
-                "#52494e",
-
-                "#c73c3f",
-                "#f43841",
-                "#ff4f58",
-
-                "#73c936",
-
-                "#ffdd33",
-                "#ccaa00", // darkened ver
-
-                "#cc8c3c",
-
-                "#95a99f",
-
-                "#303540",
-                "#565f73",
-                "#96a6c8",
-
-                "#9e95c7"
-            ],
             "style": {
+                "accents": [
+                    "#e4e4ef",
+                    "#f4f4ff",
+                    "#f5f5f5",
+                    "#ffffff",
+
+                    "#828282", // text fg muted againt #181818, passed AA contrast ratio for normal text
+
+                    "#000000", // 0
+                    "#101010", // 6,3
+                    "#181818", // 9,4
+                    "#212121", // 13 (new)
+                    "#282828", // 15,7
+                    "#303030", // 18,8 (new)
+                    "#453d41",
+                    "#484848",
+                    "#52494e",
+
+                    "#c73c3f",
+                    "#f43841",
+                    "#ff4f58",
+
+                    "#73c936",
+
+                    "#ffdd33",
+                    "#ccaa00", // darkened ver
+
+                    "#cc8c3c",
+
+                    "#95a99f",
+
+                    "#303540",
+                    "#565f73",
+                    "#96a6c8",
+
+                    "#9e95c7"
+                ],
+
                 "border": "#292929ff",
                 "border.variant": "#242424ff",
                 "border.focused": "#96a6c8ff",
@@ -77,7 +78,6 @@
                 "text.disabled": "#828282ff",
                 "text.accent": "#95a99fff", // selected button in status bar
 
-                // TODO from ayu dark
                 "icon": "#5c6166ff",
                 "icon.muted": "#8b8e92ff",
                 "icon.disabled": "#a9acaeff",
@@ -121,8 +121,9 @@
                 "editor.wrap_guide": "#242424ff",
                 "editor.active_wrap_guide": "#242424ff",
                 "editor.document_highlight.bracket_background": "#ccaa0073",
-                "editor.document_highlight.read_background": "#ccaa001a", // matching words
-                "editor.document_highlight.write_background": "#ccaa001a", // confirm wtf is this
+
+                "editor.document_highlight.read_background": "#ccaa0026", // matching words, yank highlight
+                "editor.document_highlight.write_background": "#ccaa0026", // confirm wtf is this
 
                 "terminal.background": "#181818ff",
                 "terminal.foreground": "#e4e4efff",
