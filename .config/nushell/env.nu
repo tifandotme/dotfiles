@@ -8,7 +8,7 @@ def create_left_prompt [--hide] {
     let starship = if $hide == false {
         starship prompt --cmd-duration $env.CMD_DURATION_MS
     }
-    $"($starship)(char newline)(char newline)"
+    $"($starship)(char newline)"
 }
 
 def create_character [type: string] {
