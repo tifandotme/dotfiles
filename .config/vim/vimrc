@@ -122,6 +122,9 @@ nnoremap gh 0
 nnoremap <Esc> :noh<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>c :Commentary<CR>
+nnoremap U <C-r>
+nnoremap <leader>p <Nop>
+
 " prevent accidentally openning command history list
 nnoremap q: :
 

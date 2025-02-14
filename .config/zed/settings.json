@@ -45,13 +45,16 @@
 
   // AI
   "features": {
-    "inline_completion_provider": "copilot"
+    "inline_completion_provider": "supermaven"
   },
   "languages": {
     "Nu": {
       "tab_size": 4
     },
     "CSS": {
+      "tab_size": 2
+    },
+    "Lua": {
       "tab_size": 2
     },
     "Markdown": {
@@ -77,6 +80,7 @@
   "cursor_blink": false,
   "search_wrap": false,
   "wrap_guides": [80],
+  // "soft_wrap": "editor_width",
   "inlay_hints": {
     "enabled": false,
     "show_type_hints": false,
@@ -88,7 +92,7 @@
   },
   "git": {
     "inline_blame": {
-      "enabled": false,
+      "enabled": true,
       "delay_ms": 1000
     }
   },

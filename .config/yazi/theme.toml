@@ -1,5 +1,3 @@
-# default: https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/theme-dark.toml
-
 "$schema" = "https://yazi-rs.github.io/schemas/theme.json"
 
 [manager]
@@ -11,11 +9,6 @@ count_copied = { fg = "black", bg = "yellow", blink_rapid = true, bold = true }
 [status]
 separator_open = ""
 separator_close = ""
-# separator_style = { fg = "reset", bg = "reset" }
-
-
-[icon]
-# rules = [{ name = "*", text = "" }, { name = "*/", text = "" }]
 
 [mode]
 normal_main = { fg = "black", bg = "blue", bold = true }

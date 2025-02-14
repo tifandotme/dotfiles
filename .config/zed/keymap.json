@@ -1,14 +1,5 @@
 [
   {
-    "context": "Workspace",
-    "bindings": {
-      "alt-g": [
-        "task::Spawn",
-        { "task_name": "start lazygit", "reveal_target": "center" }
-      ]
-    }
-  },
-  {
     "use_key_equivalents": true,
     "bindings": {
       "cmd-j": null,
@@ -31,7 +22,14 @@
     "context": "Workspace",
     "bindings": {
       "cmd-b": "workspace::ToggleLeftDock",
-      "cmd-s": "workspace::ToggleRightDock"
+      "cmd-s": "workspace::ToggleRightDock",
+
+      "alt-n": "pane::AlternateFile",
+
+      "alt-h": "pane::ActivatePrevItem", // to match with Zellij
+      "alt-l": "pane::ActivateNextItem", // to match with Zellij
+      "alt-shift-h": ["workspace::ActivatePaneInDirection", "Left"],
+      "alt-shift-l": ["workspace::ActivatePaneInDirection", "Right"]
     }
   },
   {
@@ -44,22 +42,32 @@
   {
     "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting",
     "bindings": {
-      "space w": "workspace::SaveWithoutFormat",
-      "space o": "editor::ToggleCodeActions",
-      "space p": "editor::Format",
-      "space z": "editor::ToggleSoftWrap",
-      "space c": "vim::ToggleComments",
-      "space k": "editor::Hover",
-      "g e": "vim::EndOfDocument",
-      "g h": "vim::FirstNonWhitespace",
-      "g l": "vim::EndOfLine"
+      // MOVED TO VIMCONTROL
+      // "space w": "workspace::SaveWithoutFormat",
+      // "space o": "editor::ToggleCodeActions",
+      // "space p": "editor::Format",
+      // "space z": "editor::ToggleSoftWrap",
+      // "space c": "vim::ToggleComments",
+      // "space k": "editor::Hover",
+      // "g e": "vim::EndOfDocument",
+      // "g h": "vim::FirstNonWhitespace",
+      // "g l": "vim::EndOfLine"
     }
   },
+
+  {
+    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting",
+    "bindings": {
+      "] d": "project_panel::SelectNextDiagnostic",
+      "[ d": "project_panel::SelectPrevDiagnostic"
+    }
+  },
+
   {
     "context": "Editor && vim_mode == normal && !VimWaiting",
     "bindings": {
-      "[": "editor::Fold",
-      "]": "editor::UnfoldLines",
+      "cmd-[": "editor::Fold",
+      "cmd-]": "editor::UnfoldLines",
       "U": "editor::Redo"
     }
   },
@@ -77,9 +85,38 @@
   {
     "context": "VimControl && !menu",
     "bindings": {
-      "alt-h": ["workspace::ActivatePaneInDirection", "Left"],
-      "alt-l": ["workspace::ActivatePaneInDirection", "Right"],
-      "ctrl-\\": "pane::AlternateFile"
+      // "space" mode
+      // TODO https://docs.helix-editor.com/keymap.html#space-mode
+      "space w": "workspace::SaveWithoutFormat",
+      "space o": "editor::ToggleCodeActions",
+      "space p": "editor::Format",
+      "space z": "editor::ToggleSoftWrap",
+      "space c": "vim::ToggleComments",
+      "space k": "editor::Hover",
+
+      "space f": "tab_switcher::Toggle",
+
+      // "g" commands
+      // TODO https://docs.helix-editor.com/keymap.html#goto-mode
+      "g h": "vim::FirstNonWhitespace", // helix inspired
+      "g l": "vim::EndOfLine", // helix inspired
+      "g e": "vim::EndOfDocument", // helix inspired
+      // "g d": "editor::GoToDefinition", // vim default
+      // "g shift-d": "editor::GoToDeclaration", // vim default
+      // "g y": "editor::GoToTypeDefinition", // vim default
+      "g i": "editor::GoToImplementation", // helix inspired
+      "g r": "editor::FindAllReferences", // helix-inspired
+
+      "g n": "workspace::ActivateNextPane" // experimenting
+    }
+  },
+  {
+    "context": "TabSwitcher",
+    "use_key_equivalents": true,
+    "bindings": {
+      "k": "menu::SelectPrev",
+      "j": "menu::SelectNext",
+      "d": "tab_switcher::CloseSelectedItem"
     }
   }
   // {
@@ -88,3 +125,11 @@
   //   "bindings": {}
   // }
 ]
+
+// REMINDER
+// "[ x": "vim::SelectLargerSyntaxNode",
+// "] x": "vim::SelectSmallerSyntaxNode",
+// "] d": "editor::GoToDiagnostic",
+// "[ d": "editor::GoToPrevDiagnostic",
+// "] c": "editor::GoToHunk",
+// "[ c": "editor::GoToPrevHunk",

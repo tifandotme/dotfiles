@@ -1,5 +1,13 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# https://github.com/Sonico98/yazi-prompt.sh
+[env_var.yazi_level]
+description = "Indicate the shell was launched by `yazi`"
+variable = "YAZI_LEVEL"
+symbol = 'yazi '
+format = 'in [$symbol]($style)'
+style = 'bold yellow'
+
 [character]
 disabled = true
 

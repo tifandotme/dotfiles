@@ -1,12 +1,13 @@
-# default: https://github.com/sxyazi/yazi/blob/latest/yazi-config/preset/yazi.toml
+# default: https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/README.md
 
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
 [manager]
 ratio = [0, 3, 3]
 show_hidden = true
-sort_by = "extension"
-linemode = "size_and_mtime"
+sort_by = "extension"       # might be overridden by folder-rules.yazi
+linemode = "size_and_mtime" # might be overridden by folder-rules.yazi
+# show_symlink = false
 
 # https://github.com/yazi-rs/plugins/tree/main/git.yazi
 [[plugin.prepend_fetchers]]
@@ -17,3 +18,12 @@ run = "git"
 id = "git"
 name = "*/"
 run = "git"
+
+[open]
+prepend_rules = [
+    { mime = "text/*", use = "edit" },
+    { mime = "video/*", use = "play" },
+]
+
+[opener]
+play = [{ run = 'open "$@" -a VLC', orphan = true, for = "unix" }]

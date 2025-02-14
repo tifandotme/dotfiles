@@ -30,7 +30,7 @@ def hh [command: string, ...args: string] {
 
 hide bhelp
 
-alias ncdu = ncdu --enable-delete --si --threads 6
+alias ncdu = ncdu --enable-delete --si --threads 8
 
 alias g = git
 

@@ -122,8 +122,8 @@
                 "editor.active_wrap_guide": "#242424ff",
                 "editor.document_highlight.bracket_background": "#ccaa0073",
 
-                "editor.document_highlight.read_background": "#ccaa0026", // matching words, yank highlight
-                "editor.document_highlight.write_background": "#ccaa0026", // confirm wtf is this
+                "editor.document_highlight.read_background": "#ccaa001a", // matching words, yank highlight
+                "editor.document_highlight.write_background": "#ccaa001a", // confirm wtf is this
 
                 "terminal.background": "#181818ff",
                 "terminal.foreground": "#e4e4efff",
@@ -172,9 +172,9 @@
                 "hidden": "#696a6aff",
                 "hidden.background": "#313337ff",
                 "hidden.border": null,
-                "hint": "#95a99fff",
-                "hint.background": "#95a99f1d",
-                "hint.border": "#95a99f26",
+                "hint": "#828282ff",
+                "hint.background": "#8282821d",
+                "hint.border": "#82828226",
                 "ignored": "#484848ff",
                 "ignored.background": "#4848481d",
                 "ignored.border": "#48484826",
