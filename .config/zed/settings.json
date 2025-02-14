@@ -45,7 +45,7 @@
 
   // AI
   "features": {
-    "inline_completion_provider": "supermaven"
+    "edit_prediction_provider": "zed"
   },
   "languages": {
     "Nu": {
@@ -58,7 +58,7 @@
       "tab_size": 2
     },
     "Markdown": {
-      "show_inline_completions": false
+      "show_edit_predictions": false
     }
   },
   "assistant": {
