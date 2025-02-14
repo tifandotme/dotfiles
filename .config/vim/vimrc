@@ -33,7 +33,7 @@ call plug#end()
 let g:highlightedyank_highlight_duration = 200
 
 " Disable sytax hl (vim-sensible enables it)
-" syntax off
+autocmd VimEnter * syntax off
 
 " }}}
 

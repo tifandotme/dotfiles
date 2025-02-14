@@ -66,3 +66,17 @@ on = [ "g", "e" ] # helix-inspired
 run = "arrow bot"
 desc = "Move cursor to the bottom"
 
+# Help (lazygit inspired)
+[[manager.prepend_keymap]]
+on = "?"
+run = "help"
+desc = "Open help"
+[[tasks.prepend_keymap]]
+on = "?"
+run = "help"
+desc = "Open help"
+[[help.prepend_keymap]]
+on = "/"
+run = "filter"
+desc = "Apply a filter for the help items"
+
