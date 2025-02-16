@@ -1,7 +1,7 @@
 [[plugin.deps]]
 use = "Rolv-Apneseth/starship"
-rev = "d1cd0a3"
-hash = "d1fee6d0f74cb52d4e031dc6b9207f31"
+rev = "f6939fb"
+hash = "8ae899541dc7accb680ee4fd382a09c"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
