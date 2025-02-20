@@ -80,7 +80,7 @@
   "cursor_blink": false,
   "search_wrap": false,
   "wrap_guides": [80],
-  // "soft_wrap": "editor_width",
+  "soft_wrap": "editor_width",
   "inlay_hints": {
     "enabled": false,
     "show_type_hints": false,
