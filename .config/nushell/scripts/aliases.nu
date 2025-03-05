@@ -65,8 +65,9 @@ def yau [] {
 # Run yazi (will cd into last directory when closed)
 def --env y [...args] {
     let tmp = (mktemp -t "yazi-cwd.XXXXXX")
-    # enable image preview using `chafa` in Zellij: https://yazi-rs.github.io/docs/image-preview/#zellij
-    NVIM=1 NVIM_LOG_FILE=1 run-with-tab-rename --name yazi yazi ...$args --cwd-file $tmp
+
+    # https://yazi-rs.github.io/docs/image-preview/#zelli
+    TERM=xterm-kitty run-with-tab-rename --name yazi yazi ...$args --cwd-file $tmp
 
     let cwd = (open $tmp)
     if $cwd != "" and $cwd != $env.PWD {

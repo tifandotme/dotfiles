@@ -65,12 +65,13 @@
     "default_width": 600,
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-3-5-sonnet"
+      "model": "claude-3-7-sonnet"
     },
     "version": "2"
   },
 
   // EDITOR
+  "show_user_picture": false,
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 12.5,
   "buffer_line_height": "standard",
@@ -122,7 +123,8 @@
 
   // UI
   "tab_bar": {
-    "show_nav_history_buttons": false
+    "show_nav_history_buttons": false,
+    // "show_tab_bar_buttons": false
   },
   "toolbar": {
     "quick_actions": false,
