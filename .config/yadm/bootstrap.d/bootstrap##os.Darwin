@@ -69,4 +69,11 @@ yazi
 yt-dlp
 zellij
 zoxide
+
+> brew ls --casks
+alacritty               cloudflare-warp         electron-fiddle         handbrake               notion                  raycast                 tailscale               vlc
+android-studio          db-browser-for-sqlite   eloston-chromium        keycastr                openmtp                 rustdesk                telegram                whatsapp
+anki                    dbeaver-community       github                  linearmouse             postman                 sequel-ace              transmission            whisky
+battery                 discord                 google-cloud-sdk        localsend               prismlauncher           slack                   virtualbox              zed
+bitwarden               domzilla-caffeine       gstreamer-runtime       microsoft-excel         pritunl                 spotify                 visual-studio-code
 '
