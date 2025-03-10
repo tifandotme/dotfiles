@@ -12,3 +12,61 @@ echo "==> Install Homebrew & packages"
 brew install --formulae bat bottom bun eza fastfetch fd ffmpeg ffmpegthumbnailer fish fzf gh git-delta gnupg imagemagick jq lazygit libgit2 mise monolith ncdu nushell podman ripgrep sevenzip starship tealdeer yadm yazi yt-dlp zellij zoxide
 brew install --casks alacritty discord font-commit-mono font-commit-mono-nerd-font librewolf linearmouse localsend raycast slack spotify telegram transmission visual-studio-code vlc whatsapp zed
 brew install --cask pritunl
+
+: '
+
+11 march backup laptop delos
+
+> brew ls --installed-on-request
+
+asciinema
+bat
+bottom
+bun
+chafa
+colima
+deno
+difftastic
+docker
+docker-compose
+exiftool
+eza
+fd
+ffmpeg
+fish
+fzf
+gh
+git-delta
+glow
+gnupg
+gping
+hyperfine
+jless
+jq
+just
+lazydocker
+lazygit
+libgit2
+mise
+monolith
+ncdu
+nushell
+poppler
+pueue
+ripgrep
+sevenzip
+sherlock
+skhd
+slackdump
+speedtest
+sshs
+starship
+tealdeer
+tokei
+trash-cli
+yadm
+yazi
+yt-dlp
+zellij
+zoxide
+'

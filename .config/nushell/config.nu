@@ -111,7 +111,7 @@ use mise.gen.nu
 source zoxide.gen.nu
 
 # Source scripts/*
-use task.nu
+# use task.nu
 use updater.nu
 source aliases.nu
 source youtube.nu

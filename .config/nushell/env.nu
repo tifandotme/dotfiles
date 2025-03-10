@@ -60,7 +60,7 @@ $env.PNPM_HOME = ($env.XDG_DATA_HOME | path join pnpm)
 $env.NU_LIB_DIRS = ($nu.default-config-dir | path join scripts)
 
 $env.ZELLIJ_AUTO_ATTACH = true
-$env.ZELLIJ_AUTO_EXIT = true
+$env.ZELLIJ_AUTO_EXIT = false
 
 # colorizes manpages using bat
 $env.MANPAGER = "sh -c 'col -bx | bat -l man -p'"
