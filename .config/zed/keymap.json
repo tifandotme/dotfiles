@@ -26,10 +26,10 @@
 
       "alt-n": "pane::AlternateFile",
 
-      "alt-h": "pane::ActivatePrevItem", // to match with Zellij
+      "alt-h": "pane::ActivatePreviousItem", // to match with Zellij
       "alt-l": "pane::ActivateNextItem", // to match with Zellij
-      "alt-shift-h": ["workspace::ActivatePaneInDirection", "Left"],
-      "alt-shift-l": ["workspace::ActivatePaneInDirection", "Right"]
+      "alt-shift-h": "workspace::ActivatePaneLeft",
+      "alt-shift-l": "workspace::ActivatePaneRight"
     }
   },
   {
@@ -114,7 +114,7 @@
     "context": "TabSwitcher",
     "use_key_equivalents": true,
     "bindings": {
-      "k": "menu::SelectPrev",
+      "k": "menu::SelectPrevious",
       "j": "menu::SelectNext",
       "d": "tab_switcher::CloseSelectedItem"
     }
