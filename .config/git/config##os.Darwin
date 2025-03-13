@@ -1,7 +1,7 @@
 [user]
 	name = Tifan Dwi Avianto
 	email = 33323177+tifandotme@users.noreply.github.com
-	signingkey = /Users/tifandwiavianto/.ssh/id_ed25519.pub
+	signingkey = /Users/tifan/.ssh/id_ed25519.pub
 [color]
 	ui = auto
 [init]
@@ -21,8 +21,8 @@
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [maintenance]
-	repo = /Users/tifandwiavianto/personal/website
-	repo = /Users/tifandwiavianto/work/aquahero-web
+	repo = /Users/tifan/personal/website
+	repo = /Users/tifan/work/aquahero-web
 
 [core]
     pager = delta
