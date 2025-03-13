@@ -1,9 +1,7 @@
 [tools]
 go = "latest"
-java = "openjdk-21.0.2"
-node = "lts"
+node = "22"
 python = "latest"
-rust = "latest"
 
 [settings]
 disable_hints = ["outdated_bump"]
