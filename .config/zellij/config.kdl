@@ -1,8 +1,24 @@
 // default: https://github.com/zellij-org/zellij/blob/main/zellij-utils/assets/config/default.kdl
 
 keybinds clear-defaults=true {
-    shared_except "tmux" "locked" {
-        bind "Ctrl e" { SwitchToMode "Tmux"; }
+    locked {
+        bind "Ctrl g" { SwitchToMode "normal"; }
+    }
+    scroll {
+        bind "/" { SwitchToMode "entersearch"; SearchInput 0; }
+        bind "e" { EditScrollback; SwitchToMode "normal"; }
+    }
+    search {
+        bind "down" { ScrollDown; }
+        bind "up" { ScrollUp; }
+        bind "N" { Search "up"; }
+        bind "c" { SearchToggleOption "CaseSensitivity"; }
+        bind "n" { Search "down"; }
+        bind "o" { SearchToggleOption "WholeWord"; }
+        bind "w" { SearchToggleOption "Wrap"; }
+    }
+    shared_except "locked" "tmux" {
+        bind "Ctrl e" { SwitchToMode "tmux"; }
         bind "Ctrl \\" {
             Run "nu" "-l" "-c" "op" {
                 // These are undocumented, so we had to RTFC :)
@@ -10,123 +26,419 @@ keybinds clear-defaults=true {
                 name "Open project"
                 floating true
                 close_on_exit true
-            };
-        };
-        bind "Ctrl z" {
-            Run "nu" "-l" "-c" "zed ." {
-                close_on_exit true
-                in_place true
+                hold_on_close false
             }
         }
         bind "Ctrl v" {
             Run "nu" "-l" "-c" "code ." {
-                close_on_exit true
                 in_place true
+                close_on_exit true
+                hold_on_close false
+            }
+        }
+        bind "Ctrl z" {
+            Run "nu" "-l" "-c" "zed ." {
+                in_place true
+                close_on_exit true
+                hold_on_close false
             }
         }
     }
+    shared_except "locked" {
+        bind "Alt +" { Resize "Increase"; }
+        bind "Alt -" { Resize "Decrease"; }
+        bind "Alt =" { Resize "Increase"; }
+        bind "Shift Super [" { MoveFocusOrTab "left"; }
+        bind "Shift Super ]" { MoveFocusOrTab "right"; }
+        bind "Ctrl g" { SwitchToMode "locked"; }
+        bind "Alt h" { MoveFocusOrTab "left"; }
+        bind "Alt l" { MoveFocusOrTab "right"; }
+        bind "Ctrl q" { Quit; }
+    }
+    shared_except "normal" "locked" "entersearch" {
+        bind "enter" { SwitchToMode "normal"; }
+    }
+    shared_except "normal" "locked" "entersearch" "renametab" "renamepane" {
+        bind "esc" { SwitchToMode "normal"; }
+    }
+    shared_among "scroll" "search" {
+        bind "Ctrl c" { ScrollToBottom; SwitchToMode "normal"; }
+        bind "d" { HalfPageScrollDown; }
+        bind "h" { PageScrollUp; }
+        bind "j" { ScrollDown; }
+        bind "k" { ScrollUp; }
+        bind "l" { PageScrollDown; }
+        bind "u" { HalfPageScrollUp; }
+    }
+    entersearch {
+        bind "Ctrl c" { SwitchToMode "scroll"; }
+        bind "esc" { SwitchToMode "scroll"; }
+        bind "enter" { SwitchToMode "search"; }
+    }
+    renametab {
+        bind "esc" { UndoRenameTab; SwitchToMode "tab"; }
+    }
+    shared_among "renametab" "renamepane" {
+        bind "Ctrl c" { SwitchToMode "normal"; }
+    }
+    renamepane {
+        bind "esc" { UndoRenamePane; SwitchToMode "pane"; }
+    }
     tmux {
-        bind "[" { SwitchToMode "Scroll"; }
-        bind "Ctrl e" { Write 2; SwitchToMode "Normal"; }
-        // only allow vertical pane for now because we can only move pane/tab focus horizontaly
-        // bind "-" { NewPane "Down"; SwitchToMode "Normal"; }
-        bind "|" "n" { NewPane "Right"; SwitchToMode "Normal"; }
-        bind "z" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
-        bind "c" { NewTab; SwitchToMode "Normal"; }
-        bind "," { SwitchToMode "RenameTab"; }
-        bind "x" { CloseFocus; SwitchToMode "Normal"; }
+        bind "," { SwitchToMode "renametab"; }
+        bind "[" { SwitchToMode "scroll"; }
+        bind "c" { NewTab; SwitchToMode "normal"; }
         bind "d" { Detach; }
-        bind "f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
+        bind "Ctrl e" { Write 2; SwitchToMode "normal"; }
+        bind "f" { ToggleFloatingPanes; SwitchToMode "normal"; }
+        bind "n" { NewPane "right"; SwitchToMode "normal"; }
+        bind "s" { ToggleActiveSyncTab; SwitchToMode "normal"; }
         bind "w" {
             LaunchOrFocusPlugin "session-manager" {
                 floating true
                 move_to_focused_tab true
-            };
-            SwitchToMode "Normal"
+            }
+            SwitchToMode "normal"
         }
-
-        // zellij-specific features
-        bind "s" { ToggleActiveSyncTab; SwitchToMode "Normal"; }
-        // bind "b" { BreakPane; SwitchToMode "Normal"; }
-        // bind "]" { BreakPaneRight; SwitchToMode "Normal"; }
-        // bind "[" { BreakPaneLeft; SwitchToMode "Normal"; }
-    }
-
-    // SCROLL
-    scroll {
-        bind "e" { EditScrollback; SwitchToMode "Normal"; } // SCROLLBACK MODE, DONT FORGET THIS FEATURE
-        bind "j" { ScrollDown; }
-        bind "k" { ScrollUp; }
-        bind "l" { PageScrollDown; }
-        bind "h" { PageScrollUp; }
-        bind "d" { HalfPageScrollDown; }
-        bind "u" { HalfPageScrollUp; }
-        bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
-        bind "/" { SwitchToMode "EnterSearch"; SearchInput 0; }
-    }
-    // from SCROLL press / to enter search
-    search {
-        bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
-        bind "j" "Down" { ScrollDown; }
-        bind "k" "Up" { ScrollUp; }
-        bind "l" { PageScrollDown; }
-        bind "h" { PageScrollUp; }
-        bind "d" { HalfPageScrollDown; }
-        bind "u" { HalfPageScrollUp; }
-        bind "n" { Search "down"; }
-        bind "N" { Search "up"; }
-        bind "c" { SearchToggleOption "CaseSensitivity"; }
-        bind "w" { SearchToggleOption "Wrap"; }
-        bind "o" { SearchToggleOption "WholeWord"; }
-    }
-
-    locked {
-        bind "Ctrl g" { SwitchToMode "Normal"; }
-    }
-    shared_except "locked" {
-        bind "Ctrl g" { SwitchToMode "Locked"; }
-        bind "Ctrl q" { Quit; } // or just press Ctrl d
-        bind "Alt =" "Alt +" { Resize "Increase"; }
-        bind "Alt -" { Resize "Decrease"; }
-        bind "Shift Super [" { MoveFocusOrTab "Left"; } // NOTE helix uses A-kj
-        bind "Shift Super ]" { MoveFocusOrTab "Right"; }
-        bind "Alt h" { MoveFocusOrTab "Left"; } // NOTE helix uses A-kj
-        bind "Alt l" { MoveFocusOrTab "Right"; }
-    }
-
-    entersearch {
-        bind "Ctrl c" "Esc" { SwitchToMode "Scroll"; }
-        bind "Enter" { SwitchToMode "Search"; }
-    }
-    renametab {
-        bind "Ctrl c" { SwitchToMode "Normal"; }
-        bind "Esc" { UndoRenameTab; SwitchToMode "Tab"; }
-    }
-    renamepane {
-        bind "Ctrl c" { SwitchToMode "Normal"; }
-        bind "Esc" { UndoRenamePane; SwitchToMode "Pane"; }
-    }
-    shared_except "normal" "locked" {
-        bind "Enter" "Esc" { SwitchToMode "Normal"; }
+        bind "x" { CloseFocus; SwitchToMode "normal"; }
+        bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
+        bind "|" { NewPane "right"; SwitchToMode "normal"; }
     }
 }
-
-
 themes {
     default {
-        fg "#7b786b"
-        bg "#000000"
-        black "#000000"
-        red "#ff6c60"
-        green "#b5b3aa" // green form irblack: "#a8ff60"
-        yellow "#ffffb6"
-        blue "#96cbfe"
-        magenta "#ff73fd"
-        cyan "#c6c5fe"
-        white "#525047"
-        orange "#d08770" // still nord from the default
+        text_unselected {
+            base 82 80 71
+            background 0 0 0
+            emphasis_0 208 135 112
+            emphasis_1 198 197 254
+            emphasis_2 181 179 170
+            emphasis_3 255 115 253
+        }
+        text_selected {
+            base 82 80 71
+            background 0 0 0
+            emphasis_0 208 135 112
+            emphasis_1 198 197 254
+            emphasis_2 181 179 170
+            emphasis_3 255 115 253
+        }
+        ribbon_selected {
+            base 0 0 0
+            background 181 179 170
+            emphasis_0 255 108 96
+            emphasis_1 208 135 112
+            emphasis_2 255 115 253
+            emphasis_3 150 203 254
+        }
+        ribbon_unselected {
+            base 0 0 0
+            background 123 120 107
+            emphasis_0 255 108 96
+            emphasis_1 82 80 71
+            emphasis_2 150 203 254
+            emphasis_3 255 115 253
+        }
+        table_title {
+            base 181 179 170
+            background 0
+            emphasis_0 208 135 112
+            emphasis_1 198 197 254
+            emphasis_2 181 179 170
+            emphasis_3 255 115 253
+        }
+        table_cell_selected {
+            base 82 80 71
+            background 0 0 0
+            emphasis_0 208 135 112
+            emphasis_1 198 197 254
+            emphasis_2 181 179 170
+            emphasis_3 255 115 253
+        }
+        table_cell_unselected {
+            base 82 80 71
+            background 0 0 0
+            emphasis_0 208 135 112
+            emphasis_1 198 197 254
+            emphasis_2 181 179 170
+            emphasis_3 255 115 253
+        }
+        list_selected {
+            base 82 80 71
+            background 0 0 0
+            emphasis_0 208 135 112
+            emphasis_1 198 197 254
+            emphasis_2 181 179 170
+            emphasis_3 255 115 253
+        }
+        list_unselected {
+            base 82 80 71
+            background 0 0 0
+            emphasis_0 208 135 112
+            emphasis_1 198 197 254
+            emphasis_2 181 179 170
+            emphasis_3 255 115 253
+        }
+        frame_selected {
+            base 181 179 170
+            background 0
+            emphasis_0 208 135 112
+            emphasis_1 198 197 254
+            emphasis_2 255 115 253
+            emphasis_3 0
+        }
+        frame_highlight {
+            base 208 135 112
+            background 0
+            emphasis_0 208 135 112
+            emphasis_1 208 135 112
+            emphasis_2 208 135 112
+            emphasis_3 208 135 112
+        }
+        exit_code_success {
+            base 181 179 170
+            background 0
+            emphasis_0 198 197 254
+            emphasis_1 0 0 0
+            emphasis_2 255 115 253
+            emphasis_3 150 203 254
+        }
+        exit_code_error {
+            base 255 108 96
+            background 0
+            emphasis_0 255 255 182
+            emphasis_1 0
+            emphasis_2 0
+            emphasis_3 0
+        }
+        multiplayer_user_colors {
+            player_1 255 115 253
+            player_2 150 203 254
+            player_3 0
+            player_4 255 255 182
+            player_5 198 197 254
+            player_6 0
+            player_7 255 108 96
+            player_8 0
+            player_9 0
+            player_10 0
+        }
     }
 }
 
+// Plugin aliases - can be used to change the implementation of Zellij
+// changing these requires a restart to take effect
+plugins {
+    about location="zellij:about"
+    compact-bar location="zellij:compact-bar"
+    configuration location="zellij:configuration"
+    filepicker location="zellij:strider" {
+        cwd "/"
+    }
+    plugin-manager location="zellij:plugin-manager"
+    session-manager location="zellij:session-manager"
+    status-bar location="zellij:status-bar"
+    strider location="zellij:strider"
+    tab-bar location="zellij:tab-bar"
+    welcome-screen location="zellij:session-manager" {
+        welcome_screen true
+    }
+}
+
+// Plugins to load in the background when a new session starts
+// eg. "file:/path/to/my-plugin.wasm"
+// eg. "https://example.com/my-plugin.wasm"
+load_plugins {
+}
+
+// Use a simplified UI without special fonts (arrow glyphs)
+// Options:
+//   - true
+//   - false (Default)
+//
+// simplified_ui true
+
+// Choose the theme that is specified in the themes section.
+// Default: default
+//
+// theme "dracula"
+
+// Choose the base input mode of zellij.
+// Default: normal
+//
+// default_mode "locked"
+
+// Choose the path to the default shell that zellij will use for opening new panes
+// Default: $SHELL
+//
+// default_shell "fish"
+
+// Choose the path to override cwd that zellij will use for opening new panes
+//
+// default_cwd "/tmp"
+
+// The name of the default layout to load on startup
+// Default: "default"
+//
+// default_layout "compact"
+
+// The folder in which Zellij will look for layouts
+// (Requires restart)
+//
+// layout_dir "/tmp"
+
+// The folder in which Zellij will look for themes
+// (Requires restart)
+//
+// theme_dir "/tmp"
+
+// Toggle enabling the mouse mode.
+// On certain configurations, or terminals this could
+// potentially interfere with copying text.
+// Options:
+//   - true (default)
+//   - false
+//
+// mouse_mode false
+
+// Toggle having pane frames around the panes
+// Options:
+//   - true (default, enabled)
+//   - false
+//
 pane_frames false
 
+// When attaching to an existing session with other users,
+// should the session be mirrored (true)
+// or should each user have their own cursor (false)
+// (Requires restart)
+// Default: false
+//
+// mirror_session true
+
+// Choose what to do when zellij receives SIGTERM, SIGINT, SIGQUIT or SIGHUP
+// eg. when terminal window with an active zellij session is closed
+// (Requires restart)
+// Options:
+//   - detach (Default)
+//   - quit
+//
+// on_force_close "quit"
+
+// Configure the scroll back buffer size
+// This is the number of lines zellij stores for each pane in the scroll back
+// buffer. Excess number of lines are discarded in a FIFO fashion.
+// (Requires restart)
+// Valid values: positive integers
+// Default value: 10000
+//
+// scroll_buffer_size 10000
+
+// Provide a command to execute when copying text. The text will be piped to
+// the stdin of the program to perform the copy. This can be used with
+// terminal emulators which do not support the OSC 52 ANSI control sequence
+// that will be used by default if this option is not set.
+// Examples:
+//
+// copy_command "xclip -selection clipboard" // x11
+// copy_command "wl-copy"                    // wayland
+// copy_command "pbcopy"                     // osx
+//
+// copy_command "pbcopy"
+
+// Choose the destination for copied text
+// Allows using the primary selection buffer (on x11/wayland) instead of the system clipboard.
+// Does not apply when using copy_command.
+// Options:
+//   - system (default)
+//   - primary
+//
+// copy_clipboard "primary"
+
+// Enable automatic copying (and clearing) of selection when releasing mouse
+// Default: true
+//
+// copy_on_select true
+
+// Path to the default editor to use to edit pane scrollbuffer
+// Default: $EDITOR or $VISUAL
+// scrollback_editor "/usr/bin/vim"
+
+// A fixed name to always give the Zellij session.
+// Consider also setting `attach_to_session true,`
+// otherwise this will error if such a session exists.
+// Default: <RANDOM>
+//
+// session_name "My singleton session"
+
+// When `session_name` is provided, attaches to that session
+// if it is already running or creates it otherwise.
+// Default: false
+//
+// attach_to_session true
+
+// Toggle between having Zellij lay out panes according to a predefined set of layouts whenever possible
+// Options:
+//   - true (default)
+//   - false
+//
+// auto_layout false
+
+// Whether sessions should be serialized to the cache folder (including their tabs/panes, cwds and running commands) so that they can later be resurrected
+// Options:
+//   - true (default)
+//   - false
+//
+// session_serialization false
+
+// Whether pane viewports are serialized along with the session, default is false
+// Options:
+//   - true
+//   - false (default)
+//
+// serialize_pane_viewport false
+
+// Scrollback lines to serialize along with the pane viewport when serializing sessions, 0
+// defaults to the scrollback size. If this number is higher than the scrollback size, it will
+// also default to the scrollback size. This does nothing if `serialize_pane_viewport` is not true.
+//
+// scrollback_lines_to_serialize 10000
+
+// Enable or disable the rendering of styled and colored underlines (undercurl).
+// May need to be disabled for certain unsupported terminals
+// (Requires restart)
+// Default: true
+//
+// styled_underlines false
+
+// How often in seconds sessions are serialized
+//
+// serialization_interval 10000
+
+// Enable or disable writing of session metadata to disk (if disabled, other sessions might not know
+// metadata info on this session)
+// (Requires restart)
+// Default: false
+//
+// disable_session_metadata false
+
+// Enable or disable support for the enhanced Kitty Keyboard Protocol (the host terminal must also support it)
+// (Requires restart)
+// Default: true (if the host terminal supports it)
+//
+// support_kitty_keyboard_protocol false
+
+// Whether to stack panes when resizing beyond a certain size
+// Default: true
+//
+// stacked_resize false
+
+// Whether to show tips on startup
+// Default: true
+//
+show_startup_tips false
+
+// Whether to show release notes on first version run
+// Default: true
+//
+// show_release_notes false

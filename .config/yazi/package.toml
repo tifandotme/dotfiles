@@ -5,22 +5,22 @@ hash = "5614c46d5de76623c283d415bfac8025"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
-rev = "cb6165b"
+rev = "2730199"
 hash = "1f3dad061209081a6b04dd6ff2cb06c7"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:git"
-rev = "cb6165b"
-hash = "ee5fa7e64db72d6b10c2315de97c9cc7"
+rev = "2730199"
+hash = "e0d2c8d7e7afe5b82270367098d1a821"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "cb6165b"
+rev = "2730199"
 hash = "7918aab6a71caf31b58411f789195677"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:jump-to-char"
-rev = "cb6165b"
+rev = "2730199"
 hash = "a670c03eb3760812e044a24f94cedc55"
 
 [[plugin.deps]]

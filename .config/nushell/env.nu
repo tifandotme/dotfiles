@@ -33,18 +33,6 @@ $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = { create_character normal }
 
 # =============================== ENVS ========================================
 
-def --env add_path [path: string] {
-    $env.PATH = ($env.PATH | split row (char esep) | prepend $path | uniq)
-}
-
-add_path ($env.HOME | path join .local bin)
-add_path ($env.HOME | path join .local share bun bin)
-add_path ($env.HOME | path join .local share mise shims)
-add_path ($env.HOME | path join .local share pnpm)
-# add_path ($env.HOME | path join .cargo bin)
-
-hide add_path
-
 $env.EDITOR = "vi"
 $env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fully functional"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
@@ -59,12 +47,29 @@ $env.DENO_INSTALL = ($env.XDG_DATA_HOME | path join deno)
 $env.PNPM_HOME = ($env.XDG_DATA_HOME | path join pnpm)
 $env.NU_LIB_DIRS = ($nu.default-config-dir | path join scripts)
 
+$env.ANDROID_HOME = ($env.HOME | path join Library Android sdk)
+$env.JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
+
 $env.ZELLIJ_AUTO_ATTACH = true
-$env.ZELLIJ_AUTO_EXIT = false
+$env.ZELLIJ_AUTO_EXIT = true
 
 # colorizes manpages using bat
 $env.MANPAGER = "sh -c 'col -bx | bat -l man -p'"
 $env.MANROFFOPT = "-c"
+
+def --env add_path [path: string] {
+    $env.PATH = ($env.PATH | split row (char esep) | prepend $path | uniq)
+}
+
+add_path ($env.HOME | path join .local bin)
+add_path ($env.HOME | path join .local share bun bin)
+add_path ($env.HOME | path join .local share mise shims)
+add_path ($env.HOME | path join .local share pnpm)
+# add_path ($env.HOME | path join .cargo bin)
+add_path ($env.ANDROID_HOME | path join emulator)
+add_path ($env.ANDROID_HOME | path join platform-tools)
+
+hide add_path
 
 # ========================== INITIALIZATION ===================================
 
