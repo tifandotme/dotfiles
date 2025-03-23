@@ -44,9 +44,6 @@
   "format_on_save": "off",
 
   // AI
-  "features": {
-    "edit_prediction_provider": "zed"
-  },
   "languages": {
     "Nu": {
       "tab_size": 4
@@ -68,6 +65,9 @@
       "model": "claude-3-7-sonnet"
     },
     "version": "2"
+  },
+  "features": {
+    "edit_prediction_provider": "zed"
   },
 
   // EDITOR
@@ -124,7 +124,7 @@
   // UI
   "tab_bar": {
     "show_nav_history_buttons": false,
-    // "show_tab_bar_buttons": false
+    "show_tab_bar_buttons": false
   },
   "toolbar": {
     "quick_actions": false,

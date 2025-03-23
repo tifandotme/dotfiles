@@ -22,7 +22,7 @@
 	insteadOf = https://github.com/
 [maintenance]
 	repo = /Users/tifan/personal/website
-	repo = /Users/tifan/work/aquahero-web
+	repo = /Users/tifan/work/aquasense-app
 
 [core]
     pager = delta
