@@ -1,4 +1,12 @@
 {
+  "edit_predictions": {
+    "mode": "subtle",
+    "copilot": {
+      "proxy": null,
+      "proxy_no_verify": null
+    },
+    "enabled_in_assistant": false
+  },
   "telemetry": {
     "diagnostics": false,
     "metrics": false
@@ -123,8 +131,7 @@
 
   // UI
   "tab_bar": {
-    "show_nav_history_buttons": false,
-    "show_tab_bar_buttons": false
+    "show_nav_history_buttons": false
   },
   "toolbar": {
     "quick_actions": false,

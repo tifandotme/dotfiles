@@ -9,16 +9,6 @@ sort_by = "extension"       # might be overridden by folder-rules.yazi
 linemode = "size_and_mtime" # might be overridden by folder-rules.yazi
 # show_symlink = false
 
-# https://github.com/yazi-rs/plugins/tree/main/git.yazi
-[[plugin.prepend_fetchers]]
-id = "git"
-name = "*"
-run = "git"
-[[plugin.prepend_fetchers]]
-id = "git"
-name = "*/"
-run = "git"
-
 [open]
 prepend_rules = [
     { mime = "text/*", use = "edit" },
