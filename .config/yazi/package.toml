@@ -1,21 +1,21 @@
 [[plugin.deps]]
 use = "Rolv-Apneseth/starship"
-rev = "c070754"
-hash = "ebe49da58741aa3bf06c49ee394e0a5a"
+rev = "6fde3b2"
+hash = "7ddb7a790746fd91ecdd0350cc5a5d8c"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
-rev = "7112e91"
+rev = "55bf699"
 hash = "1f3dad061209081a6b04dd6ff2cb06c7"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "7112e91"
+rev = "55bf699"
 hash = "7918aab6a71caf31b58411f789195677"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:jump-to-char"
-rev = "7112e91"
+rev = "55bf699"
 hash = "a670c03eb3760812e044a24f94cedc55"
 
 [[plugin.deps]]

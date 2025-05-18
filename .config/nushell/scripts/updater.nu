@@ -49,7 +49,7 @@ export def schedule [
 # Clean caches and uninstall unused packages (do this rarely)
 export def clean [] {
     mise prune
-    pnpm store prune
+    # pnpm store prune
     brew cleanup --prune=all
     brew autoremove
 }

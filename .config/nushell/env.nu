@@ -34,7 +34,7 @@ $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = { create_character normal }
 # =============================== ENVS ========================================
 
 $env.EDITOR = "vi"
-$env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fully functional"
+# $env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fully functional"
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 
 # $env.COLIMA_HOME = ($env.XDG_CONFIG_HOME | path join colima) # https://github.com/abiosoft/colima/issues/1236
@@ -65,7 +65,7 @@ add_path ($env.HOME | path join .local bin)
 add_path ($env.HOME | path join .local share bun bin)
 add_path ($env.HOME | path join .local share mise shims)
 add_path ($env.HOME | path join .local share pnpm)
-# add_path ($env.HOME | path join .cargo bin)
+add_path ($env.HOME | path join .cargo bin)
 add_path ($env.ANDROID_HOME | path join emulator)
 add_path ($env.ANDROID_HOME | path join platform-tools)
 
