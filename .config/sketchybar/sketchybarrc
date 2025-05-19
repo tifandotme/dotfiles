@@ -1,0 +1,125 @@
+#!/bin/bash
+
+# TODO migrate to #!/usr/bin/env nu once `nufmt` is stable (not in near future, but still)
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+SPOTIFY_EVENT="com.spotify.client.PlaybackStateChanged"
+
+source "$CONFIG_DIR/colors.sh"
+
+bar=(
+  height=24
+  blur_radius=30
+  position=top
+  padding_left=5
+  padding_right=5
+  y_offset=3
+  color="${TRANSPARENT}"
+)
+sketchybar --bar "${bar[@]}"
+
+default=(
+  icon.font="Liga SFMono Nerd Font:Semibold:13.0"
+  label.font="Liga SFMono Nerd Font:Semibold:13.0"
+
+  icon.color="${ACCENT}"
+  label.color="${FOREGROUND}"
+
+  label.padding_right=10
+  icon.padding_left=10
+  icon.padding_right=4
+
+  background.color="${BACKGROUND}"
+
+  background.padding_left=5
+  background.corner_radius=99
+)
+sketchybar --default "${default[@]}"
+
+# ---------------------------------- ITEMS -------------------------------------
+
+# --------------- LEFT
+
+sketchybar --add event aerospace_workspace_change
+
+workspaces=$(aerospace list-workspaces --all)
+first_workspace=$(echo "$workspaces" | head -n 1)
+last_workspace=$(echo "$workspaces" | tail -n 1)
+
+for sid in $workspaces; do
+  sketchybar --add item space."$sid" left \
+    --subscribe space."$sid" aerospace_workspace_change \
+    --set space."$sid" \
+    background.drawing=off \
+    label.padding_left=10 \
+    label.padding_right=10 \
+    icon.drawing=off \
+    label="$(echo "$sid" | cut -d'_' -f1)" \
+    click_script="aerospace workspace $sid" \
+    script="$CONFIG_DIR/plugins/aerospace.sh $sid"
+done
+
+sketchybar --set space."$first_workspace" padding_left=10
+
+sketchybar --set space."$last_workspace" padding_right=10
+
+sketchybar --add bracket spaces '/space\..*/' \
+  --set spaces background.color="${BACKGROUND}" \
+  background.height=24 \
+  background.corner_radius=99
+
+sketchybar --add item front_app left \
+  --set front_app script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
+
+# --------------- RIGHT
+
+sketchybar --add item calendar right \
+  --set calendar icon=􀧞 \
+  update_freq=30 \
+  script="$PLUGIN_DIR/calendar.sh"
+
+sketchybar --add item battery right \
+  --set battery update_freq=120 \
+  script="$PLUGIN_DIR/battery.sh" \
+  --subscribe battery system_woke power_source_change
+
+sketchybar --add item volume right \
+  --set volume script="$PLUGIN_DIR/volume.sh" \
+  --subscribe volume volume_change
+
+sketchybar --add item wifi right \
+  --set wifi \
+  icon="􀙥" \
+  label="..." \
+  script="$PLUGIN_DIR/wifi.sh" \
+  --subscribe wifi wifi_change
+
+sketchybar --add item vpn right \
+  --set vpn update_freq=5 \
+  script="$PLUGIN_DIR/vpn.sh" \
+  click_script="open -a 'Mullvad VPN'" \
+  --subscribe vpn wifi_change front_app_switched
+
+sketchybar --add item caffeinate right \
+  --set caffeinate script="$PLUGIN_DIR/caffeinate.sh" \
+  click_script="$PLUGIN_DIR/caffeinate.sh" \
+  icon.padding_right=0 \
+  icon="􀴽" \
+  --subscribe caffeinate
+
+sketchybar --add event spotify_update $SPOTIFY_EVENT
+sketchybar --add item spotify center \
+  --set spotify script="$PLUGIN_DIR/spotify.sh" \
+  background.drawing=off \
+  label.shadow.drawing=on \
+  label.shadow.color="${BACKGROUND}" \
+  label.shadow.distance=1 \
+  icon.shadow.drawing=on \
+  icon.shadow.color="${BACKGROUND}" \
+  icon.shadow.distance=1 \
+  --subscribe spotify spotify_update
+
+# ------------------------------------------------------------------------------
+
+sketchybar --update
