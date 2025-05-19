@@ -1,6 +1,0 @@
-# Show date
-alt - d : osascript ~/.config/skhd/applescripts/time.scpt
-
-# Close notifications
-ralt - n : osascript ~/.config/skhd/applescripts/notifications.scpt
-
