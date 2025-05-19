@@ -82,6 +82,10 @@ def yau [] {
 alias _btm = btm
 def btm [] { run-with-tab-rename --name bottom btm -g }
 
+# trafilatura
+
+alias tf = trafilatura
+
 # ------- yazi -------
 
 # Run yazi (will cd into last directory when closed)
