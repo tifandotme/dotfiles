@@ -1,0 +1,11 @@
+#!/bin/bash
+
+options=(
+  # refer to ~/.config/sketchybar/colors.sh, they are the same picture
+  active_color=0xff9baca6
+  inactive_color=0xff3c4a31
+  width=5.0
+  hidpi=on
+)
+
+borders "${options[@]}"
