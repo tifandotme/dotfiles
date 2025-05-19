@@ -9,71 +9,127 @@ yadm remote set-url origin "$DOTFILES_REPO_URL"
 
 echo "==> Install Homebrew & packages"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install --formulae bat bottom bun eza fastfetch fd ffmpeg ffmpegthumbnailer fish fzf gh git-delta gnupg imagemagick jq lazygit libgit2 mise monolith ncdu nushell podman ripgrep sevenzip starship tealdeer yadm yazi yt-dlp zellij zoxide
-brew install --casks alacritty discord font-commit-mono font-commit-mono-nerd-font librewolf linearmouse localsend raycast slack spotify telegram transmission visual-studio-code vlc whatsapp zed
-brew install --cask pritunl
 
-: '
+brew tap hougesen/tap        # kdlfmt
+brew tap felixkratz/formulae # sketchybar, borders
+brew tap nikitabobko/tap     # aerospace
+brew tap oven-sh/bun
+brew tap teamookla/speedtest
 
-11 march backup laptop delos
+formulae=(
+  # must have
+  nushell
+  bun
+  colima
+  borders
+  sketchybar
+  starship
+  # differ
+  difftastic # used in nu's dif command
+  git-delta  # used in lazygit
+  # utils
+  bat
+  eza
+  ncdu
+  fastfetch
+  bottom
+  zoxide
+  # finder
+  fd
+  ripgrep
+  fzf
+  # nushell deps (likely used in nu scripts)
+  fish
+  gping
+  just
+  # dev tools
+  lazydocker
+  lazygit
+  mise
+  docker
+  docker-compose
+  gh
+  # misc
+  monolith
+  sherlock
+  speedtest
+  sshs
+  pueue
+  hyperfine
+  ffmpeg
+  asciinema
+  tealdeer
+  yt-dlp
+  # jless # use nu's explore command instead
+  ffmpegthumbnailer
+  slackdump
+  trafilatura
+  # exiftool
+  # trash-cli
+  tokei
+  # language tools
+  kdlfmt # tapped, configured as Kdl formatter in zed/settings.json
+  # yazi deps
+  poppler
+  chafa
+  sevenzip
+  jq
+  imagemagick
+)
+brew install --formulae "${formulae[@]}"
 
-> brew ls --installed-on-request
+casks=(
+  # general
+  raycast
+  eloston-chromium
+  mullvadvpn
+  # anki
+  # openmtp
+  # linearmouse
+  # keycastr
+  # utm
+  bitwarden
+  handbrake
+  transmission
+  localsend
+  domzilla-caffeine
+  battery
+  # note-taking
+  notion
+  # multimedia
+  iina
+  vlc
+  spotify
+  # messaging
+  discord
+  whatsapp
+  telegram
+  slack
+  # fonts
+  font-commit-mono
+  font-commit-mono-nerd-font
+  font-sf-pro
+  font-sf-mono-nerd-font-ligaturized
+  # dev tools
+  zed
+  visual-studio-code
+  # misc
+  # android-studio
+  # whisky
+  # dbeaver-community
+  # google-cloud-sdk
+  # postman
+  # db-browser-for-sqlite
+  # sequel-ace
+  # rustdesk
+  # tailscale
+  # electron-fiddle
+)
+brew install --casks "${casks[@]}"
 
-asciinema
-bat
-bottom
-bun
-chafa
-colima
-deno
-difftastic
-docker
-docker-compose
-exiftool
-eza
-fd
-ffmpeg
-fish
-fzf
-gh
-git-delta
-glow
-gnupg
-gping
-hyperfine
-jless
-jq
-just
-lazydocker
-lazygit
-libgit2
-mise
-monolith
-ncdu
-nushell
-poppler
-pueue
-ripgrep
-sevenzip
-sherlock
-skhd
-slackdump
-speedtest
-sshs
-starship
-tealdeer
-tokei
-trash-cli
-yadm
-yazi
-yt-dlp
-zellij
-zoxide
+# `gh auth login` first
+gh extension install github/gh-copilot
 
-> brew ls --casks
-alacritty               cloudflare-warp         electron-fiddle         handbrake               notion                  raycast                 tailscale               vlc
-android-studio          db-browser-for-sqlite   eloston-chromium        keycastr                openmtp                 rustdesk                telegram                whatsapp
-anki                    dbeaver-community       github                  linearmouse             postman                 sequel-ace              transmission            whisky
-battery                 discord                 google-cloud-sdk        localsend               prismlauncher           slack                   virtualbox              zed
-bitwarden               domzilla-caffeine       gstreamer-runtime       microsoft-excel         pritunl                 spotify                 visual-studio-code
-'
+bun add -g vercel npm-check-updates
+
+softwareupdate --install-rosetta
