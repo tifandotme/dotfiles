@@ -6,7 +6,8 @@ confirm-close-surface = false
 
 macos-option-as-alt = true
 
-theme = dark:irblack,light:GruvboxLightHard
+# TODO why the fuck background wont change
+theme = dark:ir-black,light:GruvboxLightHard
 
 # default mac behaviour is false, linux is true
 # quit-after-last-window-closed = true
