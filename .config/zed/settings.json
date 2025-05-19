@@ -5,7 +5,7 @@
       "proxy": null,
       "proxy_no_verify": null
     },
-    "enabled_in_assistant": false
+    "enabled_in_text_threads": false
   },
   "telemetry": {
     "diagnostics": false,
@@ -51,10 +51,35 @@
   "restore_on_startup": "last_workspace",
   "format_on_save": "off",
 
-  // AI
   "languages": {
+    "Shell Script": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "shfmt",
+          "arguments": ["--filename", "{buffer_path}", "--indent", "2"]
+        }
+      }
+    },
+
+    "Kdl": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "kdlfmt",
+          "arguments": ["format", "--stdin"]
+        }
+      }
+    },
     "Nu": {
       "tab_size": 4
+      // "formatter": {
+      //   // https://github.com/nushell/nufmt is not stable yet
+      //   "external": {
+      //     "command": "sed",
+      //     "arguments": ["-e", "s/ *$//"]
+      //   }
+      // }
     },
     "CSS": {
       "tab_size": 2
@@ -66,8 +91,57 @@
       "show_edit_predictions": false
     }
   },
-  "assistant": {
+  "context_servers": {
+    "mcp-server-github": {
+      "settings": {
+      }
+    }
+  },
+  "agent": {
     "profiles": {
+      "ask": {
+        "context_servers": {
+          "mcp-server-github": {
+            "tools": {
+              "get_code_scanning_alert": true,
+              "get_commit": true,
+              "get_file_contents": true,
+              "get_issue": true,
+              "get_issue_comments": true,
+              "get_me": true,
+              "get_pull_request": true,
+              "get_pull_request_comments": true,
+              "get_pull_request_files": true,
+              "get_pull_request_reviews": true,
+              "get_pull_request_status": true,
+              "get_secret_scanning_alert": true,
+              "list_branches": true,
+              "list_code_scanning_alerts": true,
+              "list_commits": true,
+              "list_issues": true,
+              "list_pull_requests": true,
+              "list_secret_scanning_alerts": true,
+              "search_issues": true,
+              "search_users": true,
+              "search_repositories": true,
+              "search_code": true
+            }
+          }
+        },
+        "name": "Ask",
+        "tools": {
+          "terminal": false,
+          "contents": true,
+          "diagnostics": true,
+          "fetch": true,
+          "list_directory": true,
+          "now": true,
+          "find_path": true,
+          "read_file": false,
+          "grep": true,
+          "thinking": true
+        }
+      },
       "write": {
         "name": "Write",
         "tools": {
@@ -82,14 +156,14 @@
           "create_file": true,
           "delete_path": true,
           "diagnostics": true,
-          "find_replace_file": true,
+          "edit_file": true,
           "fetch": true,
           "list_directory": true,
           "move_path": true,
           "now": true,
-          "path_search": true,
+          "find_path": true,
           "read_file": true,
-          "regex_search": true,
+          "grep": true,
           "rename": true,
           "symbol_info": true,
           "thinking": true
@@ -98,16 +172,16 @@
       }
     },
     "always_allow_tool_actions": true,
-    "default_profile": "ask",
+    "default_profile": "minimal",
     "default_width": 600,
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-3-7-sonnet"
+      "model": "claude-3.7-sonnet"
     },
     "version": "2"
   },
   "features": {
-    "edit_prediction_provider": "zed"
+    "edit_prediction_provider": "copilot"
   },
 
   // EDITOR
