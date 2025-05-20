@@ -27,7 +27,7 @@ default=(
 
   label.padding_right=10
   icon.padding_left=10
-  icon.padding_right=4
+  icon.padding_right=6
 
   background.color="${BACKGROUND}"
 
@@ -69,6 +69,7 @@ sketchybar --add bracket spaces '/space\..*/' \
   background.corner_radius=99
 
 sketchybar --add item front_app left \
+  icon="" \
   --set front_app script="$PLUGIN_DIR/front_app.sh" \
   --subscribe front_app front_app_switched
 

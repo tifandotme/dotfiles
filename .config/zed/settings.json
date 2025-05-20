@@ -172,7 +172,7 @@
       }
     },
     "always_allow_tool_actions": true,
-    "default_profile": "minimal",
+    "default_profile": "ask",
     "default_width": 600,
     "default_model": {
       "provider": "copilot_chat",
