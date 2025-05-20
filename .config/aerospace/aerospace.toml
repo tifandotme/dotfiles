@@ -164,6 +164,9 @@ if.app-id = 'com.apple.Safari'
 run = 'move-node-to-workspace 1_web'
 
 # Move to 2_projects workspace
+[[on-window-detected]]
+if.app-id = 'com.github.Electron'
+run = 'move-node-to-workspace 2_projects'
 
 # Move to 3_editor workspace
 [[on-window-detected]]
