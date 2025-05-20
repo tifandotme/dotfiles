@@ -1,13 +1,15 @@
 #!/bin/bash
 
-RELAY=$(/usr/local/bin/mullvad status | grep "Relay:" | awk '{print $2}')
+STATUS=$(/usr/local/bin/mullvad status --json)
+STATE=$(echo "$STATUS" | jq -r '.state')
 
-if [[ -z "$RELAY" ]]; then
+if [[ "$STATE" == "connected" ]]; then
+  CITY=$(echo "$STATUS" | jq -r '.details.location.city')
+  ICON="􀎡"
+  LABEL="$CITY"
+else
   ICON="􀎣"
   LABEL="Disconnected"
-else
-  ICON="􀎡"
-  LABEL="$RELAY"
 fi
 
 sketchybar --set "$NAME" icon="$ICON" label="$LABEL"
