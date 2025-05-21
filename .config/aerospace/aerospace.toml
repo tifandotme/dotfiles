@@ -1,16 +1,18 @@
-# https://nikitabobko.github.io/AeroSpace/guide
-# References:
-# https://github.com/waytoabv/Dotfiles/blob/main/.config/aerospace/aerospace.toml
-# https://github.com/agenttank/dotfiles_macos/blob/main/aerospace/aerospace.toml
-
+# don't add AeroSpace in Login Items or there will be duplicates!
 start-at-login = true
 
-after-login-command = []
+after-login-command = [
+    'exec-and-forget open -a "Spotify"', # a must
+    'exec-and-forget open -a "Ghostty"',
+]
 
 after-startup-command = [
-    # both will be excecuted by homebrew service instead
-    # 'exec-and-forget borders active_color=0xff9d9f74 inactive_color=0xff494d64 width=3 hdpi=on',
-    # 'exec-and-forget sketchybar',
+    # don't use homebrew services to start/restart these, especially sketchybar,
+    # homebrew services will run sketchybar before aerospace which is not what we want
+    'exec-and-forget sketchybar',
+    'exec-and-forget borders',
+    # fix issue where wifi won't connect after login (idk why the fuck)
+    'exec-and-forget osascript "/Users/tifan/.config/aerospace/applescripts/wifi_off_on.applescript"',
 ]
 
 exec-on-workspace-change = [
@@ -30,7 +32,6 @@ default-root-container-orientation = 'auto'
 
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
-# Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 automatically-unhide-macos-hidden-apps = true
 
 [key-mapping]
@@ -83,8 +84,8 @@ alt-shift-minus = 'resize smart -70'
 alt-shift-equal = 'resize smart +70'
 alt-shift-0 = 'balance-sizes'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
+
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 # alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
@@ -120,16 +121,11 @@ cmd-shift-quote = [
 esc = [
     'reload-config',
     'exec-and-forget sketchybar --trigger hide_message',
-    'exec-and-forget sketchybar --reload',               # testing using brew services restart TODO check again
-    # 'exec-and-forget brew services restart sketchybar',
-    'exec-and-forget brew services restart borders',
+    'exec-and-forget sketchybar --reload',
+    'exec-and-forget borders',
     'mode main',
 ]
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
-f = [
-    'layout floating tiling',
-    'mode main',
-] # Toggle between floating and tiling layout
 
 backspace = ['close-all-windows-but-current', 'mode main']
 
@@ -167,6 +163,9 @@ run = 'move-node-to-workspace 1_web'
 [[on-window-detected]]
 if.app-id = 'com.github.Electron'
 run = 'move-node-to-workspace 2_projects'
+[[on-window-detected]]
+if.app-id = 'com.utmapp.UTM'
+run = 'move-node-to-workspace 2_projects'
 
 # Move to 3_editor workspace
 [[on-window-detected]]
@@ -196,12 +195,12 @@ run = 'move-node-to-workspace 5_rest'
 if.app-id = 'com.tdesktop.Telegram'
 run = 'move-node-to-workspace 5_rest'
 # Document viewers
-[[on-window-detected]]
-if.app-id = 'com.apple.Preview'
-run = 'move-node-to-workspace 5_rest'
-[[on-window-detected]]
-if.app-id = 'com.apple.iBooksX'
-run = 'move-node-to-workspace 5_rest'
+# [[on-window-detected]]
+# if.app-id = 'com.apple.Preview'
+# run = 'move-node-to-workspace 5_rest'
+# [[on-window-detected]]
+# if.app-id = 'com.apple.iBooksX'
+# run = 'move-node-to-workspace 5_rest'
 # Music
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
