@@ -8,8 +8,11 @@ macos-option-as-alt = true
 
 theme = ir-black
 
+maximize = true
+
 # default mac behaviour is false, linux is true
-# quit-after-last-window-closed = true
+# if false, `zka` won't quit ghostty
+quit-after-last-window-closed = true
 
 font-family = "CommitMono Nerd Font"
 font-size = 13
