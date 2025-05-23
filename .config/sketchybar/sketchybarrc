@@ -109,10 +109,10 @@ sketchybar --add item battery right \
   script="$PLUGIN_DIR/battery.sh" \
   --subscribe battery system_woke power_source_change
 
-sketchybar --add item volume right \
-  --set volume \
-  script="$PLUGIN_DIR/volume.sh" \
-  --subscribe volume volume_change
+# sketchybar --add item volume right \
+#   --set volume \
+#   script="$PLUGIN_DIR/volume.sh" \
+#   --subscribe volume volume_change
 
 sketchybar --add item wifi right \
   --set wifi \
