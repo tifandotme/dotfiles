@@ -29,10 +29,6 @@ def hh [command: string, ...args: string] {
 
 hide bhelp
 
-# ncdu
-
-alias ncdu = ncdu --enable-delete --si --threads 8
-
 # gping
 
 alias _ping = ping

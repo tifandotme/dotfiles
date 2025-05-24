@@ -30,7 +30,7 @@ formulae=(
   # utils
   bat
   eza
-  ncdu
+  dua-cli # ncdu replacement
   fastfetch
   bottom
   zoxide
@@ -51,6 +51,7 @@ formulae=(
   gh
   # misc
   monolith
+  taplo # used by Zed's TOML ext
   sherlock
   speedtest
   sshs
