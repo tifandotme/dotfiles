@@ -166,6 +166,9 @@ run = 'move-node-to-workspace 2_projects'
 [[on-window-detected]]
 if.app-id = 'com.utmapp.UTM'
 run = 'move-node-to-workspace 2_projects'
+[[on-window-detected]]
+if.app-id = 'com.postmanlabs.mac'
+run = 'move-node-to-workspace 2_projects'
 
 # Move to 3_editor workspace
 [[on-window-detected]]
