@@ -71,7 +71,7 @@ cmd-h = []     # Disable "hide application"
 cmd-alt-h = [] # Disable "hide others"
 
 alt-period = 'layout tiles horizontal vertical'
-alt-comma = 'layout accordion horizontal vertical'
+alt-comma = 'layout accordion horizontal'
 
 alt-shift-h = 'focus left'
 alt-shift-j = 'focus down'
