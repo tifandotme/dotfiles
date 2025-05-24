@@ -1,0 +1,66 @@
+{
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.10.0",
+  "schemes" : [
+    {
+      "pointer" : {
+        "disableAcceleration" : false,
+        "acceleration" : 1.3,
+        "speed" : 0.0689655172413792768
+      },
+      "scrolling" : {
+        "modifiers" : {
+          "vertical" : {
+            "command" : {
+              "type" : "preventDefault"
+            }
+          }
+        },
+        "distance" : {
+          "vertical" : "auto"
+        },
+        "acceleration" : {
+          "vertical" : 1
+        },
+        "reverse" : {
+          "vertical" : true
+        },
+        "speed" : {
+          "vertical" : 20
+        }
+      },
+      "if" : {
+        "device" : {
+          "productID" : "0xb03f",
+          "productName" : "Logi M196",
+          "category" : "mouse",
+          "vendorID" : "0x46d"
+        }
+      }
+    },
+    {
+      "pointer" : {
+        "disableAcceleration" : false,
+        "acceleration" : 0.6875,
+        "speed" : 0.0689655172413792768
+      },
+      "scrolling" : {
+        "modifiers" : {
+          "vertical" : {
+            "command" : {
+              "scale" : 2,
+              "type" : "changeSpeed"
+            }
+          }
+        }
+      },
+      "if" : {
+        "device" : {
+          "vendorID" : "0x5ac",
+          "category" : "trackpad",
+          "productID" : "0x341",
+          "productName" : "Apple Internal Keyboard \/ Trackpad"
+        }
+      }
+    }
+  ]
+}
