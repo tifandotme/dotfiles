@@ -1,11 +1,18 @@
 {
-  "$schema" : "https:\/\/schema.linearmouse.app\/0.10.0",
   "schemes" : [
     {
+      "if" : {
+        "device" : {
+          "productID" : "0xb03f",
+          "productName" : "Logi M196",
+          "vendorID" : "0x46d",
+          "category" : "mouse"
+        }
+      },
       "pointer" : {
-        "disableAcceleration" : false,
         "acceleration" : 1.3,
-        "speed" : 0.0689655172413792768
+        "speed" : 0.0689655172413792768,
+        "disableAcceleration" : false
       },
       "scrolling" : {
         "modifiers" : {
@@ -15,52 +22,54 @@
             }
           }
         },
-        "distance" : {
-          "vertical" : "auto"
+        "reverse" : {
+          "vertical" : true
         },
         "acceleration" : {
           "vertical" : 1
         },
-        "reverse" : {
-          "vertical" : true
+        "distance" : {
+          "vertical" : "auto"
         },
         "speed" : {
           "vertical" : 20
         }
-      },
-      "if" : {
-        "device" : {
-          "productID" : "0xb03f",
-          "productName" : "Logi M196",
-          "category" : "mouse",
-          "vendorID" : "0x46d"
-        }
       }
     },
     {
+      "if" : {
+        "device" : {
+          "category" : "trackpad",
+          "productName" : "Apple Internal Keyboard \/ Trackpad",
+          "productID" : "0x341",
+          "vendorID" : "0x5ac"
+        }
+      },
       "pointer" : {
+        "speed" : 0.0689655172413792768,
         "disableAcceleration" : false,
-        "acceleration" : 0.6875,
-        "speed" : 0.0689655172413792768
+        "acceleration" : 0.6875
       },
       "scrolling" : {
         "modifiers" : {
           "vertical" : {
             "command" : {
-              "scale" : 2,
-              "type" : "changeSpeed"
+              "type" : "preventDefault"
             }
           }
+        },
+        "acceleration" : {
+          "vertical" : 1
         }
-      },
-      "if" : {
-        "device" : {
-          "vendorID" : "0x5ac",
-          "category" : "trackpad",
-          "productID" : "0x341",
-          "productName" : "Apple Internal Keyboard \/ Trackpad"
+      }
+    },
+    {
+      "scrolling" : {
+        "acceleration" : {
+          "vertical" : 1
         }
       }
     }
-  ]
+  ],
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.10.0"
 }
