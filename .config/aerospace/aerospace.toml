@@ -64,11 +64,11 @@ outer.right = 7
 
 [mode.main.binding]
 
-cmd-enter = ['layout floating tiling', 'mode main']
-
 # https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 cmd-h = []     # Disable "hide application"
 cmd-alt-h = [] # Disable "hide others"
+
+alt-enter = ['layout floating tiling', 'mode main']
 
 alt-period = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal'

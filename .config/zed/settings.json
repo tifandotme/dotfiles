@@ -265,6 +265,9 @@
     "dock": "right",
     "auto_fold_dirs": false
   },
+  "git_panel": {
+    "button": false
+  },
   "chat_panel": {
     "button": "when_in_call"
   },

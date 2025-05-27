@@ -86,9 +86,9 @@ casks=(
   mullvadvpn
   # anki
   # openmtp
-  # linearmouse
+  linearmouse
   # keycastr
-  # utm
+  utm
   bitwarden
   handbrake
   transmission
