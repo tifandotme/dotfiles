@@ -118,6 +118,7 @@ def download-youtube [
     print "\nDownload unsuccessful"
   }
 }
+alias yd = download-youtube
 
 hide yt-dlp
 

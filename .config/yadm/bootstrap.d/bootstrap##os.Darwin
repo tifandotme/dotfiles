@@ -7,130 +7,18 @@ DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
 echo "==> Updating the yadm repo origin URL"
 yadm remote set-url origin "$DOTFILES_REPO_URL"
 
-echo "==> Install Homebrew & packages"
+echo "==> Install Homebrew"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-brew tap hougesen/tap        # kdlfmt
-brew tap felixkratz/formulae # sketchybar, borders
-brew tap nikitabobko/tap     # aerospace
-brew tap oven-sh/bun
-brew tap teamookla/speedtest
+echo "==> Installing packages with brew bundle"
+brew bundle --file="$HOME/.config/yadm/Brewfile"
 
-formulae=(
-  # must have
-  nushell
-  bun
-  colima
-  borders
-  sketchybar
-  starship
-  # differ
-  difftastic # used in nu's dif command
-  git-delta  # used in lazygit
-  # utils
-  bat
-  eza
-  dua-cli # ncdu replacement
-  fastfetch
-  bottom
-  zoxide
-  # finder
-  fd
-  ripgrep
-  fzf
-  # nushell deps (likely used in nu scripts)
-  fish
-  gping
-  just
-  # dev tools
-  lazydocker
-  lazygit
-  mise
-  docker
-  docker-compose
-  gh
-  # misc
-  monolith
-  taplo # used by Zed's TOML ext
-  sherlock
-  speedtest
-  sshs
-  pueue
-  hyperfine
-  ffmpeg
-  asciinema
-  tealdeer
-  yt-dlp
-  # jless # use nu's explore command instead
-  ffmpegthumbnailer
-  slackdump
-  trafilatura
-  # exiftool
-  # trash-cli
-  tokei
-  # language tools
-  kdlfmt # tapped, configured as Kdl formatter in zed/settings.json
-  # yazi deps
-  poppler
-  chafa
-  sevenzip
-  jq
-  imagemagick
-)
-brew install --formulae "${formulae[@]}"
-
-casks=(
-  # general
-  raycast
-  eloston-chromium
-  mullvadvpn
-  # anki
-  # openmtp
-  linearmouse
-  # keycastr
-  utm
-  bitwarden
-  handbrake
-  transmission
-  localsend
-  domzilla-caffeine
-  battery
-  # note-taking
-  notion
-  # multimedia
-  iina
-  vlc
-  spotify
-  # messaging
-  discord
-  whatsapp
-  telegram
-  slack
-  # fonts
-  font-commit-mono
-  font-commit-mono-nerd-font
-  font-sf-pro
-  font-sf-mono-nerd-font-ligaturized
-  # dev tools
-  zed
-  visual-studio-code
-  # misc
-  # android-studio
-  # whisky
-  # dbeaver-community
-  # google-cloud-sdk
-  # postman
-  # db-browser-for-sqlite
-  # sequel-ace
-  # rustdesk
-  # tailscale
-  # electron-fiddle
-)
-brew install --casks "${casks[@]}"
-
+echo "==> Installing GitHub CLI extensions"
 # `gh auth login` first
 gh extension install github/gh-copilot
 
+echo "==> Installing global npm packages"
 bun add -g vercel npm-check-updates
 
+echo "==> Installing Rosetta"
 softwareupdate --install-rosetta

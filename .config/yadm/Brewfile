@@ -1,0 +1,95 @@
+tap "hougesen/tap"
+tap "felixkratz/formulae"
+tap "nikitabobko/tap"
+tap "oven-sh/bun"
+tap "teamookla/speedtest"
+
+# General
+brew "felixkratz/formulae/borders"
+brew "felixkratz/formulae/sketchybar"
+brew "nushell"
+brew "starship"
+brew "difftastic" # used in nu's dif command
+brew "git-delta" # used in lazygit
+brew "bat" # cat replacement
+brew "eza" # ls replacement
+brew "dua-cli" # ncdu replacement
+brew "gping" # ping replacement
+brew "fastfetch"
+brew "bottom"
+brew "zoxide"
+brew "fd" # find replacement
+brew "ripgrep" # grep replacement
+brew "fzf"
+brew "just"
+brew "fish" # nu command completer
+brew "oven-sh/bun/bun"
+brew "pnpm"
+brew "mise"
+brew "lazydocker"
+brew "lazygit"
+brew "docker"
+brew "docker-compose"
+brew "colima", restart_service: :changed
+brew "gh"
+brew "monolith"
+brew "sherlock"
+brew "speedtest"
+brew "sshs"
+brew "pueue"
+brew "hyperfine"
+brew "asciinema"
+brew "tealdeer"
+brew "yt-dlp"
+brew "ffmpeg"
+# brew "ffmpegthumbnailer"
+# brew "slackdump"
+brew "trafilatura"
+brew "tokei"
+
+# Languages
+brew "taplo"  # used by Zed's TOML ext
+brew "hougesen/tap/kdlfmt" # Used as .kdl formatter in Zed
+
+# Yazi deps
+brew "poppler"
+brew "chafa"
+brew "sevenzip"
+brew "jq"
+brew "imagemagick"
+
+# ------------------------------------------------------------------------------
+
+# General
+cask "raycast"
+cask "eloston-chromium"
+cask "mullvadvpn"
+cask "linearmouse"
+cask "utm"
+cask "bitwarden"
+cask "handbrake"
+cask "transmission"
+cask "localsend"
+cask "battery"
+
+# Note-taking
+cask "notion"
+
+# Multimedia
+cask "iina"
+cask "vlc"
+cask "spotify"
+
+# Messaging
+cask "discord"
+cask "whatsapp"
+cask "telegram"
+cask "slack"
+
+# Fonts
+cask "font-sf-pro"
+cask "font-sketchybar-app-font"
+
+# Dev tools
+cask "zed"
+cask "visual-studio-code"
