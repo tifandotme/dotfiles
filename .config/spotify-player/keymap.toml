@@ -1,0 +1,3 @@
+[[actions]]
+action = "ToggleLiked"
+key_sequence = "C-l"

@@ -46,6 +46,7 @@ brew "ffmpeg"
 # brew "slackdump"
 brew "trafilatura"
 brew "tokei"
+brew "spotify_player"
 
 # Languages
 brew "taplo"  # used by Zed's TOML ext
