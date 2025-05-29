@@ -16,6 +16,7 @@ bar=(
 sketchybar --bar "${bar[@]}"
 
 default=(
+  icon.font="SF Mono:Semibold:13.0"
   label.font="SF Mono:Semibold:13.0"
 
   icon.color="${ACCENT}"
