@@ -2,7 +2,7 @@
 
 # https://yazi-rs.github.io/docs/tips/#dropping-to-shell
 # prompt will say "in yazi", see starship conf file
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on   = "!"
 run  = 'shell "$SHELL" --block'
 desc = "Open shell here"
@@ -14,60 +14,60 @@ run = "close"
 desc = "Cancel input"
 
 # https://yazi-rs.github.io/docs/tips/#cd-to-git-root
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = [ "g", "r" ]
 run = 'shell -- ya emit cd "$(git rev-parse --show-toplevel)"'
 
 # https://github.com/yazi-rs/plugins/tree/main/smart-enter.yazi
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = "l"
 run = "plugin smart-enter"
 desc = "Enter the child directory, or open the file"
 
 # https://github.com/yazi-rs/plugins/tree/main/jump-to-char.yazi
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on   = "f"
 run  = "plugin jump-to-char"
 desc = "Jump to char"
 
 # https://github.com/AnirudhG07/custom-shell.yazi
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = [ "'", ";" ]
 run = 'plugin custom-shell -- auto --interactive'
 desc = "custom-shell as default, interactive"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = [ "'", ":" ]
 run = 'plugin custom-shell -- auto --interactive --block'
 desc = "custom-shell as default, interactive, block"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = [ "'", "h" ]
 run = "plugin custom-shell history"
 desc = "Show custom-shell history"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = [ "'", "z" ]
 run = "plugin custom-shell -- custom nu 'zed $env.PWD'"
 desc = "Run Zed in current directory"
 
 # Extra gotos
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = [ "g", "p" ]
 run = "cd ~/Pictures"
 desc = "Goto ~/Pictures"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = [ "g", "m" ]
 run = "cd ~/Movies"
 desc = "Goto ~/Movies"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = [ "g", "D" ]
 run = "cd ~/Documents"
 desc = "Goto ~/Documents"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = [ "g", "e" ] # helix-inspired
 run = "arrow bot"
 desc = "Move cursor to the bottom"
 
 # Help (lazygit inspired)
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = "?"
 run = "help"
 desc = "Open help"

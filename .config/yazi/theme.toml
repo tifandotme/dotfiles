@@ -1,6 +1,6 @@
 "$schema" = "https://yazi-rs.github.io/schemas/theme.json"
 
-[manager]
+[mgr]
 border_style = { fg = "gray" }
 preview_hovered = {}
 count_selected = { fg = "black", bg = "yellow", bold = true }

@@ -2,7 +2,7 @@
 
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
-[manager]
+[mgr]
 ratio = [0, 3, 3]
 show_hidden = true
 sort_by = "extension"       # might be overridden by folder-rules.yazi
