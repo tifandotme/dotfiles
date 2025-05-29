@@ -108,11 +108,11 @@ cmd-shift-5 = ['move-node-to-workspace 5_rest', 'workspace 5_rest']
 # Change modes
 cmd-shift-semicolon = [
     'mode service',
-    'exec-and-forget sketchybar --trigger send_message MESSAGE="SERVICE MODE" HOLD="true"',
+    'exec-and-forget sketchybar --trigger send_message MESSAGE="[SERVICE]" HOLD="true"',
 ]
 cmd-shift-quote = [
     'mode move',
-    'exec-and-forget sketchybar --trigger send_message MESSAGE="MOVE MODE" HOLD="true"',
+    'exec-and-forget sketchybar --trigger send_message MESSAGE="[MOVE]" HOLD="true"',
 ]
 
 # ------------------------------- SERVICE MODE ---------------------------------
