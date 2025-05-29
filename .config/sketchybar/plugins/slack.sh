@@ -18,13 +18,13 @@ UNREAD_COUNT=${UNREAD_COUNT//[^0-9]/}
 # Update display
 if [ "$UNREAD_COUNT" -gt 0 ]; then
   sketchybar --set "$NAME" \
-    icon="􀌤" \
+    icon="􀋚" \
     label="$UNREAD_COUNT" \
     icon.color="${DANGER}" \
     drawing=on
 else
   sketchybar --set "$NAME" \
-    icon="􀌤" \
+    icon="􀋚" \
     label="0" \
     icon.color="${ACCENT}" \
     drawing=on

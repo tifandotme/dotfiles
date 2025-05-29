@@ -82,6 +82,12 @@ def btm [] { run-with-tab-rename --name bottom btm -g }
 
 alias tf = trafilatura
 
+# ------- spotify_player -------
+
+def sp [...args] {
+    TERM=xterm-256color run-with-tab-rename --name spotify spotify_player
+}
+
 # ------- yazi -------
 
 # Run yazi (will cd into last directory when closed)

@@ -1,24 +1,46 @@
 #!/bin/bash
 
-set_spotify() {
-  SPOTIFY="$(osascript -e 'tell application "Spotify" to get name of current track') - $(osascript -e 'tell application "Spotify" to get album of current track')"
-  if ((${#SPOTIFY} < 31)); then # TODO adjust max chars
-    sketchybar --set spotify icon="􀑪" \
-      label="${SPOTIFY}"
-  else
-    sketchybar --set spotify icon="􀑪" \
-      label="$(osascript -e 'tell application "Spotify" to get name of current track')"
-  fi
-}
+set -euo pipefail
 
-# Check if Spotify is playing
-case $(osascript -e 'tell application "Spotify" to get player state') in
-"playing")
-  set_spotify
-  sketchybar --set spotify drawing=on
-  ;;
-*)
-  # Hide completely when not playing
-  sketchybar --set spotify drawing=off
-  ;;
-esac
+PATH="$HOME/bin:$PATH"
+
+info="$(spotify_player get key playback)"
+
+if [[ -n "$info" && "$info" != "null" ]]; then
+  is_active="$(jq -r '.device.is_active' <<<"$info")"
+  track="$(jq -r '.item.name' <<<"$info")"
+  artist="$(jq -r '.item.artists | map(.name) | join(", ")' <<<"$info")"
+else
+  is_active=false
+  track=""
+  artist=""
+fi
+
+args=(
+  --animate quadratic 30
+  --set "$NAME"
+)
+
+if $is_active; then
+  if [[ -z "$artist" && -z "$track" ]]; then
+    : "No track info available..."
+  elif [[ -z "$artist" ]]; then
+    : "$track"
+  elif [[ -z "$track" ]]; then
+    : "$artist"
+  else
+    : "$track - $artist"
+  fi
+  label="$_"
+
+  args+=(
+    drawing=on
+    label="$label"
+  )
+else
+  args+=(
+    drawing=off
+  )
+fi
+
+sketchybar "${args[@]}"

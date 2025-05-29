@@ -8,7 +8,7 @@ apps=$(aerospace list-windows --workspace "$1" | awk -F '|' '{gsub(/^ *| *$/, ""
 icon_strip=""
 if [ "${apps}" != "" ]; then
   while read -r app; do
-    icon_strip+=" $($CONFIG_DIR/plugins/icons.sh "$app")"
+    icon_strip+=" $("$CONFIG_DIR"/plugins/icons.sh "$app")"
   done <<<"${apps}"
 fi
 
@@ -19,7 +19,8 @@ if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
     icon="$(echo "$1" | cut -d'_' -f1)" \
     label="$icon_strip" \
     label.color="${FOREGROUND}" \
-    label.font="sketchybar-app-font:Regular:13.0"
+    label.font="sketchybar-app-font:Regular:12.0" \
+    label.y_offset=-1
 else
   sketchybar --set "$NAME" \
     icon.color="${ACCENT}" \
@@ -27,5 +28,6 @@ else
     icon="$(echo "$1" | cut -d'_' -f1)" \
     label="$icon_strip" \
     label.color="${ACCENT}" \
-    label.font="sketchybar-app-font:Regular:13.0"
+    label.font="sketchybar-app-font:Regular:12.0" \
+    label.y_offset=-1
 fi

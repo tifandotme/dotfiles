@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# TODO migrate to #!/usr/bin/env nu once `nufmt` is stable (not in near future, but still)
-
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 source "$CONFIG_DIR/colors.sh"
@@ -90,16 +88,30 @@ sketchybar --add item front_app left \
 
 # --------------- CENTER
 
+# IF USING SHITTY SPOTIFY ELECTRON APP, KEEPING THIS ARCHIVED
 # warning, this shit caused:
 # - spotify to be opened when reloading sketchybar config and after system boot up
 # - a glitch (workspace change back and forth) when cmd-q -ing spotify (sometimes)
-sketchybar --add event spotify_update "com.spotify.client.PlaybackStateChanged"
+# sketchybar --add event spotify_update "com.spotify.client.PlaybackStateChanged"
+# sketchybar --add item spotify center \
+#   --set spotify \
+#   "${GHOST[@]}" \
+#   script="$PLUGIN_DIR/spotify.sh" \
+#   --subscribe spotify spotify_update
 
+# SPOTIFY-PLAYER TUI
 sketchybar --add item spotify center \
   --set spotify \
+  label.max_chars=40 \
+  label.scroll_duration=300 \
+  label.shadow.scroll_duration=300 \
+  scroll_texts=on \
   "${GHOST[@]}" \
-  script="$PLUGIN_DIR/spotify.sh" \
-  --subscribe spotify spotify_update
+  label.shadow.drawing=off \
+  icon="􀑪" \
+  drawing=off \
+  update_freq=3 \
+  script="$PLUGIN_DIR/spotify.sh"
 
 # --------------- RIGHT
 
