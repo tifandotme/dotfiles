@@ -2,7 +2,7 @@
 start-at-login = true
 
 after-login-command = [
-    'exec-and-forget open -a "Spotify"', # a must
+    # 'exec-and-forget open -a "Spotify"', # a must (29 MAY 2025: now using spotify-player, no need)
     'exec-and-forget open -a "Ghostty"',
 ]
 
