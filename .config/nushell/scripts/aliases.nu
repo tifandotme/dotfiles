@@ -82,9 +82,19 @@ def btm [] { run-with-tab-rename --name bottom btm -g }
 
 alias tf = trafilatura
 
+# speedtest
+
+# there is also `networkQuality`
+alias spe = speedtest
+
+# ripgrep
+
+alias _rg = rg
+alias rg = rg --smart-case --glob '!{.git/*,out/*,**/node_modules/**}' --max-columns-preview
+
 # ------- spotify_player -------
 
-def sp [...args] {
+def spo [...args] {
     TERM=xterm-256color run-with-tab-rename --name spotify spotify_player
 }
 

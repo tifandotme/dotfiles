@@ -5,23 +5,23 @@ hash = "7ddb7a790746fd91ecdd0350cc5a5d8c"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
-rev = "a54b96a"
+rev = "c0ad8a3"
 hash = "3996fc74044bc44144b323686f887e1"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "a54b96a"
+rev = "c0ad8a3"
 hash = "a7ab702e1ef0c097defbc976ed34c186"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:jump-to-char"
-rev = "a54b96a"
+rev = "c0ad8a3"
 hash = "30fc0b37f03a597b92d387268319450f"
 
 [[plugin.deps]]
 use = "AnirudhG07/custom-shell"
-rev = "6b4550a"
-hash = "43019cca17a4d7b41746c2e0a6b8f33f"
+rev = "c4c2fea"
+hash = "c728f8c1c07fdc803e365071421e9083"
 
 [flavor]
 deps = []
