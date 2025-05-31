@@ -5,8 +5,7 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 source "$CONFIG_DIR/colors.sh"
 
 bar=(
-  height=24
-  blur_radius=30
+  height=22
   position=top
   padding_left=5
   padding_right=5
@@ -16,8 +15,7 @@ bar=(
 sketchybar --bar "${bar[@]}"
 
 default=(
-  icon.font="SF Mono:Semibold:13.0"
-  label.font="SF Mono:Semibold:13.0"
+  label.font="SF Mono:Semibold:12.5"
 
   icon.color="${ACCENT}"
   label.color="${FOREGROUND}"
@@ -61,25 +59,23 @@ for sid in $workspaces; do
     icon.padding_left=10 \
     icon.padding_right=2 \
     label.padding_left=0 \
-    label.padding_onright=10 \
+    label.padding_right=10 \
     icon.drawing=on \
     background.drawing=off \
     icon="$(echo "$sid" | cut -d'_' -f1)" \
-    icon.font="SF Mono:Semibold:13.0" \
-    label.font="sketchybar-app-font:Regular:16.0" \
+    icon.font="SF Mono:Semibold:12.5" \
     click_script="aerospace workspace $sid" \
     script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
     --subscribe space."$sid" aerospace_workspace_change
 done
 
-sketchybar --set space."$first_workspace" padding_left=10
-sketchybar --set space."$last_workspace" padding_right=10
+sketchybar --set space."$first_workspace" padding_left=8
+sketchybar --set space."$last_workspace" padding_right=8
 
 sketchybar --add bracket spaces '/space\..*/' \
   --set spaces \
   background.color="${BACKGROUND}" \
-  background.height=24 \
-  background.corner_radius=99
+  background.height=21
 
 sketchybar --add item front_app left \
   --set front_app \

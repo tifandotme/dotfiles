@@ -50,7 +50,7 @@ $env.NU_LIB_DIRS = ($nu.default-config-dir | path join scripts)
 $env.ANDROID_HOME = ($env.HOME | path join Library Android sdk)
 $env.JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 
-$env.ZELLIJ_AUTO_ATTACH = false
+$env.ZELLIJ_AUTO_ATTACH = true
 $env.ZELLIJ_AUTO_EXIT = false
 
 # colorizes manpages using bat

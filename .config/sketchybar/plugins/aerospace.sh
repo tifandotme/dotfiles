@@ -24,7 +24,7 @@ if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
 else
   sketchybar --set "$NAME" \
     icon.color="${ACCENT}" \
-    icon.font.style="Semibold" \
+    icon.font.style="Bold" \
     icon="$(echo "$1" | cut -d'_' -f1)" \
     label="$icon_strip" \
     label.color="${ACCENT}" \
