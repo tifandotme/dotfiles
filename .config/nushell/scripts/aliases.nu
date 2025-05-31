@@ -76,7 +76,7 @@ def yau [] {
 # bottom
 
 alias _btm = btm
-def btm [] { run-with-tab-rename --name bottom btm -g }
+def btm [] { run-with-tab-rename --name [bottom] btm -g }
 
 # trafilatura
 
@@ -95,7 +95,7 @@ alias rg = rg --smart-case --glob '!{.git/*,out/*,**/node_modules/**}' --max-col
 # ------- spotify_player -------
 
 def spo [...args] {
-    TERM=xterm-256color run-with-tab-rename --name spotify spotify_player
+    TERM=xterm-256color run-with-tab-rename --name [spotify] spotify_player
 }
 
 # ------- yazi -------
@@ -104,9 +104,9 @@ def spo [...args] {
 def --env y [...args] {
     let tmp = (mktemp -t "yazi-cwd.XXXXXX")
 
-    run-with-tab-rename --name yazi yazi ...$args --cwd-file $tmp
+    run-with-tab-rename --name [yazi] yazi ...$args --cwd-file $tmp
     # https://yazi-rs.github.io/docs/image-preview/#zellij (GUESS NOT NEEDED IN GHOSTTY)
-    # TERM=xterm-kitty run-with-tab-rename --name yazi yazi ...$args --cwd-file $tmp
+    # TERM=xterm-kitty run-with-tab-rename --name [yazi] yazi ...$args --cwd-file $tmp
 
     let cwd = (open $tmp)
     if $cwd != "" and $cwd != $env.PWD {

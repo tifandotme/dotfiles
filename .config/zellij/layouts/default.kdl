@@ -6,7 +6,7 @@ layout {
             // zjstatus v0.20.2
             // On MacOS, the plugin location cannot be https and should be local
             plugin location="file:~/.config/zellij/zjstatus.wasm" {
-                color_fg_muted "#afafaf"
+                color_fg_muted "#9baca6"
                 color_fg       "#e4e4ef"
                 color_bg       "#3c4a31"
 
@@ -26,7 +26,7 @@ layout {
                 hide_frame_except_for_search true
                 hide_frame_except_for_scroll true
 
-                tab_normal               "#[fg=$fg_muted,bg=$bg]  {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}  "
+                tab_normal               "#[fg=$fg_muted,bg=$bg,bold]  {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}  "
                 tab_active               "#[fg=$fg,bg=$bg,bold]  {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}  "
                 tab_fullscreen_indicator " " // z (in tmux mode)
                 tab_sync_indicator       " " // s (in tmux mode)
