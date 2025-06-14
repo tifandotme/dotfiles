@@ -80,7 +80,7 @@ def compare [] {
         let file_1 = $files | fzf --header="Choose a file"
         let file_2 = $files
             | split row "\n"
-            | filter {|x| $x != $file_1 }
+            | where {|x| $x != $file_1 }
             | str join "\n"
             | fzf --header="Choose another file to diff"
 

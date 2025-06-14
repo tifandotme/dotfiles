@@ -75,7 +75,7 @@ sketchybar --set space."$last_workspace" padding_right=8
 sketchybar --add bracket spaces '/space\..*/' \
   --set spaces \
   background.color="${BACKGROUND}" \
-  background.height=21
+  background.height=20
 
 sketchybar --add item front_app left \
   --set front_app \
