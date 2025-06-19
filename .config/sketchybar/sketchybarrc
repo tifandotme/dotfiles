@@ -119,9 +119,12 @@ sketchybar --add item calendar right \
 
 sketchybar --add item battery right \
   --set battery \
-  update_freq=120 \
+  update_freq=60 \
   script="$PLUGIN_DIR/battery.sh" \
   --subscribe battery system_woke power_source_change
+
+# Start smart battery monitor in background
+exec "$PLUGIN_DIR/battery_monitor.sh" smart-monitor &
 
 # sketchybar --add item volume right \
 #   --set volume \

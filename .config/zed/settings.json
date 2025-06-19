@@ -52,6 +52,14 @@
   "format_on_save": "off",
 
   "languages": {
+    "XML": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--parser", "html", "--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
     "Shell Script": {
       "format_on_save": "on",
       "formatter": {

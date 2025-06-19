@@ -2,6 +2,7 @@
 os:
   open: "bash -c 'open {{filename}}'"
 git:
+  overrideGpg: true
   paging:
     colorArg: always
     pager: delta --paging=never # other configs in gitconfig
