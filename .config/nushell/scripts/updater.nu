@@ -10,7 +10,7 @@ export def start [] {
     gh extension upgrade --all
 
     print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)yazi(ansi reset) packages"
-    ya pack --upgrade
+    ya pkg --upgrade
 
     print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)bun(ansi reset) global packages"
     bun update --global --latest

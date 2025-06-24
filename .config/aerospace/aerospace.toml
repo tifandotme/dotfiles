@@ -1,5 +1,5 @@
 # don't add AeroSpace in Login Items or there will be duplicates!
-start-at-login = true
+start-at-login = false
 
 after-login-command = [
     # 'exec-and-forget open -a "Spotify"', # a must (29 MAY 2025: now using spotify-player, no need)
