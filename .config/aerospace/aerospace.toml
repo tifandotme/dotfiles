@@ -193,10 +193,10 @@ run = 'move-node-to-workspace 4_terminal'
 if.app-id = 'net.whatsapp.WhatsApp'
 run = 'move-node-to-workspace 5_rest'
 [[on-window-detected]]
-if.app-id = 'com.tinyspeck.slackmacgap'
+if.app-id = 'com.tdesktop.Telegram'
 run = 'move-node-to-workspace 5_rest'
 [[on-window-detected]]
-if.app-id = 'com.tdesktop.Telegram'
+if.app-id = 'com.hnc.Discord'
 run = 'move-node-to-workspace 5_rest'
 # Document viewers
 # [[on-window-detected]]
@@ -215,6 +215,12 @@ run = 'move-node-to-workspace 5_rest'
 # Productivity
 [[on-window-detected]]
 if.app-id = 'notion.id'
+run = 'move-node-to-workspace 5_rest'
+[[on-window-detected]]
+if.app-id = 'com.clickup.desktop-app'
+run = 'move-node-to-workspace 5_rest'
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
 run = 'move-node-to-workspace 5_rest'
 
 # Windows that should float
