@@ -26,8 +26,8 @@ layout {
                 hide_frame_except_for_search true
                 hide_frame_except_for_scroll true
 
-                tab_normal               "#[fg=$fg_muted,bg=$bg,bold]  {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}  "
-                tab_active               "#[fg=$fg,bg=$bg,bold]  {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}  "
+                tab_normal               "#[fg=$fg_muted,bg=$bg,bold]  {name}  {fullscreen_indicator}{sync_indicator}{floating_indicator}"
+                tab_active               "#[fg=$bg,bg=$fg_muted,bold]  {name}  {fullscreen_indicator}{sync_indicator}{floating_indicator}"
                 tab_fullscreen_indicator " " // z (in tmux mode)
                 tab_sync_indicator       " " // s (in tmux mode)
                 tab_floating_indicator   " " // f (in tmux mode)
