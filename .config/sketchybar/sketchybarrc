@@ -65,6 +65,7 @@ for sid in $workspaces; do
     icon="$(echo "$sid" | cut -d'_' -f1)" \
     icon.font="SF Mono:Semibold:12.5" \
     click_script="aerospace workspace $sid" \
+    background.corner_radius=0 \
     script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
     --subscribe space."$sid" aerospace_workspace_change
 done

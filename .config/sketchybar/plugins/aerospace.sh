@@ -14,15 +14,17 @@ fi
 
 if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
   sketchybar --set "$NAME" \
-    icon.color="${FOREGROUND}" \
+    background.color="${ACCENT}" \
+    icon.color="${BACKGROUND}" \
     icon.font.style="Bold" \
     icon="$(echo "$1" | cut -d'_' -f1)" \
     label="$icon_strip" \
-    label.color="${FOREGROUND}" \
+    label.color="${BACKGROUND}" \
     label.font="sketchybar-app-font:Regular:12.0" \
     label.y_offset=-1
 else
   sketchybar --set "$NAME" \
+    background.color="${TRANSPARENT}" \
     icon.color="${ACCENT}" \
     icon.font.style="Bold" \
     icon="$(echo "$1" | cut -d'_' -f1)" \
