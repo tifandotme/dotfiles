@@ -100,12 +100,23 @@
     }
   },
   "context_servers": {
+    "mcp-server-context7": {
+      "source": "extension",
+      "settings": {
+        "default_minimum_tokens": "10000"
+      }
+    },
     "mcp-server-github": {
+      "source": "extension",
       "settings": {
       }
     }
   },
   "agent": {
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4.1"
+    },
     "profiles": {
       "ask": {
         "context_servers": {
@@ -180,16 +191,16 @@
       }
     },
     "always_allow_tool_actions": true,
-    "default_profile": "minimal",
+    "default_profile": "write",
     "default_width": 600,
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4"
+      "model": "gpt-4.1"
     },
     "version": "2"
   },
   "features": {
-    "edit_prediction_provider": "copilot"
+    "edit_prediction_provider": "zed"
   },
 
   // EDITOR
@@ -266,7 +277,7 @@
     "file_icons": false
   },
   "outline_panel": {
-    "default_width": 500,
+    "default_width": 300,
     "indent_guides": {
       "show": "never"
     },
