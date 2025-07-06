@@ -14,9 +14,9 @@ gui:
   showFileTree: false
   sidePanelWidth: 0.22
   showBottomLine: false
-  theme:
-    selectedLineBgColor:
-      - "#282828"
+  # theme:
+    # selectedLineBgColor:
+      # - "#282828"
 notARepository: "quit"
 promptToReturnFromSubprocess: false
 keybinding:

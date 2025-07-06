@@ -37,7 +37,7 @@
 [interactive]
     diffFilter = delta --color-only --features=interactive
 [delta]
-    dark = true
+    light = false
     syntax-theme = none
     navigate = true
     side-by-side = true

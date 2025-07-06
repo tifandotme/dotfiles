@@ -6,7 +6,7 @@ confirm-close-surface = false
 
 macos-option-as-alt = true
 
-theme = ir-black
+theme = light:GruvboxLight,dark:ir-black
 
 maximize = true
 
@@ -23,7 +23,7 @@ window-save-state = never
 
 window-padding-balance = true
 
-background-opacity = 0.7
+background-opacity = 0.8
 background-blur = true
 
 # ------------------------------ KEYBINDS --------------------------------------

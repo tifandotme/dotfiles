@@ -115,7 +115,6 @@ use mise.gen.nu
 source zoxide.gen.nu
 source aliases.nu
 source utils.nu
-source ir-black.nu # https://github.com/nushell/nu_scripts/blob/f74b2aa7770a4c78ac7cb13fe2015f23ed9c597c/themes/nu-themes/ir-black.nu
 
 if "ZELLIJ" not-in ($env | columns) {
     if $env.ZELLIJ_AUTO_ATTACH == true {
