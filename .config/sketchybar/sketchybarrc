@@ -127,10 +127,10 @@ sketchybar --add item battery right \
 # Start smart battery monitor in background
 exec "$PLUGIN_DIR/battery_monitor.sh" smart-monitor &
 
-# sketchybar --add item volume right \
-#   --set volume \
-#   script="$PLUGIN_DIR/volume.sh" \
-#   --subscribe volume volume_change
+sketchybar --add item volume right \
+  --set volume \
+  script="$PLUGIN_DIR/volume.sh" \
+  --subscribe volume volume_change
 
 sketchybar --add item wifi right \
   --set wifi \
@@ -146,12 +146,18 @@ sketchybar --add item vpn right \
   script="$PLUGIN_DIR/vpn.sh" \
   --subscribe vpn wifi_change front_app_switched
 
-sketchybar --add item slack right \
-  --set slack \
-  update_freq=15 \
-  click_script="open -a 'Slack'" \
-  script="$PLUGIN_DIR/slack.sh" \
-  --subscribe slack system_woke
+# sketchybar --add item slack right \
+#   --set slack \
+#   update_freq=15 \
+#   click_script="open -a 'Slack'" \
+#   script="$PLUGIN_DIR/slack.sh" \
+#   --subscribe slack system_woke
+
+# sketchybar --add item theme_toggle right \
+#   --set theme_toggle \
+#   icon="􀡊" \
+#   icon.padding_right=0 \
+#   click_script="$PLUGIN_DIR/toggle_theme.sh"
 
 sketchybar --add item caffeinate right \
   --set caffeinate \
