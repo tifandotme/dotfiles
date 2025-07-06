@@ -140,6 +140,7 @@ keybinds clear-defaults=true {
         }
         bind "enter" {
             SwitchToMode "search"
+            SearchToggleOption "CaseSensitivity"
         }
     }
     renametab {
@@ -162,6 +163,10 @@ keybinds clear-defaults=true {
     tmux {
         bind "," {
             SwitchToMode "renametab"
+        }
+        bind "/" {
+            SwitchToMode "entersearch"
+            SearchInput 0
         }
         bind "[" {
             SwitchToMode "scroll"
