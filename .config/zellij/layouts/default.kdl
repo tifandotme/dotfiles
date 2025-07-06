@@ -14,14 +14,14 @@ layout {
                 format_space "#[bg=$bg]"
                 format_right "{mode}"
 
-                mode_locked       "#[fg=$fg,bg=$bg]    " // ctrl-g (in all mode)
-                mode_scroll       "#[fg=$fg,bg=$bg]    " // [ (in tmux mode)
-                mode_enter_search "#[fg=$fg,bg=$bg]    " // / (in scroll mode)
-                mode_search       "#[fg=$fg,bg=$bg] [c: case-sensitivity, w: wrap, o: wholeworld]    "
-                mode_rename_tab   "#[fg=$fg,bg=$bg]    " // , (in tmux mode)
-                mode_rename_pane  "#[fg=$fg,bg=$bg]    "
-                mode_prompt       "#[fg=$fg,bg=$bg]    "
-                mode_tmux         "#[fg=$fg,bg=$bg] ?   " // ctrl-e (in normal mode)
+                mode_locked       "#[fg=$bg,bg=$fg_muted,bold]  LOCKED  " // ctrl-g (in all mode)
+                mode_scroll       "#[fg=$bg,bg=$fg_muted,bold]  SCROLL  " // [ (in tmux mode)
+                mode_enter_search "#[fg=$bg,bg=$fg_muted,bold]  SEARCH  " // / (in scroll mode)
+                mode_search       "#[fg=$bg,bg=$fg_muted,bold] [c: case-sensitivity, w: wrap, o: wholeworld]  SEARCH  "
+                mode_rename_tab   "#[fg=$bg,bg=$fg_muted,bold]  RENAME  " // , (in tmux mode)
+                mode_rename_pane  "#[fg=$bg,bg=$fg_muted,bold]  RENAME  "
+                mode_prompt       "#[fg=$bg,bg=$fg_muted,bold]  PROMPT  "
+                mode_tmux         "#[fg=$bg,bg=$fg_muted,bold]  TMUX  " // ctrl-e (in normal mode)
 
                 hide_frame_except_for_search true
                 hide_frame_except_for_scroll true
