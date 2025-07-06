@@ -127,10 +127,10 @@ sketchybar --add item battery right \
 # Start smart battery monitor in background
 exec "$PLUGIN_DIR/battery_monitor.sh" smart-monitor &
 
-sketchybar --add item volume right \
-  --set volume \
-  script="$PLUGIN_DIR/volume.sh" \
-  --subscribe volume volume_change
+# sketchybar --add item volume right \
+#   --set volume \
+#   script="$PLUGIN_DIR/volume.sh" \
+#   --subscribe volume volume_change
 
 sketchybar --add item wifi right \
   --set wifi \

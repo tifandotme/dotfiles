@@ -6,7 +6,7 @@
 # @raycast.mode silent
 
 # Optional parameters:
-# @raycast.icon 􀡊
+# @raycast.icon 🌗
 
 # Path to your git config symlink
 SYMLINK="$HOME/.config/git/config"
