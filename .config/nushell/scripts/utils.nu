@@ -31,7 +31,7 @@ def open-project [] {
         zellij action focus-previous-pane; zellij action close-pane
 
         zellij action new-tab --name $"($dir_name)\(git\)"
-        zellij action new-pane --cwd $absolute_path -- nu -i -c lazygit
+        zellij action new-pane --close-on-exit --cwd $absolute_path -- nu -i -c lazygit
         zellij action focus-previous-pane; zellij action close-pane
 
         zellij action go-to-previous-tab
