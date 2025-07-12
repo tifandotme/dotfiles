@@ -14,11 +14,21 @@ def commands [] {
 
 # Setup project environment
 def open-project [] {
+    # If the default project is present in the project list, fzf will pre-select it using --query.
+    # This makes it easy to open your most-used project by just hitting Enter.
+    const default_project = "aquasense-app"
     try {
         let project_dirs = _ls ~/personal ~/work | where type =~ dir | get name
 
-        # Prompt user to choose a project directory
-        let chosen_project = $project_dirs | str join "\n" | str replace --all $"($env.HOME)/" '' | str join "\n" | fzf
+        let project_list = $project_dirs | str join "\n" | str replace --all $"($env.HOME)/" '' | str join "\n"
+
+        let has_default = $project_list | str contains $default_project
+
+        let chosen_project = if $has_default {
+            $project_list | fzf --query=($default_project)
+        } else {
+            $project_list | fzf
+        }
 
         let dir_name = $chosen_project | split row "/" | get 1
         let absolute_path = $"($env.HOME)/($chosen_project)"
