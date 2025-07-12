@@ -139,12 +139,12 @@ sketchybar --add item wifi right \
   script="$PLUGIN_DIR/wifi.sh" \
   --subscribe wifi wifi_change
 
-sketchybar --add item vpn right \
-  --set vpn \
-  update_freq=5 \
-  click_script="open -a 'Mullvad VPN'" \
-  script="$PLUGIN_DIR/vpn.sh" \
-  --subscribe vpn wifi_change front_app_switched
+# sketchybar --add item vpn right \
+#   --set vpn \
+#   update_freq=5 \
+#   click_script="open -a 'Mullvad VPN'" \
+#   script="$PLUGIN_DIR/vpn.sh" \
+#   --subscribe vpn wifi_change front_app_switched
 
 # sketchybar --add item slack right \
 #   --set slack \

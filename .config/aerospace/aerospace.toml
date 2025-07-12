@@ -1,10 +1,5 @@
 # don't add AeroSpace in Login Items or there will be duplicates!
-start-at-login = false
-
-after-login-command = [
-    # 'exec-and-forget open -a "Spotify"', # a must (29 MAY 2025: now using spotify-player, no need)
-    'exec-and-forget open -a "Ghostty"',
-]
+start-at-login = true
 
 after-startup-command = [
     # don't use homebrew services to start/restart these, especially sketchybar,
