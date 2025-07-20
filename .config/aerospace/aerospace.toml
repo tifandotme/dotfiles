@@ -86,7 +86,7 @@ alt-shift-0 = 'balance-sizes'
 # alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 cmd-1 = 'workspace 1_web'
-cmd-2 = 'workspace 2_projects' # Electron/Android Studio development
+cmd-2 = 'workspace 2_projects' # Electron/Android Studio development, or else
 cmd-3 = 'workspace 3_editor'
 cmd-4 = 'workspace 4_terminal'
 cmd-5 = 'workspace 5_rest'
@@ -217,6 +217,9 @@ run = 'move-node-to-workspace 5_rest'
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = 'move-node-to-workspace 5_rest'
+[[on-window-detected]]
+if.app-id = 'org.chromium.Chromium.app.jolmgehenbgcjpegbfnknhkjjmbaeilm'
+run = 'move-node-to-workspace 5_rest'
 
 # Windows that should float
 [[on-window-detected]]
@@ -234,6 +237,7 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.apple.AppStore'
 run = 'layout floating'
+
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']

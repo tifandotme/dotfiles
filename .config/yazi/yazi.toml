@@ -5,8 +5,8 @@
 [mgr]
 ratio = [0, 3, 3]
 show_hidden = true
-sort_by = "extension"       # might be overridden by folder-rules.yazi
-linemode = "size_and_mtime" # might be overridden by folder-rules.yazi
+# sort_by = "extension"       # might be overridden by folder-rules.yazi
+# linemode = "size_and_mtime" # might be overridden by folder-rules.yazi
 # show_symlink = false
 
 [open]
