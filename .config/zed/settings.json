@@ -113,6 +113,7 @@
     }
   },
   "agent": {
+    "play_sound_when_agent_done": true,
     "inline_assistant_model": {
       "provider": "copilot_chat",
       "model": "gpt-4.1"
