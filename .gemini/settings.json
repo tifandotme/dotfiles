@@ -1,4 +1,16 @@
 {
+  "vimMode": true,
   "theme": "ANSI",
-  "selectedAuthType": "oauth-personal"
+  "selectedAuthType": "oauth-personal",
+  "contextFileName": [
+    "AGENTS.md",
+    ".github/copilot-instructions.md",
+    "GEMINI.md"
+  ],
+  "mcpServers": {
+    "context7": {
+      "httpUrl": "https://mcp.context7.com/mcp"
+    }
+  },
+  "preferredEditor": "zed"
 }
