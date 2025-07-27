@@ -165,6 +165,9 @@ run = 'move-node-to-workspace 2_projects'
 [[on-window-detected]]
 if.app-id = 'com.postmanlabs.mac'
 run = 'move-node-to-workspace 2_projects'
+[[on-window-detected]]
+if.app-id = 'org.openvpn.client.app'
+run = 'move-node-to-workspace 2_projects'
 
 # Move to 3_editor workspace
 [[on-window-detected]]
@@ -232,12 +235,14 @@ run = 'layout floating'
 if.app-id = 'com.colliderli.iina'
 run = 'layout floating'
 [[on-window-detected]]
-if.app-id = 'com.apple.finder'
-run = 'layout floating'
-[[on-window-detected]]
 if.app-id = 'com.apple.AppStore'
 run = 'layout floating'
-
+# [[on-window-detected]]
+# if.app-id = 'com.apple.finder'
+# run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'org.openvpn.client.app'
+run = 'layout floating'
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']

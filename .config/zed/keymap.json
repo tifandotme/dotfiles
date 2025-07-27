@@ -1,35 +1,17 @@
 [
   {
-    "use_key_equivalents": true,
-    "bindings": {
-      "cmd-j": null,
-      "cmd-s": null,
-      "cmd-shift-e": "project_panel::ToggleFocus"
-    }
-  },
-  {
     "context": "(ProjectPanel && not_editing) || OutlinePanel",
     "bindings": {
       "g e": "menu::SelectLast"
     }
   },
-
-  {
-    "context": "ContextEditor > Editor",
-    "bindings": {}
-  },
   {
     "context": "Workspace",
     "bindings": {
-      "cmd-b": "workspace::ToggleLeftDock",
-      "cmd-s": "workspace::ToggleRightDock",
-
       "alt-n": "pane::AlternateFile",
 
-      "alt-h": "pane::ActivatePreviousItem", // to match with Zellij
-      "alt-l": "pane::ActivateNextItem", // to match with Zellij
-      "alt-shift-h": "workspace::ActivatePaneLeft",
-      "alt-shift-l": "workspace::ActivatePaneRight"
+      "alt-h": "workspace::ActivatePaneLeft",
+      "alt-l": "workspace::ActivatePaneRight"
     }
   },
   {
@@ -71,10 +53,7 @@
       "U": "editor::Redo"
     }
   },
-  // {
-  //   "context": "Editor && vim_mode == visual && !VimWaiting && !menu",
-  //   "bindings": {}
-  // },
+
   {
     "context": "Editor && vim_mode == insert",
     "bindings": {
@@ -93,7 +72,6 @@
       "space z": "editor::ToggleSoftWrap",
       "space c": "vim::ToggleComments",
       "space k": "editor::Hover",
-
       "space f": "tab_switcher::Toggle",
 
       // "g" commands
@@ -101,13 +79,7 @@
       "g h": "vim::FirstNonWhitespace", // helix inspired
       "g l": "vim::EndOfLine", // helix inspired
       "g e": "vim::EndOfDocument", // helix inspired
-      // "g d": "editor::GoToDefinition", // vim default
-      // "g shift-d": "editor::GoToDeclaration", // vim default
-      // "g y": "editor::GoToTypeDefinition", // vim default
-      "g i": "editor::GoToImplementation", // helix inspired
-      "g r": "editor::FindAllReferences", // helix-inspired
-
-      "g n": "workspace::ActivateNextPane" // experimenting
+      "g i": "editor::GoToImplementation" // helix inspired
     }
   },
   {
@@ -118,12 +90,32 @@
       "j": "menu::SelectNext",
       "d": "tab_switcher::CloseSelectedItem"
     }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-;": null // editor::ToggleLineNumbers
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-j": null // workspace::ToggleBottomDock
+    }
+  },
+  {
+    "context": "ContextEditor > Editor",
+    "bindings": {
+      "cmd-s": null // workspace::Save
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-s": null, // workspace::Save
+      "alt-cmd-s": null // workspace::SaveAs
+    }
   }
-  // {
-  //   // when no editor exists
-  //   "context": "EmptyPane || SharedScreen",
-  //   "bindings": {}
-  // }
 ]
 
 // REMINDER
