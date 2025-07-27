@@ -1,12 +1,4 @@
 {
-  "edit_predictions": {
-    "mode": "subtle",
-    "copilot": {
-      "proxy": null,
-      "proxy_no_verify": null
-    },
-    "enabled_in_text_threads": false
-  },
   "telemetry": {
     "diagnostics": false,
     "metrics": false
@@ -99,19 +91,8 @@
       "show_edit_predictions": false
     }
   },
-  "context_servers": {
-    "mcp-server-context7": {
-      "source": "extension",
-      "settings": {
-        "default_minimum_tokens": "10000"
-      }
-    },
-    "mcp-server-github": {
-      "source": "extension",
-      "settings": {
-      }
-    }
-  },
+
+  // AI
   "agent": {
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {
@@ -120,7 +101,26 @@
     },
     "profiles": {
       "ask": {
+        "name": "Ask",
+        "tools": {
+          "open": true,
+          "contents": true,
+          "diagnostics": true,
+          "fetch": true,
+          "list_directory": true,
+          "now": true,
+          "find_path": true,
+          "read_file": true,
+          "grep": true,
+          "thinking": true
+        },
         "context_servers": {
+          "mcp-server-context7": {
+            "tools": {
+              "resolve-library-id": true,
+              "get-library-docs": true
+            }
+          },
           "mcp-server-github": {
             "tools": {
               "get_code_scanning_alert": true,
@@ -147,19 +147,6 @@
               "search_code": true
             }
           }
-        },
-        "name": "Ask",
-        "tools": {
-          "terminal": false,
-          "contents": true,
-          "diagnostics": true,
-          "fetch": true,
-          "list_directory": true,
-          "now": true,
-          "find_path": true,
-          "read_file": false,
-          "grep": true,
-          "thinking": true
         }
       },
       "write": {
@@ -191,21 +178,36 @@
         "enable_all_context_servers": true
       }
     },
+
     "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_width": 600,
     "default_model": {
       "provider": "copilot_chat",
       "model": "gpt-4.1"
-    },
-    "version": "2"
+    }
   },
   "features": {
     "edit_prediction_provider": "zed"
   },
+  "edit_predictions": {
+    "mode": "subtle",
+    "copilot": {
+      "proxy": null,
+      "proxy_no_verify": null
+    },
+    "enabled_in_text_threads": false
+  },
+  "context_servers": {
+    "mcp-server-context7": {
+      "source": "extension",
+      "settings": {
+        "default_minimum_tokens": "10000"
+      }
+    }
+  },
 
   // EDITOR
-  "show_user_picture": false,
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 12.5,
   "buffer_line_height": "standard",
@@ -256,11 +258,8 @@
   },
 
   // UI
-  "tab_bar": {
-    "show_nav_history_buttons": false
-  },
   "toolbar": {
-    "quick_actions": false,
+    // "quick_actions": false,
     "selections_menu": false
   },
   "file_finder": {
