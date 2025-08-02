@@ -42,58 +42,55 @@
   // GENERAL
   "restore_on_startup": "last_workspace",
   "format_on_save": "off",
-
-  "languages": {
-    "XML": {
-      "formatter": {
-        "external": {
-          "command": "prettier",
-          "arguments": ["--parser", "html", "--stdin-filepath", "{buffer_path}"]
-        }
-      }
+  "toolbar": {
+    // "quick_actions": false,
+    "selections_menu": false
+  },
+  "file_finder": {
+    "file_icons": false
+  },
+  "project_panel": {
+    "default_width": 300,
+    "indent_guides": {
+      "show": "never"
     },
-    "Shell Script": {
-      "format_on_save": "on",
-      "formatter": {
-        "external": {
-          "command": "shfmt",
-          "arguments": ["--filename", "{buffer_path}", "--indent", "2"]
-        }
-      }
+    "dock": "right",
+    "auto_fold_dirs": false,
+    "indent_size": 20,
+    "folder_icons": false,
+    "file_icons": false
+  },
+  "outline_panel": {
+    "default_width": 300,
+    "indent_guides": {
+      "show": "never"
     },
-
-    "Kdl": {
-      "format_on_save": "on",
-      "formatter": {
-        "external": {
-          "command": "kdlfmt",
-          "arguments": ["format", "--stdin"]
-        }
-      }
-    },
-    "Nu": {
-      "tab_size": 4
-      // "formatter": {
-      //   // https://github.com/nushell/nufmt is not stable yet
-      //   "external": {
-      //     "command": "sed",
-      //     "arguments": ["-e", "s/ *$//"]
-      //   }
-      // }
-    },
-    "CSS": {
-      "tab_size": 2
-    },
-    "Lua": {
-      "tab_size": 2
-    },
-    "Markdown": {
-      "show_edit_predictions": false
-    }
+    "dock": "right",
+    "auto_fold_dirs": false
+  },
+  "git_panel": {
+    "button": false
+  },
+  "chat_panel": {
+    "button": "when_in_call"
+  },
+  "terminal": {
+    "button": false
+  },
+  "notification_panel": {
+    "button": false
   },
 
   // AI
   "agent": {
+    "use_modifier_to_send": true,
+    "always_allow_tool_actions": true,
+    "default_profile": "write",
+    "default_width": 600,
+    "default_model": {
+      "provider": "openrouter",
+      "model": "openrouter/horizon-beta"
+    },
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {
       "provider": "copilot_chat",
@@ -177,18 +174,10 @@
         },
         "enable_all_context_servers": true
       }
-    },
-
-    "always_allow_tool_actions": true,
-    "default_profile": "write",
-    "default_width": 600,
-    "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4.1"
     }
   },
   "features": {
-    "edit_prediction_provider": "zed"
+    "edit_prediction_provider": "copilot"
   },
   "edit_predictions": {
     "mode": "subtle",
@@ -243,6 +232,12 @@
     "calt": false // ligatures
   },
 
+  "diagnostics": {
+    "inline": {
+      "enabled": false
+    }
+  },
+
   // LSP
   "lsp": {
     "biome": {
@@ -257,43 +252,51 @@
     }
   },
 
-  // UI
-  "toolbar": {
-    // "quick_actions": false,
-    "selections_menu": false
-  },
-  "file_finder": {
-    "file_icons": false
-  },
-  "project_panel": {
-    "default_width": 300,
-    "indent_guides": {
-      "show": "never"
+  "languages": {
+    "XML": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--parser", "html", "--stdin-filepath", "{buffer_path}"]
+        }
+      }
     },
-    "dock": "right",
-    "auto_fold_dirs": false,
-    "indent_size": 20,
-    "folder_icons": false,
-    "file_icons": false
-  },
-  "outline_panel": {
-    "default_width": 300,
-    "indent_guides": {
-      "show": "never"
+    "Shell Script": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "shfmt",
+          "arguments": ["--filename", "{buffer_path}", "--indent", "2"]
+        }
+      }
     },
-    "dock": "right",
-    "auto_fold_dirs": false
-  },
-  "git_panel": {
-    "button": false
-  },
-  "chat_panel": {
-    "button": "when_in_call"
-  },
-  "terminal": {
-    "button": false
-  },
-  "notification_panel": {
-    "button": false
+    "Kdl": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "kdlfmt",
+          "arguments": ["format", "--stdin"]
+        }
+      }
+    },
+    "Nu": {
+      "tab_size": 4
+      // "formatter": {
+      //   // https://github.com/nushell/nufmt is not stable yet
+      //   "external": {
+      //     "command": "sed",
+      //     "arguments": ["-e", "s/ *$//"]
+      //   }
+      // }
+    },
+    "CSS": {
+      "tab_size": 2
+    },
+    "Lua": {
+      "tab_size": 2
+    },
+    "Markdown": {
+      "show_edit_predictions": false
+    }
   }
 }
