@@ -42,10 +42,6 @@
   // GENERAL
   "restore_on_startup": "last_workspace",
   "format_on_save": "off",
-  "toolbar": {
-    // "quick_actions": false,
-    "selections_menu": false
-  },
   "file_finder": {
     "file_icons": false
   },
@@ -83,13 +79,13 @@
 
   // AI
   "agent": {
-    "use_modifier_to_send": true,
+    "use_modifier_to_send": false,
     "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_width": 600,
     "default_model": {
-      "provider": "openrouter",
-      "model": "openrouter/horizon-beta"
+      "provider": "copilot_chat",
+      "model": "claude-sonnet-4"
     },
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {
@@ -177,7 +173,7 @@
     }
   },
   "features": {
-    "edit_prediction_provider": "copilot"
+    "edit_prediction_provider": "zed"
   },
   "edit_predictions": {
     "mode": "subtle",
