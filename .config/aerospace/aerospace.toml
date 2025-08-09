@@ -146,6 +146,9 @@ enter = ['mode main', 'exec-and-forget sketchybar --trigger hide_message']
 
 # Move to 1_web workspace
 [[on-window-detected]]
+if.app-id = 'net.imput.helium'
+run = 'move-node-to-workspace 1_web'
+[[on-window-detected]]
 if.app-id = 'org.chromium.Chromium'
 run = 'move-node-to-workspace 1_web'
 [[on-window-detected]]
@@ -221,7 +224,7 @@ run = 'move-node-to-workspace 5_rest'
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = 'move-node-to-workspace 5_rest'
 [[on-window-detected]]
-if.app-id = 'org.chromium.Chromium.app.jolmgehenbgcjpegbfnknhkjjmbaeilm'
+if.app-id = 'net.imput.helium.app.jolmgehenbgcjpegbfnknhkjjmbaeilm' # Actual.app
 run = 'move-node-to-workspace 5_rest'
 
 # Windows that should float
@@ -237,9 +240,6 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.apple.AppStore'
 run = 'layout floating'
-# [[on-window-detected]]
-# if.app-id = 'com.apple.finder'
-# run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'org.openvpn.client.app'
 run = 'layout floating'

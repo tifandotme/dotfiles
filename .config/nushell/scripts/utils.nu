@@ -13,10 +13,10 @@ def commands [] {
 }
 
 # Setup project environment
-def open-project [] {
+def open-project [default_project: string = ""] {
     # If the default project is present in the project list, fzf will pre-select it using --query.
     # This makes it easy to open your most-used project by just hitting Enter.
-    const default_project = "aquasense-app"
+    # const default_project = "aquasense-app"
     try {
         let project_dirs = _ls ~/personal ~/work | where type =~ dir | get name
 
@@ -48,6 +48,25 @@ def open-project [] {
     } catch {
         print "No project directory found."
     }
+}
+
+# Setup aquasense-app
+def open-aquasense-app [] {
+    let absolute_path = $env.HOME | path join "work/aquasense-app"
+    let dir_name = "aquasense-app"
+
+    let last_tab_index = zellij action query-tab-names | split row "\n" | length
+    zellij action go-to-tab $last_tab_index
+
+    zellij action new-tab --name $dir_name
+    zellij action new-pane --cwd $absolute_path -- nu -i
+    zellij action focus-previous-pane; zellij action close-pane
+
+    zellij action new-tab --name $"($dir_name)\(git\)"
+    zellij action new-pane --close-on-exit --cwd $absolute_path -- nu -i -c lazygit
+    zellij action focus-previous-pane; zellij action close-pane
+
+    zellij action go-to-previous-tab
 }
 
 # Open up a book

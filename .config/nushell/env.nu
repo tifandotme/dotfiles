@@ -35,6 +35,7 @@ $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = { create_character normal }
 
 $env.EDITOR = "vi"
 # $env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fully functional"
+$env.TERM = "xterm-ghostty" # sometimes it's not set automatically
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 
 # $env.COLIMA_HOME = ($env.XDG_CONFIG_HOME | path join colima) # https://github.com/abiosoft/colima/issues/1236
