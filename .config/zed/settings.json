@@ -3,9 +3,7 @@
     "diagnostics": false,
     "metrics": false
   },
-
   "base_keymap": "VSCode",
-
   "theme": {
     "dark": "Neo Gruber Darker",
     "light": "Gruvbox Light Hard",
@@ -149,25 +147,6 @@
     },
     "enabled_in_text_threads": false
   },
-  "context_servers": {
-    "github": {
-      "source": "custom",
-      "enabled": true,
-      "command": "bunx",
-      "args": [
-        "-y",
-        "@smithery/cli@latest",
-        "run",
-        "@smithery-ai/github",
-        "--key",
-        "5d1813c6-4571-4c5e-8f17-2ff9e9914246",
-        "--profile",
-        "principal-jellyfish-1LaTzI"
-      ]
-    }
-  },
-
-  // EDITOR
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 12.5,
   "buffer_line_height": "standard",
@@ -197,11 +176,9 @@
     "highlight_on_yank_duration": 300,
     "toggle_relative_line_numbers": true
   },
-
   "buffer_font_features": {
     "calt": false // ligatures
   },
-
   "diagnostics": {
     "inline": {
       "enabled": false
@@ -221,7 +198,6 @@
       }
     }
   },
-
   "languages": {
     "XML": {
       "formatter": {
