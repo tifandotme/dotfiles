@@ -115,6 +115,24 @@
       "cmd-s": null, // workspace::Save
       "alt-cmd-s": null // workspace::SaveAs
     }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-b": "git::Blame"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "alt-cmd-g b": null
+    }
+  },
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "shift-s": ["vim::PushAddSurrounds", {}]
+    }
   }
 ]
 
