@@ -89,8 +89,8 @@
     },
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4.1"
+      "provider": "mistral",
+      "model": "codestral-latest"
     },
     "profiles": {
       "ask": {
@@ -106,40 +106,6 @@
           "read_file": true,
           "grep": true,
           "thinking": true
-        },
-        "context_servers": {
-          "mcp-server-context7": {
-            "tools": {
-              "resolve-library-id": true,
-              "get-library-docs": true
-            }
-          },
-          "mcp-server-github": {
-            "tools": {
-              "get_code_scanning_alert": true,
-              "get_commit": true,
-              "get_file_contents": true,
-              "get_issue": true,
-              "get_issue_comments": true,
-              "get_me": true,
-              "get_pull_request": true,
-              "get_pull_request_comments": true,
-              "get_pull_request_files": true,
-              "get_pull_request_reviews": true,
-              "get_pull_request_status": true,
-              "get_secret_scanning_alert": true,
-              "list_branches": true,
-              "list_code_scanning_alerts": true,
-              "list_commits": true,
-              "list_issues": true,
-              "list_pull_requests": true,
-              "list_secret_scanning_alerts": true,
-              "search_issues": true,
-              "search_users": true,
-              "search_repositories": true,
-              "search_code": true
-            }
-          }
         }
       },
       "write": {
@@ -184,11 +150,20 @@
     "enabled_in_text_threads": false
   },
   "context_servers": {
-    "mcp-server-context7": {
-      "source": "extension",
-      "settings": {
-        "default_minimum_tokens": "10000"
-      }
+    "github": {
+      "source": "custom",
+      "enabled": true,
+      "command": "bunx",
+      "args": [
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "@smithery-ai/github",
+        "--key",
+        "5d1813c6-4571-4c5e-8f17-2ff9e9914246",
+        "--profile",
+        "principal-jellyfish-1LaTzI"
+      ]
     }
   },
 
@@ -214,8 +189,7 @@
   },
   "git": {
     "inline_blame": {
-      "enabled": true,
-      "delay_ms": 1000
+      "enabled": false
     }
   },
   "vim_mode": true,
