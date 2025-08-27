@@ -31,8 +31,8 @@ hide bhelp
 
 # gping
 
-alias _ping = ping
-alias ping = gping
+# alias _ping = ping
+# alias ping = gping
 
 # lazygit
 
@@ -42,8 +42,9 @@ alias g = git
 
 # lazydocker
 
-alias ld = lazydocker
+# alias ld = lazydocker
 alias _ld = ^ld # beware: `ld` is an existing program
+def ld [] { env TERM=xterm lazydocker }
 
 # bun
 

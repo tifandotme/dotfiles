@@ -48,8 +48,21 @@ export def schedule [
 
 # Clean caches and uninstall unused packages (do this rarely)
 export def clean [] {
-    mise prune
-    # pnpm store prune
-    brew cleanup --prune=all
-    brew autoremove
+    if (which mise | is-not-empty) {
+        mise prune -y
+        mise cache clear -y
+    }
+    if (which pnpm | is-not-empty) {
+        pnpm store prune
+    }
+    if (which brew | is-not-empty) {
+        brew cleanup --prune=all
+        brew autoremove
+    }
+    if (which bun | is-not-empty) {
+        bun pm -g cache rm
+    }
+    if (which npm | is-not-empty) {
+        npm cache clean --force
+    }
 }
