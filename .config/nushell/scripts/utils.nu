@@ -13,6 +13,13 @@ def commands [] {
 }
 
 # Setup project environment
+def revert-release [tag: string] {
+    gh release delete $tag -y
+    git push origin --delete $tag
+    git tag -d $tag
+}
+
+# Setup project environment
 def open-project [default_project: string = ""] {
     # If the default project is present in the project list, fzf will pre-select it using --query.
     # This makes it easy to open your most-used project by just hitting Enter.
