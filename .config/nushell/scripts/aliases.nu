@@ -36,15 +36,13 @@ hide bhelp
 
 # lazygit
 
-alias lg = lazygit
-
-alias g = git
+alias lzg = lazygit
 
 # lazydocker
 
-# alias ld = lazydocker
-alias _ld = ^ld # beware: `ld` is an existing program
-def ld [] { env TERM=xterm lazydocker }
+def lzd [] { env TERM=xterm lazydocker }
+
+alias g = git
 
 # bun
 
@@ -58,11 +56,6 @@ alias p = pnpm
 
 alias _ncu = ncu
 alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME)/.ncu-cache.json"
-
-# gh (with copilot extension installed)
-
-alias cos = gh copilot suggest
-alias coe = gh copilot explain
 
 # yadm
 

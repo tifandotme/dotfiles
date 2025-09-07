@@ -57,6 +57,22 @@ def open-project [default_project: string = ""] {
     }
 }
 
+
+# Open actions-runner tab and run script
+def open-actions-runner [] {
+    let absolute_path = $env.HOME | path join "work/actions-runner"
+    let dir_name = "runner (running)"
+
+    let last_tab_index = zellij action query-tab-names | split row "\n" | length
+    zellij action go-to-tab $last_tab_index
+
+    zellij action new-tab --name $dir_name
+    zellij action new-pane --cwd $absolute_path -- nu -i -c "./run.sh"
+    zellij action focus-previous-pane; zellij action close-pane
+
+    zellij action go-to-previous-tab
+}
+
 # Setup aquasense-app
 def open-aquasense-app [] {
     let absolute_path = $env.HOME | path join "work/aquasense-app"
@@ -73,7 +89,14 @@ def open-aquasense-app [] {
     zellij action new-pane --close-on-exit --cwd $absolute_path -- nu -i -c lazygit
     zellij action focus-previous-pane; zellij action close-pane
 
-    zellij action go-to-previous-tab
+    open-actions-runner
+
+    zellij action go-to-tab-name "aquasense-app"
+}
+
+def open-webui [] {
+    let path = $env.HOME | path join personal openweb-ui
+    docker compose up -f $path -d
 }
 
 # Open up a book
@@ -158,13 +181,11 @@ alias yd = download-youtube
 
 hide yt-dlp
 
-# def get-app-id [app_name: string] {
-#     let app_id = (ps | where name =~ $app_name | get id)
-#     if $app_id == "" {
-#         print "No app found with name: $app_name"
-#         return
-#     }
-#     return $app_id
-# }
-
-# TODO keybinds
+def get-app-id [app_name: string] {
+    let app_id = (ps | where name =~ $app_name | get id)
+    if $app_id == "" {
+        print "No app found with name: $app_name"
+        return
+    }
+    return $app_id
+}
