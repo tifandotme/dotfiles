@@ -83,7 +83,7 @@
     "default_width": 600,
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4"
+      "model": "grok-code-fast-1"
     },
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {

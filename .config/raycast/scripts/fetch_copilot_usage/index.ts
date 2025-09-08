@@ -1,13 +1,10 @@
 import puppeteer from "puppeteer";
 
-// Get 2FA code from arguments
-// const twoFactorCode = Bun.argv[2];
-// if (!twoFactorCode) {
-//   console.error("2FA code not provided as argument");
-//   process.exit(1);
-// }
+// const email = Bun.env.GITHUB_USERNAME;
+// const password = Bun.env.GITHUB_PASSWORD;
+// const twoFactorCode = Bun.env.GITHUB_2FA;
 
-const userDataDir = `${Bun.env.XDG_CONFIG_HOME}/raycast/scripts/profile`;
+const userDataDir = `${process.env.HOME}/.config/raycast/scripts/profile`;
 
 const browser = await puppeteer.launch({
   headless: true,
@@ -17,6 +14,9 @@ const page = await browser.newPage();
 page.setDefaultTimeout(10000);
 
 try {
+  // await page.goto("https://github.com/settings/copilot/features");
+
+  // // Redirected to login
   // await page.goto("https://github.com/login");
 
   // await page.type('input[name="login"]', email);
@@ -24,13 +24,12 @@ try {
   // await page.click('input[type="submit"]');
   // await page.waitForNavigation();
 
-  // // Check if 2FA is required
   // if (page.url().includes("/sessions/two-factor")) {
   //   await page.type('input[name="app_otp"]', twoFactorCode);
   //   await page.click(
   //     'form[action="/sessions/two-factor"] button[type="submit"]',
   //   );
-  //   // await page.waitForNavigation();
+  //   await page.waitForNavigation();
   // }
 
   await page.goto("https://github.com/settings/copilot/features");
