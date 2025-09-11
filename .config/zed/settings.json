@@ -175,7 +175,8 @@
   "vim_mode": true,
   "vim": {
     "highlight_on_yank_duration": 300,
-    "toggle_relative_line_numbers": true
+    "toggle_relative_line_numbers": true,
+    "use_system_clipboard": "on_yank"
   },
   "buffer_font_features": {
     "calt": false // ligatures
@@ -227,7 +228,7 @@
       }
     },
     "Nu": {
-      "tab_size": 4
+      "tab_size": 4,
       // "formatter": {
       //   // https://github.com/nushell/nufmt is not stable yet
       //   "external": {
@@ -235,6 +236,12 @@
       //     "arguments": ["-e", "s/ *$//"]
       //   }
       // }
+      "formatter": {
+        "external": {
+          "command": "/Users/tifan/.config/nushell/scripts/format.nu"
+        }
+      },
+      "format_on_save": "on"
     },
     "CSS": {
       "tab_size": 2
