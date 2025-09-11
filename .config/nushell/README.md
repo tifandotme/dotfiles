@@ -1,6 +1,6 @@
 ## Notes
 
-As of 18 May 2025, Nu's [formatter](https://github.com/nushell/nufmt) is still in pre-alpha
+As of 11 Sep 2025, Nu's [formatter](https://github.com/nushell/nufmt) is still in pre-alpha, so we are using https://github.com/blindFS/topiary-nushell as git submodules
 
 ## Resources
 
