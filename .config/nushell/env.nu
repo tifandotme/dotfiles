@@ -4,20 +4,20 @@
 
 $env.STARSHIP_SHELL = "nu"
 
-def create_left_prompt [--hide] {
-    let starship = if $hide == false {
-        starship prompt --cmd-duration $env.CMD_DURATION_MS
-    }
-    $"($starship)(char newline)"
+def create_left_prompt [    --hide] {
+  let starship = if $hide == false {
+    starship prompt --cmd-duration $env.CMD_DURATION_MS
+  }
+  $"($starship)(char newline)"
 }
 
 def create_character [type: string] {
-    if $env.LAST_EXIT_CODE == 1 {
-        return $'(ansi red_bold)x (ansi reset)'
-    }
+  if $env.LAST_EXIT_CODE == 1 {
+    return $'(ansi red_bold)x (ansi reset)'
+  }
 
-    let char = if $type == insert { '>' } else { '<' }
-    $'(ansi green_bold)($char) (ansi reset)'
+  let char = if $type == insert { '>' } else { '<' }
+  $'(ansi green_bold)($char) (ansi reset)'
 }
 
 $env.PROMPT_COMMAND = { create_left_prompt }
@@ -59,7 +59,7 @@ $env.MANPAGER = "sh -c 'col -bx | bat -l man -p'"
 $env.MANROFFOPT = "-c"
 
 def --env add_path [path: string] {
-    $env.PATH = ($env.PATH | split row (char esep) | prepend $path | uniq)
+  $env.PATH = ($env.PATH | split row (char esep) | prepend $path | uniq)
 }
 
 add_path ($env.HOME | path join .local bin)

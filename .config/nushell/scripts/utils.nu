@@ -1,82 +1,53 @@
 # Show all open ports
 def open-ports [] {
-    lsof -i -P -n | grep LISTEN
+  lsof -i -P -n | grep LISTEN
 }
 
 # List all custom commands and aliases (filtered by noteworthiness)
 def commands [] {
-    let custom_excludes = [
-        "drop", "banner", "lsblk", "update terminal", "_", "main", "pwd", "show", "next", "add"
-    ]
+  let custom_excludes = [
+    "drop"
+    "banner"
+    "lsblk"
+    "update terminal"
+    "_"
+    "main"
+    "pwd"
+    "show"
+    "next"
+    "add"
+  ]
 
-    help commands | where command_type =~ 'custom|alias' | reject params input_output search_terms category command_type | where name !~ ($custom_excludes | str join "|") | sort-by description
+  help commands | where command_type =~ 'custom|alias' | reject params input_output search_terms category command_type | where name !~ ($custom_excludes | str join "|") | sort-by description
 }
 
 # Setup project environment
 def revert-release [tag: string] {
-    gh release delete $tag -y
-    git push origin --delete $tag
-    git tag -d $tag
+  gh release delete $tag -y
+  git push origin --delete $tag
+  git tag -d $tag
 }
 
 # Setup project environment
 def open-project [default_project: string = ""] {
-    # If the default project is present in the project list, fzf will pre-select it using --query.
-    # This makes it easy to open your most-used project by just hitting Enter.
-    # const default_project = "aquasense-app"
-    try {
-        let project_dirs = _ls ~/personal ~/work | where type =~ dir | get name
+  # If the default project is present in the project list, fzf will pre-select it using --query.
+  # This makes it easy to open your most-used project by just hitting Enter.
+  # const default_project = "aquasense-app"
+  try {
+    let project_dirs = _ls ~/personal ~/work | where type =~ dir | get name
 
-        let project_list = $project_dirs | str join "\n" | str replace --all $"($env.HOME)/" '' | str join "\n"
+    let project_list = $project_dirs | str join "\n" | str replace --all $"($env.HOME)/" '' | str join "\n"
 
-        let has_default = $project_list | str contains $default_project
+    let has_default = $project_list | str contains $default_project
 
-        let chosen_project = if $has_default {
-            $project_list | fzf --query=($default_project)
-        } else {
-            $project_list | fzf
-        }
-
-        let dir_name = $chosen_project | split row "/" | get 1
-        let absolute_path = $"($env.HOME)/($chosen_project)"
-
-        let last_tab_index = zellij action query-tab-names | split row "\n" | length
-        zellij action go-to-tab $last_tab_index
-
-        zellij action new-tab --name $dir_name
-        zellij action new-pane --cwd $absolute_path -- nu -i
-        zellij action focus-previous-pane; zellij action close-pane
-
-        zellij action new-tab --name $"($dir_name)\(git\)"
-        zellij action new-pane --close-on-exit --cwd $absolute_path -- nu -i -c lazygit
-        zellij action focus-previous-pane; zellij action close-pane
-
-        zellij action go-to-previous-tab
-    } catch {
-        print "No project directory found."
+    let chosen_project = if $has_default {
+      $project_list | fzf --query=($default_project)
+    } else {
+      $project_list | fzf
     }
-}
 
-
-# Open actions-runner tab and run script
-def open-actions-runner [] {
-    let absolute_path = $env.HOME | path join "work/actions-runner"
-    let dir_name = "runner (running)"
-
-    let last_tab_index = zellij action query-tab-names | split row "\n" | length
-    zellij action go-to-tab $last_tab_index
-
-    zellij action new-tab --name $dir_name
-    zellij action new-pane --cwd $absolute_path -- nu -i -c "./run.sh"
-    zellij action focus-previous-pane; zellij action close-pane
-
-    zellij action go-to-previous-tab
-}
-
-# Setup aquasense-app
-def open-aquasense-app [] {
-    let absolute_path = $env.HOME | path join "work/aquasense-app"
-    let dir_name = "aquasense-app"
+    let dir_name = $chosen_project | split row "/" | get 1
+    let absolute_path = $"($env.HOME)/($chosen_project)"
 
     let last_tab_index = zellij action query-tab-names | split row "\n" | length
     zellij action go-to-tab $last_tab_index
@@ -89,64 +60,104 @@ def open-aquasense-app [] {
     zellij action new-pane --close-on-exit --cwd $absolute_path -- nu -i -c lazygit
     zellij action focus-previous-pane; zellij action close-pane
 
-    open-actions-runner
+    zellij action go-to-previous-tab
+  } catch {
+    print "No project directory found."
+  }
+}
 
-    zellij action go-to-tab-name "aquasense-app"
+# Open actions-runner tab and run script
+def open-actions-runner [] {
+  let absolute_path = $env.HOME | path join "work/actions-runner"
+  let dir_name = "runner (running)"
+
+  let last_tab_index = zellij action query-tab-names | split row "\n" | length
+  zellij action go-to-tab $last_tab_index
+
+  zellij action new-tab --name $dir_name
+  zellij action new-pane --cwd $absolute_path -- nu -i -c "./run.sh"
+  zellij action focus-previous-pane; zellij action close-pane
+
+  zellij action go-to-previous-tab
+}
+
+# Setup aquasense-app
+def open-aquasense-app [] {
+  let absolute_path = $env.HOME | path join "work/aquasense-app"
+  let dir_name = "aquasense-app"
+
+  let include_runner = (input $"(ansi yellow)Do you want to open the actions-runner? \(y/N\): (ansi reset)" | str downcase) == "y"
+
+  let last_tab_index = zellij action query-tab-names | split row "\n" | length
+  zellij action go-to-tab $last_tab_index
+
+  zellij action new-tab --name $dir_name
+  zellij action new-pane --cwd $absolute_path -- nu -i
+  zellij action focus-previous-pane; zellij action close-pane
+
+  zellij action new-tab --name $"($dir_name)\(git\)"
+  zellij action new-pane --close-on-exit --cwd $absolute_path -- nu -i -c lazygit
+  zellij action focus-previous-pane; zellij action close-pane
+
+  if $include_runner {
+    open-actions-runner
+  }
+  zellij action go-to-tab-name "aquasense-app"
 }
 
 def open-webui [] {
-    let path = $env.HOME | path join personal openweb-ui
-    docker compose up -f $path -d
+  let path = $env.HOME | path join personal openweb-ui
+  docker compose up -f $path -d
 }
 
 # Open up a book
 def open-book [] {
-    try {
-        let books_dir = $"($env.HOME)/personal/books/"
+  try {
+    let books_dir = $"($env.HOME)/personal/books/"
 
-        let books = _ls ...(glob $"($books_dir)**/*.{pdf,epub}") | get name
+    let books = _ls ...(glob $"($books_dir)**/*.{pdf,epub}") | get name
 
-        let chosen_book = $books | str join "\n" | str replace --all $books_dir '' | str join "\n" | fzf
+    let chosen_book = $books | str join "\n" | str replace --all $books_dir '' | str join "\n" | fzf
 
-        ^open $"($books_dir)($chosen_book)"
-    } catch {
-        print "No books found."
-    }
+    ^open $"($books_dir)($chosen_book)"
+  } catch {
+    print "No books found."
+  }
 }
 
 # Diff two files located anywhere within the current directory (MUST be inside a git repository)
 def compare [] {
-    use std
+  use std
 
-    let is_git_repo = (do { git rev-parse --is-inside-work-tree } | complete).exit_code == 0
+  let is_git_repo = (do { git rev-parse --is-inside-work-tree } | complete).exit_code == 0
 
-    let files = if $is_git_repo {
-        # If in git repo, use git ls-files for untracked and tracked, excluding .gitignore
-        do {
-            git ls-files --others --exclude-standard --cached
-        } | complete | if $in.exit_code == 0 { $in.stdout } else { "" }
-    } else {
-        # Otherwise, get all files recursively
-        _ls **/* | where type == file | get name | str join "\n"
-    }
+  let files = if $is_git_repo {
+    # If in git repo, use git ls-files for untracked and tracked, excluding .gitignore
+    do {
+      git ls-files --others --exclude-standard --cached
+    } | complete | if $in.exit_code == 0 { $in.stdout } else { "" }
+  } else {
+    # Otherwise, get all files recursively
+    _ls **/* | where type == file | get name | str join "\n"
+  }
 
-    if ($files | is-empty) {
-        print "No files found in the current directory."
-        return
-    }
+  if ($files | is-empty) {
+    print "No files found in the current directory."
+    return
+  }
 
-    try {
-        let file_1 = $files | fzf --header="Choose a file"
-        let file_2 = $files
-            | split row "\n"
-            | where {|x| $x != $file_1 }
-            | str join "\n"
-            | fzf --header="Choose another file to diff"
+  try {
+    let file_1 = $files | fzf --header="Choose a file"
+    let file_2 = $files
+    | split row "\n"
+    | where {|x| $x != $file_1 }
+    | str join "\n"
+    | fzf --header="Choose another file to diff"
 
-        difft $file_1 $file_2 --syntax-highlight="off"
-    } catch {
-        print "Failed to select files for diff."
-    }
+    difft $file_1 $file_2 --syntax-highlight="off"
+  } catch {
+    print "Failed to select files for diff."
+  }
 }
 
 alias _yt-dlp = yt-dlp
@@ -154,7 +165,7 @@ alias yt-dlp = yt-dlp --extractor-args="youtube:player_client=all" --embed-metad
 
 # Download a YouTube video
 def download-youtube [
-  --audio(-a) # Download audio only
+  --audio (-a) # Download audio only
   --cwd # Save to current directory (default: ~/Downloads)
   url: string # URL of the thing
 ] {
@@ -182,10 +193,22 @@ alias yd = download-youtube
 hide yt-dlp
 
 def get-app-id [app_name: string] {
-    let app_id = (ps | where name =~ $app_name | get id)
-    if $app_id == "" {
-        print "No app found with name: $app_name"
-        return
-    }
-    return $app_id
+  let app_id = (ps | where name =~ $app_name | get id)
+  if $app_id == "" {
+    print "No app found with name: $app_name"
+    return
+  }
+  return $app_id
+}
+
+# Update the format.nu script from the GitHub repo
+def update-format-nu [] {
+  let repo_dir = $nu.default-config-dir | path join scripts topiary-nushell-repo
+  cd $repo_dir
+  git pull
+  if $env.LAST_EXIT_CODE == 0 {
+    print "format.nu updated successfully"
+  } else {
+    print "Failed to update format.nu"
+  }
 }
