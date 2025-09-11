@@ -1,0 +1,3 @@
+[submodule ".config/nushell/scripts/topiary-nushell-repo"]
+	path = .config/nushell/scripts/topiary-nushell-repo
+	url = https://github.com/blindFS/topiary-nushell.git
