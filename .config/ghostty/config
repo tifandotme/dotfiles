@@ -3,6 +3,8 @@
 macos-titlebar-style = "hidden"
 
 confirm-close-surface = false
+# useless inside zellij
+copy-on-select = false
 
 macos-option-as-alt = true
 
@@ -34,6 +36,8 @@ background-blur = true
 keybind = super+r=reload_config
 
 # -------------- UNBINDED
+keybind = super+n=unbind
+
 keybind = super+shift+comma=unbind
 
 keybind = super+alt+shift+w=unbind
