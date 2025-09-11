@@ -36,7 +36,7 @@ brew "monolith"
 brew "sherlock"
 brew "speedtest"
 brew "sshs"
-brew "pueue"
+# brew "pueue"
 brew "hyperfine"
 brew "asciinema"
 brew "tealdeer"
@@ -47,6 +47,9 @@ brew "ffmpeg"
 brew "trafilatura"
 brew "tokei"
 brew "spotify_player"
+
+# nushell formatter https://github.com/blindFS/topiary-nushell
+brew "topiary"
 
 # Languages
 brew "taplo"  # used by Zed's TOML ext
@@ -94,3 +97,6 @@ cask "font-sketchybar-app-font"
 # Dev tools
 cask "zed"
 cask "visual-studio-code"
+
+cask "android-commandlinetools"
+cask "temurin" # needed by android-commandlinetools
