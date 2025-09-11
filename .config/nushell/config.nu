@@ -58,7 +58,7 @@ $env.config = {
       name: complete_completion
       modifier: control
       keycode: space
-      mode: [emacs, vi_normal vi_insert]
+      mode: [emacs vi_normal vi_insert]
       event: {send: historyhintcomplete}
     }
     {

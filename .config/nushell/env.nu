@@ -4,7 +4,7 @@
 
 $env.STARSHIP_SHELL = "nu"
 
-def create_left_prompt [    --hide] {
+def create_left_prompt [ --hide] {
   let starship = if $hide == false {
     starship prompt --cmd-duration $env.CMD_DURATION_MS
   }
