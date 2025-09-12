@@ -8,12 +8,10 @@ if [ "$SSID" = "" ]; then
   sketchybar --set "$NAME" \
     icon="􀙈" \
     label="" \
-    icon.color="${DANGER}" \
-    icon.padding_right=0
+    icon.color="${DANGER}"
 else
   sketchybar --set "$NAME" \
     icon="􀙇" \
-    label="$SSID" \
-    icon.color="${ACCENT}" \
-    icon.padding_right=6
+    label="" \
+    icon.color="${ACCENT}"
 fi
