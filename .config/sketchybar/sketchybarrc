@@ -98,18 +98,18 @@ sketchybar --add item front_app left \
 #   --subscribe spotify spotify_update
 
 # SPOTIFY-PLAYER TUI
-# sketchybar --add item spotify center \
-#   --set spotify \
-#   label.max_chars=40 \
-#   label.scroll_duration=300 \
-#   label.shadow.scroll_duration=300 \
-#   scroll_texts=on \
-#   "${GHOST[@]}" \
-#   label.shadow.drawing=off \
-#   icon="􀑪" \
-#   drawing=off \
-#   update_freq=5 \
-#   script="$PLUGIN_DIR/spotify.sh"
+sketchybar --add item spotify center \
+  --set spotify \
+  label.max_chars=40 \
+  label.scroll_duration=300 \
+  label.shadow.scroll_duration=300 \
+  scroll_texts=on \
+  "${GHOST[@]}" \
+  label.shadow.drawing=off \
+  icon="􀑪" \
+  drawing=off \
+  update_freq=5 \
+  script="$PLUGIN_DIR/spotify.sh"
 
 # --------------- RIGHT
 
@@ -132,12 +132,27 @@ exec "$PLUGIN_DIR/battery_monitor.sh" smart-monitor &
 #   script="$PLUGIN_DIR/volume.sh" \
 #   --subscribe volume volume_change
 
+sketchybar --add item caffeinate right \
+  --set caffeinate \
+  icon="􀴽" \
+  icon.padding_right=0 \
+  click_script="$PLUGIN_DIR/caffeinate.sh" \
+  script="$PLUGIN_DIR/caffeinate.sh" \
+  --subscribe caffeinate
+
 sketchybar --add item wifi right \
   --set wifi \
   icon="􀴽" \
   icon.padding_right=0 \
   script="$PLUGIN_DIR/wifi.sh" \
+  click_script="$PLUGIN_DIR/wifi.sh" \
   --subscribe wifi wifi_change
+
+sketchybar --add item network_speed right \
+  --set network_speed \
+  update_freq=1 \
+  icon.padding_right=0 \
+  script="$PLUGIN_DIR/network_speed.sh"
 
 # sketchybar --add item vpn right \
 #   --set vpn \
@@ -158,15 +173,6 @@ sketchybar --add item wifi right \
 #   icon="􀡊" \
 #   icon.padding_right=0 \
 #   click_script="$PLUGIN_DIR/toggle_theme.sh"
-
-sketchybar --add item caffeinate right \
-  --set caffeinate \
-  icon="􀴽" \
-  icon.padding_right=0 \
-  click_script="$PLUGIN_DIR/caffeinate.sh" \
-  script="$PLUGIN_DIR/caffeinate.sh" \
-  --subscribe caffeinate
-
 sketchybar --add event send_message
 sketchybar --add event hide_message
 sketchybar --add item aerospace_mode right \
