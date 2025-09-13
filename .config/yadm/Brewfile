@@ -47,6 +47,7 @@ brew "ffmpeg"
 brew "trafilatura"
 brew "tokei"
 brew "spotify_player"
+brew "bandwhich" # need sudo to use
 
 # nushell formatter https://github.com/blindFS/topiary-nushell
 brew "topiary"
