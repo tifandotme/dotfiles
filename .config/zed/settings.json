@@ -145,6 +145,7 @@
   },
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 12.5,
+  "agent_font_size": 16.5,
   "buffer_line_height": "standard",
   "use_autoclose": false,
   "current_line_highlight": "all",
