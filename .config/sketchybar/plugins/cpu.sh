@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "$CONFIG_DIR/colors.sh"
+
 # Prevent multiple instances
 LOCKFILE="/tmp/sketchybar_cpu.lock"
 if [ -f "$LOCKFILE" ]; then
@@ -21,8 +23,14 @@ USAGE=$((100 - ${IDLE%.*}))
 if [ "$USAGE" -lt 0 ]; then USAGE=0; fi
 if [ "$USAGE" -gt 100 ]; then USAGE=100; fi
 
-# Update sketchybar item
+if [ "$USAGE" -ge 80 ]; then
+  LABEL_COLOR="$DANGER"
+else
+  LABEL_COLOR="$FOREGROUND"
+fi
+
 sketchybar --set "$NAME" \
   icon="􀫥" \
   label="${USAGE}%" \
+  label.color="$LABEL_COLOR" \
   icon.padding_right=6

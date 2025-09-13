@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "$CONFIG_DIR/colors.sh"
+
 # Get total memory in bytes
 TOTAL_MEMORY=$(sysctl -n hw.memsize)
 
@@ -17,8 +19,14 @@ USED_MEMORY=$(((ACTIVE_PAGES + WIRED_PAGES + COMPRESSED_PAGES) * PAGE_SIZE))
 # Calculate percentage
 PERCENTAGE=$((USED_MEMORY * 100 / TOTAL_MEMORY))
 
-# Update sketchybar item
+if [ "$PERCENTAGE" -ge 80 ]; then
+  LABEL_COLOR="$DANGER"
+else
+  LABEL_COLOR="$FOREGROUND"
+fi
+
 sketchybar --set "$NAME" \
   label="${PERCENTAGE}%" \
+  label.color="$LABEL_COLOR" \
   icon="􀫦" \
   icon.padding_right=6
