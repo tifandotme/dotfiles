@@ -40,6 +40,9 @@
   "file_finder": {
     "file_icons": false
   },
+  "collaboration_panel": {
+    "button": false
+  },
   "project_panel": {
     "default_width": 300,
     "indent_guides": {
