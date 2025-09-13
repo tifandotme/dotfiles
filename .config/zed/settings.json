@@ -10,7 +10,6 @@
     "mode": "system"
   },
   "experimental.theme_overrides": {
-    // Base 16 IR Black
     "terminal.ansi.black": "#000000",
     "terminal.ansi.bright_black": "#6c6c66",
     "terminal.ansi.dim_black": "#6c6c66",
@@ -36,8 +35,6 @@
     "terminal.ansi.bright_white": "#fdfbee",
     "terminal.ansi.dim_white": "#b5b3aa"
   },
-
-  // GENERAL
   "restore_on_startup": "last_workspace",
   "format_on_save": "off",
   "file_finder": {
@@ -74,8 +71,6 @@
   "notification_panel": {
     "button": false
   },
-
-  // AI
   "agent": {
     "use_modifier_to_send": false,
     "always_allow_tool_actions": true,
@@ -87,8 +82,8 @@
     },
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {
-      "provider": "mistral",
-      "model": "codestral-latest"
+      "provider": "copilot_chat",
+      "model": "grok-code-fast-1"
     },
     "profiles": {
       "ask": {
@@ -179,15 +174,13 @@
     "use_system_clipboard": "on_yank"
   },
   "buffer_font_features": {
-    "calt": false // ligatures
+    "calt": false
   },
   "diagnostics": {
     "inline": {
       "enabled": false
     }
   },
-
-  // LSP
   "lsp": {
     "biome": {
       "settings": {
@@ -229,13 +222,6 @@
     },
     "Nu": {
       "tab_size": 4,
-      // "formatter": {
-      //   // https://github.com/nushell/nufmt is not stable yet
-      //   "external": {
-      //     "command": "sed",
-      //     "arguments": ["-e", "s/ *$//"]
-      //   }
-      // }
       "formatter": {
         "external": {
           "command": "/Users/tifan/.config/nushell/scripts/format.nu"
