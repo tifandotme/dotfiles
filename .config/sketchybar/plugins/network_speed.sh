@@ -49,5 +49,10 @@ echo "$CURRENT_TX" >>"$STATS_FILE"
 if [ -z "$INTERFACE" ] || [ -z "$CURRENT_RX" ] || [ -z "$CURRENT_TX" ] || ! ifconfig "$INTERFACE" 2>/dev/null | grep -q "inet "; then
   sketchybar --set "$NAME" label="No connection"
 else
-  sketchybar --set "$NAME" label="↓${DOWNLOAD} ↑${UPLOAD}"
+  # Set label color based on traffic
+  if [ "$DOWNLOAD" = "0K" ] && [ "$UPLOAD" = "0K" ]; then
+    sketchybar --set "$NAME" label="↓${DOWNLOAD} ↑${UPLOAD}" label.color="${ACCENT}"
+  else
+    sketchybar --set "$NAME" label="↓${DOWNLOAD} ↑${UPLOAD}" label.color="${FOREGROUND}"
+  fi
 fi
