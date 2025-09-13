@@ -141,6 +141,9 @@ sketchybar --add item cpu right \
 # Start smart battery monitor in background
 exec "$PLUGIN_DIR/battery_monitor.sh" smart-monitor &
 
+# Start caffeinate monitor in background
+exec "$PLUGIN_DIR/caffeinate_monitor.sh" smart-monitor &
+
 # sketchybar --add item volume right \
 #   --set volume \
 #   script="$PLUGIN_DIR/volume.sh" \
