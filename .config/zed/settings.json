@@ -143,6 +143,7 @@
     },
     "enabled_in_text_threads": false
   },
+  "context_servers": {},
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 12.5,
   "agent_font_size": 16.5,
