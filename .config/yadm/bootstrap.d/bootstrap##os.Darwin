@@ -13,10 +13,6 @@ echo "==> Install Homebrew"
 echo "==> Installing packages with brew bundle"
 brew bundle --file="$HOME/.config/yadm/Brewfile"
 
-echo "==> Installing GitHub CLI extensions"
-# `gh auth login` first
-gh extension install github/gh-copilot
-
 echo "==> Installing global npm packages"
 bun add -g vercel npm-check-updates
 
