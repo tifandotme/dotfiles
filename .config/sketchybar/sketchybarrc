@@ -124,6 +124,20 @@ sketchybar --add item battery right \
   script="$PLUGIN_DIR/battery.sh" \
   --subscribe battery system_woke power_source_change
 
+sketchybar --add item ram right \
+  --set ram \
+  icon="􀴽" \
+  icon.padding_right=0 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/ram.sh"
+
+sketchybar --add item cpu right \
+  --set cpu \
+  icon="􀴽" \
+  icon.padding_right=0 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/cpu.sh"
+
 # Start smart battery monitor in background
 exec "$PLUGIN_DIR/battery_monitor.sh" smart-monitor &
 
