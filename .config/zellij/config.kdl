@@ -45,9 +45,9 @@ keybinds clear-defaults=true {
         }
         bind "Ctrl Shift \\" {
             Run "nu" "-l" "-c" "open-aquasense-app" {
-                in_place true
+                floating true
                 close_on_exit true
-                hold_on_close true
+                hold_on_close false
             }
         }
         bind "Ctrl \\" {
