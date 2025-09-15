@@ -20,13 +20,16 @@ USED_MEMORY=$(((ACTIVE_PAGES + WIRED_PAGES + COMPRESSED_PAGES) * PAGE_SIZE))
 PERCENTAGE=$((USED_MEMORY * 100 / TOTAL_MEMORY))
 
 if [ "$PERCENTAGE" -ge 80 ]; then
+  ICON_COLOR="$DANGER"
   LABEL_COLOR="$DANGER"
 else
   LABEL_COLOR="$FOREGROUND"
+  ICON_COLOR="$ACCENT"
 fi
 
 sketchybar --set "$NAME" \
   label="${PERCENTAGE}%" \
   label.color="$LABEL_COLOR" \
+  icon.color="$ICON_COLOR" \
   icon="􀫦" \
   icon.padding_right=6
