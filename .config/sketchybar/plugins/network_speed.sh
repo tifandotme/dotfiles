@@ -51,8 +51,16 @@ if [ -z "$INTERFACE" ] || [ -z "$CURRENT_RX" ] || [ -z "$CURRENT_TX" ] || ! ifco
 else
   # Set label color based on traffic
   if [ "$DOWNLOAD" = "0K" ] && [ "$UPLOAD" = "0K" ]; then
-    sketchybar --set "$NAME" label="↓${DOWNLOAD} ↑${UPLOAD}" label.color="${ACCENT}"
+    sketchybar --set "$NAME" \
+      label="↓${DOWNLOAD} ↑${UPLOAD}" \
+      label.color="${ACCENT}" \
+      icon.drawing=off \
+      label.padding_left=12
   else
-    sketchybar --set "$NAME" label="↓${DOWNLOAD} ↑${UPLOAD}" label.color="${FOREGROUND}"
+    sketchybar --set "$NAME" \
+      label="↓${DOWNLOAD} ↑${UPLOAD}" \
+      label.color="${FOREGROUND}" \
+      icon.drawing=off \
+      label.padding_left=12
   fi
 fi

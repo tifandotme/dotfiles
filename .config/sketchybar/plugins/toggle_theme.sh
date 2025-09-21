@@ -2,7 +2,7 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title Toggle System Appearance
+# @raycast.title Toggle Theme
 # @raycast.mode silent
 
 # Optional parameters:
