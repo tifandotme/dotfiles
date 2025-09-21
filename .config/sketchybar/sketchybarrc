@@ -20,7 +20,7 @@ default=(
   icon.color="${ACCENT}"
   label.color="${FOREGROUND}"
 
-  label.padding_right=10
+  label.padding_right=12
   icon.padding_left=10
   icon.padding_right=6
 
@@ -161,8 +161,9 @@ sketchybar --add item wifi right \
 
 sketchybar --add item network_speed right \
   --set network_speed \
-  update_freq=1 \
+  icon="􀴽" \
   icon.padding_right=0 \
+  update_freq=1 \
   script="$PLUGIN_DIR/network_speed.sh"
 
 # sketchybar --add item vpn right \
