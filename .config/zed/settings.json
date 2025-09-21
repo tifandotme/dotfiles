@@ -9,32 +9,6 @@
     "light": "Gruvbox Light Hard",
     "mode": "system"
   },
-  "experimental.theme_overrides": {
-    "terminal.ansi.black": "#000000",
-    "terminal.ansi.bright_black": "#6c6c66",
-    "terminal.ansi.dim_black": "#6c6c66",
-    "terminal.ansi.red": "#ff6c60",
-    "terminal.ansi.bright_red": "#ff6c60",
-    "terminal.ansi.dim_red": "#ff6c60",
-    "terminal.ansi.green": "#a8ff60",
-    "terminal.ansi.bright_green": "#a8ff60",
-    "terminal.ansi.dim_green": "#a8ff60",
-    "terminal.ansi.yellow": "#ffffb6",
-    "terminal.ansi.bright_yellow": "#ffffb6",
-    "terminal.ansi.dim_yellow": "#ffffb6",
-    "terminal.ansi.blue": "#96cbfe",
-    "terminal.ansi.bright_blue": "#96cbfe",
-    "terminal.ansi.dim_blue": "#96cbfe",
-    "terminal.ansi.magenta": "#ff73fd",
-    "terminal.ansi.bright_magenta": "#ff73fd",
-    "terminal.ansi.dim_magenta": "#ff73fd",
-    "terminal.ansi.cyan": "#c6c5fe",
-    "terminal.ansi.bright_cyan": "#c6c5fe",
-    "terminal.ansi.dim_cyan": "#c6c5fe",
-    "terminal.ansi.white": "#b5b3aa",
-    "terminal.ansi.bright_white": "#fdfbee",
-    "terminal.ansi.dim_white": "#b5b3aa"
-  },
   "restore_on_startup": "last_workspace",
   "format_on_save": "off",
   "file_finder": {
@@ -52,7 +26,8 @@
     "auto_fold_dirs": false,
     "indent_size": 20,
     "folder_icons": false,
-    "file_icons": false
+    "file_icons": false,
+    "hide_root": true
   },
   "outline_panel": {
     "default_width": 300,
@@ -72,7 +47,6 @@
     "button": false
   },
   "agent": {
-    "use_modifier_to_send": false,
     "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_width": 600,
@@ -88,10 +62,74 @@
     "profiles": {
       "ask": {
         "context_servers": {
+          "github": {
+            "tools": {
+              "get_code_scanning_alert": true,
+              "get_commit": true,
+              "get_dependabot_alert": true,
+              "get_discussion": true,
+              "get_discussion_comments": true,
+              "get_file_contents": true,
+              "get_global_security_advisory": true,
+              "get_issue": true,
+              "get_issue_comments": true,
+              "get_job_logs": true,
+              "get_latest_release": true,
+              "get_me": true,
+              "get_notification_details": true,
+              "get_pull_request": true,
+              "get_pull_request_comments": true,
+              "get_pull_request_diff": true,
+              "get_pull_request_files": true,
+              "get_pull_request_reviews": true,
+              "get_pull_request_status": true,
+              "get_release_by_tag": true,
+              "get_secret_scanning_alert": true,
+              "get_tag": true,
+              "get_team_members": true,
+              "get_teams": true,
+              "get_workflow_run": true,
+              "get_workflow_run_logs": true,
+              "get_workflow_run_usage": true,
+              "list_branches": true,
+              "list_code_scanning_alerts": true,
+              "list_commits": true,
+              "list_dependabot_alerts": true,
+              "list_discussion_categories": true,
+              "list_discussions": true,
+              "list_gists": true,
+              "list_global_security_advisories": true,
+              "list_issue_types": true,
+              "list_issues": true,
+              "list_notifications": true,
+              "list_org_repository_security_advisories": true,
+              "list_pull_requests": true,
+              "list_releases": true,
+              "list_repository_security_advisories": true,
+              "list_secret_scanning_alerts": true,
+              "list_sub_issues": true,
+              "list_tags": true,
+              "list_workflow_jobs": true,
+              "list_workflow_run_artifacts": true,
+              "list_workflow_runs": true,
+              "list_workflows": true,
+              "search_code": true,
+              "search_issues": true,
+              "search_orgs": true,
+              "search_pull_requests": true,
+              "search_repositories": true,
+              "search_users": true
+            }
+          },
+          "server-sequential-thinking": {
+            "tools": {
+              "sequentialthinking": true
+            }
+          },
           "exa": {
             "tools": {
-              "web_search_exa": true,
-              "crawling_exa": true
+              "crawling_exa": true,
+              "web_search_exa": true
             }
           },
           "context7-mcp": {
@@ -106,7 +144,6 @@
           "open": true,
           "contents": true,
           "diagnostics": true,
-          "fetch": false,
           "list_directory": true,
           "now": true,
           "find_path": true,
@@ -119,10 +156,10 @@
         "context_servers": {
           "exa": {
             "tools": {
-              "company_research_exa": false,
-              "deep_researcher_check": false,
+              "linkedin_search_exa": false,
               "deep_researcher_start": false,
-              "linkedin_search_exa": false
+              "deep_researcher_check": false,
+              "company_research_exa": false
             }
           }
         },
@@ -170,7 +207,7 @@
   "context_servers": {},
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 12.5,
-  "agent_font_size": 16.5,
+  "agent_font_size": 17,
   "buffer_line_height": "standard",
   "use_autoclose": false,
   "current_line_highlight": "all",
@@ -262,7 +299,7 @@
       "tab_size": 2
     },
     "Markdown": {
-      "show_edit_predictions": false
+      "show_edit_predictions": true
     }
   }
 }
