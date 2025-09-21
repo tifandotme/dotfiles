@@ -65,9 +65,6 @@
   "git_panel": {
     "button": false
   },
-  "chat_panel": {
-    "button": "when_in_call"
-  },
   "terminal": {
     "button": false
   },
@@ -90,6 +87,20 @@
     },
     "profiles": {
       "ask": {
+        "context_servers": {
+          "exa": {
+            "tools": {
+              "web_search_exa": true,
+              "crawling_exa": true
+            }
+          },
+          "context7-mcp": {
+            "tools": {
+              "resolve-library-id": true,
+              "get-library-docs": true
+            }
+          }
+        },
         "name": "Ask",
         "tools": {
           "open": true,
@@ -105,6 +116,16 @@
         }
       },
       "write": {
+        "context_servers": {
+          "exa": {
+            "tools": {
+              "company_research_exa": false,
+              "deep_researcher_check": false,
+              "deep_researcher_start": false,
+              "linkedin_search_exa": false
+            }
+          }
+        },
         "name": "Write",
         "tools": {
           "project_notifications": true,
