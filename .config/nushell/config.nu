@@ -53,6 +53,12 @@ $env.config = {
   edit_mode: vi
   highlight_resolved_externals: true
 
+  history: {
+    file_format: "sqlite"
+    max_size: 5_000_000
+    isolation: false
+  }
+
   keybindings: [
     {
       name: complete_completion

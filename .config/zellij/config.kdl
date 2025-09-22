@@ -94,11 +94,23 @@ keybinds clear-defaults=true {
         bind "Ctrl g" {
             SwitchToMode "locked"
         }
+        bind "Ctrl Alt h" {
+            MoveTab "left"
+        }
+        bind "Ctrl Alt l" {
+            MoveTab "right"
+        }
         bind "Alt h" {
             MoveFocusOrTab "left"
         }
         bind "Alt l" {
             MoveFocusOrTab "right"
+        }
+        bind "Super w" {
+            CloseTab
+        }
+        bind "Super t" {
+            NewTab
         }
         bind "Ctrl q" {
             Quit

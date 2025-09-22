@@ -90,12 +90,12 @@ cmd-2 = 'workspace 2_projects' # Electron/Android Studio development, or else
 cmd-3 = 'workspace 3_editor'
 cmd-4 = 'workspace 4_terminal'
 cmd-5 = 'workspace 5_rest'
-# corne
-ctrl-a = 'workspace 1_web'
-ctrl-s = 'workspace 2_projects' # Electron/Android Studio development, or else
-ctrl-d = 'workspace 3_editor'
-ctrl-f = 'workspace 4_terminal'
-ctrl-g = 'workspace 5_rest'
+# corne (conflict, comment for now)
+# ctrl-a = 'workspace 1_web'
+# ctrl-s = 'workspace 2_projects' # Electron/Android Studio development, or else
+# ctrl-d = 'workspace 3_editor'
+# ctrl-f = 'workspace 4_terminal'
+# ctrl-g = 'workspace 5_rest'
 
 # alt-w = [
 #     'workspace W',
@@ -107,12 +107,12 @@ cmd-shift-2 = ['move-node-to-workspace 2_projects', 'workspace 2_projects']
 cmd-shift-3 = ['move-node-to-workspace 3_editor', 'workspace 3_editor']
 cmd-shift-4 = ['move-node-to-workspace 4_terminal', 'workspace 4_terminal']
 cmd-shift-5 = ['move-node-to-workspace 5_rest', 'workspace 5_rest']
-# corne
-ctrl-shift-a = ['move-node-to-workspace 1_web', 'workspace 1_web']
-ctrl-shift-s = ['move-node-to-workspace 2_projects', 'workspace 2_projects']
-ctrl-shift-d = ['move-node-to-workspace 3_editor', 'workspace 3_editor']
-ctrl-shift-f = ['move-node-to-workspace 4_terminal', 'workspace 4_terminal']
-ctrl-shift-g = ['move-node-to-workspace 5_rest', 'workspace 5_rest']
+# corne (nah, confict)
+# ctrl-shift-a = ['move-node-to-workspace 1_web', 'workspace 1_web']
+# ctrl-shift-s = ['move-node-to-workspace 2_projects', 'workspace 2_projects']
+# ctrl-shift-d = ['move-node-to-workspace 3_editor', 'workspace 3_editor']
+# ctrl-shift-f = ['move-node-to-workspace 4_terminal', 'workspace 4_terminal']
+# ctrl-shift-g = ['move-node-to-workspace 5_rest', 'workspace 5_rest']
 
 # Change modes
 cmd-shift-semicolon = [

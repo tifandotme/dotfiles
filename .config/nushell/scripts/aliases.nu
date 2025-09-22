@@ -86,6 +86,11 @@ alias spe = speedtest
 alias _rg = rg
 alias rg = rg --smart-case --glob '!{.git/*,out/*,**/node_modules/**}' --max-columns-preview
 
+# bandwhich
+def bandwhich [] {
+    run-with-tab-rename --name [bandwhich] sudo bandwhich
+}
+
 # ------- spotify_player -------
 
 def spo [...args] {
