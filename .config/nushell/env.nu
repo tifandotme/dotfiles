@@ -40,7 +40,7 @@ $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 
 # $env.COLIMA_HOME = ($env.XDG_CONFIG_HOME | path join colima) # https://github.com/abiosoft/colima/issues/1236
 $env.DOCKER_CONFIG = ($env.XDG_CONFIG_HOME | path join docker)
-$env.DOCKER_HOST = $"unix://($env.HOME | path join .colima)/default/docker.sock"
+$env.DOCKER_HOST = $"unix://($env.XDG_CONFIG_HOME | path join colima)/default/docker.sock"
 
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
