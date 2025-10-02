@@ -1,7 +1,11 @@
 {
-	"auths": {},
-	"currentContext": "colima",
-	"cliPluginsExtraDirs": [
-		"/opt/homebrew/lib/docker/cli-plugins"
-	]
+  "auths": {},
+  "currentContext": "colima",
+  "cliPluginsExtraDirs": [
+    "/opt/homebrew/lib/docker/cli-plugins"
+  ],
+  "credHelpers": {
+    "asia-southeast1-docker.pkg.dev": "gcloud",
+    "us-central1-docker.pkg.dev": "gcloud"
+  }
 }
