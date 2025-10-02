@@ -61,84 +61,7 @@
     },
     "profiles": {
       "ask": {
-        "context_servers": {
-          "github": {
-            "tools": {
-              "get_code_scanning_alert": true,
-              "get_commit": true,
-              "get_dependabot_alert": true,
-              "get_discussion": true,
-              "get_discussion_comments": true,
-              "get_file_contents": true,
-              "get_global_security_advisory": true,
-              "get_issue": true,
-              "get_issue_comments": true,
-              "get_job_logs": true,
-              "get_latest_release": true,
-              "get_me": true,
-              "get_notification_details": true,
-              "get_pull_request": true,
-              "get_pull_request_comments": true,
-              "get_pull_request_diff": true,
-              "get_pull_request_files": true,
-              "get_pull_request_reviews": true,
-              "get_pull_request_status": true,
-              "get_release_by_tag": true,
-              "get_secret_scanning_alert": true,
-              "get_tag": true,
-              "get_team_members": true,
-              "get_teams": true,
-              "get_workflow_run": true,
-              "get_workflow_run_logs": true,
-              "get_workflow_run_usage": true,
-              "list_branches": true,
-              "list_code_scanning_alerts": true,
-              "list_commits": true,
-              "list_dependabot_alerts": true,
-              "list_discussion_categories": true,
-              "list_discussions": true,
-              "list_gists": true,
-              "list_global_security_advisories": true,
-              "list_issue_types": true,
-              "list_issues": true,
-              "list_notifications": true,
-              "list_org_repository_security_advisories": true,
-              "list_pull_requests": true,
-              "list_releases": true,
-              "list_repository_security_advisories": true,
-              "list_secret_scanning_alerts": true,
-              "list_sub_issues": true,
-              "list_tags": true,
-              "list_workflow_jobs": true,
-              "list_workflow_run_artifacts": true,
-              "list_workflow_runs": true,
-              "list_workflows": true,
-              "search_code": true,
-              "search_issues": true,
-              "search_orgs": true,
-              "search_pull_requests": true,
-              "search_repositories": true,
-              "search_users": true
-            }
-          },
-          "server-sequential-thinking": {
-            "tools": {
-              "sequentialthinking": true
-            }
-          },
-          "exa": {
-            "tools": {
-              "crawling_exa": true,
-              "web_search_exa": true
-            }
-          },
-          "context7-mcp": {
-            "tools": {
-              "resolve-library-id": true,
-              "get-library-docs": true
-            }
-          }
-        },
+        "enable_all_context_servers": true,
         "name": "Ask",
         "tools": {
           "open": true,
@@ -153,16 +76,7 @@
         }
       },
       "write": {
-        "context_servers": {
-          "exa": {
-            "tools": {
-              "linkedin_search_exa": false,
-              "deep_researcher_start": false,
-              "deep_researcher_check": false,
-              "company_research_exa": false
-            }
-          }
-        },
+        "enable_all_context_servers": true,
         "name": "Write",
         "tools": {
           "project_notifications": true,
@@ -188,8 +102,7 @@
           "rename": true,
           "symbol_info": true,
           "thinking": true
-        },
-        "enable_all_context_servers": true
+        }
       }
     }
   },
