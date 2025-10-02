@@ -1,36 +1,82 @@
 #
-# Update Zed Settings from MCP Config
+# Update Zed and OpenCode Settings from MCP Config
 #
 # This script reads server configurations from a source JSON file (mcpo/config.json),
-# modifies them, and updates a destination JSON file (zed/settings.json).
+# transforms them for different target formats, and updates destination JSON files
+# (zed/settings.json and opencode/opencode.json).
 #
 # Key operations:
 # 1. Reads the `mcpServers` object from the source file.
-# 2. Adds a `"source": "custom"` key-value pair to each server entry.
-# 3. Overwrites the `context_servers` object in the destination file with the modified data.
+# 2. For Zed: Adds a `"source": "custom"` key-value pair to each server entry.
+# 3. For OpenCode: Converts to OpenCode format with "type": "local", command array, etc.
+# 4. Overwrites the `context_servers` object in Zed settings with the transformed data.
+# 5. Overwrites the `mcp` object in OpenCode config with the transformed data.
 #
 
 let MCP_CONFIG_PATH = ($env.XDG_CONFIG_HOME | path join mcpo config.json)
 let ZED_SETTINGS_PATH = ($env.XDG_CONFIG_HOME | path join zed settings.json)
+let OPENCODE_CONFIG_PATH = ($env.XDG_CONFIG_HOME | path join opencode opencode.json)
+
+# Transform servers for Zed format (adds "source": "custom")
+def transform_for_zed [servers] {
+  $servers
+  | items {|server_name server_data|
+    let updated_data = $server_data | insert source "custom"
+    {($server_name): $updated_data}
+  }
+  | reduce -f {} {|acc item| $acc | merge $item }
+}
+
+# Transform servers for OpenCode format
+def transform_for_opencode [servers] {
+  $servers
+  | items {|server_name server_data|
+
+    
+    # Convert command and args to command array
+    let command_array = if ($server_data | get -o args | is-empty) {
+      [$server_data.command]
+    } else {
+      [$server_data.command] ++ $server_data.args
+    }
+
+    # Use env object directly (already in correct format)
+    let environment = if ($server_data | get -o env | is-empty) {
+      {}
+    } else {
+      $server_data.env
+    }
+
+    let opencode_data = {
+      type: "local"
+      command: $command_array
+      enabled: true
+      environment: $environment
+    }
+
+    {($server_name): $opencode_data}
+  }
+  | reduce -f {} {|acc item| $acc | merge $item }
+}
 
 def main [] {
   let mcp_servers = open $MCP_CONFIG_PATH | get mcpServers
 
-  # Add the "source": "custom" field to each server.
-  let updated_servers = $mcp_servers
-  | columns
-  | each {|server_name|
-    let server_data = $mcp_servers | get $server_name
-    let updated_data = $server_data | insert source "custom"
-    {($server_name): $updated_data}
-  }
-  | reduce -f {} {|acc item| $acc | merge $item } # Merge the list of records back into a single record.
+  # Transform servers for Zed
+  let zed_servers = transform_for_zed $mcp_servers
 
+  # Transform servers for OpenCode
+  let opencode_servers = transform_for_opencode $mcp_servers
+
+  # Update Zed settings
   let zed_settings = open $ZED_SETTINGS_PATH
-
-  let updated_zed_settings = $zed_settings | update context_servers $updated_servers
-
+  let updated_zed_settings = $zed_settings | update context_servers $zed_servers
   $updated_zed_settings | to json --indent 2 | save --force $ZED_SETTINGS_PATH
 
-  print $"Successfully updated ($ZED_SETTINGS_PATH) with servers from ($MCP_CONFIG_PATH)!"
+  # Update OpenCode config
+  let opencode_config = open $OPENCODE_CONFIG_PATH
+  let updated_opencode_config = $opencode_config | upsert mcp $opencode_servers
+  $updated_opencode_config | to json --indent 2 | save --force $OPENCODE_CONFIG_PATH
+
+  print $"Successfully updated ($ZED_SETTINGS_PATH) and ($OPENCODE_CONFIG_PATH) with servers from ($MCP_CONFIG_PATH)!"
 }
