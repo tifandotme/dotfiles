@@ -142,7 +142,7 @@ sketchybar --add item ram right \
 exec "$PLUGIN_DIR/battery_monitor.sh" smart-monitor &
 
 # Start caffeinate monitor in background
-exec "$PLUGIN_DIR/caffeinate_monitor.sh" smart-monitor &
+# exec "$PLUGIN_DIR/caffeinate_monitor.sh" smart-monitor &
 
 # sketchybar --add item volume right \
 #   --set volume \
@@ -186,15 +186,15 @@ sketchybar --add item network_speed right \
 #   icon.padding_right=0 \
 #   click_script="$PLUGIN_DIR/toggle_theme.sh"
 
-sketchybar --add event caffeinate_toggle
-sketchybar --add item caffeinate right \
-  --set caffeinate \
-  icon="􀴽" \
-  "${GHOST[@]}" \
-  icon.color="${FOREGROUND}" \
-  icon.padding_right=0 \
-  script="$PLUGIN_DIR/caffeinate.sh" \
-  --subscribe caffeinate caffeinate_toggle
+# sketchybar --add event caffeinate_toggle
+# sketchybar --add item caffeinate right \
+#   --set caffeinate \
+#   icon="􀴽" \
+#   "${GHOST[@]}" \
+#   icon.color="${FOREGROUND}" \
+#   icon.padding_right=0 \
+#   script="$PLUGIN_DIR/caffeinate.sh" \
+#   --subscribe caffeinate caffeinate_toggle
 
 sketchybar --add event send_message
 sketchybar --add event hide_message
