@@ -180,6 +180,10 @@ keybinds clear-defaults=true {
         }
     }
     tmux {
+        bind "e" {
+            EditScrollback
+            SwitchToMode "normal"
+        }
         bind "," {
             SwitchToMode "renametab"
         }
