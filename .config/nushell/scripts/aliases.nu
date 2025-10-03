@@ -18,13 +18,13 @@ alias cat = bat --plain --theme=base16
 alias bhelp = bat --language=help --paging=never --decorations=never --wrap=never
 
 # Run a colored [cmd] -h
-def h [command: string, ...args: string] {
-    ^($command) ...$args -h | bhelp
+def h [command: string ...args: string] {
+  ^($command) ...$args -h | bhelp
 }
 
 # Run a colored [cmd] --help
-def hh [command: string, ...args: string] {
-    ^($command) ...$args --help | bhelp
+def hh [command: string ...args: string] {
+  ^($command) ...$args --help | bhelp
 }
 
 hide bhelp
@@ -64,7 +64,7 @@ alias yag = yadm enter lazygit --work-tree ~
 
 # Push all yadm changes
 def yau [] {
-    yadm add -u; yadm commit -m "update"; yadm push
+  yadm add -u; yadm commit -m "update"; yadm push
 }
 
 # bottom
@@ -88,49 +88,49 @@ alias rg = rg --smart-case --glob '!{.git/*,out/*,**/node_modules/**}' --max-col
 
 # bandwhich
 def bandwhich [] {
-    run-with-tab-rename --name [bandwhich] sudo bandwhich
+  run-with-tab-rename --name [bandwhich] sudo bandwhich
 }
 
 # ------- spotify_player -------
 
 def spo [...args] {
-    TERM=xterm-256color run-with-tab-rename --name [spotify] spotify_player
+  run-with-tab-rename --name [spotify] spotify_player
 }
 
 # ------- yazi -------
 
 # Run yazi (will cd into last directory when closed)
 def --env y [...args] {
-    let tmp = (mktemp -t "yazi-cwd.XXXXXX")
+  let tmp = (mktemp -t "yazi-cwd.XXXXXX")
 
-    run-with-tab-rename --name [yazi] yazi ...$args --cwd-file $tmp
-    # https://yazi-rs.github.io/docs/image-preview/#zellij (GUESS NOT NEEDED IN GHOSTTY)
-    # TERM=xterm-kitty run-with-tab-rename --name [yazi] yazi ...$args --cwd-file $tmp
+  run-with-tab-rename --name [yazi] yazi ...$args --cwd-file $tmp
+  # https://yazi-rs.github.io/docs/image-preview/#zellij (GUESS NOT NEEDED IN GHOSTTY)
+  # TERM=xterm-kitty run-with-tab-rename --name [yazi] yazi ...$args --cwd-file $tmp
 
-    let cwd = (open $tmp)
-    if $cwd != "" and $cwd != $env.PWD {
-        cd $cwd
-    }
+  let cwd = (open $tmp)
+  if $cwd != "" and $cwd != $env.PWD {
+    cd $cwd
+  }
 
-    rm -fp $tmp
+  rm -fp $tmp
 }
 
 # ------- zellij -------
 
 # Delete all zellij sessions (will close terminal window)
 def zka [] {
-    zellij delete-all-sessions --force --yes; zellij kill-all-sessions --yes
+  zellij delete-all-sessions --force --yes; zellij kill-all-sessions --yes
 }
 
 # Run a command and rename the tab (does not work with command that require an certain argument like `ncdu ~`)
 def --wrapped run-with-tab-rename [
-    --name: string
-    command: string
-    ...args: string
+  --name: string
+  command: string
+  ...args: string
 ] {
-    zellij action rename-tab $name
-    do { ^$command ...$args }
-    zellij action undo-rename-tab
+  zellij action rename-tab $name
+  do { ^$command ...$args }
+  zellij action undo-rename-tab
 }
 
 # def nufzf [] {

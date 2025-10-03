@@ -34,7 +34,7 @@ $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = { create_character normal }
 # =============================== ENVS ========================================
 
 $env.EDITOR = "vi"
-# $env.TERM = "xterm-256color" # if not set, will get "WARNING: terminal is not fully functional"
+$env.TERMINFO = "/Applications/Ghostty.app/Contents/Resources/terminfo"
 $env.TERM = "xterm-ghostty" # sometimes it's not set automatically
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
 
