@@ -1,16 +1,6 @@
 #
-# Update Zed and OpenCode Settings from MCP Config
-#
-# This script reads server configurations from a source JSON file (mcpo/config.json),
-# transforms them for different target formats, and updates destination JSON files
-# (zed/settings.json and opencode/opencode.json).
-#
-# Key operations:
-# 1. Reads the `mcpServers` object from the source file.
-# 2. For Zed: Adds a `"source": "custom"` key-value pair to each server entry.
-# 3. For OpenCode: Converts to OpenCode format with "type": "local", command array, etc.
-# 4. Overwrites the `context_servers` object in Zed settings with the transformed data.
-# 5. Overwrites the `mcp` object in OpenCode config with the transformed data.
+# Sync MCP server configs from mcpo/config.json to Zed and OpenCode settings,
+# preserving enabled status and formatting with prettier for consistency.
 #
 
 let MCP_CONFIG_PATH = ($env.XDG_CONFIG_HOME | path join mcpo config.json)
@@ -50,7 +40,7 @@ def transform_for_opencode [servers] {
     let opencode_data = {
       type: "local"
       command: $command_array
-      enabled: true
+      enabled: $server_data.enabled
       environment: $environment
     }
 
@@ -72,11 +62,13 @@ def main [] {
   let zed_settings = open $ZED_SETTINGS_PATH
   let updated_zed_settings = $zed_settings | update context_servers $zed_servers
   $updated_zed_settings | to json --indent 2 | save --force $ZED_SETTINGS_PATH
+  run-external "bunx" "prettier" "--write" $ZED_SETTINGS_PATH
 
   # Update OpenCode config
   let opencode_config = open $OPENCODE_CONFIG_PATH
   let updated_opencode_config = $opencode_config | upsert mcp $opencode_servers
   $updated_opencode_config | to json --indent 2 | save --force $OPENCODE_CONFIG_PATH
+  run-external "bunx" "prettier" "--write" $OPENCODE_CONFIG_PATH
 
   print $"Successfully updated ($ZED_SETTINGS_PATH) and ($OPENCODE_CONFIG_PATH) with servers from ($MCP_CONFIG_PATH)!"
 }
