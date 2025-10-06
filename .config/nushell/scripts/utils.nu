@@ -212,3 +212,23 @@ def update-format-nu [] {
     print "Failed to update format.nu"
   }
 }
+
+# Open memory graph image
+def open-memory-graph [] {
+  if (which dot | is-empty) {
+    print "Graphviz not installed. Install with: brew install graphviz"
+    return
+  }
+  let json = (docker run --rm -v my-memory:/data alpine cat /data/memory.json)
+  let data = $json | lines | where {|line| $line != "" } | each {|line| $line | from json }
+  let entities = $data | where type == "entity" | each {|e|
+    let obs = $e.observations | each {|o| $o | str replace -r ": *" " " } | each {|o| $"- ($o)" } | str join "\n"
+    $"\"($e.name)\" [label=\"($e.entityType)\n($obs)\" shape=box];"
+  }
+  let relations = $data | where type == "relation" | each {|r|
+    $"\"($r.from)\" -> \"($r.to)\" [label=\"($r.relationType)\"];"
+  }
+  let dot = $"digraph G {\n($entities | append $relations | str join "\n")\n}"
+  $dot | dot -Tpng -o /tmp/graph.png
+  ^open /tmp/graph.png
+}
