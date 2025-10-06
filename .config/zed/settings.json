@@ -49,10 +49,10 @@
   "agent": {
     "always_allow_tool_actions": true,
     "default_profile": "write",
-    "default_width": 600,
+    "default_width": 700,
     "default_model": {
       "provider": "copilot_chat",
-      "model": "grok-code-fast-1"
+      "model": "claude-sonnet-4.5"
     },
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {
