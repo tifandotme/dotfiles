@@ -33,8 +33,8 @@ summary = "{track} • {artists}"
 body = "{album}"
 
 [layout]
-playback_window_position = "Top"
-playback_window_height = 6
+playback_window_position = "Bottom"
+playback_window_height = 10
 
 [layout.library]
 playlist_percent = 40
@@ -43,8 +43,8 @@ album_percent = 40
 [device]
 name = "spotify-player"
 device_type = "speaker"
-volume = 80
+volume = 100
 bitrate = 320
-audio_cache = false
-normalization = false
-autoplay = false
+audio_cache = true
+normalization = true
+autoplay = true
