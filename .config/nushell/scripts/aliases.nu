@@ -40,7 +40,7 @@ alias lzg = lazygit
 
 # lazydocker
 
-def lzd [] { env TERM=xterm lazydocker }
+alias lzd = lazydocker
 
 alias g = git
 
@@ -94,7 +94,8 @@ def bandwhich [] {
 # ------- spotify_player -------
 
 def spo [...args] {
-  run-with-tab-rename --name [spotify] spotify_player
+  # without TERM, app won't load
+  TERM="xterm-256color" run-with-tab-rename --name [spotify] spotify_player
 }
 
 # ------- yazi -------
