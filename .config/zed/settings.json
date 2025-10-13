@@ -52,13 +52,18 @@
     "default_width": 700,
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4.5"
+      "model": "grok-code-fast-1"
     },
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {
       "provider": "copilot_chat",
       "model": "grok-code-fast-1"
     },
+    "thread_summary_model": {
+      "provider": "google",
+      "model": "gemini-2.5-flash-lite-preview"
+    },
+    "play_sound_when_agent_done": true,
     "profiles": {
       "ask": {
         "enable_all_context_servers": true,
