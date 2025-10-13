@@ -63,7 +63,6 @@
       "provider": "google",
       "model": "gemini-2.5-flash-lite-preview"
     },
-    "play_sound_when_agent_done": true,
     "profiles": {
       "ask": {
         "enable_all_context_servers": true,
