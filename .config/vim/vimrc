@@ -46,8 +46,8 @@ set mouse=a
 
 " Highlight current line
 set cursorline
-highlight CursorLine cterm=NONE ctermbg=237
-highlight CursorLineNr cterm=NONE ctermbg=237 ctermfg=yellow
+" highlight CursorLine cterm=NONE ctermbg=237
+" highlight CursorLineNr cterm=NONE ctermbg=237 ctermfg=yellow
 
 " Use system clipboard
 set clipboard=unnamed
