@@ -6,6 +6,6 @@
   ],
   "credHelpers": {
     "asia-southeast1-docker.pkg.dev": "gcloud",
-    "us-central1-docker.pkg.dev": "gcloud"
+    "us-west1-docker.pkg.dev": "gcloud"
   }
 }
