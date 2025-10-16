@@ -4,14 +4,14 @@ os:
 git:
   overrideGpg: true
   paging:
-    colorArg: always
     pager: delta --paging=never # other configs in gitconfig
+    colorArg: always
 gui:
   expandFocusedSidePanel: true
   expandedSidePanelWeight: 99
   border: "single"
   showPanelJumps: true
-  showFileTree: false
+  showFileTree: true
   sidePanelWidth: 0.22
   showBottomLine: false
   theme:
@@ -33,3 +33,8 @@ customCommands:
     context: global
     description: "Open repository in browser"
     command: "gh repo view --web"
+  - key: "I"
+    context: "localBranches"
+    description: "Rebase onto upstream"
+    command: "git rebase --autostash --keep-empty --no-autosquash --rebase-merges refs/remotes/upstream/{{.SelectedLocalBranch.Name}}"
+    output: "log"
