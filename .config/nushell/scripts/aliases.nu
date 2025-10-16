@@ -118,6 +118,8 @@ def --env y [...args] {
 
 # ------- zellij -------
 
+alias z = zellij
+
 # Delete all zellij sessions (will close terminal window)
 def zka [] {
   zellij delete-all-sessions --force --yes; zellij kill-all-sessions --yes
