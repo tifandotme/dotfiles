@@ -47,14 +47,18 @@
     "button": false
   },
   "agent": {
+    "expand_terminal_card": false,
+    "expand_edit_card": true,
+    "message_editor_min_lines": 8,
+    "enable_feedback": false,
     "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_width": 700,
+    "play_sound_when_agent_done": true,
     "default_model": {
       "provider": "copilot_chat",
       "model": "grok-code-fast-1"
     },
-    "play_sound_when_agent_done": true,
     "inline_assistant_model": {
       "provider": "copilot_chat",
       "model": "grok-code-fast-1"
