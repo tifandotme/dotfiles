@@ -60,6 +60,14 @@ keybinds clear-defaults=true {
                 hold_on_close false
             }
         }
+        bind "Ctrl Shift g" {
+            Run "nu" "-l" "-c" "gcloud-config" {
+                name "Select gcloud config"
+                floating true
+                close_on_exit true
+                hold_on_close false
+            }
+        }
         bind "Ctrl v" {
             Run "nu" "-l" "-c" "code ." {
                 in_place true
