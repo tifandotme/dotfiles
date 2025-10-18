@@ -69,9 +69,30 @@
     },
     "profiles": {
       "ask": {
-        "enable_all_context_servers": true,
         "name": "Ask",
+        "enable_all_context_servers": true,
+        "context_servers": {
+          "exa": {
+            "tools": {
+              "get_code_context_exa": false
+            }
+          },
+          "travily": {
+            "tools": {
+              "tavily_map": false,
+              "tavily_crawl": false,
+              "tavily_extract": false
+            }
+          },
+          "firecrawl": {
+            "tools": {
+              "firecrawl_extract": false,
+              "firecrawl_search": false
+            }
+          }
+        },
         "tools": {
+          "fetch": false,
           "open": true,
           "contents": true,
           "diagnostics": true,
@@ -84,9 +105,30 @@
         }
       },
       "write": {
-        "enable_all_context_servers": true,
         "name": "Write",
+        "enable_all_context_servers": true,
+        "context_servers": {
+          "exa": {
+            "tools": {
+              "get_code_context_exa": false
+            }
+          },
+          "travily": {
+            "tools": {
+              "tavily_map": false,
+              "tavily_crawl": false,
+              "tavily_extract": false
+            }
+          },
+          "firecrawl": {
+            "tools": {
+              "firecrawl_extract": false,
+              "firecrawl_search": false
+            }
+          }
+        },
         "tools": {
+          "fetch": false,
           "project_notifications": true,
           "open": true,
           "create_directory": true,
@@ -100,7 +142,6 @@
           "delete_path": true,
           "diagnostics": true,
           "edit_file": true,
-          "fetch": false,
           "list_directory": true,
           "move_path": true,
           "now": true,
@@ -119,16 +160,12 @@
   },
   "edit_predictions": {
     "mode": "subtle",
-    "copilot": {
-      "proxy": null,
-      "proxy_no_verify": null
-    },
     "enabled_in_text_threads": false
   },
   "context_servers": {},
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 12.5,
-  "agent_font_size": 17.5,
+  "agent_ui_font_size": 17.5,
   "buffer_line_height": "standard",
   "use_autoclose": false,
   "current_line_highlight": "all",

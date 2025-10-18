@@ -3,7 +3,8 @@
 # preserving enabled status and formatting with prettier for consistency.
 #
 
-let MCP_CONFIG_PATH = ($env.XDG_CONFIG_HOME | path join mcpo config.json)
+let MCPO_CONFIG_PATH = ($env.XDG_CONFIG_HOME | path join mcpo config.json)
+
 let ZED_SETTINGS_PATH = ($env.XDG_CONFIG_HOME | path join zed settings.json)
 let OPENCODE_CONFIG_PATH = ($env.XDG_CONFIG_HOME | path join opencode opencode.json)
 
@@ -50,12 +51,9 @@ def transform_for_opencode [servers] {
 }
 
 def main [] {
-  let mcp_servers = open $MCP_CONFIG_PATH | get mcpServers
+  let mcp_servers = open $MCPO_CONFIG_PATH | get mcpServers
 
-  # Transform servers for Zed
   let zed_servers = transform_for_zed $mcp_servers
-
-  # Transform servers for OpenCode
   let opencode_servers = transform_for_opencode $mcp_servers
 
   # Update Zed settings
@@ -70,5 +68,5 @@ def main [] {
   $updated_opencode_config | to json --indent 2 | save --force $OPENCODE_CONFIG_PATH
   run-external "bunx" "prettier" "--write" $OPENCODE_CONFIG_PATH
 
-  print $"Successfully updated ($ZED_SETTINGS_PATH) and ($OPENCODE_CONFIG_PATH) with servers from ($MCP_CONFIG_PATH)!"
+  print $"Successfully updated ($ZED_SETTINGS_PATH) and ($OPENCODE_CONFIG_PATH) with servers from ($MCPO_CONFIG_PATH)!"
 }
