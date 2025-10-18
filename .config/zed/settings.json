@@ -47,7 +47,7 @@
     "button": false
   },
   "agent": {
-    "expand_terminal_card": false,
+    "expand_terminal_card": true,
     "expand_edit_card": true,
     "message_editor_min_lines": 8,
     "enable_feedback": false,
