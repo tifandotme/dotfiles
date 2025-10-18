@@ -165,7 +165,7 @@
   "context_servers": {},
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 12.5,
-  "agent_ui_font_size": 17.5,
+  "agent_ui_font_size": 18,
   "buffer_line_height": "standard",
   "use_autoclose": false,
   "current_line_highlight": "all",
