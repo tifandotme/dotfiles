@@ -53,11 +53,9 @@ def open-project [default_project: string = ""] {
     zellij action go-to-tab $last_tab_index
 
     zellij action new-tab --name $dir_name
-    zellij action new-pane --cwd $absolute_path -- nu -i
-    zellij action focus-previous-pane; zellij action close-pane
 
     zellij action new-tab --name $"($dir_name)\(git\)"
-    zellij action new-pane --close-on-exit --cwd $absolute_path -- nu -i -c lazygit
+    zellij run --close-on-exit --cwd $absolute_path -- nu -c lazygit
     zellij action focus-previous-pane; zellij action close-pane
 
     zellij action go-to-previous-tab
@@ -75,7 +73,7 @@ def open-actions-runner [] {
   zellij action go-to-tab $last_tab_index
 
   zellij action new-tab --name $dir_name
-  zellij action new-pane --cwd $absolute_path -- nu -i -c "./run.sh"
+  zellij run --close-on-exit --cwd $absolute_path -- nu -c "./run.sh"
   zellij action focus-previous-pane; zellij action close-pane
 
   zellij action go-to-previous-tab
@@ -92,11 +90,9 @@ def open-aquasense-app [] {
   zellij action go-to-tab $last_tab_index
 
   zellij action new-tab --name $dir_name
-  zellij action new-pane --cwd $absolute_path -- nu -i
-  zellij action focus-previous-pane; zellij action close-pane
 
   zellij action new-tab --name $"($dir_name)\(git\)"
-  zellij action new-pane --close-on-exit --cwd $absolute_path -- nu -i -c lazygit
+  zellij run --close-on-exit --cwd $absolute_path -- nu -c lazygit
   zellij action focus-previous-pane; zellij action close-pane
 
   if $include_runner {
@@ -172,7 +168,7 @@ def open-firecrawl [] {
 
   let cmd = "if (colima status --json | from json | is-empty) { colima start }; if not (docker compose ps | str contains 'Up') { docker compose up -d }; lazydocker"
 
-  zellij action new-tab --name $tab_name --cwd $absolute_path
+  zellij action new-tab --name $tab_name
   zellij run --close-on-exit --cwd $absolute_path -- nu -c $cmd
   zellij action focus-previous-pane; zellij action close-pane
 }
