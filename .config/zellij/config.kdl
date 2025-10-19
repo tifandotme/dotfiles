@@ -82,6 +82,13 @@ keybinds clear-defaults=true {
                 hold_on_close false
             }
         }
+        bind "Ctrl f" {
+            Run "nu" "-l" "-c" "open-firecrawl" {
+                in_place true
+                close_on_exit true
+                hold_on_close false
+            }
+        }
     }
     shared_except "locked" {
         bind "Alt +" {
