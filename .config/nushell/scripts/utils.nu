@@ -160,6 +160,23 @@ def compare [] {
   }
 }
 
+def open-firecrawl [] {
+  let absolute_path = $env.HOME | path join personal firecrawl
+  let tab_name = "firecrawl (running)"
+
+  let existing_tabs = zellij action query-tab-names | split row "\n"
+  if $tab_name in $existing_tabs {
+    zellij action go-to-tab-name $tab_name
+    return
+  }
+
+  let cmd = "if (colima status --json | from json | is-empty) { colima start }; if not (docker compose ps | str contains 'Up') { docker compose up -d }; lazydocker"
+
+  zellij action new-tab --name $tab_name --cwd $absolute_path
+  zellij run --close-on-exit --cwd $absolute_path -- nu -c $cmd
+  zellij action focus-previous-pane; zellij action close-pane
+}
+
 alias _yt-dlp = yt-dlp
 alias yt-dlp = yt-dlp --extractor-args="youtube:player_client=all" --embed-metadata --embed-chapters --embed-subs --embed-thumbnail --sponsorblock-remove="sponsor,selfpromo,interaction" --progress --quiet --output="%(uploader)s - %(title)s.%(ext)s"
 
