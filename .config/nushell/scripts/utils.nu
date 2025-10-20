@@ -52,7 +52,7 @@ def open-project [default_project: string = ""] {
     let last_tab_index = zellij action query-tab-names | split row "\n" | length
     zellij action go-to-tab $last_tab_index
 
-    zellij action new-tab --name $dir_name
+    zellij action new-tab --name $dir_name --cwd $absolute_path
 
     zellij action new-tab --name $"($dir_name)\(git\)"
     zellij run --close-on-exit --cwd $absolute_path -- nu -c lazygit
@@ -72,7 +72,7 @@ def open-actions-runner [] {
   let last_tab_index = zellij action query-tab-names | split row "\n" | length
   zellij action go-to-tab $last_tab_index
 
-  zellij action new-tab --name $dir_name
+  zellij action new-tab --name $dir_name --cwd $absolute_path
   zellij run --close-on-exit --cwd $absolute_path -- nu -c "./run.sh"
   zellij action focus-previous-pane; zellij action close-pane
 
@@ -89,7 +89,7 @@ def open-aquasense-app [] {
   let last_tab_index = zellij action query-tab-names | split row "\n" | length
   zellij action go-to-tab $last_tab_index
 
-  zellij action new-tab --name $dir_name
+  zellij action new-tab --name $dir_name --cwd $absolute_path
 
   zellij action new-tab --name $"($dir_name)\(git\)"
   zellij run --close-on-exit --cwd $absolute_path -- nu -c lazygit
