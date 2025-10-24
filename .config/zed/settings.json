@@ -15,7 +15,7 @@
     "file_icons": false
   },
   "collaboration_panel": {
-    "button": false
+    "button": true
   },
   "project_panel": {
     "default_width": 300,
@@ -92,6 +92,7 @@
           }
         },
         "tools": {
+          "copy_path": true,
           "fetch": false,
           "open": true,
           "contents": true,
@@ -106,24 +107,42 @@
       },
       "write": {
         "name": "Build",
-        "enable_all_context_servers": true,
+        "enable_all_context_servers": false,
         "context_servers": {
-          "exa": {
-            "tools": {
-              "get_code_context_exa": false
-            }
-          },
           "tavily": {
             "tools": {
-              "tavily_map": false,
-              "tavily_crawl": false,
-              "tavily_extract": false
+              "tavily_search": true
+            }
+          },
+          "memory": {
+            "tools": {
+              "search_nodes": true,
+              "read_graph": true,
+              "open_nodes": true,
+              "delete_relations": true,
+              "delete_observations": true,
+              "delete_entities": true,
+              "create_relations": true,
+              "create_entities": true,
+              "add_observations": true
+            }
+          },
+          "mcp-sequentialthinking-tools": {
+            "tools": {
+              "sequentialthinking_tools": true
             }
           },
           "firecrawl": {
             "tools": {
-              "firecrawl_extract": false,
-              "firecrawl_search": false
+              "firecrawl_scrape": true,
+              "firecrawl_map": true,
+              "firecrawl_crawl": true,
+              "firecrawl_check_crawl_status": true
+            }
+          },
+          "exa": {
+            "tools": {
+              "web_search_exa": true
             }
           }
         },
@@ -185,7 +204,7 @@
   },
   "git": {
     "inline_blame": {
-      "enabled": false
+      "enabled": true
     }
   },
   "vim_mode": true,
