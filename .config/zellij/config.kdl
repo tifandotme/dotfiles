@@ -44,7 +44,7 @@ keybinds clear-defaults=true {
             SwitchToMode "tmux"
         }
         bind "Ctrl Shift \\" {
-            Run "nu" "-l" "-c" "open-aquasense-app" {
+            Run "nu" "-l" "-c" "open-actions-runner" {
                 floating true
                 close_on_exit true
                 hold_on_close false

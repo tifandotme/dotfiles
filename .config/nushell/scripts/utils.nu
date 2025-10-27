@@ -66,6 +66,13 @@ def open-project [default_project: string = ""] {
 
 # Open actions-runner tab and run script
 def open-actions-runner [] {
+  let response = input $"(ansi yellow)Do you want to open the actions-runner? \(Y/n\): (ansi reset)" | str downcase
+  let include_runner = $response == "y" or $response == ""
+
+  if $include_runner == false {
+    return
+  }
+
   let absolute_path = $env.HOME | path join "work/actions-runner"
   let dir_name = "runner (running)"
 
@@ -77,28 +84,6 @@ def open-actions-runner [] {
   zellij action focus-previous-pane; zellij action close-pane
 
   zellij action go-to-previous-tab
-}
-
-# Setup aquasense-app
-def open-aquasense-app [] {
-  let absolute_path = $env.HOME | path join "work/aquasense-app"
-  let dir_name = "aquasense-app"
-
-  let include_runner = (input $"(ansi yellow)Do you want to open the actions-runner? \(y/N\): (ansi reset)" | str downcase) == "y"
-
-  let last_tab_index = zellij action query-tab-names | split row "\n" | length
-  zellij action go-to-tab $last_tab_index
-
-  zellij action new-tab --name $dir_name --cwd $absolute_path
-
-  zellij action new-tab --name $"($dir_name)\(git\)"
-  zellij run --close-on-exit --cwd $absolute_path -- nu -c lazygit
-  zellij action focus-previous-pane; zellij action close-pane
-
-  if $include_runner {
-    open-actions-runner
-  }
-  zellij action go-to-tab-name "aquasense-app"
 }
 
 def open-webui [] {
