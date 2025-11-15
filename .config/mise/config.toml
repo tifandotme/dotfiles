@@ -1,6 +1,6 @@
 [tools]
 go = "latest"
-node = "22"
+node = "lts"
 python = "latest"
 rust = "latest"
 
