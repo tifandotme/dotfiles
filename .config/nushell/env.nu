@@ -70,6 +70,7 @@ add_path ($env.HOME | path join .cargo bin)
 add_path ($env.ANDROID_HOME | path join emulator)
 add_path ($env.ANDROID_HOME | path join platform-tools)
 add_path ($env.HOMEBREW_REPOSITORY | path join opt postgresql@18 bin)
+add_path ($env.HOME | path join .antigravity antigravity bin)
 
 hide add_path
 

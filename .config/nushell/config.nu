@@ -81,16 +81,16 @@ $env.config = {
       mode: [emacs vi_normal vi_insert]
       event: {send: down}
     }
-    {
-      name: clear_scroll_back
-      modifier: control
-      keycode: char_n
-      mode: [emacs vi_normal vi_insert]
-      event: [
-        {send: clearscrollback}
-        {send: executehostcommand cmd: "banner"}
-      ]
-    }
+    # { # unsed in go to bottom in list
+    #   name: clear_scroll_back
+    #   modifier: control
+    #   keycode: char_n
+    #   mode: [emacs vi_normal vi_insert]
+    #   event: [
+    #     {send: clearscrollback}
+    #     {send: executehostcommand cmd: "banner"}
+    #   ]
+    # }
     {
       name: insert_newline
       modifier: alt
@@ -99,7 +99,7 @@ $env.config = {
       event: {edit: insertnewline}
     }
     {
-      name: history_menu
+      name: help_menu
       modifier: control
       keycode: char_h
       mode: [vi_insert vi_normal]
@@ -108,6 +108,87 @@ $env.config = {
           {send: menu name: help_menu}
           {send: menupagenext}
         ]
+      }
+    }
+    {
+      name: fzf_file_menu
+      modifier: control
+      keycode: char_t
+      mode: [emacs vi_normal vi_insert]
+      event: {send: menu name: fzf_file_menu}
+    }
+    {
+      name: fzf_dir_menu
+      modifier: control
+      keycode: char_g
+      mode: [emacs vi_normal vi_insert]
+      event: {send: menu name: fzf_dir_menu}
+    }
+    {
+      name: fzf_history
+      modifier: control
+      keycode: char_r
+      mode: [emacs vi_normal vi_insert]
+      event: {send: menu name: fzf_history}
+    }
+  ]
+
+  menus: [
+    {
+      name: fzf_file_menu
+      only_buffer_difference: true
+      marker: "# "
+      type: {
+        layout: list
+        page_size: 20
+      }
+      style: {
+        text: "green"
+        selected_text: {fg: "green" attr: r}
+        description_text: yellow
+      }
+      source: {|buffer position|
+        fd --type f --full-path $env.PWD
+        | fzf -f $buffer | lines
+        | each {|v| {value: ($v | str trim)} }
+      }
+    }
+    {
+      name: fzf_dir_menu
+      only_buffer_difference: true
+      marker: "# "
+      type: {
+        layout: list
+        page_size: 20
+      }
+      style: {
+        text: "green"
+        selected_text: {fg: "green" attr: r}
+        description_text: yellow
+      }
+      source: {|buffer position|
+        fd --type d --full-path $env.PWD
+        | fzf -f $buffer | lines
+        | each {|v| {value: ($v | str trim)} }
+      }
+    }
+    {
+      name: fzf_history
+      only_buffer_difference: true
+      marker: "# "
+      type: {
+        layout: list
+        page_size: 20
+      }
+      style: {
+        text: "green"
+        selected_text: {fg: "green" attr: r}
+        description_text: yellow
+      }
+      source: {|buffer position|
+        history | last 1000 | get command | uniq | str join (char nl)
+        | fzf -f $buffer | lines
+        | each {|v| {value: ($v | str trim)} }
       }
     }
   ]
