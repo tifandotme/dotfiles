@@ -13,10 +13,5 @@
     "prefix": "error",
     "body": ["console.error($1);", "$0"],
     "description": "Log error to the console"
-  },
-  "Throw Exception": {
-    "prefix": "throw",
-    "body": ["throw new Error(\"$1\");", "$0"],
-    "description": "Throw Exception"
   }
 }
