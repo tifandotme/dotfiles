@@ -94,6 +94,7 @@ sketchybar --add item front_app left \
 # sketchybar --add item spotify center \
 #   --set spotify \
 #   "${GHOST[@]}" \
+#   icon="􀑪" \
 #   script="$PLUGIN_DIR/spotify.sh" \
 #   --subscribe spotify spotify_update
 
