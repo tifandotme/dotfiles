@@ -3,9 +3,9 @@ os:
   open: "bash -c 'open {{filename}}'"
 git:
   overrideGpg: true
-  paging:
-    pager: delta --paging=never # other configs in gitconfig
-    colorArg: always
+  pagers:
+    - pager: delta --paging=never # other configs in gitconfig
+      colorArg: always
 gui:
   expandFocusedSidePanel: true
   expandedSidePanelWeight: 99
