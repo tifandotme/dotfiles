@@ -60,5 +60,6 @@ export def clean [] {
   if (which docker | is-not-empty) {
     docker image prune -a -f
     docker volume prune -f
+    docker buildx prune -f
   }
 }
