@@ -240,7 +240,7 @@ run = 'move-node-to-workspace 5_rest'
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = 'move-node-to-workspace 5_rest'
 [[on-window-detected]]
-if.app-id = 'net.imput.helium.app.jolmgehenbgcjpegbfnknhkjjmbaeilm' # Actual.app
+if.app-id = 'com.apple.Safari.WebApp.2834129F-B549-458A-9ECB-95FC1C82C67E' # Actual.app
 run = 'move-node-to-workspace 5_rest'
 
 # Windows that should float
@@ -259,6 +259,9 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'org.openvpn.client.app'
 run = 'layout floating'
+# [[on-window-detected]]
+# if.app-id = 'com.pais.handy'
+# run = 'layout floating'
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']
