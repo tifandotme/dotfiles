@@ -1,8 +1,3 @@
-# Show all open ports
-def open-ports [] {
-  lsof -i -P -n | grep LISTEN
-}
-
 # List all custom commands and aliases (filtered by noteworthiness)
 def commands [] {
   let custom_excludes = [
@@ -34,9 +29,20 @@ def open-project [default_project: string = ""] {
   # This makes it easy to open your most-used project by just hitting Enter.
   # const default_project = "aquasense-app"
   try {
-    let project_dirs = _ls ~/personal ~/work | where type =~ dir | get name
+    mut project_dirs = []
+    for base in [($env.HOME | path join 'personal') ($env.HOME | path join 'work')] {
+      let base_dirs = _ls $base | where type == dir | get name
+      for dir in $base_dirs {
+        if (($dir | path basename) | str starts-with '@') {
+          let sub_dirs = _ls $dir | where type == dir | get name
+          $project_dirs = ($project_dirs | append $sub_dirs | flatten)
+        } else {
+          $project_dirs = ($project_dirs | append $dir)
+        }
+      }
+    }
 
-    let project_list = $project_dirs | str join "\n" | str replace --all $"($env.HOME)/" '' | str join "\n"
+    let project_list = $project_dirs | each {|p| $p | str replace -r $"^($env.HOME)/" '' } | str join "\n"
 
     let has_default = $project_list | str contains $default_project
 
@@ -46,7 +52,7 @@ def open-project [default_project: string = ""] {
       $project_list | fzf
     }
 
-    let dir_name = $chosen_project | split row "/" | get 1
+    let dir_name = $chosen_project | split row "/" | last
     let absolute_path = $"($env.HOME)/($chosen_project)"
 
     let last_tab_index = zellij action query-tab-names | split row "\n" | length
@@ -255,4 +261,46 @@ def open-memory-graph [] {
   let dot = $"digraph G {\n($entities | append $relations | str join "\n")\n}"
   $dot | dot -Tpng -o /tmp/graph.png
   ^open /tmp/graph.png
+}
+
+# Show all open ports
+def open-ports [] {
+  lsof -i -P -n | grep LISTEN | lines | each {|line|
+    let fields = ($line | split row -r '\s+')
+    let command = $fields.0
+    let pid = $fields.1
+    let address = ($fields | skip 8 | str join ' ')
+    {command: $command pid: $pid address: $address}
+  }
+}
+
+# Kill a selected listening port
+def kill-port [] {
+  let ports = (open-ports)
+  if ($ports | is-empty) {
+    print "No listening TCP ports found."
+    return
+  }
+  let max_cmd = ($ports | get command | each {|c| $c | str length } | math max)
+  let max_pid = ($ports | get pid | each {|p| $p | str length } | math max)
+  let max_addr = ($ports | get address | each {|a| $a | str length } | math max)
+  let chosen = (
+    $ports | each {|row|
+      let cmd = ($row.command | fill -a l -c ' ' -w $max_cmd)
+      let pid_str = ($row.pid | fill -a r -c ' ' -w $max_pid)
+      let addr = ($row.address | fill -a l -c ' ' -w $max_addr)
+      $"($cmd)\t($pid_str)\t($addr)"
+    } | fzf --header="Select PID to kill"
+  )
+  if ($chosen | is-empty) {
+    return
+  }
+  print ($chosen | split row -r '\s+' | get 3)
+  let pid = ($chosen | split row -r '\s+' | get 3 | str trim)
+  print $"Killing process ($pid)"
+  kill ($pid | into int)
+}
+
+def stop-all-containers [] {
+  docker stop ...(docker ps -aq | lines | str trim)
 }
