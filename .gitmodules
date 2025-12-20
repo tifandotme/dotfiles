@@ -1,3 +1,6 @@
 [submodule ".config/nushell/scripts/topiary-nushell-repo"]
 	path = .config/nushell/scripts/topiary-nushell-repo
 	url = https://github.com/blindFS/topiary-nushell.git
+[submodule ".config/nushell/scripts/bash-env-nushell"]
+	path = .config/nushell/scripts/bash-env-nushell
+	url = https://github.com/tesujimath/bash-env-nushell.git
