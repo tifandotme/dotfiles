@@ -42,6 +42,12 @@ alias lzg = lazygit
 
 alias lzd = lazydocker
 
+# docker
+
+alias d = docker
+
+# git
+
 alias g = git
 
 # bun
