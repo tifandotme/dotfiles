@@ -304,3 +304,22 @@ def kill-port [] {
 def stop-all-containers [] {
   docker stop ...(docker ps -aq | lines | str trim)
 }
+
+def "git rebase-release" [remote = "upstream"] {
+  print "Fetching tags..."
+  git fetch $remote --tags
+
+  let latest_tag = (git describe --tags --abbrev=0 $"($remote)/HEAD" | str trim)
+
+  if ($latest_tag | is-empty) {
+    print "No tags found on upstream."
+    return
+  }
+
+  print $"Rebasing to latest release: ($latest_tag)"
+  git rebase $latest_tag
+}
+
+def "git loggy" [] {
+  git log --oneline (git describe --tags --abbrev=0 upstream/HEAD)
+}
