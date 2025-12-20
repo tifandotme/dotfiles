@@ -3,6 +3,8 @@ go = "latest"
 node = "lts"
 python = "latest"
 rust = "latest"
+ruby = "latest"
+"gem:kamal" = "latest"
 
 [settings]
 disable_hints = ["outdated_bump"]
