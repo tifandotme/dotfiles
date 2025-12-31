@@ -1,21 +1,28 @@
 #!/bin/bash
 
-# update to use ssh, previusly we clone with https
+set -e
+
+# update to use ssh, previously we clone with https
 DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
 yadm remote set-url origin "$DOTFILES_REPO_URL"
 
-sudo apt update
 export DEBIAN_FRONTEND=noninteractive
+
+sudo apt update
 sudo dpkg --configure -a --force-confnew
-sudo apt -o Dpkg::Options::="--force-confnew" -o Dpkg::Options::="--force-confdef" upgrade -y
+sudo apt -o Dpkg::Options::="--force-confnew" upgrade -y
 sudo apt autoremove -y
 
 # https://docs.brew.sh/Homebrew-on-Linux#requirements
 sudo apt install build-essential procps curl file git -y
+
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Add Homebrew to PATH for the current session
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 brew bundle --file="$HOME/.config/yadm/Brewfile"
 
 cat <<EOF
-Bootstrap succesfull
+Bootstrap successful
 EOF
