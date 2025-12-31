@@ -1,8 +1,6 @@
 tap "oven-sh/bun"
 tap "teamookla/speedtest"
 
-brew update
-
 # General
 brew "bat" # cat replacement
 brew "eza" # ls replacement
