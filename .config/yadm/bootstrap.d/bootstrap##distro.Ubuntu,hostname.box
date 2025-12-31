@@ -9,6 +9,7 @@ yadm remote set-url origin "$DOTFILES_REPO_URL"
 export DEBIAN_FRONTEND=noninteractive
 
 sudo apt update
+# dpkg stuff is for this error: `E: Sub-process /usr/bin/dpkg returned an error code (1)`
 sudo dpkg --configure -a --force-confnew
 sudo apt -o Dpkg::Options::="--force-confnew" upgrade -y
 sudo apt autoremove -y
