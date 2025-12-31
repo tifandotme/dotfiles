@@ -1,22 +1,16 @@
-# yadm Bootstrap Setup
+# Bootstrap Guide
 
 ## Prerequisites
 
 - Git
-- SSH public and private keys encrypted by yadm
+- SSH public and private keys encrypted by yadm (homebrew won't work without ssh configured)
 
-## Usage
-
-1. `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
-1. `apt install yadm -y` (macOS) or equivalent
-1. `yadm clone https://github.com/tifandotme/dotfiles.git` (DO NOT bootstrap yet)
-1. `yadm decrypt` (see Bitwarden notes for password)
-1. `yadm bootstrap`
-
-## One-liner
+## Usage (bash)
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
+echo "DO NOT press y when asked to bootstrap during clone!" && \
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
+  sudo apt install --fix-broken && / # fix "E: Sub-process /usr/bin/dpkg returned an error code (1)" during bootstrap
   sudo apt install yadm -y && \
   yadm clone https://github.com/tifandotme/dotfiles.git && \
   yadm decrypt && \
