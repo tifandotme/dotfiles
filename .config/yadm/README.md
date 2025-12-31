@@ -9,10 +9,34 @@
 ## Usage (bash)
 
 ```bash
-echo "DO NOT press y when asked to bootstrap during clone!" && \
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
-  sudo apt install yadm -y && \
-  yadm clone https://github.com/tifandotme/dotfiles.git && \
-  yadm decrypt && \
-  yadm bootstrap
+bash -c '
+set -e
+
+echo "--- Installing homebrew ---"
+echo ""
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+echo ""
+echo "--- Installing yadm ---"
+echo ""
+sudo apt install yadm -y
+
+echo ""
+echo "--- Cloning dotfiles ---"
+echo ""
+yadm clone https://github.com/tifandotme/dotfiles.git
+
+echo ""
+echo "--- Decrypting files ---"
+echo ""
+yadm decrypt
+
+echo ""
+echo "--- Running bootstrap ---"
+echo ""
+yadm bootstrap
+
+echo ""
+echo "Done!"
+'
 ```
