@@ -1,0 +1,31 @@
+tap "oven-sh/bun"
+tap "teamookla/speedtest"
+
+# General
+brew "bat" # cat replacement
+brew "eza" # ls replacement
+brew "fastfetch"
+brew "bottom"
+brew "oven-sh/bun/bun"
+brew "speedtest"
+brew "bandwhich" # need sudo to use
+
+brew "lazydocker"
+
+# lazygit with deps
+brew "lazygit"
+brew "git-delta"
+
+# https://yazi-rs.github.io/docs/installation/#homebrew
+brew "yazi"
+brew "ffmpeg"
+brew "sevenzip"
+brew "jq"
+brew "poppler"
+brew "fd"
+brew "ripgrep"
+brew "fzf"
+brew "zoxide"
+brew "resvg"
+brew "imagemagick"
+brew "font-symbols-only-nerd-font"
