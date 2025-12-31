@@ -1,7 +1,7 @@
 [user]
 	name = Tifan Dwi Avianto
 	email = 33323177+tifandotme@users.noreply.github.com
-	signingkey = /Users/tifan/.ssh/id_ed25519.pub
+	signingkey = ~/.ssh/id_ed25519.pub
 [color]
 	ui = auto
 [init]
@@ -10,8 +10,6 @@
 	gpgsign = true
 [gpg]
 	format = ssh
-[includeIf "gitdir:~/work/"]
-	path = ~/work/.gitconfig
 [push]
     default = current
     autoSetupRemote = true
@@ -29,6 +27,8 @@
 [maintenance]
 	repo = /Users/tifan/personal/website
 	repo = /Users/tifan/work/aquasense-app
+[includeIf "gitdir:~/work/"]
+	path = ~/work/.gitconfig
 
 [core]
     whitespace = error
