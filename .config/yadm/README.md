@@ -1,5 +1,10 @@
 # Bootstrap Guide
 
+Machines atm:
+
+- ##distro.Ubuntu,hostname.box
+- ##os.Darwin
+
 ## Prerequisites
 
 - Git
@@ -22,19 +27,9 @@ echo ""
 sudo apt install yadm -y
 
 echo ""
-echo "--- Cloning dotfiles ---"
+echo "--- Cloning dotfiles & bootstrap ---"
 echo ""
-yadm clone https://github.com/tifandotme/dotfiles.git
-
-echo ""
-echo "--- Decrypting files ---"
-echo ""
-yadm decrypt
-
-echo ""
-echo "--- Running bootstrap ---"
-echo ""
-yadm bootstrap
+yadm clone --bootstrap https://github.com/tifandotme/dotfiles.git
 
 echo ""
 echo "Done!"

@@ -5,6 +5,7 @@ set -e
 # update to use ssh, previously we clone with https
 DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
 yadm remote set-url origin "$DOTFILES_REPO_URL"
+yadm decrypt
 
 export DEBIAN_FRONTEND=noninteractive
 

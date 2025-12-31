@@ -17,8 +17,8 @@ brew "lazygit"
 
 # https://yazi-rs.github.io/docs/installation/#homebrew
 brew "yazi"
-brew "ffmpeg"
-# brew "sevenzip"
+# brew "ffmpeg" # slow af to install
+brew "sevenzip"
 brew "jq"
 brew "poppler"
 brew "fd"
