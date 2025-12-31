@@ -1,19 +1,13 @@
 #!/bin/bash
 
-DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
-
-echo "==> Updating the yadm repo origin URL"
-yadm remote set-url origin "$DOTFILES_REPO_URL"
-
-echo "==> Install Homebrew"
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-echo "==> Installing packages with brew bundle"
-brew bundle --file="$HOME/.config/yadm/Brewfile"
-
-echo "==> Installing packages with apt"
 sudo apt update
 sudo apt upgrade -y
+
+# https://docs.brew.sh/Homebrew-on-Linux#requirements
+sudo apt install build-essential procps curl file git -y
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+brew bundle --file="$HOME/.config/yadm/Brewfile"
 
 cat <<EOF
 Bootstrap succesfull. Lastly, do these steps manually:
