@@ -1,14 +1,15 @@
 tap "oven-sh/bun"
+brew "oven-sh/bun/bun"
+
 tap "teamookla/speedtest"
+brew "teamookla/speedtest/speedtest"
 
 # General
 brew "bat" # cat replacement
 brew "eza" # ls replacement
 brew "fastfetch"
 brew "bottom"
-brew "oven-sh/bun"
 brew "zellij"
-brew "teamookla/speedtest"
 brew "bandwhich" # need sudo to use
 
 brew "lazydocker"
@@ -17,7 +18,7 @@ brew "lazygit"
 # https://yazi-rs.github.io/docs/installation/#homebrew
 brew "yazi"
 brew "ffmpeg"
-brew "sevenzip"
+# brew "sevenzip"
 brew "jq"
 brew "poppler"
 brew "fd"
