@@ -4,6 +4,7 @@
 
 - Git
 - SSH public and private keys encrypted by yadm (homebrew won't work without ssh configured)
+- yadm encryption pass ready (see in Bitwarden note)
 
 ## Usage (bash)
 
