@@ -2,7 +2,7 @@
 
 Machines atm:
 
-- ##distro.Ubuntu,hostname.box
+- ##distro.Ubuntu,hostname.box (Ubuntu 24 VPS)
 - ##os.Darwin
 
 ## Prerequisites

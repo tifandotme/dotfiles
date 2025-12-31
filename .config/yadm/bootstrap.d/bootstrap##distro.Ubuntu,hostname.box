@@ -2,17 +2,22 @@
 
 set -e
 
+# Add GitHub to known_hosts to avoid SSH prompt
+mkdir -p ~/.ssh
+ssh-keyscan -t ed25519 github.com >>~/.ssh/known_hosts 2>/dev/null || true
+
 # update to use ssh, previously we clone with https
 DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
 yadm remote set-url origin "$DOTFILES_REPO_URL"
-yadm decrypt
-
-export DEBIAN_FRONTEND=noninteractive
+yadm decrypt # need the ssh private and public key when installing packages from Brewfile
 
 sudo apt update
+
 # dpkg stuff is for this error: `E: Sub-process /usr/bin/dpkg returned an error code (1)`
+export DEBIAN_FRONTEND=noninteractive
 sudo dpkg --configure -a --force-confnew
 sudo apt -o Dpkg::Options::="--force-confnew" upgrade -y
+
 sudo apt autoremove -y
 
 # https://docs.brew.sh/Homebrew-on-Linux#requirements
