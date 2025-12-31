@@ -1,0 +1,6 @@
+alias grep="ripgrep"
+
+alias ls="eza --group-directories-first --classify=auto --sort=extension --oneline"
+alias lsa="eza --group-directories-first --classify=auto --sort=extension --oneline --all"
+
+alias update="sudo apt update && sudo apt upgrade -y"
