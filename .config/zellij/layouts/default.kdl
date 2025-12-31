@@ -6,9 +6,11 @@ layout {
             // zjstatus v0.22.0
             // On MacOS, the plugin location cannot be https and should be local
             plugin location="file:~/.config/zellij/zjstatus.wasm" {
-                color_fg_muted "#9baca6"
+                // color_fg_muted "#9baca6"
+                color_fg_muted "#e8c174"
                 color_fg       "#e4e4ef"
-                color_bg       "#3c4a31"
+                // color_bg       "#3c4a31"
+                color_bg       "#5b4b2b"
 
                 format_left  "#[fg=$fg,bg=$bg]  {tabs}"
                 format_space "#[bg=$bg]"
