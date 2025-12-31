@@ -17,17 +17,17 @@ Machines atm:
 bash -c '
 set -e
 
-echo "--- Installing homebrew ---"
+echo -e "\033[1;36m--- Installing homebrew ---\033[0m"
 echo ""
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 echo ""
-echo "--- Installing yadm ---"
+echo -e "\033[1;36m--- Installing yadm ---\033[0m"
 echo ""
 sudo apt install yadm -y
 
 echo ""
-echo "--- Cloning dotfiles & bootstrap ---"
+echo -e "\033[1;36m--- Cloning dotfiles & bootstrap ---\033[0m"
 echo ""
 yadm clone --bootstrap https://github.com/tifandotme/dotfiles.git
 
