@@ -7,7 +7,7 @@
 set -eu
 
 # Directory to look for bootstrap executables in
-BOOTSTRAP_D="$(dirname "$0").d"
+BOOTSTRAP_D="$0.d"
 
 if [ ! -d "$BOOTSTRAP_D" ]; then
   echo "Error: bootstrap directory '$BOOTSTRAP_D' not found" >&2
