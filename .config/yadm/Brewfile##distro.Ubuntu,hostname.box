@@ -7,12 +7,12 @@ brew "eza" # ls replacement
 brew "fastfetch"
 brew "bottom"
 brew "oven-sh/bun/bun"
+brew "zellij"
 brew "speedtest"
 brew "bandwhich" # need sudo to use
 
 brew "lazydocker"
 brew "lazygit"
-
 
 # https://yazi-rs.github.io/docs/installation/#homebrew
 brew "yazi"
