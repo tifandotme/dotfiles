@@ -28,7 +28,7 @@ sudo apt install build-essential procps curl file git -y
 # Add Homebrew to PATH for the current session
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-brew bundle --file="$HOME/.config/yadm/Brewfile"
+brew bundle --file="$HOME/.config/yadm/Brewfile" --verbose
 
 cat <<EOF
 Bootstrap successful
