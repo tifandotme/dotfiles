@@ -1,7 +1,12 @@
 #!/bin/bash
 
+# update to use ssh, previusly we clone with https
+DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
+yadm remote set-url origin "$DOTFILES_REPO_URL"
+
 sudo apt update
 sudo apt upgrade -y
+sudo apt autoremove -y
 
 # https://docs.brew.sh/Homebrew-on-Linux#requirements
 sudo apt install build-essential procps curl file git -y
@@ -10,6 +15,5 @@ curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
 brew bundle --file="$HOME/.config/yadm/Brewfile"
 
 cat <<EOF
-Bootstrap succesfull. Lastly, do these steps manually:
-gogo powerrangers
+Bootstrap succesfull
 EOF
