@@ -1,3 +1,0 @@
-if command -v nu >/dev/null 2>&1; then
-  SHELL=$(which nu) exec nu
-fi
