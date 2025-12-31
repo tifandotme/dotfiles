@@ -8,9 +8,9 @@ brew "bat" # cat replacement
 brew "eza" # ls replacement
 brew "fastfetch"
 brew "bottom"
-brew "oven-sh/bun/bun"
+brew "oven-sh/bun"
 brew "zellij"
-brew "speedtest"
+brew "teamookla/speedtest"
 brew "bandwhich" # need sudo to use
 
 brew "lazydocker"
