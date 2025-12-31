@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
+os:
+  open: "bash -c 'open {{filename}}'"
+git:
+  overrideGpg: true
+{% if yadm.os == "Darwin" %}
+  pagers:
+    - pager: delta --paging=never # other configs in gitconfig
+      colorArg: always
+{% endif %}
+gui:
+  expandFocusedSidePanel: true
+  expandedSidePanelWeight: 99
+  border: "single"
+  showPanelJumps: true
+  showFileTree: true
+  sidePanelWidth: 0.22
+  showBottomLine: false
+  theme:
+    selectedLineBgColor:
+      - reverse
+notARepository: "quit"
+promptToReturnFromSubprocess: false
+keybinding:
+  files:
+    commitChangesWithEditor: <disabled>
+customCommands:
+  - key: "C"
+    context: "files"
+    description: "Run OpenCommit"
+    command: "opencommit -y"
+    output: "none"
+    loadingText: "Generating commit message.."
+  - key: "<c-r>"
+    context: global
+    description: "Open repository in browser"
+    command: "gh repo view --web"
+  - key: "I"
+    context: "localBranches"
+    description: "Rebase onto upstream"
+    command: "git rebase --autostash --keep-empty --no-autosquash --rebase-merges refs/remotes/upstream/{{.SelectedLocalBranch.Name}}"
+    output: "log"
