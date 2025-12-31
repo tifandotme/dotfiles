@@ -4,13 +4,10 @@
 DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
 yadm remote set-url origin "$DOTFILES_REPO_URL"
 
+sudo apt update
 export DEBIAN_FRONTEND=noninteractive
 sudo dpkg --configure -a --force-confnew
-
-sudo apt update
-# if below not work try:
-# sudo apt -o Dpkg::Options::="--force-confnew" -o Dpkg::Options::="--force-confdef" upgrade -y
-sudo apt upgrade -y
+sudo apt -o Dpkg::Options::="--force-confnew" -o Dpkg::Options::="--force-confdef" upgrade -y
 sudo apt autoremove -y
 
 # https://docs.brew.sh/Homebrew-on-Linux#requirements
