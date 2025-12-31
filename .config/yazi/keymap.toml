@@ -3,19 +3,13 @@
 # https://yazi-rs.github.io/docs/tips/#dropping-to-shell
 # prompt will say "in yazi", see starship conf file
 [[mgr.prepend_keymap]]
-on   = "!"
-run  = 'shell "$SHELL" --block'
+on = "!"
+run = 'shell "$SHELL" --block'
 desc = "Open shell here"
-
-# https://yazi-rs.github.io/docs/tips#close-input-by-esc
-[[input.prepend_keymap]]
-on = "<Esc>"
-run = "close"
-desc = "Cancel input"
 
 # https://yazi-rs.github.io/docs/tips/#cd-to-git-root
 [[mgr.prepend_keymap]]
-on = [ "g", "r" ]
+on = ["g", "r"]
 run = 'shell -- ya emit cd "$(git rev-parse --show-toplevel)"'
 desc = "Change directory to git root"
 
@@ -27,51 +21,67 @@ desc = "Enter the child directory, or open the file"
 
 # https://github.com/yazi-rs/plugins/tree/main/jump-to-char.yazi
 [[mgr.prepend_keymap]]
-on   = "f"
-run  = "plugin jump-to-char"
+on = "f"
+run = "plugin jump-to-char"
 desc = "Jump to char"
 
 # https://github.com/AnirudhG07/custom-shell.yazi
 [[mgr.prepend_keymap]]
-on = [ "'", ";" ]
-run = 'plugin custom-shell -- auto --interactive'
+on = ["'", ";"]
+run = "plugin custom-shell -- auto --interactive"
 desc = "custom-shell as default, interactive"
+
 [[mgr.prepend_keymap]]
-on = [ "'", ":" ]
-run = 'plugin custom-shell -- auto --interactive --block'
+on = ["'", ":"]
+run = "plugin custom-shell -- auto --interactive --block"
 desc = "custom-shell as default, interactive, block"
+
 [[mgr.prepend_keymap]]
-on = [ "'", "h" ]
+on = ["'", "h"]
 run = "plugin custom-shell history"
 desc = "Show custom-shell history"
+
 [[mgr.prepend_keymap]]
-on = [ "'", "z" ] # can't use ctrl-z like in zellij config, because zellij intercepts it, and cwd is still when we first open yazi
+on = [
+  "'",
+  "z"
+]  # can't use ctrl-z like in zellij config, because zellij intercepts it, and cwd is still when we first open yazi
 run = "plugin custom-shell -- custom nu 'zed $env.PWD'"
 desc = "Run Zed in current directory"
 
+[[mgr.prepend_keymap]]
+on = ["'", "a"]
+run = "shell -- yadm add %s"
+desc = "Add file to yadm"
+
 # Extra gotos
 [[mgr.prepend_keymap]]
-on = [ "g", "w" ]
+on = ["g", "w"]
 run = "cd ~/work"
 desc = "Go ~/work"
+
 [[mgr.prepend_keymap]]
-on = [ "g", "p" ]
+on = ["g", "p"]
 run = "cd ~/personal"
 desc = "Go ~/personal"
+
 [[mgr.prepend_keymap]]
-on = [ "g", "P" ]
+on = ["g", "P"]
 run = "cd ~/Pictures"
 desc = "Go ~/Pictures"
+
 [[mgr.prepend_keymap]]
-on = [ "g", "m" ]
+on = ["g", "m"]
 run = "cd ~/Movies"
 desc = "Go ~/Movies"
+
 [[mgr.prepend_keymap]]
-on = [ "g", "D" ]
+on = ["g", "D"]
 run = "cd ~/Documents"
 desc = "Go ~/Documents"
+
 [[mgr.prepend_keymap]]
-on = [ "g", "e" ] # helix-inspired
+on = ["g", "e"]  # helix-inspired
 run = "arrow bot"
 desc = "Move cursor to the bottom"
 
@@ -80,6 +90,13 @@ desc = "Move cursor to the bottom"
 on = "?"
 run = "help"
 desc = "Open help"
+
+# https://yazi-rs.github.io/docs/tips#close-input-by-esc
+[[input.prepend_keymap]]
+on = "<Esc>"
+run = "close"
+desc = "Cancel input"
+
 [[help.prepend_keymap]]
 on = "/"
 run = "filter"

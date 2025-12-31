@@ -11,8 +11,8 @@ show_hidden = true
 
 [open]
 prepend_rules = [
-    { mime = "text/*", use = "edit" },
-    { mime = "video/*", use = "play" },
+  { mime = "text/*", use = "edit" },
+  { mime = "video/*", use = "play" },
 ]
 
 [opener]
