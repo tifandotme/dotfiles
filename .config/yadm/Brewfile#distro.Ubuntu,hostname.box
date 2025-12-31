@@ -11,10 +11,8 @@ brew "speedtest"
 brew "bandwhich" # need sudo to use
 
 brew "lazydocker"
-
-# lazygit with deps
 brew "lazygit"
-brew "git-delta"
+
 
 # https://yazi-rs.github.io/docs/installation/#homebrew
 brew "yazi"
