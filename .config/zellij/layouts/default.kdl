@@ -12,9 +12,14 @@ layout {
                 // color_bg       "#3c4a31"
                 color_bg       "#5b4b2b"
 
-                format_left  "#[fg=$fg,bg=$bg]  {tabs}"
+                format_left  "#[fg=$fg,bg=$bg] {command_is_ssh} {tabs}"
                 format_space "#[bg=$bg]"
                 format_right "{mode}"
+                
+                command_is_ssh_command "bash -c \"if [ -n \\\"$SSH_CLIENT\\\" ] || [ -n \\\"$SSH_TTY\\\" ]; then echo SSH; fi\""
+                command_is_ssh_format "{stdout}"
+                command_is_ssh_interval "0"
+                command_is_ssh_rendermode "static"
 
                 mode_locked       "#[fg=$bg,bg=$fg_muted,bold]  LOCKED  " // ctrl-g (in all mode)
                 mode_scroll       "#[fg=$bg,bg=$fg_muted,bold]  SCROLL  " // [ (in tmux mode)
