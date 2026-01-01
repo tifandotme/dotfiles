@@ -3,10 +3,6 @@ require("full-border"):setup {
   -- Available values: ui.Border.PLAIN, ui.Border.ROUNDED
   type = ui.Border.PLAIN,
 }
-require("custom-shell"):setup({
-  history_path = "default",
-  save_history = true,
-})
 require("folder-rules"):setup()
 
 -- https://yazi-rs.github.io/docs/configuration/yazi/#manager.linemode

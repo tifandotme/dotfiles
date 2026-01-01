@@ -18,10 +18,5 @@ use = "yazi-rs/plugins:jump-to-char"
 rev = "398796d"
 hash = "ce67445ebb1bf3d97b8e44f50904b2c5"
 
-[[plugin.deps]]
-use = "AnirudhG07/custom-shell"
-rev = "b04213d"
-hash = "3efc7ddc9bac120c618462eb994edf75"
-
 [flavor]
 deps = []
