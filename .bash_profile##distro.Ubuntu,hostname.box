@@ -14,3 +14,7 @@ export EDITOR=vi
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
 
 export PATH="$BUN_INSTALL/bin:$HOME/.cargo/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"
+
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
