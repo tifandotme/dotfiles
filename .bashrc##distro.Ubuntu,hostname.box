@@ -6,4 +6,4 @@ eval "$(starship init bash)"
 
 eval "$(zellij setup --generate-auto-start bash)"
 
-eval "$(zoxide init bash)"
+eval "$(zoxide init --cmd cd bash)"
