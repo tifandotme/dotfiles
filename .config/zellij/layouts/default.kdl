@@ -16,7 +16,7 @@ layout {
                 format_space "#[bg=$bg]"
                 format_right "{mode}"
                 
-                command_is_ssh_command "bash -c \"if [ -n \\\"$SSH_CLIENT\\\" ] || [ -n \\\"$SSH_TTY\\\" ]; then echo SSH; fi\""
+                command_is_ssh_command "bash -c \"if [ -n \\\"$SSH_CLIENT\\\" ] || [ -n \\\"$SSH_TTY\\\" ]; then echo \"SSH \\>\"; fi\""
                 command_is_ssh_format "#[fg=$fg_muted,bg=$bg,bold] {stdout} "
                 command_is_ssh_interval "0"
                 command_is_ssh_rendermode "static"

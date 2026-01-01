@@ -3,3 +3,5 @@ if [ -f ~/.config/bash/bash_aliases ]; then
 fi
 
 eval "$(starship init bash)"
+
+eval "$(zellij setup --generate-auto-start bash)"

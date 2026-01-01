@@ -28,3 +28,6 @@ if type brew &>/dev/null; then
     done
   fi
 fi
+
+export ZELLIJ_AUTO_ATTACH="true"
+export ZELLIJ_AUTO_EXIT="false"
