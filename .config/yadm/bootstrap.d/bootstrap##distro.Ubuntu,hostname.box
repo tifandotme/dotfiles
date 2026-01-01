@@ -30,6 +30,16 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 brew bundle --file="$HOME/.config/yadm/Brewfile" --verbose
 
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+sudo tailscale set --ssh
+
 cat <<EOF
-Bootstrap successful
+Bootstrap successful.
+
+# https://tailscale.com/kb/1077/secure-server-ubuntu
+sudo ufw enable
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow in on tailscale0
 EOF

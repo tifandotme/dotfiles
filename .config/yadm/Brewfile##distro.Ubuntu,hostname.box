@@ -15,8 +15,6 @@ brew "bandwhich" # need sudo to use
 brew "lazydocker"
 brew "lazygit"
 
-brew "tailscale"
-
 # https://yazi-rs.github.io/docs/installation/#homebrew
 brew "yazi"
 # brew "ffmpeg" # slow af to install
