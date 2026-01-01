@@ -4,6 +4,16 @@ fi
 
 eval "$(starship init bash)"
 
-eval "$(zellij setup --generate-auto-start bash)"
+if [[ -z "$ZELLIJ" ]]; then
+  if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
+    zellij attach --create "$USER"@"$(hostname)"
+  else
+    zellij
+  fi
+
+  if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
+    exit
+  fi
+fi
 
 eval "$(zoxide init --cmd cd bash)"
