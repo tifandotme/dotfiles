@@ -6,7 +6,7 @@ eval "$(starship init bash)"
 
 if [[ -z "$ZELLIJ" ]]; then
   if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-    zellij attach --create "$USER"@"$(hostname)"
+    zellij attach --create $USER
   else
     zellij
   fi
