@@ -3,3 +3,4 @@
 .secrets
 .config/mcpo/config.json
 .config/nushell/history.sqlite3
+.config/npm/config
