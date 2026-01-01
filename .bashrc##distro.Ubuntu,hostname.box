@@ -1,3 +1,5 @@
+[ -z "$PS1" ] && return
+
 if [ -f ~/.config/bash/bash_aliases ]; then
   . "$XDG_CONFIG_HOME"/bash/bash_aliases
 fi
