@@ -1,5 +1,5 @@
 if [ -f ~/.config/bash/bash_aliases ]; then
-  . ~/.config/bash/bash_aliases
+  . "$XDG_CONFIG_HOME"/bash/bash_aliases
 fi
 
 eval "$(starship init bash)"
