@@ -1,4 +1,0 @@
-# https://docs.npmjs.com/cli/v9/using-npm/config
-
-fund = false
-cache = ~/.cache/npm
