@@ -43,7 +43,7 @@ cat <<EOF
 Bootstrap successful.
 
 # https://tailscale.com/kb/1077/secure-server-ubuntu
-sudo ufw enable
+sudo systemctl enable ufw
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow in on tailscale0
