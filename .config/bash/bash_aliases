@@ -8,7 +8,7 @@ alias lzg="lazygit"
 alias lzd="lazydocker"
 alias d="docker"
 alias g="git"
-alias z="zellij"
+alias t="tailscale"
 y() {
   local tmp
   tmp=$(mktemp -t "yazi-cwd.XXXXXX")
@@ -20,6 +20,8 @@ y() {
   fi
   rm -f "$tmp"
 }
+
+alias z="zellij"
 alias zka="zellij delete-all-sessions --force --yes && zellij kill-all-sessions --yes"
 
 alias yal="yadm list -a"
