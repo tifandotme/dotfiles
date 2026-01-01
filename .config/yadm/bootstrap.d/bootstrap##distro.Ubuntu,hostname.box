@@ -34,6 +34,11 @@ curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up
 sudo tailscale set --ssh
 
+# https://tailscale.com/kb/1103/exit-nodes?tab=linux#advertise-a-device-as-an-exit-node
+echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
+
 cat <<EOF
 Bootstrap successful.
 
@@ -42,4 +47,8 @@ sudo ufw enable
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow in on tailscale0
+
+# https://tailscale.com/kb/1103/exit-nodes?tab=linux#advertise-a-device-as-an-exit-node
+sudo tailscale set --advertise-exit-node
+sudo tailscale up
 EOF
