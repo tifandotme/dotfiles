@@ -301,8 +301,13 @@ def kill-port [] {
   kill ($pid | into int)
 }
 
-def stop-all-containers [] {
+def stop-all-containers [
+  --stop-colima (-c) # Stop colima aswell
+] {
   docker stop ...(docker ps -aq | lines | str trim)
+  if ($stop_colima) {
+    colima stop
+  }
 }
 
 def "git rebase-release" [remote = "upstream"] {

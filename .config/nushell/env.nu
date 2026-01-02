@@ -58,6 +58,10 @@ $env.ZELLIJ_AUTO_EXIT = false
 $env.MANPAGER = "sh -c 'col -bx | bat -l man -p'"
 $env.MANROFFOPT = "-c"
 
+# turns out there is a std lib (just found out 19 dec 2025)
+# use std/util "path add"
+# path add $"($nu.home-path)/.cargo/bin"
+
 def --env add_path [path: string] {
   $env.PATH = ($env.PATH | split row (char esep) | prepend $path | uniq)
 }
@@ -71,14 +75,43 @@ add_path ($env.ANDROID_HOME | path join emulator)
 add_path ($env.ANDROID_HOME | path join platform-tools)
 add_path ($env.HOMEBREW_REPOSITORY | path join opt postgresql@18 bin)
 add_path ($env.HOME | path join .antigravity antigravity bin)
+add_path ($env.NU_LIB_DIRS | path join bash-env-json)
 
 hide add_path
+
+# https://www.nushell.sh/cookbook/ssh_agent.html#workarounds
+
+do --env {
+  let ssh_agent_file = (
+    $nu.temp-path | path join $"ssh-agent-(whoami).nuon"
+  )
+
+  if ($ssh_agent_file | path exists) {
+    let ssh_agent_env = open ($ssh_agent_file)
+    if ($"/proc/($ssh_agent_env.SSH_AGENT_PID)" | path exists) {
+      load-env $ssh_agent_env
+      return
+    } else {
+      rm $ssh_agent_file
+    }
+  }
+
+  let ssh_agent_env = ^ssh-agent -c
+  | lines
+  | first 2
+  | parse "setenv {name} {value};"
+  | transpose --header-row
+  | into record
+  load-env $ssh_agent_env
+  $ssh_agent_env | save --force $ssh_agent_file
+}
 
 # ========================== INITIALIZATION ===================================
 
 # https://github.com/jdx/mise/issues/2768
 # let mise_path = $nu.default-config-dir | path join scripts mise.gen.nu
 # mise activate nu | save --force $mise_path
+mkdir ~/.cache/mise; (^env -i (which 'mise' | first | get 'path') activate nu) | save --force ~/.cache/mise/init.nu
 
 let zoxide_path = $nu.default-config-dir | path join scripts zoxide.gen.nu
 zoxide init --cmd cd nushell | save --force $zoxide_path

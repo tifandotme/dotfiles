@@ -197,14 +197,16 @@ $env.config = {
 # Source scripts/*
 # use task.nu
 use updater.nu
-use mise.gen.nu
+# use mise.gen.nu
+source ~/.cache/mise/init.nu
+use bash-env.nu
 source zoxide.gen.nu
 source aliases.nu
 source utils.nu
 
 if "ZELLIJ" not-in ($env | columns) {
   if $env.ZELLIJ_AUTO_ATTACH == true {
-    ^zellij attach -c
+    ^zellij attach --create $env.USER
   } else {
     ^zellij
   }

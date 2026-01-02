@@ -54,10 +54,6 @@ alias g = git
 
 alias b = bun
 
-# pnpm
-
-alias p = pnpm
-
 # ncu
 
 alias _ncu = ncu
@@ -76,7 +72,7 @@ def yau [] {
 # bottom
 
 alias _btm = btm
-def btm [] { run-with-tab-rename --name [bottom] btm -g }
+def btm [] { run-with-tab-rename --name [bottom] btm -g --process_memory_as_value }
 
 # trafilatura
 
@@ -95,6 +91,20 @@ alias rg = rg --smart-case --glob '!{.git/*,out/*,**/node_modules/**}' --max-col
 # bandwhich
 def bandwhich [] {
   run-with-tab-rename --name [bandwhich] sudo bandwhich
+}
+
+# kamal
+
+# inject env from mise.toml to be then read by kamal secrets
+alias kamal = mise x -- kamal
+
+# bws
+
+# alias bws = docker run --rm -it -e BWS_ACCESS_TOKEN bitwarden/bws
+
+alias _sshs = sshs
+def sshs [] {
+  TERM=xterm-256color _sshs
 }
 
 # ------- spotify_player -------
@@ -146,3 +156,4 @@ def --wrapped run-with-tab-rename [
 #     # https://github.com/nushell/nushell/discussions/10859#discussioncomment-7413476
 #     $in | each {|i| $i | to json --raw} | str join "\n" | fzf | from json
 # }
+#
