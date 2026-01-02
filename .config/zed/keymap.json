@@ -104,12 +104,6 @@
   {
     "context": "Editor",
     "bindings": {
-      "cmd-b": "git::Blame"
-    }
-  },
-  {
-    "context": "Editor",
-    "bindings": {
       "alt-cmd-g b": null
     }
   },
@@ -117,6 +111,39 @@
     "context": "vim_mode == visual",
     "bindings": {
       "shift-s": ["vim::PushAddSurrounds", {}]
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-l": null
+    }
+  },
+  {
+    "context": "((FileFinder || FileFinder > Picker > Editor) || FileFinder > Picker > menu)",
+    "bindings": {
+      "cmd-l": null
+    }
+  },
+  {
+    "bindings": {
+      "alt-cmd-,": "zed::OpenSettings"
+    }
+  },
+  {
+    "bindings": {
+      "cmd-,": "zed::OpenSettingsFile"
+    }
+  },
+  {
+    "bindings": {
+      "cmd-shift-c": null
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-shift-g": null
     }
   }
 ]
