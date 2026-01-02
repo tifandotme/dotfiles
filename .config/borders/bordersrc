@@ -2,8 +2,10 @@
 
 options=(
   # refer to ~/.config/sketchybar/colors.sh, they are the same picture
-  active_color=0xff9baca6
-  inactive_color=0xff3c4a31
+  # active_color=0xff9baca6
+  active_color=0xffe8c174
+  # inactive_color=0xff3c4a31
+  inactive_color=0xff5b4b2b
   width=5.0
   hidpi=on
 )

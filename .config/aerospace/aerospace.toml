@@ -1,36 +1,28 @@
 # don't add AeroSpace in Login Items or there will be duplicates!
 start-at-login = true
-
 after-startup-command = [
-    # don't use homebrew services to start/restart these, especially sketchybar,
-    # homebrew services will run sketchybar before aerospace which is not what we want
-    'exec-and-forget sketchybar',
-    'exec-and-forget borders',
-    # fix issue where wifi won't connect after login (idk why the fuck)
-    'exec-and-forget osascript "/Users/tifan/.config/aerospace/applescripts/wifi_off_on.applescript"',
+  # don't use homebrew services to start/restart these, especially sketchybar,
+  # homebrew services will run sketchybar before aerospace which is not what we want
+  "exec-and-forget sketchybar",
+  "exec-and-forget borders",
+  # fix issue where wifi won't connect after login (idk why the fuck)
+  'exec-and-forget osascript "/Users/tifan/.config/aerospace/applescripts/wifi_off_on.applescript"',
 ]
-
 exec-on-workspace-change = [
-    '/bin/bash',
-    '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+  "/bin/bash",
+  "-c",
+  "sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE",
 ]
-
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
-
 accordion-padding = 30
-
-default-root-container-layout = 'tiles'
-
-default-root-container-orientation = 'auto'
-
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-
+default-root-container-layout = "tiles"
+default-root-container-orientation = "auto"
+on-focused-monitor-changed = ["move-mouse monitor-lazy-center"]
 automatically-unhide-macos-hidden-apps = true
 
 [key-mapping]
-preset = 'qwerty'
+preset = "qwerty"
 
 [gaps]
 inner.horizontal = 7
@@ -58,163 +50,162 @@ outer.right = 7
 # --------------------------------- MAIN MODE ----------------------------------
 
 [mode.main.binding]
-
 # https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
-cmd-h = []     # Disable "hide application"
-cmd-alt-h = [] # Disable "hide others"
-
-alt-enter = ['layout floating tiling', 'mode main']
-
-alt-period = 'layout tiles horizontal vertical'
-alt-comma = 'layout accordion horizontal'
-
-alt-shift-h = 'focus left'
-alt-shift-j = 'focus down'
-alt-shift-k = 'focus up'
-alt-shift-l = 'focus right'
-
-alt-f = 'fullscreen'
-
-alt-shift-minus = 'resize smart -70'
-alt-shift-equal = 'resize smart +70'
-alt-shift-0 = 'balance-sizes'
-
+cmd-h = []  # Disable "hide application"
+cmd-alt-h = []  # Disable "hide others"
+alt-enter = ["layout floating tiling", "mode main"]
+alt-period = "layout tiles horizontal vertical"
+alt-comma = "layout accordion horizontal"
+alt-shift-h = "focus left"
+alt-shift-j = "focus down"
+alt-shift-k = "focus up"
+alt-shift-l = "focus right"
+alt-shift-f = "fullscreen --no-outer-gaps"
+alt-shift-minus = "resize smart -70"
+alt-shift-equal = "resize smart +70"
+alt-shift-0 = "balance-sizes"
 # zed edit prediction at cursor use alt-tab bro
 # alt-tab = 'workspace-back-and-forth'
-
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 # alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
-
-cmd-1 = 'workspace 1_web'
-cmd-2 = 'workspace 2_projects' # Electron/Android Studio development, or else
-cmd-3 = 'workspace 3_editor'
-cmd-4 = 'workspace 4_terminal'
-cmd-5 = 'workspace 5_rest'
+cmd-1 = "workspace 1_web"
+cmd-2 = "workspace 2_projects"  # Electron/Android Studio development, or else
+cmd-3 = "workspace 3_editor"
+cmd-4 = "workspace 4_terminal"
+cmd-5 = "workspace 5_rest"
 # corne (conflict, comment for now)
 # ctrl-a = 'workspace 1_web'
 # ctrl-s = 'workspace 2_projects' # Electron/Android Studio development, or else
 # ctrl-d = 'workspace 3_editor'
 # ctrl-f = 'workspace 4_terminal'
 # ctrl-g = 'workspace 5_rest'
-
 # alt-w = [
 #     'workspace W',
 #     'layout accordion horizontal',
 # ] # (W)eb browser (Chromium)
-
-cmd-shift-1 = ['move-node-to-workspace 1_web', 'workspace 1_web']
-cmd-shift-2 = ['move-node-to-workspace 2_projects', 'workspace 2_projects']
-cmd-shift-3 = ['move-node-to-workspace 3_editor', 'workspace 3_editor']
-cmd-shift-4 = ['move-node-to-workspace 4_terminal', 'workspace 4_terminal']
-cmd-shift-5 = ['move-node-to-workspace 5_rest', 'workspace 5_rest']
+cmd-shift-1 = ["move-node-to-workspace 1_web", "workspace 1_web"]
+cmd-shift-2 = ["move-node-to-workspace 2_projects", "workspace 2_projects"]
+cmd-shift-3 = ["move-node-to-workspace 3_editor", "workspace 3_editor"]
+cmd-shift-4 = ["move-node-to-workspace 4_terminal", "workspace 4_terminal"]
+cmd-shift-5 = ["move-node-to-workspace 5_rest", "workspace 5_rest"]
 # corne (nah, confict)
 # ctrl-shift-a = ['move-node-to-workspace 1_web', 'workspace 1_web']
 # ctrl-shift-s = ['move-node-to-workspace 2_projects', 'workspace 2_projects']
 # ctrl-shift-d = ['move-node-to-workspace 3_editor', 'workspace 3_editor']
 # ctrl-shift-f = ['move-node-to-workspace 4_terminal', 'workspace 4_terminal']
 # ctrl-shift-g = ['move-node-to-workspace 5_rest', 'workspace 5_rest']
-
 # Change modes
 cmd-shift-semicolon = [
-    'mode service',
-    'exec-and-forget sketchybar --trigger send_message MESSAGE="[SERVICE]" HOLD="true"',
+  "mode service",
+  'exec-and-forget sketchybar --trigger send_message MESSAGE="[SERVICE]" HOLD="true"',
 ]
 cmd-shift-quote = [
-    'mode move',
-    'exec-and-forget sketchybar --trigger send_message MESSAGE="[MOVE]" HOLD="true"',
+  "mode move",
+  'exec-and-forget sketchybar --trigger send_message MESSAGE="[MOVE]" HOLD="true"',
 ]
 
 # ------------------------------- SERVICE MODE ---------------------------------
 
 [mode.service.binding]
 esc = [
-    'reload-config',
-    'exec-and-forget sketchybar --trigger hide_message',
-    'exec-and-forget sketchybar --reload',
-    'exec-and-forget borders',
-    'mode main',
+  "reload-config",
+  "exec-and-forget sketchybar --trigger hide_message",
+  "exec-and-forget sketchybar --reload",
+  "exec-and-forget borders",
+  "mode main",
 ]
-r = ['flatten-workspace-tree', 'mode main'] # reset layout
-
-backspace = ['close-all-windows-but-current', 'mode main']
+r = ["flatten-workspace-tree", "mode main"]  # reset layout
+backspace = ["close-all-windows-but-current", "mode main"]
 
 # -------------------------------- MOVE MODE -----------------------------------
 
 [mode.move.binding]
-
-h = ['move left']
-j = ['move down']
-k = ['move up']
-l = ['move right']
-
-shift-h = ['join-with left']
-shift-j = ['join-with down']
-shift-k = ['join-with up']
-shift-l = ['join-with right']
-
-esc = ['mode main', 'exec-and-forget sketchybar --trigger hide_message']
-enter = ['mode main', 'exec-and-forget sketchybar --trigger hide_message']
+h = ["move left"]
+j = ["move down"]
+k = ["move up"]
+l = ["move right"]
+shift-h = ["join-with left"]
+shift-j = ["join-with down"]
+shift-k = ["join-with up"]
+shift-l = ["join-with right"]
+esc = ["mode main", "exec-and-forget sketchybar --trigger hide_message"]
+enter = ["mode main", "exec-and-forget sketchybar --trigger hide_message"]
 
 # ------------------------------------------------------------------------------
 
 # Move to 1_web workspace
 [[on-window-detected]]
-if.app-id = 'net.imput.helium'
-run = 'move-node-to-workspace 1_web'
+if.app-id = "net.imput.helium"
+run = "move-node-to-workspace 1_web"
+
 # [[on-window-detected]]
 # if.app-id = 'org.chromium.Chromium'
 # run = 'move-node-to-workspace 1_web'
 [[on-window-detected]]
-if.app-id = 'org.mozilla.firefox'
-run = 'move-node-to-workspace 1_web'
+if.app-id = "org.mozilla.firefox"
+run = "move-node-to-workspace 1_web"
+
 [[on-window-detected]]
-if.app-id = 'com.apple.Safari'
-run = 'move-node-to-workspace 1_web'
+if.app-id = "com.apple.Safari"
+run = "move-node-to-workspace 1_web"
 
 # Move to 2_projects workspace
 [[on-window-detected]]
-if.app-id = 'com.github.Electron'
-run = 'move-node-to-workspace 2_projects'
+if.app-id = "com.github.Electron"
+run = "move-node-to-workspace 2_projects"
+
 [[on-window-detected]]
-if.app-id = 'com.utmapp.UTM'
-run = 'move-node-to-workspace 2_projects'
+if.app-id = "com.utmapp.UTM"
+run = "move-node-to-workspace 2_projects"
+
 [[on-window-detected]]
-if.app-id = 'com.postmanlabs.mac'
-run = 'move-node-to-workspace 2_projects'
+if.app-id = "com.postmanlabs.mac"
+run = "move-node-to-workspace 2_projects"
+
 [[on-window-detected]]
-if.app-id = 'org.openvpn.client.app'
-run = 'move-node-to-workspace 2_projects'
+if.app-id = "org.openvpn.client.app"
+run = "move-node-to-workspace 2_projects"
+
 [[on-window-detected]]
-if.app-id = 'org.chromium.Chromium'
-run = 'move-node-to-workspace 2_projects'
+if.app-id = "org.chromium.Chromium"
+run = "move-node-to-workspace 2_projects"
 
 # Move to 3_editor workspace
 [[on-window-detected]]
-if.app-id = 'com.microsoft.VSCode'
-run = 'move-node-to-workspace 3_editor'
+if.app-id = "com.microsoft.VSCode"
+run = "move-node-to-workspace 3_editor"
+
 [[on-window-detected]]
-if.app-id = 'dev.zed.Zed'
-run = 'move-node-to-workspace 3_editor'
+if.app-id = "dev.zed.Zed"
+run = "move-node-to-workspace 3_editor"
 
 # Move to 4_terminal workspace
 [[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
-run = 'move-node-to-workspace 4_terminal'
+if.app-id = "com.mitchellh.ghostty"
+run = "move-node-to-workspace 4_terminal"
+
 [[on-window-detected]]
-if.app-id = 'com.apple.Terminal'
-run = 'move-node-to-workspace 4_terminal'
+if.app-id = "com.apple.Terminal"
+run = "move-node-to-workspace 4_terminal"
 
 # Move to 5_rest workspace
 # Messaging
 [[on-window-detected]]
-if.app-id = 'net.whatsapp.WhatsApp'
-run = 'move-node-to-workspace 5_rest'
+if.app-id = "net.whatsapp.WhatsApp"
+run = "move-node-to-workspace 5_rest"
+
 [[on-window-detected]]
-if.app-id = 'com.tdesktop.Telegram'
-run = 'move-node-to-workspace 5_rest'
+if.app-id = "com.tdesktop.Telegram"
+run = "move-node-to-workspace 5_rest"
+
 [[on-window-detected]]
-if.app-id = 'com.hnc.Discord'
-run = 'move-node-to-workspace 5_rest'
+if.app-id = "com.hnc.Discord"
+run = "move-node-to-workspace 5_rest"
+
+[[on-window-detected]]
+if.app-id = "com.apple.Safari.WebApp.2ADBBBBB-FD36-42E8-8053-EC3A72FBAC90"
+run = "move-node-to-workspace 5_rest"
+
 # Document viewers
 # [[on-window-detected]]
 # if.app-id = 'com.apple.Preview'
@@ -224,44 +215,50 @@ run = 'move-node-to-workspace 5_rest'
 # run = 'move-node-to-workspace 5_rest'
 # Music
 [[on-window-detected]]
-if.app-id = 'com.spotify.client'
-run = 'move-node-to-workspace 5_rest'
+if.app-id = "com.spotify.client"
+run = "move-node-to-workspace 5_rest"
+
 [[on-window-detected]]
-if.app-id = 'com.apple.Music'
-run = 'move-node-to-workspace 5_rest'
+if.app-id = "com.apple.Music"
+run = "move-node-to-workspace 5_rest"
+
 # Productivity
 [[on-window-detected]]
-if.app-id = 'notion.id'
-run = 'move-node-to-workspace 5_rest'
+if.app-id = "notion.id"
+run = "move-node-to-workspace 5_rest"
+
 [[on-window-detected]]
-if.app-id = 'com.clickup.desktop-app'
-run = 'move-node-to-workspace 5_rest'
+if.app-id = "com.clickup.desktop-app"
+run = "move-node-to-workspace 5_rest"
+
 [[on-window-detected]]
-if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace 5_rest'
+if.app-id = "com.tinyspeck.slackmacgap"
+run = "move-node-to-workspace 5_rest"
+
 [[on-window-detected]]
-if.app-id = 'com.apple.Safari.WebApp.2834129F-B549-458A-9ECB-95FC1C82C67E' # Actual.app
-run = 'move-node-to-workspace 5_rest'
+if.app-id = "com.apple.Safari.WebApp.2834129F-B549-458A-9ECB-95FC1C82C67E"  # Actual.app
+run = "move-node-to-workspace 5_rest"
 
 # Windows that should float
 [[on-window-detected]]
-if.app-id = 'com.apple.systempreferences'
-run = 'layout floating'
+if.app-id = "com.apple.systempreferences"
+run = "layout floating"
+
 [[on-window-detected]]
-if.app-id = 'net.mullvad.vpn'
-run = 'layout floating'
+if.app-id = "net.mullvad.vpn"
+run = "layout floating"
+
 [[on-window-detected]]
-if.app-id = 'com.colliderli.iina'
-run = 'layout floating'
+if.app-id = "com.colliderli.iina"
+run = "layout floating"
+
 [[on-window-detected]]
-if.app-id = 'com.apple.AppStore'
-run = 'layout floating'
+if.app-id = "com.apple.AppStore"
+run = "layout floating"
+
 [[on-window-detected]]
-if.app-id = 'org.openvpn.client.app'
-run = 'layout floating'
-# [[on-window-detected]]
-# if.app-id = 'com.pais.handy'
-# run = 'layout floating'
+if.app-id = "org.openvpn.client.app"
+run = "layout floating"
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-#s = ['layout sticky tiling', 'mode main']
+# s = ['layout sticky tiling', 'mode main']
