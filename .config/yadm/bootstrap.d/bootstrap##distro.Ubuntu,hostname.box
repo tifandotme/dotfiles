@@ -2,14 +2,24 @@
 
 set -e
 
-# Add GitHub to known_hosts to avoid SSH prompt
+################################################################################
+# 1. add GitHub to known_hosts to avoid SSH prompt
+################################################################################
+
 mkdir -p ~/.ssh
 ssh-keyscan -t ed25519 github.com >>~/.ssh/known_hosts 2>/dev/null || true
 
-# update to use ssh, previously we clone with https
+################################################################################
+# 2. update to use ssh remote, previously we clone with https, and decrypt secrets
+################################################################################
+
 DOTFILES_REPO_URL="git@github.com:tifandotme/dotfiles.git"
 yadm remote set-url origin "$DOTFILES_REPO_URL"
 yadm decrypt # need the ssh private and public key when installing packages from Brewfile
+
+################################################################################
+# 3. upgrade apt packages
+################################################################################
 
 sudo apt update
 
@@ -19,6 +29,10 @@ sudo dpkg --configure -a --force-confnew
 sudo apt -o Dpkg::Options::="--force-confnew" upgrade -y
 
 sudo apt autoremove -y
+
+################################################################################
+# 4. install homebrew and brew's packages
+################################################################################
 
 # https://docs.brew.sh/Homebrew-on-Linux#requirements
 sudo apt install build-essential procps curl file git -y
@@ -30,6 +44,18 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 brew bundle --file="$HOME/.config/yadm/Brewfile" --verbose
 
+################################################################################
+# 5. prepare for kamal deployment
+################################################################################
+
+# https://kamal-deploy.org/docs/configuration/ssh/
+sudo apt install docker.io -y
+sudo usermod -a -G docker "$USER"
+
+################################################################################
+# 6. setup tailscale
+################################################################################
+
 curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up
 sudo tailscale set --ssh
@@ -39,8 +65,9 @@ echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
 echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
 sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
 
-cat <<EOF
-Bootstrap successful.
+################################################################################
+# 7. block public access
+################################################################################
 
 # https://tailscale.com/kb/1077/secure-server-ubuntu
 sudo systemctl enable ufw
@@ -48,7 +75,65 @@ sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow in on tailscale0
 
+# https://github.com/chaifeng/ufw-docker#solving-ufw-and-docker-issues
+# below ufw rules is from above repo with some adjustment for tailscale
+FILE="/etc/ufw/after.rules"
+
+if grep -q "BEGIN UFW AND DOCKER" "$FILE"; then
+  echo "It looks like the UFW DOCKER rules are already in $FILE."
+  echo "Please check manually. Aborting."
+  exit 1
+fi
+
+echo "Backing up $FILE to ${FILE}.bak..."
+cp "$FILE" "${FILE}.bak"
+
+echo "Appending rules..."
+cat <<EOF >>"$FILE"
+
+# BEGIN UFW AND DOCKER
+*filter
+:ufw-user-forward - [0:0]
+:ufw-docker-logging-deny - [0:0]
+:DOCKER-USER - [0:0]
+-A DOCKER-USER -j ufw-user-forward
+
+-A DOCKER-USER -m conntrack --ctstate RELATED,ESTABLISHED -j RETURN
+-A DOCKER-USER -m conntrack --ctstate INVALID -j DROP
+-A DOCKER-USER -i docker0 -o docker0 -j ACCEPT
+
+# Fix: Trust Tailscale interface
+-A DOCKER-USER -i tailscale0 -j RETURN
+
+-A DOCKER-USER -j RETURN -s 10.0.0.0/8
+-A DOCKER-USER -j RETURN -s 172.16.0.0/12
+-A DOCKER-USER -j RETURN -s 192.168.0.0/16
+
+-A DOCKER-USER -j ufw-docker-logging-deny -m conntrack --ctstate NEW -d 10.0.0.0/8
+-A DOCKER-USER -j ufw-docker-logging-deny -m conntrack --ctstate NEW -d 172.16.0.0/12
+-A DOCKER-USER -j ufw-docker-logging-deny -m conntrack --ctstate NEW -d 192.168.0.0/16
+
+-A DOCKER-USER -j RETURN
+
+-A ufw-docker-logging-deny -m limit --limit 3/min --limit-burst 10 -j LOG --log-prefix "[UFW DOCKER BLOCK] "
+-A ufw-docker-logging-deny -j DROP
+
+COMMIT
+# END UFW AND DOCKER
+EOF
+
+echo "Reloading UFW..."
+sudo ufw reload
+
+echo "Done."
+
+# test with `nc -zv <public_or_tailnet_ip> <port>`
+
+cat <<EOF
+Bootstrap successful.
+
 # https://tailscale.com/kb/1103/exit-nodes?tab=linux#advertise-a-device-as-an-exit-node
+# will exit session, so do this manually:
 sudo tailscale set --advertise-exit-node
 sudo tailscale up
 EOF
