@@ -46,6 +46,10 @@ alias lzd = lazydocker
 
 alias d = docker
 
+# terraform
+
+alias t = terraform
+
 # git
 
 alias g = git
