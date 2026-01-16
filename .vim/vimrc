@@ -4,7 +4,7 @@
 " `zR` - Open all folds
 " `zM` - Close all folds
 " `za` - Toggle fold (open if closed, close if open)
-set foldmethod=marker
+" set foldmethod=marker
 
 " :PlugInstall  - Install plugins
 " :PlugUpdate   - Update plugins
@@ -28,11 +28,11 @@ Plug 'tpope/vim-commentary'
 
 call plug#end()
 
-" vim-highlightedyank configs
-let g:highlightedyank_highlight_duration = 200
-
 " Disable sytax hl (vim-sensible enables it)
 autocmd VimEnter * syntax off
+
+" vim-highlightedyank configs
+let g:highlightedyank_highlight_duration = 200
 
 " }}}
 
@@ -152,5 +152,3 @@ set statusline+=\ ascii:\ %b\ hex:\ 0x%B\ row:\ %l\ col:\ %c\ percent:\ %p%%
 set laststatus=2
 
 " }}}
-
-

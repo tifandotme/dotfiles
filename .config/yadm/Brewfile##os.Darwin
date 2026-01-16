@@ -1,24 +1,27 @@
 tap "hougesen/tap"
+
 tap "felixkratz/formulae"
+brew "felixkratz/formulae/borders"
+brew "felixkratz/formulae/sketchybar"
+
 tap "nikitabobko/tap"
+
 tap "oven-sh/bun"
 tap "teamookla/speedtest"
 
 # General
-brew "felixkratz/formulae/borders"
-brew "felixkratz/formulae/sketchybar"
 brew "nushell"
 brew "starship"
 brew "difftastic" # used in nu's dif command
-brew "git-delta" # used in lazygit
-brew "bat" # cat replacement
-brew "eza" # ls replacement
-brew "dua-cli" # ncdu replacement
-brew "gping" # ping replacement
+brew "git-delta"  # used in lazygit
+brew "bat"        # cat replacement
+brew "eza"        # ls replacement
+brew "dua-cli"    # ncdu replacement
+brew "gping"      # ping replacement
 brew "fastfetch"
 brew "bottom"
 brew "zoxide"
-brew "fd" # find replacement
+brew "fd"      # find replacement
 brew "ripgrep" # grep replacement
 brew "fzf"
 brew "just"
@@ -53,7 +56,7 @@ brew "bandwhich" # need sudo to use
 brew "topiary"
 
 # Languages
-brew "taplo"  # used by Zed's TOML ext
+brew "taplo"               # used by Zed's TOML ext
 brew "hougesen/tap/kdlfmt" # Used as .kdl formatter in Zed
 
 # Yazi deps

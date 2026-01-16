@@ -197,6 +197,7 @@ $env.config = {
 # Source scripts/*
 # use task.nu
 use updater.nu
+source cert.nu
 # use mise.gen.nu
 source ~/.cache/mise/init.nu
 use bash-env.nu

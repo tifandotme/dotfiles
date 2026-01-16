@@ -1,4 +1,4 @@
-# don't add AeroSpace in Login Items or there will be duplicates!
+# don't add AeroSpace in Login Items manually or there will be duplicates!
 start-at-login = true
 after-startup-command = [
   # don't use homebrew services to start/restart these, especially sketchybar,
@@ -68,32 +68,34 @@ alt-shift-0 = "balance-sizes"
 # alt-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 # alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
-cmd-1 = "workspace 1_web"
-cmd-2 = "workspace 2_projects"  # Electron/Android Studio development, or else
+cmd-backtick = "workspace 0_misc"
+cmd-1 = "workspace 1_personal"
+cmd-2 = "workspace 2_work"  # web/electron dev server, android emulator
 cmd-3 = "workspace 3_editor"
 cmd-4 = "workspace 4_terminal"
-cmd-5 = "workspace 5_rest"
+cmd-5 = "workspace 5_notes"
 # corne (conflict, comment for now)
-# ctrl-a = 'workspace 1_web'
-# ctrl-s = 'workspace 2_projects' # Electron/Android Studio development, or else
+# ctrl-a = 'workspace 1_personal'
+# ctrl-s = 'workspace 2_work' # Electron/Android Studio development, or else
 # ctrl-d = 'workspace 3_editor'
 # ctrl-f = 'workspace 4_terminal'
-# ctrl-g = 'workspace 5_rest'
+# ctrl-g = 'workspace 5_notes'
 # alt-w = [
 #     'workspace W',
 #     'layout accordion horizontal',
 # ] # (W)eb browser (Chromium)
-cmd-shift-1 = ["move-node-to-workspace 1_web", "workspace 1_web"]
-cmd-shift-2 = ["move-node-to-workspace 2_projects", "workspace 2_projects"]
+cmd-shift-backtick = ["move-node-to-workspace 0_misc", "workspace 0_misc"]
+cmd-shift-1 = ["move-node-to-workspace 1_personal", "workspace 1_personal"]
+cmd-shift-2 = ["move-node-to-workspace 2_work", "workspace 2_work"]
 cmd-shift-3 = ["move-node-to-workspace 3_editor", "workspace 3_editor"]
 cmd-shift-4 = ["move-node-to-workspace 4_terminal", "workspace 4_terminal"]
-cmd-shift-5 = ["move-node-to-workspace 5_rest", "workspace 5_rest"]
+cmd-shift-5 = ["move-node-to-workspace 5_notes", "workspace 5_notes"]
 # corne (nah, confict)
-# ctrl-shift-a = ['move-node-to-workspace 1_web', 'workspace 1_web']
+# ctrl-shift-a = ['move-node-to-workspace 1_personal', 'workspace 1_personal']
 # ctrl-shift-s = ['move-node-to-workspace 2_projects', 'workspace 2_projects']
 # ctrl-shift-d = ['move-node-to-workspace 3_editor', 'workspace 3_editor']
 # ctrl-shift-f = ['move-node-to-workspace 4_terminal', 'workspace 4_terminal']
-# ctrl-shift-g = ['move-node-to-workspace 5_rest', 'workspace 5_rest']
+# ctrl-shift-g = ['move-node-to-workspace 5_notes', 'workspace 5_notes']
 # Change modes
 cmd-shift-semicolon = [
   "mode service",
@@ -114,8 +116,8 @@ esc = [
   "exec-and-forget borders",
   "mode main",
 ]
-r = ["flatten-workspace-tree", "mode main"]  # reset layout
-backspace = ["close-all-windows-but-current", "mode main"]
+# r = ["flatten-workspare-tree", "mode main"]  # reset layout
+# backspace = ["close-all-windows-but-current", "mode main"]
 
 # -------------------------------- MOVE MODE -----------------------------------
 
@@ -133,42 +135,35 @@ enter = ["mode main", "exec-and-forget sketchybar --trigger hide_message"]
 
 # ------------------------------------------------------------------------------
 
-# Move to 1_web workspace
+# Move to 1_personal workspace
 [[on-window-detected]]
 if.app-id = "net.imput.helium"
-run = "move-node-to-workspace 1_web"
-
-# [[on-window-detected]]
-# if.app-id = 'org.chromium.Chromium'
-# run = 'move-node-to-workspace 1_web'
-[[on-window-detected]]
-if.app-id = "org.mozilla.firefox"
-run = "move-node-to-workspace 1_web"
+run = "move-node-to-workspace 1_personal"
 
 [[on-window-detected]]
 if.app-id = "com.apple.Safari"
-run = "move-node-to-workspace 1_web"
-
-# Move to 2_projects workspace
-[[on-window-detected]]
-if.app-id = "com.github.Electron"
-run = "move-node-to-workspace 2_projects"
-
-[[on-window-detected]]
-if.app-id = "com.utmapp.UTM"
-run = "move-node-to-workspace 2_projects"
-
-[[on-window-detected]]
-if.app-id = "com.postmanlabs.mac"
-run = "move-node-to-workspace 2_projects"
-
-[[on-window-detected]]
-if.app-id = "org.openvpn.client.app"
-run = "move-node-to-workspace 2_projects"
+run = "move-node-to-workspace 1_personal"
 
 [[on-window-detected]]
 if.app-id = "org.chromium.Chromium"
-run = "move-node-to-workspace 2_projects"
+run = "move-node-to-workspace 1_personal"
+
+[[on-window-detected]]
+if.app-id = "org.mozilla.firefox"
+run = "move-node-to-workspace 1_personal"
+
+# Move to 2_work workspace
+[[on-window-detected]]
+if.app-id = "com.github.Electron"
+run = "move-node-to-workspace 2_work"
+
+[[on-window-detected]]
+if.app-id = "com.utmapp.UTM"
+run = "move-node-to-workspace 2_work"
+
+[[on-window-detected]]
+if.app-id = "com.postmanlabs.mac"
+run = "move-node-to-workspace 2_work"
 
 # Move to 3_editor workspace
 [[on-window-detected]]
@@ -188,23 +183,28 @@ run = "move-node-to-workspace 4_terminal"
 if.app-id = "com.apple.Terminal"
 run = "move-node-to-workspace 4_terminal"
 
-# Move to 5_rest workspace
+# Move to 5_notes workspace
+[[on-window-detected]]
+if.app-id = "md.obsidian"
+run = "move-node-to-workspace 5_notes"
+
+# Move to 0_misc workspace
 # Messaging
 [[on-window-detected]]
 if.app-id = "net.whatsapp.WhatsApp"
-run = "move-node-to-workspace 5_rest"
+run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
 if.app-id = "com.tdesktop.Telegram"
-run = "move-node-to-workspace 5_rest"
+run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
 if.app-id = "com.hnc.Discord"
-run = "move-node-to-workspace 5_rest"
+run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
 if.app-id = "com.apple.Safari.WebApp.2ADBBBBB-FD36-42E8-8053-EC3A72FBAC90"
-run = "move-node-to-workspace 5_rest"
+run = "move-node-to-workspace 0_misc"
 
 # Document viewers
 # [[on-window-detected]]
@@ -216,28 +216,28 @@ run = "move-node-to-workspace 5_rest"
 # Music
 [[on-window-detected]]
 if.app-id = "com.spotify.client"
-run = "move-node-to-workspace 5_rest"
+run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
 if.app-id = "com.apple.Music"
-run = "move-node-to-workspace 5_rest"
+run = "move-node-to-workspace 0_misc"
 
 # Productivity
 [[on-window-detected]]
 if.app-id = "notion.id"
-run = "move-node-to-workspace 5_rest"
+run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
 if.app-id = "com.clickup.desktop-app"
-run = "move-node-to-workspace 5_rest"
+run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
 if.app-id = "com.tinyspeck.slackmacgap"
-run = "move-node-to-workspace 5_rest"
+run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
-if.app-id = "com.apple.Safari.WebApp.2834129F-B549-458A-9ECB-95FC1C82C67E"  # Actual.app
-run = "move-node-to-workspace 5_rest"
+if.app-id = "com.apple.Safari.WebApp.792C0494-7180-49DF-BB30-AA6B7C4EFDFB"  # Actual.app
+run = "move-node-to-workspace 0_misc"
 
 # Windows that should float
 [[on-window-detected]]

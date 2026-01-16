@@ -6,7 +6,7 @@ local function setup()
       ya.emit("linemode", { "mtime" })
     else
       ya.emit("sort", { "extension", reverse = false, dir_first = true })
-      ya.emit("linemode", { "none" })
+      ya.emit("linemode", { "size_and_mtime" })
     end
   end)
 end
