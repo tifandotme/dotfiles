@@ -104,3 +104,5 @@ cask "visual-studio-code"
 
 cask "android-commandlinetools"
 cask "temurin" # needed by android-commandlinetools
+
+cask "notunes"
