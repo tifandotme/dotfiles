@@ -206,6 +206,10 @@ run = "move-node-to-workspace 0_misc"
 if.app-id = "com.apple.Safari.WebApp.2ADBBBBB-FD36-42E8-8053-EC3A72FBAC90"
 run = "move-node-to-workspace 0_misc"
 
+[[on-window-detected]]
+if.app-id = "com.colliderli.iina"
+run = "move-node-to-workspace 0_misc"
+
 # Document viewers
 # [[on-window-detected]]
 # if.app-id = 'com.apple.Preview'
@@ -240,6 +244,10 @@ if.app-id = "com.apple.Safari.WebApp.792C0494-7180-49DF-BB30-AA6B7C4EFDFB"  # Ac
 run = "move-node-to-workspace 0_misc"
 
 # Windows that should float
+[[on-window-detected]]
+if.app-id = "org.localsend.localsendApp"
+run = "layout floating"
+
 [[on-window-detected]]
 if.app-id = "com.apple.systempreferences"
 run = "layout floating"
