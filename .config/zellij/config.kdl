@@ -43,13 +43,6 @@ keybinds clear-defaults=true {
         bind "Ctrl e" {
             SwitchToMode "tmux"
         }
-        bind "Ctrl Shift \\" {
-            Run "nu" "-l" "-c" "open-actions-runner" {
-                floating true
-                close_on_exit true
-                hold_on_close false
-            }
-        }
         bind "Ctrl \\" {
             Run "nu" "-l" "-c" "open-project" {
                 // These are undocumented
@@ -60,30 +53,8 @@ keybinds clear-defaults=true {
                 hold_on_close false
             }
         }
-        bind "Ctrl Shift g" {
-            Run "nu" "-l" "-c" "gcloud-config" {
-                name "Select gcloud config"
-                floating true
-                close_on_exit true
-                hold_on_close false
-            }
-        }
-        bind "Ctrl v" {
-            Run "nu" "-l" "-c" "code ." {
-                in_place true
-                close_on_exit true
-                hold_on_close false
-            }
-        }
         bind "Ctrl z" {
             Run "nu" "-l" "-c" "zed ." {
-                in_place true
-                close_on_exit true
-                hold_on_close false
-            }
-        }
-        bind "Ctrl f" {
-            Run "nu" "-l" "-c" "open-firecrawl" {
                 in_place true
                 close_on_exit true
                 hold_on_close false
