@@ -186,7 +186,7 @@ $env.config = {
         description_text: yellow
       }
       source: {|buffer position|
-        history | get command | uniq | str join (char nl)
+        history | get command | uniq | reverse | str join (char nl)
         | fzf -f $buffer | lines
         | each {|v| {value: ($v | str trim)} }
       }
