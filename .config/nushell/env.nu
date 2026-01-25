@@ -83,7 +83,7 @@ hide add_path
 
 do --env {
   let ssh_agent_file = (
-    $nu.temp-path | path join $"ssh-agent-(whoami).nuon"
+    $nu.temp-dir | path join $"ssh-agent-(whoami).nuon"
   )
 
   if ($ssh_agent_file | path exists) {
