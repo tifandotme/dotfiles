@@ -72,8 +72,15 @@ set nobackup
 " Do not let cursor scroll below or above N number of lines when scrolling.
 set scrolloff=5
 
-" Do not wrap lines. Allow long lines to extend as far as the line goes.
-set nowrap
+" Soft wrap lines.
+set wrap
+set linebreak
+set breakindent
+set breakindentopt=shift:2
+
+" Disable hard line wrapping, allowing lines to soft wrap.
+set textwidth=0
+set wrapmargin=0
 
 " While searching though a file incrementally highlight matching characters as you type.
 set incsearch
@@ -123,6 +130,12 @@ nnoremap <leader>w :w<CR>
 nnoremap <leader>c :Commentary<CR>
 nnoremap U <C-r>
 nnoremap <leader>p <Nop>
+
+" Navigate by display lines when soft wrapping is on.
+nnoremap j gj
+nnoremap k gk
+nnoremap 0 g0
+nnoremap $ g$
 
 " prevent accidentally openning command history list
 nnoremap q: :
