@@ -5,6 +5,7 @@ python = "latest"
 rust = "latest"
 ruby = "latest"
 "gem:kamal" = "latest"
+terraform = "latest"
 
 [settings]
 disable_hints = ["outdated_bump"]
