@@ -328,3 +328,43 @@ def "git rebase-release" [remote = "upstream"] {
 def "git loggy" [] {
   git log --oneline (git describe --tags --abbrev=0 upstream/HEAD)
 }
+
+def prep-excalidraw [
+  file?: path # Optional: specific file to process. If omitted, processes all images in PWD.
+  --width: int = 500 # Maximum width
+] {
+  let resize_arg = $"($width)>"
+
+  # Internal closure to handle single file logic
+  let optimize = {|in_file|
+    let parts = ($in_file | path parse)
+
+    # Safety: skip if it looks like an output file already
+    if ($parts.stem | str ends-with "_optimized") { return }
+
+    let new_stem = $"($parts.stem)_optimized"
+    let out_name = ($parts | update stem $new_stem | update extension "webp" | path join)
+
+    # Convert
+    magick $in_file -resize $resize_arg -strip -quality 75 $out_name
+
+    # Verify success before deleting original
+    if ($out_name | path exists) {
+      rm $in_file
+      print $"Converted & Deleted: ($in_file) -> ($out_name)"
+    } else {
+      print -e $"Failed to convert: ($in_file)"
+    }
+  }
+
+  if ($file != null) {
+    # Single file mode
+    do $optimize $file
+  } else {
+    # Batch mode: find jpg, jpeg, png, webp in PWD
+    _ls
+    | where name =~ '(?i)\.(jpg|jpeg|png|webp)$'
+    | where name !~ '_optimized'
+    | each {|row| do $optimize $row.name }
+  }
+}

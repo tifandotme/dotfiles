@@ -58,8 +58,11 @@ export def clean [] {
     go clean -modcache
   }
   if (which docker | is-not-empty) {
+    docker container prune -f
+    docker network prune -f
     docker image prune -a -f
     docker volume prune -f
+    docker builder prune -f
     docker buildx prune -f
   }
 }

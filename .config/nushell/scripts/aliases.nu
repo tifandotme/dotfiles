@@ -33,6 +33,10 @@ hide bhelp
 
 # alias _ping = ping
 # alias ping = gping
+#
+# fast
+
+alias f = fast --verbose
 
 # lazygit
 
@@ -68,6 +72,10 @@ alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME
 alias yal = yadm list -a
 alias yag = yadm enter lazygit --work-tree ~
 
+# opencode
+
+alias oc = opencode
+
 # Push all yadm changes
 def yau [] {
   yadm add -u; yadm commit -m "update"; yadm push
@@ -100,7 +108,7 @@ def bandwhich [] {
 # kamal
 
 # inject env from mise.toml to be then read by kamal secrets
-alias kamal = mise x -- kamal
+# alias kamal = mise x -- kamal
 
 # bws
 
