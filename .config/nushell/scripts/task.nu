@@ -1,1 +1,0 @@
-/Users/tifandwiavianto/personal/nu_scripts/modules/background_task/task.nu
