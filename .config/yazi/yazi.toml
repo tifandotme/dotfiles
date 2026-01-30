@@ -19,4 +19,3 @@ prepend_rules = [
 play = [{ run = 'open "$@" -a IINA', orphan = true, for = "unix" }]
 # setting TERM because we overrides TERM inside Yazi which is invalid according to vi
 edit = [{ run = 'TERM=ansi $EDITOR "$@"', block = true, for = "unix" }]
-

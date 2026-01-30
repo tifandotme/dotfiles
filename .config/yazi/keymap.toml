@@ -17,7 +17,8 @@ prepend_keymap = [
   { on = ["'", "h"], run = "plugin custom-shell history", desc = "Show custom-shell history" },
   { on = ["'", "z"], run = "plugin custom-shell -- custom nu 'zed $env.PWD'", desc = "Run Zed in current directory" },
   # yadm
-  { on = ["'", "a"], run = "shell -- yadm add %s", desc = "Add file to yadm" },
+  { on = ["'", "y"], run = "shell -- yadm add %s", desc = "Add file to yadm" },
+  { on = ["'", "Y"], run = "shell -- yadm rm --cached %s", desc = "Remove file from yadm" },
   # Extra gotos
   { on = ["g", "w"], run = "cd ~/work", desc = "Go ~/work" },
   { on = ["g", "p"], run = "cd ~/personal", desc = "Go ~/personal" },
