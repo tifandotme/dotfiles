@@ -11,11 +11,11 @@
 [gpg]
 	format = ssh
 [push]
-    default = current
-    autoSetupRemote = true
-    followTags = true
+	default = current
+	autoSetupRemote = true
+	followTags = true
 [pull]
-    default = current
+	default = current
 	rebase = true
 [rebase]
 	autoStash = true
@@ -24,6 +24,7 @@
 	prune = true
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+
 [maintenance]
 	repo = /Users/tifan/personal/website
 	repo = /Users/tifan/work/aquasense-app
@@ -31,24 +32,24 @@
 	path = ~/work/.gitconfig
 
 [core]
-    whitespace = error
-    preloadindex = true
-    pager = delta
+	whitespace = error
+	preloadindex = true
+	pager = delta
 [interactive]
-    diffFilter = delta --color-only --features=interactive
+	diffFilter = delta --color-only --features=interactive
 [delta]
-    light = false
-    syntax-theme = none
-    navigate = true
-    side-by-side = true
-    line-numbers-left-format = ""
-    line-numbers-right-format = "│ "
-    hyperlinks = true
-    hyperlinks-file-link-format = "zed://file/{path}:{line}"
+	light = false
+	syntax-theme = none
+	navigate = true
+	side-by-side = true
+	line-numbers-left-format = ""
+	line-numbers-right-format = "│ "
+	hyperlinks = true
+	hyperlinks-file-link-format = "zed://file/{path}:{line}"
 [merge]
-    conflictstyle = zdiff3
+	conflictstyle = zdiff3
 [diff]
-    colorMoved = default
+	colorMoved = default
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f

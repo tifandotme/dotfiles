@@ -15,6 +15,7 @@
     autoSetupRemote = true
     followTags = true
 [pull]
+    default = current
 	rebase = true
 [rebase]
 	autoStash = true
