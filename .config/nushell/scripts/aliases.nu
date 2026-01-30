@@ -105,14 +105,11 @@ def bandwhich [] {
   run-with-tab-rename --name [bandwhich] sudo bandwhich
 }
 
+# gdu-go
+
+alias gdu = gdu-go
+
 # kamal
-
-# inject env from mise.toml to be then read by kamal secrets
-# alias kamal = mise x -- kamal
-
-# bws
-
-# alias bws = docker run --rm -it -e BWS_ACCESS_TOKEN bitwarden/bws
 
 alias _sshs = sshs
 def sshs [] {
