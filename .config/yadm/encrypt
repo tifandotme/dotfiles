@@ -1,6 +1,4 @@
 .ssh/id_ed25519
 .ssh/id_ed25519.pub
-.config/mcpo/config.json
 .config/nushell/history.sqlite3
 .config/docker/config.json##os.Darwin
-.config/zed/settings.json
