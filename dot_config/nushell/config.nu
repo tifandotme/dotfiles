@@ -195,15 +195,17 @@ $env.config = {
 }
 
 # Source scripts/*
-# use task.nu
+source aliases.nu
+source utils.nu
+
 use updater.nu
-source cert.nu
+use cert.nu
+use chezmoi.nu
+
 # use mise.gen.nu
 source ~/.cache/mise/init.nu
 use bash-env.nu
 source zoxide.gen.nu
-source aliases.nu
-source utils.nu
 
 if "ZELLIJ" not-in ($env | columns) {
   if $env.ZELLIJ_AUTO_ATTACH == true {
