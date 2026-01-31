@@ -5,7 +5,7 @@ export def sync [] {
     chezmoi status
     chezmoi git add .
     chezmoi git -- commit -m "update"
-    chezmoi git push --force-with-lease
+    chezmoi git push
   } catch {
     print "hiya."
   }
