@@ -72,10 +72,6 @@ alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME
 alias yal = yadm list -a
 alias yag = yadm enter lazygit --work-tree ~
 
-# chezmoi
-
-alias c = chezmoi
-
 # opencode
 
 alias oc = opencode
