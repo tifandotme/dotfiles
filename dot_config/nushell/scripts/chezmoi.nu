@@ -2,14 +2,18 @@
 export def sync [] {
   try {
     chezmoi re-add
-    let diff_output = (chezmoi diff)
-    if ($diff_output != "") {
-      error make {msg: "chezmoi diff shows changes. Please update the file in template."}
+    let output = (chezmoi status)
+    if ($output != "") {
+      chezmoi diff
+      print ""
+      chezmoi status
+      print ""
+      error make {msg: "Run `chezmoi edit --apply <file>` on each template first. Then re-run this command."}
     }
     chezmoi git add .
     chezmoi git -- commit -m "update"
     chezmoi git push
   } catch {|e|
-    print "error: ($e.msg)"
+    print $"error: ($e.msg)"
   }
 }
