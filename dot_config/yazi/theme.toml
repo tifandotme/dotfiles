@@ -1,0 +1,26 @@
+"$schema" = "https://yazi-rs.github.io/schemas/theme.json"
+
+[mgr]
+# sort_dir_first = true
+border_style = { fg = "gray" }
+preview_hovered = {  }
+count_selected = { fg = "black", bg = "yellow", bold = true }
+count_copied = { fg = "black", bg = "yellow", blink_rapid = true, bold = true }
+
+[status]
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+
+[mode]
+normal_main = { fg = "black", bg = "blue", bold = true }
+normal_alt = { fg = "blue", bg = "reset" }
+select_main = { fg = "black", bg = "yellow", bold = true }
+select_alt = { fg = "yellow", bg = "reset" }
+unset_main = { fg = "yellow", bg = "reset", bold = true }
+unset_alt = { fg = "blue", bg = "reset" }
+
+[tabs]
+active = { fg = "black", bg = "white", bold = true }
+inactive = { fg = "gray", bg = "reset" }
+sep_inner = { open = "", close = "" }
+sep_outer = { open = "", close = "" }

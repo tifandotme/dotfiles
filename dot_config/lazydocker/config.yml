@@ -1,0 +1,6 @@
+gui:
+  border: "single"
+  showBottomLine: false
+  theme:
+    selectedLineBgColor:
+      - "#282828"

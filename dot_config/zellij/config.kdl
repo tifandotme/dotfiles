@@ -1,0 +1,246 @@
+// default: https://github.com/zellij-org/zellij/blob/main/zellij-utils/assets/config/default.kdl
+// https://zellij.dev/documentation/options.html
+keybinds clear-defaults=true {
+    locked {
+        bind "Ctrl g" {
+            SwitchToMode "Normal"
+        }
+    }
+    scroll {
+        bind "/" {
+            SwitchToMode "EnterSearch"
+            SearchInput 0
+        }
+        bind "e" {
+            EditScrollback
+            SwitchToMode "normal"
+        }
+    }
+    search {
+        bind "down" {
+            ScrollDown
+        }
+        bind "up" {
+            ScrollUp
+        }
+        bind "N" {
+            Search "up"
+        }
+        bind "c" {
+            SearchToggleOption "CaseSensitivity"
+        }
+        bind "n" {
+            Search "down"
+        }
+        bind "o" {
+            SearchToggleOption "WholeWord"
+        }
+        bind "w" {
+            SearchToggleOption "Wrap"
+        }
+    }
+    shared_except "locked" "tmux" {
+        bind "Ctrl e" {
+            SwitchToMode "tmux"
+        }
+        bind "Ctrl \\" {
+            Run "nu" "-l" "-c" "open-project" {
+                // These are undocumented
+                // https://github.com/zellij-org/zellij/blob/ea57d9a73026bbc6f9c7f1a7803067ad365584cb/zellij-utils/src/kdl/mod.rs#L1497
+                name "Open project"
+                floating true
+                close_on_exit true
+                hold_on_close false
+            }
+        }
+        bind "Ctrl z" {
+            Run "nu" "-l" "-c" "zed ." {
+                in_place true
+                close_on_exit true
+                hold_on_close false
+            }
+        }
+    }
+    shared_except "locked" {
+        bind "Alt +" {
+            Resize "Increase"
+        }
+        bind "Alt -" {
+            Resize "Decrease"
+        }
+        bind "Alt =" {
+            Resize "Increase"
+        }
+        bind "Shift Super [" {
+            MoveFocusOrTab "left"
+        }
+        bind "Shift Super ]" {
+            MoveFocusOrTab "right"
+        }
+        bind "Ctrl g" {
+            SwitchToMode "locked"
+        }
+        bind "Ctrl Alt h" {
+            MoveTab "left"
+        }
+        bind "Ctrl Alt l" {
+            MoveTab "right"
+        }
+        bind "Alt h" {
+            MoveFocusOrTab "left"
+        }
+        bind "Alt l" {
+            MoveFocusOrTab "right"
+        }
+        bind "Super w" {
+            CloseTab
+        }
+        bind "Super t" {
+            NewTab
+        }
+        bind "Ctrl q" {
+            Quit
+        }
+    }
+    shared_except "normal" "locked" "entersearch" {
+        bind "enter" {
+            SwitchToMode "normal"
+        }
+    }
+    shared_except "normal" "locked" "entersearch" "renametab" "renamepane" {
+        bind "esc" {
+            SwitchToMode "normal"
+        }
+    }
+    shared_among "scroll" "search" {
+        bind "Ctrl c" {
+            ScrollToBottom
+            SwitchToMode "normal"
+        }
+        bind "d" {
+            HalfPageScrollDown
+        }
+        bind "h" {
+            PageScrollUp
+        }
+        bind "j" {
+            ScrollDown
+        }
+        bind "k" {
+            ScrollUp
+        }
+        bind "l" {
+            PageScrollDown
+        }
+        bind "u" {
+            HalfPageScrollUp
+        }
+    }
+    entersearch {
+        bind "Ctrl c" {
+            SwitchToMode "scroll"
+        }
+        bind "esc" {
+            SwitchToMode "scroll"
+        }
+        bind "enter" {
+            SwitchToMode "search"
+            SearchToggleOption "CaseSensitivity"
+        }
+    }
+    renametab {
+        bind "esc" {
+            UndoRenameTab
+            SwitchToMode "tab"
+        }
+    }
+    shared_among "renametab" "renamepane" {
+        bind "Ctrl c" {
+            SwitchToMode "normal"
+        }
+    }
+    renamepane {
+        bind "esc" {
+            UndoRenamePane
+            SwitchToMode "pane"
+        }
+    }
+    tmux {
+        bind "e" {
+            EditScrollback
+            SwitchToMode "normal"
+        }
+        bind "," {
+            SwitchToMode "renametab"
+        }
+        bind "/" {
+            SwitchToMode "entersearch"
+            SearchInput 0
+        }
+        bind "[" {
+            SwitchToMode "scroll"
+        }
+        bind "c" {
+            NewTab
+            SwitchToMode "normal"
+        }
+        bind "d" {
+            Detach
+        }
+        bind "Ctrl e" {
+            Write 2
+            SwitchToMode "normal"
+        }
+        bind "f" {
+            ToggleFloatingPanes
+            SwitchToMode "normal"
+        }
+        bind "n" {
+            NewPane "right"
+            SwitchToMode "normal"
+        }
+        bind "s" {
+            ToggleActiveSyncTab
+            SwitchToMode "normal"
+        }
+        bind "w" {
+            LaunchOrFocusPlugin "session-manager" {
+                floating true
+                move_to_focused_tab true
+            }
+            SwitchToMode "normal"
+        }
+        bind "x" {
+            CloseFocus
+            SwitchToMode "normal"
+        }
+        bind "z" {
+            ToggleFocusFullscreen
+            SwitchToMode "normal"
+        }
+        bind "|" {
+            NewPane "right"
+            SwitchToMode "normal"
+        }
+    }
+}
+// changing these requires a restart to take effect
+plugins {
+    about location="zellij:about"
+    compact-bar location="zellij:compact-bar"
+    configuration location="zellij:configuration"
+    filepicker location="zellij:strider" {
+        cwd "/"
+    }
+    plugin-manager location="zellij:plugin-manager"
+    session-manager location="zellij:session-manager"
+    status-bar location="zellij:status-bar"
+    strider location="zellij:strider"
+    tab-bar location="zellij:tab-bar"
+    welcome-screen location="zellij:session-manager" {
+        welcome_screen true
+    }
+}
+pane_frames false
+show_startup_tips false
+

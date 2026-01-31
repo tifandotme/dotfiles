@@ -1,0 +1,177 @@
+[
+  {
+    "context": "(ProjectPanel && not_editing) || OutlinePanel",
+    "bindings": {
+      "g e": "menu::SelectLast"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "alt-n": "pane::AlternateFile",
+
+      "alt-h": "workspace::ActivatePaneLeft",
+      "alt-l": "workspace::ActivatePaneRight"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "alt-k": "editor::MoveLineUp",
+      "alt-j": "editor::MoveLineDown"
+    }
+  },
+
+  {
+    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting",
+    "bindings": {
+      "] d": "project_panel::SelectNextDiagnostic",
+      "[ d": "project_panel::SelectPrevDiagnostic"
+    }
+  },
+
+  {
+    "context": "Editor && vim_mode == normal && !VimWaiting",
+    "bindings": {
+      "cmd-[": "editor::Fold",
+      "cmd-]": "editor::UnfoldLines",
+      "U": "editor::Redo"
+    }
+  },
+
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "cmd-\\": "copilot::Suggest",
+      "j j": ["workspace::SendKeystrokes", "escape"]
+    }
+  },
+  {
+    "context": "VimControl && !menu",
+    "bindings": {
+      // "space" mode
+      // TODO https://docs.helix-editor.com/keymap.html#space-mode
+      "space w": "workspace::SaveWithoutFormat",
+      "space o": "editor::ToggleCodeActions",
+      "space p": "editor::Format",
+      "space z": "editor::ToggleSoftWrap",
+      "space c": "vim::ToggleComments",
+      "space k": "editor::Hover",
+      "space f": "tab_switcher::Toggle",
+
+      // "g" commands
+      // TODO https://docs.helix-editor.com/keymap.html#goto-mode
+      "g h": "vim::FirstNonWhitespace", // helix inspired
+      "g l": "vim::EndOfLine", // helix inspired
+      "g e": "vim::EndOfDocument", // helix inspired
+      "g i": "editor::GoToImplementation" // helix inspired
+    }
+  },
+  {
+    "context": "TabSwitcher",
+    "use_key_equivalents": true,
+    "bindings": {
+      "k": "menu::SelectPrevious",
+      "j": "menu::SelectNext",
+      "d": "tab_switcher::CloseSelectedItem"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-;": null // editor::ToggleLineNumbers
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-j": null // workspace::ToggleBottomDock
+    }
+  },
+  {
+    "context": "ContextEditor > Editor",
+    "bindings": {
+      "cmd-s": null // workspace::Save
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-s": null, // workspace::Save
+      "alt-cmd-s": null // workspace::SaveAs
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "alt-cmd-g b": null
+    }
+  },
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "shift-s": ["vim::PushAddSurrounds", {}]
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-l": null
+    }
+  },
+  {
+    "context": "((FileFinder || FileFinder > Picker > Editor) || FileFinder > Picker > menu)",
+    "bindings": {
+      "cmd-l": null
+    }
+  },
+  {
+    "bindings": {
+      "alt-cmd-,": "zed::OpenSettings"
+    }
+  },
+  {
+    "bindings": {
+      "cmd-,": "zed::OpenSettingsFile"
+    }
+  },
+  {
+    "bindings": {
+      "cmd-shift-c": null
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-shift-g": null
+    }
+  }
+]
+
+// REMINDER
+// "[ x": "vim::SelectLargerSyntaxNode",
+// "] x": "vim::SelectSmallerSyntaxNode",
+// "] d": "editor::GoToDiagnostic",
+// "[ d": "editor::GoToPrevDiagnostic",
+// "] c": "editor::GoToHunk",
+// "[ c": "editor::GoToPrevHunk",
+// "vaw": "Select a word + surrounding space (around word)",
+// "viw": "Select inner word (no space)",
+// "va{": "Select around curly braces {} (includes braces; repeat a{ for enclosing parent block)",
+// "vi{": "Select inner content of {} (excludes braces)",
+// "va\"": "Select around double quotes (includes quotes)",
+// "vi\"": "Select inner content of double quotes",
+// "va(": "Select around parentheses () (includes parens; handles nesting)",
+// "dip": "Select inner paragraph",
+// "das": "Select around sentence (includes trailing space)",
+// "dat": "Select around HTML/XML tags (handles nesting)",
+// "vap": "Select around paragraph (includes surrounding whitespace)",
+// "vip": "Select inner paragraph (excludes surrounding whitespace)",
+// Examples with other operators (switch d/v with y/copy, c/change, gU/uppercase, etc.):
+// "yap": "Yank (copy) around paragraph",
+// "yip": "Yank inner paragraph",
+// "cip": "Change (delete + insert) inner paragraph",
+// "gUiw": "Uppercase inner word",
+// ">ap": "Indent around paragraph",
+// "<ip": "Outdent inner paragraph",
+// "c2i{": "Change 2 levels of inner braces (use count for nesting)",

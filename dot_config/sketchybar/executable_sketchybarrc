@@ -1,0 +1,211 @@
+#!/bin/bash
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+source "$CONFIG_DIR/colors.sh"
+
+bar=(
+  height=22
+  position=top
+  padding_left=5
+  padding_right=5
+  y_offset=3
+  color="${TRANSPARENT}"
+)
+sketchybar --bar "${bar[@]}"
+
+default=(
+  label.font="SF Mono:Semibold:12.5"
+
+  icon.color="${ACCENT}"
+  label.color="${FOREGROUND}"
+
+  label.padding_right=12
+  icon.padding_left=10
+  icon.padding_right=6
+
+  background.color="${BACKGROUND}"
+
+  background.padding_left=5
+  background.corner_radius=99
+)
+sketchybar --default "${default[@]}"
+
+# ---------------------------------- ITEMS -------------------------------------
+
+GHOST=(
+  background.drawing=off
+  label.shadow.drawing=on
+  label.shadow.color="${BACKGROUND}"
+  label.shadow.distance=1
+  icon.shadow.drawing=on
+  icon.shadow.color="${BACKGROUND}"
+  icon.shadow.distance=1
+)
+
+# --------------- LEFT
+
+sketchybar --add event aerospace_workspace_change
+
+workspaces=$(aerospace list-workspaces --all)
+first_workspace=$(echo "$workspaces" | head -n 1)
+last_workspace=$(echo "$workspaces" | tail -n 1)
+
+# without setting icon.width, focused and unfocused icon will cause layout shift
+for sid in $workspaces; do
+  sketchybar --add item space."$sid" left \
+    --set space."$sid" \
+    icon.width=20 \
+    icon.padding_left=10 \
+    icon.padding_right=2 \
+    label.padding_left=0 \
+    label.padding_right=10 \
+    icon.drawing=on \
+    background.drawing=off \
+    icon="$(echo "$sid" | cut -d'_' -f1)" \
+    icon.font="SF Mono:Semibold:12.5" \
+    click_script="aerospace workspace $sid" \
+    background.corner_radius=0 \
+    script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
+    --subscribe space."$sid" aerospace_workspace_change
+done
+
+sketchybar --set space."$first_workspace" padding_left=8
+sketchybar --set space."$last_workspace" padding_right=8
+
+sketchybar --add bracket spaces '/space\..*/' \
+  --set spaces \
+  background.color="${BACKGROUND}" \
+  background.height=20
+
+sketchybar --add item front_app left \
+  --set front_app \
+  "${GHOST[@]}" \
+  script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
+
+# --------------- CENTER
+
+# IF USING SHITTY SPOTIFY ELECTRON APP, KEEPING THIS ARCHIVED
+# warning, this shit caused:
+# - spotify to be opened when reloading sketchybar config and after system boot up
+# - a glitch (workspace change back and forth) when cmd-q -ing spotify (sometimes)
+# sketchybar --add event spotify_update "com.spotify.client.PlaybackStateChanged"
+# sketchybar --add item spotify center \
+#   --set spotify \
+#   "${GHOST[@]}" \
+#   icon="􀑪" \
+#   script="$PLUGIN_DIR/spotify.sh" \
+#   --subscribe spotify spotify_update
+
+# SPOTIFY-PLAYER TUI
+# sketchybar --add item spotify center \
+#   --set spotify \
+#   label.max_chars=40 \
+#   label.scroll_duration=300 \
+#   label.shadow.scroll_duration=300 \
+#   scroll_texts=on \
+#   "${GHOST[@]}" \
+#   label.shadow.drawing=off \
+#   icon="􀑪" \
+#   drawing=off \
+#   update_freq=5 \
+#   script="$PLUGIN_DIR/spotify.sh"
+
+# --------------- RIGHT
+
+sketchybar --add item calendar right \
+  --set calendar icon="􀧞" \
+  update_freq=30 \
+  script="$PLUGIN_DIR/calendar.sh"
+
+sketchybar --add item battery right \
+  --set battery \
+  update_freq=60 \
+  script="$PLUGIN_DIR/battery.sh" \
+  --subscribe battery system_woke power_source_change
+
+sketchybar --add item cpu right \
+  --set cpu \
+  icon="􀴽" \
+  icon.padding_right=0 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/cpu.sh"
+
+sketchybar --add item ram right \
+  --set ram \
+  icon="􀴽" \
+  icon.padding_right=0 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/ram.sh"
+
+# Start smart battery monitor in background
+exec "$PLUGIN_DIR/battery_monitor.sh" smart-monitor &
+
+# Start caffeinate monitor in background
+exec "$PLUGIN_DIR/caffeinate_monitor.sh" smart-monitor &
+
+# sketchybar --add item volume right \
+#   --set volume \
+#   script="$PLUGIN_DIR/volume.sh" \
+#   --subscribe volume volume_change
+
+sketchybar --add item wifi right \
+  --set wifi \
+  icon="􀴽" \
+  icon.padding_right=10 \
+  icon.padding_left=10 \
+  label.padding_right=0 \
+  script="$PLUGIN_DIR/wifi.sh" \
+  click_script="$PLUGIN_DIR/wifi.sh" \
+  --subscribe wifi wifi_change
+
+sketchybar --add item network_speed right \
+  --set network_speed \
+  icon="􀴽" \
+  icon.padding_right=0 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/network_speed.sh"
+
+# sketchybar --add item vpn right \
+#   --set vpn \
+#   update_freq=5 \
+#   click_script="open -a 'Mullvad VPN'" \
+#   script="$PLUGIN_DIR/vpn.sh" \
+#   --subscribe vpn wifi_change front_app_switched
+
+# sketchybar --add item slack right \
+#   --set slack \
+#   update_freq=15 \
+#   click_script="open -a 'Slack'" \
+#   script="$PLUGIN_DIR/slack.sh" \
+#   --subscribe slack system_woke
+
+# sketchybar --add item theme_toggle right \
+#   --set theme_toggle \
+#   icon="􀡊" \
+#   icon.padding_right=0 \
+#   click_script="$PLUGIN_DIR/toggle_theme.sh"
+
+sketchybar --add event caffeinate_toggle
+sketchybar --add item caffeinate right \
+  --set caffeinate \
+  icon="􀴽" \
+  "${GHOST[@]}" \
+  icon.color="${FOREGROUND}" \
+  icon.padding_right=0 \
+  script="$PLUGIN_DIR/caffeinate.sh" \
+  --subscribe caffeinate caffeinate_toggle
+
+sketchybar --add event send_message
+sketchybar --add event hide_message
+sketchybar --add item aerospace_mode right \
+  --set aerospace_mode \
+  "${GHOST[@]}" \
+  drawing=off \
+  script="$PLUGIN_DIR/aerospace_mode.sh" \
+  --subscribe aerospace_mode send_message hide_message
+
+# ------------------------------------------------------------------------------
+
+sketchybar --update

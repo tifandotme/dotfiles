@@ -1,0 +1,113 @@
+# ------------------------------ GENERAL ---------------------------------------
+
+macos-titlebar-style = "hidden"
+
+confirm-close-surface = false
+# useless inside zellij
+copy-on-select = false
+
+macos-option-as-alt = true
+
+theme = light:Gruvbox Material Light,dark:ir-black
+
+maximize = true
+
+# default mac behaviour is false, linux is true
+# if false, `zka` won't quit ghostty
+quit-after-last-window-closed = true
+
+font-family = "CommitMono Nerd Font"
+font-size = 13
+font-thicken = true
+
+# we have Zellij at home
+window-save-state = never
+
+window-padding-balance = true
+
+background-opacity = 0.8
+background-blur = true
+
+# ------------------------------ KEYBINDS --------------------------------------
+# Defaults: ghostty +list-keybinds --default
+# Current: ghostty +list-keybinds
+
+# -------------- MODIFIED
+keybind = super+r=reload_config
+
+# -------------- UNBINDED
+# cmd+w is set as CloseTab in zellij config
+keybind = super+w=unbind
+
+keybind = super+n=unbind
+
+keybind = super+shift+comma=unbind
+
+keybind = super+alt+shift+w=unbind
+keybind = super+alt+w=unbind
+
+keybind = super+a=unbind
+keybind = shift+down=unbind
+keybind = shift+end=unbind
+keybind = shift+home=unbind
+keybind = shift+left=unbind
+keybind = shift+page_down=unbind
+keybind = shift+page_up=unbind
+keybind = shift+right=unbind
+keybind = shift+up=unbind
+
+keybind = alt+left=unbind
+keybind = alt+right=unbind
+
+keybind = super+ctrl+equal=unbind
+keybind = super+alt+down=unbind
+keybind = super+alt+left=unbind
+keybind = super+right_bracket=unbind
+keybind = super+alt+right=unbind
+keybind = super+left_bracket=unbind
+keybind = super+alt+up=unbind
+keybind = super+d=unbind
+keybind = super+shift+d=unbind
+keybind = super+ctrl+down=unbind
+keybind = super+ctrl+left=unbind
+keybind = super+ctrl+right=unbind
+keybind = super+ctrl+up=unbind
+keybind = super+shift+enter=unbind
+
+keybind = super+physical:eight=unbind
+keybind = super+physical:five=unbind
+keybind = super+physical:four=unbind
+keybind = super+physical:nine=unbind
+keybind = super+physical:one=unbind
+keybind = super+physical:seven=unbind
+keybind = super+physical:six=unbind
+keybind = super+physical:three=unbind
+keybind = super+physical:two=unbind
+keybind = ctrl+tab=unbind
+keybind = super+shift+right_bracket=unbind
+keybind = super+t=unbind
+keybind = ctrl+shift+tab=unbind
+keybind = super+shift+left_bracket=unbind
+
+keybind = super+down=unbind
+keybind = super+shift+down=unbind
+keybind = super+shift+up=unbind
+keybind = super+up=unbind
+
+keybind = super+end=unbind
+keybind = super+page_down=unbind
+keybind = super+page_up=unbind
+keybind = super+home=unbind
+
+keybind = super+backspace=unbind
+keybind = super+left=unbind
+keybind = super+right=unbind
+
+keybind = super+ctrl+f=unbind
+keybind = super+enter=unbind
+
+keybind = super+shift+j=unbind
+keybind = super+alt+shift+j=unbind
+
+keybind = super+k=unbind
+keybind = super+comma=unbind

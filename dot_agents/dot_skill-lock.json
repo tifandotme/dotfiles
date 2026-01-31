@@ -1,0 +1,331 @@
+{
+  "version": 3,
+  "skills": {
+    "humanizer": {
+      "source": "softaworks/agent-toolkit",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/softaworks/agent-toolkit.git",
+      "skillPath": "skills/humanizer/SKILL.md",
+      "skillFolderHash": "004c1998fffe4d5cd4535123d65cf9fb1a107b64",
+      "installedAt": "2026-01-24T07:36:54.392Z",
+      "updatedAt": "2026-01-24T08:12:17.446Z"
+    },
+    "context7": {
+      "source": "intellectronica/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/intellectronica/agent-skills.git",
+      "skillPath": "skills/context7/SKILL.md",
+      "skillFolderHash": "c7ab574e006997d98e8a2d8fb7a1db0d2477b180",
+      "installedAt": "2026-01-24T07:45:51.915Z",
+      "updatedAt": "2026-01-24T08:05:07.712Z"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "skillFolderHash": "b86e3967846abb5beeeb874410d8f2ebf6a3f5e1",
+      "installedAt": "2026-01-24T08:06:08.071Z",
+      "updatedAt": "2026-01-24T08:06:08.071Z"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "skillFolderHash": "3116f3e62dbd02b44a598b1aa690d2a8938e8f89",
+      "installedAt": "2026-01-24T08:06:48.827Z",
+      "updatedAt": "2026-01-24T08:06:48.827Z"
+    },
+    "cto-advisor": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "c-level-advisor/cto-advisor/SKILL.md",
+      "skillFolderHash": "c7193965c4b2b58fc1a7514b14eb49ae6d6b89bc",
+      "installedAt": "2026-01-24T08:10:41.506Z",
+      "updatedAt": "2026-01-24T08:10:41.506Z"
+    },
+    "code-reviewer": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/code-reviewer/SKILL.md",
+      "skillFolderHash": "8581bc5a01a7c106dfd5a579ba239d29a333d9f7",
+      "installedAt": "2026-01-24T08:10:41.607Z",
+      "updatedAt": "2026-01-24T08:10:41.607Z"
+    },
+    "senior-fullstack": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/senior-fullstack/SKILL.md",
+      "skillFolderHash": "1c7704f6b5a78207eb8ac2c1fa64876625f7e8e3",
+      "installedAt": "2026-01-24T08:10:41.668Z",
+      "updatedAt": "2026-01-24T08:10:41.668Z"
+    },
+    "senior-frontend": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/senior-frontend/SKILL.md",
+      "skillFolderHash": "9c17ed7740d01fc2471c10eab9985891e65c66b0",
+      "installedAt": "2026-01-24T08:10:41.708Z",
+      "updatedAt": "2026-01-24T08:10:41.708Z"
+    },
+    "senior-backend": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/senior-backend/SKILL.md",
+      "skillFolderHash": "f1b4a87593b51900bd231ef28da1d82c83112f3e",
+      "installedAt": "2026-01-24T08:10:41.754Z",
+      "updatedAt": "2026-01-24T08:10:41.754Z"
+    },
+    "senior-architect": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/senior-architect/SKILL.md",
+      "skillFolderHash": "9e83a3260b3df24e23e8fcb83cb13be4ec3c8f5b",
+      "installedAt": "2026-01-24T08:10:41.789Z",
+      "updatedAt": "2026-01-24T08:10:41.789Z"
+    },
+    "senior-ml-engineer": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/senior-ml-engineer/SKILL.md",
+      "skillFolderHash": "a2c7f58024a5e3762195360a5e94dfd516ea8ef8",
+      "installedAt": "2026-01-24T08:10:41.830Z",
+      "updatedAt": "2026-01-24T08:10:41.830Z"
+    },
+    "senior-qa": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/senior-qa/SKILL.md",
+      "skillFolderHash": "052cd25f1be746c9451bc6eb95b4183e34c52bab",
+      "installedAt": "2026-01-24T08:10:41.892Z",
+      "updatedAt": "2026-01-24T08:10:41.892Z"
+    },
+    "tech-stack-evaluator": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/tech-stack-evaluator/SKILL.md",
+      "skillFolderHash": "726f439d71f678a3199a89b25b9620184bf04a82",
+      "installedAt": "2026-01-24T08:10:41.956Z",
+      "updatedAt": "2026-01-24T08:10:41.956Z"
+    },
+    "content-creator": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "marketing-skill/content-creator/SKILL.md",
+      "skillFolderHash": "932be5c14834f28ece61bfb8bc3e8131e2ee68b1",
+      "installedAt": "2026-01-24T08:10:42.018Z",
+      "updatedAt": "2026-01-24T08:10:42.018Z"
+    },
+    "product-manager-toolkit": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "product-team/product-manager-toolkit/SKILL.md",
+      "skillFolderHash": "97aaf0d5fe3b5decbe6fc2eb9dde23d95e852134",
+      "installedAt": "2026-01-24T08:10:42.055Z",
+      "updatedAt": "2026-01-24T08:10:42.055Z"
+    },
+    "agile-product-owner": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "product-team/agile-product-owner/SKILL.md",
+      "skillFolderHash": "8577dbef7cd413f512694f731046af58e389939d",
+      "installedAt": "2026-01-24T08:10:42.083Z",
+      "updatedAt": "2026-01-24T08:10:42.083Z"
+    },
+    "ux-researcher-designer": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "product-team/ux-researcher-designer/SKILL.md",
+      "skillFolderHash": "bd2278f520e61decbc15ae8bb55526cb09d13043",
+      "installedAt": "2026-01-24T08:10:42.113Z",
+      "updatedAt": "2026-01-24T08:10:42.113Z"
+    },
+    "ui-design-system": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "product-team/ui-design-system/SKILL.md",
+      "skillFolderHash": "ebd92dd5eb700408b0039aa097d6fae214da634c",
+      "installedAt": "2026-01-24T08:10:42.182Z",
+      "updatedAt": "2026-01-24T08:10:42.182Z"
+    },
+    "product-strategist": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "product-team/product-strategist/SKILL.md",
+      "skillFolderHash": "596dd9b25effc3bed05039b4b67154166fc0e90b",
+      "installedAt": "2026-01-24T08:10:42.220Z",
+      "updatedAt": "2026-01-24T08:10:42.220Z"
+    },
+    "quality-documentation-manager": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "ra-qm-team/quality-documentation-manager/SKILL.md",
+      "skillFolderHash": "ca1fe3ea6d23e5b9a79b4a90c2bbb65cbd34af74",
+      "installedAt": "2026-01-24T08:10:42.257Z",
+      "updatedAt": "2026-01-24T08:10:42.257Z"
+    },
+    "senior-devops": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/senior-devops/SKILL.md",
+      "skillFolderHash": "5e704951431ff3a9496b5be7d33617b8b3552137",
+      "installedAt": "2026-01-24T08:10:42.291Z",
+      "updatedAt": "2026-01-24T08:10:42.291Z"
+    },
+    "senior-data-engineer": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/senior-data-engineer/SKILL.md",
+      "skillFolderHash": "b0b31344997f656329f56b8407c6531e001bc93e",
+      "installedAt": "2026-01-24T08:10:42.322Z",
+      "updatedAt": "2026-01-24T08:10:42.322Z"
+    },
+    "senior-data-scientist": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/senior-data-scientist/SKILL.md",
+      "skillFolderHash": "bad34105bc6d79e94606fb1e42b7fb5483b97458",
+      "installedAt": "2026-01-24T08:10:42.357Z",
+      "updatedAt": "2026-01-24T08:10:42.357Z"
+    },
+    "senior-computer-vision": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alirezarezvani/claude-skills.git",
+      "skillPath": "engineering-team/senior-computer-vision/SKILL.md",
+      "skillFolderHash": "8789b8efc5dec0ef169d71c1388440192fdf6df1",
+      "installedAt": "2026-01-24T08:10:42.388Z",
+      "updatedAt": "2026-01-24T08:10:42.388Z"
+    },
+    "send-email": {
+      "source": "resend/resend-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/resend/resend-skills.git",
+      "skillPath": "send-email/SKILL.md",
+      "skillFolderHash": "8ddecc1346f541981771d13ad4b5a1bed3f93d8c",
+      "installedAt": "2026-01-24T08:51:16.339Z",
+      "updatedAt": "2026-01-24T08:51:16.339Z"
+    },
+    "terraform-module-library": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/cloud-infrastructure/skills/terraform-module-library/SKILL.md",
+      "skillFolderHash": "85f8f2f909a257968ebdd049d9d5457f3ee34140",
+      "installedAt": "2026-01-24T09:58:32.163Z",
+      "updatedAt": "2026-01-24T09:58:32.163Z"
+    },
+    "karpathy-guidelines": {
+      "source": "forrestchang/andrej-karpathy-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/forrestchang/andrej-karpathy-skills.git",
+      "skillPath": "skills/karpathy-guidelines/SKILL.md",
+      "skillFolderHash": "e119339197d600aa39a24fd7a95c946800c9c949",
+      "installedAt": "2026-01-30T15:12:32.658Z",
+      "updatedAt": "2026-01-30T15:12:32.658Z"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "c2f31172b6f256272305a5e6e7228b258446899f",
+      "installedAt": "2026-01-30T15:12:46.945Z",
+      "updatedAt": "2026-01-30T15:12:46.945Z"
+    },
+    "crawl": {
+      "source": "tavily-ai/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/tavily-ai/skills.git",
+      "skillPath": "skills/tavily/crawl/SKILL.md",
+      "skillFolderHash": "c466ddd5e32d82e83a7569377bc9f303d420a440",
+      "installedAt": "2026-01-30T15:18:22.895Z",
+      "updatedAt": "2026-01-30T15:18:22.895Z"
+    },
+    "extract": {
+      "source": "tavily-ai/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/tavily-ai/skills.git",
+      "skillPath": "skills/tavily/extract/SKILL.md",
+      "skillFolderHash": "0275f5dc58c0dda3301a3e3defe87675814588e8",
+      "installedAt": "2026-01-30T15:18:22.923Z",
+      "updatedAt": "2026-01-30T15:18:22.923Z"
+    },
+    "research": {
+      "source": "tavily-ai/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/tavily-ai/skills.git",
+      "skillPath": "skills/tavily/research/SKILL.md",
+      "skillFolderHash": "b83e400b372defc1e9642c6a65646894136a1ca4",
+      "installedAt": "2026-01-30T15:18:22.961Z",
+      "updatedAt": "2026-01-30T15:18:22.961Z"
+    },
+    "search": {
+      "source": "tavily-ai/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/tavily-ai/skills.git",
+      "skillPath": "skills/tavily/search/SKILL.md",
+      "skillFolderHash": "d7a6d4e536ac1a7c91c5ee24dddd8401784a9408",
+      "installedAt": "2026-01-30T15:18:22.988Z",
+      "updatedAt": "2026-01-30T15:18:22.988Z"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "skillFolderHash": "7bd8fc459f09f0e14dcc2adbb4a5a58e60ea755c",
+      "installedAt": "2026-01-31T11:53:11.146Z",
+      "updatedAt": "2026-01-31T11:53:11.146Z"
+    },
+    "gh-cli": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/github/awesome-copilot.git",
+      "skillPath": "skills/gh-cli/SKILL.md",
+      "skillFolderHash": "630febb65053eaeef93352149fb91f308697c228",
+      "installedAt": "2026-01-31T12:09:08.256Z",
+      "updatedAt": "2026-01-31T12:09:08.256Z"
+    },
+    "actualbudget-api": {
+      "source": "tifandotme/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/tifandotme/skills.git",
+      "skillPath": "skills/actualbudget-api/SKILL.md",
+      "skillFolderHash": "6cd27f6794584cf8dc34ca77fd0c2daef0a1c27b",
+      "installedAt": "2026-01-31T12:17:00.909Z",
+      "updatedAt": "2026-01-31T12:17:00.909Z"
+    }
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "antigravity",
+    "claude-code",
+    "gemini-cli",
+    "github-copilot",
+    "opencode"
+  ],
+  "dismissed": {
+    "findSkillsPrompt": true
+  }
+}

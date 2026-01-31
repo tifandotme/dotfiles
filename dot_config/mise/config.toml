@@ -1,0 +1,12 @@
+[tools]
+go = "latest"
+node = "lts"
+python = "latest"
+rust = "latest"
+ruby = "latest"
+"gem:kamal" = "latest"
+terraform = "latest"
+
+[settings]
+disable_hints = ["outdated_bump"]
+idiomatic_version_file_enable_tools = ["node"]

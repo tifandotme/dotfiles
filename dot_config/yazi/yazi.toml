@@ -1,0 +1,21 @@
+# default: https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/README.md
+
+"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+
+[mgr]
+ratio = [0, 3, 3]
+show_hidden = true
+# sort_by = "extension"       # might be overridden by folder-rules.yazi
+# linemode = "size_and_mtime" # might be overridden by folder-rules.yazi
+# show_symlink = false
+
+[open]
+prepend_rules = [
+  { mime = "text/*", use = "edit" },
+  { mime = "video/*", use = "play" },
+]
+
+[opener]
+play = [{ run = 'open "$@" -a IINA', orphan = true, for = "unix" }]
+# setting TERM because we overrides TERM inside Yazi which is invalid according to vi
+edit = [{ run = 'TERM=ansi $EDITOR "$@"', block = true, for = "unix" }]

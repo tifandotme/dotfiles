@@ -1,0 +1,22 @@
+{
+  "context": {
+    "fileName": [
+      "AGENTS.md",
+      ".github/copilot-instructions.md",
+      "GEMINI.md"
+    ]
+  },
+  "general": {
+    "preferredEditor": "zed",
+    "vimMode": true,
+    "previewFeatures": true
+  },
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    }
+  },
+  "ui": {
+    "theme": "ANSI"
+  }
+}

@@ -1,0 +1,39 @@
+layout {
+    default_tab_template split_direction="horizontal" {
+        children
+
+        pane size=1 borderless=true {
+            // zjstatus v0.22.0
+            // On MacOS, the plugin location cannot be https and should be local
+            plugin location="file:~/.config/zellij/zjstatus.wasm" {
+                // color_fg_muted "#9baca6"
+                color_fg_muted "#e8c174"
+                color_fg       "#e4e4ef"
+                // color_bg       "#3c4a31"
+                color_bg       "#5b4b2b"
+
+                format_left  "#[fg=$fg,bg=$bg]  {tabs}"
+                format_space "#[bg=$bg]"
+                format_right "{mode}"
+                
+                mode_locked       "#[fg=$bg,bg=$fg_muted,bold]  LOCKED  " // ctrl-g (in all mode)
+                mode_scroll       "#[fg=$bg,bg=$fg_muted,bold]  SCROLL  " // [ (in tmux mode)
+                mode_enter_search "#[fg=$bg,bg=$fg_muted,bold]  SEARCH  " // / (in scroll mode)
+                mode_search       "#[fg=$bg,bg=$fg_muted,bold] [c: case-sensitivity, w: wrap, o: wholeworld]  SEARCH  "
+                mode_rename_tab   "#[fg=$bg,bg=$fg_muted,bold]  RENAME  " // , (in tmux mode)
+                mode_rename_pane  "#[fg=$bg,bg=$fg_muted,bold]  RENAME  "
+                mode_prompt       "#[fg=$bg,bg=$fg_muted,bold]  PROMPT  "
+                mode_tmux         "#[fg=$bg,bg=$fg_muted,bold]  TMUX  " // ctrl-e (in normal mode)
+
+                hide_frame_except_for_search true
+                hide_frame_except_for_scroll true
+
+                tab_normal               "#[fg=$fg_muted,bg=$bg,bold]  {name}  {fullscreen_indicator}{sync_indicator}{floating_indicator}"
+                tab_active               "#[fg=$bg,bg=$fg_muted,bold]  {name}  {fullscreen_indicator}{sync_indicator}{floating_indicator}"
+                tab_fullscreen_indicator " " // z (in tmux mode)
+                tab_sync_indicator       " " // s (in tmux mode)
+                tab_floating_indicator   " " // f (in tmux mode)
+            }
+        }
+    }
+}
