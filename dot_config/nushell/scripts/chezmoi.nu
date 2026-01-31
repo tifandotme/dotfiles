@@ -1,4 +1,4 @@
-# Add non-template managed files to chezmoi and push to git
+# Add non-template managed files to chezmoi and push to git (test)
 export def sync [] {
   try {
     chezmoi re-add
