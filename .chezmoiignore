@@ -2,7 +2,8 @@ README.md
 key.txt.age
 
 {{- if ne .chezmoi.hostname "darwin" }}
-~/work/.gitconfig
+~/work
+~/personal
 {{- end }}
 
 {{- if ne .chezmoi.hostname "linux" }}
