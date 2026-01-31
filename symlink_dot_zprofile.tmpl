@@ -1,1 +1,0 @@
-.zprofile##os.Darwin
