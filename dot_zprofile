@@ -1,0 +1,18 @@
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export HOMEBREW_NO_ENV_HINTS=true
+export HOMEBREW_NO_ANALYTICS=true
+
+# https://skills.sh/docs/cli
+export DISABLE_TELEMETRY=1
+
+# Fix `yadm encrypt` error in MacOS
+# https://yadm.io/docs/faq#encryption
+export GPG_TTY=$(tty)
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+# Prevent "Unknown locale, assuming C"
+export LANG="en_US.UTF-8"
