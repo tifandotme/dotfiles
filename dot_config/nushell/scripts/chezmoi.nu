@@ -3,8 +3,8 @@ export def sync [] {
   try {
     chezmoi re-add
     chezmoi status
-    chezmoi git commit -m "update"
-    chezmoi git push --force-with-lease
+    chezmoi git add .
+    chezmoi git -- commit -m "update"
   } catch {
     print "hiya."
   }
