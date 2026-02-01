@@ -160,6 +160,13 @@ sketchybar --add item wifi right \
   click_script="$PLUGIN_DIR/wifi.sh" \
   --subscribe wifi wifi_change
 
+sketchybar --add item amp_usage right \
+  --set amp_usage \
+  icon="􁎢" \
+  icon.padding_right=4 \
+  update_freq=300 \
+  script="$PLUGIN_DIR/amp_usage.sh"
+
 sketchybar --add item network_speed right \
   --set network_speed \
   icon="􀴽" \
