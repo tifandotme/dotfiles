@@ -21,3 +21,5 @@ use karpathy guidelines skill
 to search the web, use Tavily's search skill
 
 if user ask to read docs of certain tool, use context7 skill
+
+my defult branch is `master`
