@@ -1,81 +1,62 @@
 local M = {}
 
-local get_state = ya.sync(function()
+local get_target = ya.sync(function()
   local hovered = cx.active.current.hovered
   return hovered and tostring(hovered.url) or nil
 end)
 
-local function run_chezmoi(chezmoi_args, success_msg, fail_title)
+local function notify(title, content, level)
+  ya.notify { title = title, content = content, timeout = level == "error" and 5 or 3, level = level }
+end
+
+local function run_chezmoi(args, success_msg)
   local cmd = Command("chezmoi")
-  for _, arg in ipairs(chezmoi_args) do
+  for _, arg in ipairs(args) do
     cmd = cmd:arg(arg)
   end
+
   local output, err = cmd:output()
   if not output then
-    ya.notify {
-      title = "Chezmoi Error",
-      content = "Failed to run: " .. tostring(err),
-      timeout = 5,
-      level = "error",
-    }
-    return
+    return notify("Chezmoi", "Failed: " .. tostring(err), "error")
   end
 
   if output.status.success then
-    ya.notify {
-      title = "Chezmoi",
-      content = success_msg,
-      timeout = 3,
-      level = "info",
-    }
+    notify("Chezmoi", success_msg, "info")
   else
-    ya.notify {
-      title = fail_title,
-      content = output.stderr ~= "" and output.stderr or ("Exit code: " .. tostring(output.status.code)),
-      timeout = 5,
-      level = "error",
-    }
+    notify("Chezmoi", output.stderr ~= "" and output.stderr or ("Exit " .. output.status.code), "error")
   end
 end
 
+local commands = {
+  add = { msg = "Added to source state" },
+  forget = { msg = "Removed from source state" },
+  apply = { msg = "Applied to destination" },
+  ["re-add"] = { msg = "Re-added current state" },
+}
+
 function M:entry(job)
   local args = job.args or {}
-  local cmd = args[1]
+  local cmd_name = args[1]
   local flag = args[2]
 
-  local target = get_state()
-
+  local target = get_target()
   if not target then
-    ya.notify {
-      title = "Chezmoi",
-      content = "No file selected",
-      timeout = 3,
-      level = "error",
-    }
-    return
+    return notify("Chezmoi", "No file selected", "error")
   end
 
-  if cmd == "add" then
-    local chezmoi_args = { "add", "--force" }
-    if flag then
-      table.insert(chezmoi_args, flag)
-    end
-    table.insert(chezmoi_args, target)
-    run_chezmoi(chezmoi_args, flag and ("Added with " .. flag) or "Added to source state", "Chezmoi Add Failed")
-  elseif cmd == "forget" then
-    run_chezmoi({ "forget", "--force", target }, "Removed from source state", "Chezmoi Forget Failed")
-  elseif cmd == "apply" then
-    run_chezmoi({ "apply", "--force", target }, "Applied to destination", "Chezmoi Apply Failed")
-  elseif cmd == "re-add" then
-    run_chezmoi({ "re-add", "--force", target }, "Re-added current state", "Chezmoi Re-add Failed")
-  else
-    ya.notify {
-      title = "Chezmoi",
-      content = "Unknown command: " .. tostring(cmd),
-      timeout = 3,
-      level = "warn",
-    }
+  local cmd_info = commands[cmd_name]
+  if not cmd_info then
+    return notify("Chezmoi", "Unknown command: " .. tostring(cmd_name), "warn")
   end
+
+  local chezmoi_args = { cmd_name, "--force" }
+  if flag then
+    table.insert(chezmoi_args, flag)
+  end
+  table.insert(chezmoi_args, target)
+
+  local msg = (cmd_name == "add" and flag) and ("Added with " .. flag) or cmd_info.msg
+  run_chezmoi(chezmoi_args, msg)
 end
 
 return M
