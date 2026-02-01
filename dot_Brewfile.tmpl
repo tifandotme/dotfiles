@@ -6,21 +6,23 @@ tap "oven-sh/bun"
 brew "bandwhich"
 brew "bat"
 brew "bottom"
+brew "yazi"
+brew "zellij"
 brew "bun"
 brew "eza"
 brew "fastfetch"
-brew "fd"  # yazi: file searching
-brew "fzf" # yazi: quick file subtree navigation
 brew "gdu"
-brew "imagemagick" # yazi: Font, HEIC, JPEG XL preview
-brew "jq"          # yazi: JSON preview
 brew "lazygit"
 brew "lazydocker"
-brew "poppler"  # yazi: PDF preview
-brew "resvg"    # yazi: SVG preview
-brew "ripgrep"  # yazi: file content searching
-brew "sevenzip" # yazi: archive extraction and preview
-brew "zoxide"   # yazi: historical directories navigation
+brew "fd"          # yazi: file searching
+brew "fzf"         # yazi: quick file subtree navigation
+brew "imagemagick" # yazi: Font, HEIC, JPEG XL preview
+brew "jq"          # yazi: JSON preview
+brew "poppler"     # yazi: PDF preview
+brew "resvg"       # yazi: SVG preview
+brew "ripgrep"     # yazi: file content searching
+brew "sevenzip"    # yazi: archive extraction and preview
+brew "zoxide"      # yazi: historical directories navigation
 
 # {{ if eq .chezmoi.os "darwin" -}}
 
@@ -33,7 +35,8 @@ tap "nikitabobko/tap" # aerospace
 # General
 brew "asciinema"
 brew "chafa"
-brew "colima", restart_service: :changed
+brew "colima"
+# brew "colima", restart_service: :changed
 brew "difftastic"
 brew "docker"
 brew "docker-compose"
@@ -43,7 +46,7 @@ brew "batt"
 brew "gh"
 brew "git-delta"
 brew "gping"
-brew "hougesen/tap/kdlfmt"
+# brew "hougesen/tap/kdlfmt"
 brew "hyperfine"
 brew "mise"
 brew "monolith"
@@ -68,7 +71,7 @@ cask "aerospace"
 cask "bitwarden"
 cask "font-sf-pro"
 cask "font-sketchybar-app-font"
-cask "handbrake"
+cask "handbrake-app"
 cask "iina"
 cask "linearmouse"
 cask "localsend"
@@ -85,7 +88,5 @@ cask "zed"
 # {{ else if eq .chezmoi.os "linux" -}}
 
 # General
-brew "yazi"
-brew "zellij"
 
 # {{ end -}}
