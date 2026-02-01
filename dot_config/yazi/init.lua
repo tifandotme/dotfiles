@@ -4,6 +4,7 @@ require("full-border"):setup {
   type = ui.Border.PLAIN,
 }
 require("folder-rules"):setup()
+require("chezmoi"):setup()
 
 -- https://yazi-rs.github.io/docs/configuration/yazi/#manager.linemode
 function Linemode:size_and_mtime()
@@ -18,7 +19,8 @@ function Linemode:size_and_mtime()
   end
 
   local size = self._file:size()
-  return string.format("%s %s", size and ya.readable_size(size) or "", time_str)
+  local text = string.format("%s %s", size and ya.readable_size(size) or "", time_str)
+  return ui.Line { ui.Span(text) }
 end
 
 -- https://yazi-rs.github.io/docs/tips/#symlink-in-status
@@ -30,3 +32,18 @@ Status:children_add(function(self)
     return ""
   end
 end, 3300, Status.LEFT)
+
+-- https://yazi-rs.github.io/docs/tips/#user-group-in-status
+Status:children_add(function()
+  local h = cx.active.current.hovered
+  if not h or ya.target_family() ~= "unix" then
+    return ""
+  end
+
+  return ui.Line {
+    ui.Span(ya.user_name(h.cha.uid) or tostring(h.cha.uid)):fg("magenta"),
+    ":",
+    ui.Span(ya.group_name(h.cha.gid) or tostring(h.cha.gid)):fg("magenta"),
+    " ",
+  }
+end, 500, Status.RIGHT)

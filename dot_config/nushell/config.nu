@@ -204,8 +204,8 @@ use chezmoi.nu
 
 # use mise.gen.nu
 source ~/.cache/mise/init.nu
-use bash-env.nu
 source zoxide.gen.nu
+use external/bash-env-nushell/bash-env.nu
 
 if "ZELLIJ" not-in ($env | columns) {
   if $env.ZELLIJ_AUTO_ATTACH == true {

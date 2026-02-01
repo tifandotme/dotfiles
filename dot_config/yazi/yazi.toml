@@ -2,6 +2,11 @@
 
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
+[plugin]
+append_fetchers = [
+  { id = "chezmoi", url = "*/", name = "chezmoi", run = "chezmoi", prio = "low" },
+]
+
 [mgr]
 ratio = [0, 3, 3]
 show_hidden = true

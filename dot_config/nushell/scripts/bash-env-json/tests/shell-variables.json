@@ -1,9 +1,0 @@
-{
-  "env": {
-    "B": "exported"
-  },
-  "shellvars": {
-    "A": "not exported",
-    "C": "embedded=equals"
-  }
-}

@@ -1,0 +1,36 @@
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export HOMEBREW_NO_ENV_HINTS=true
+export HOMEBREW_NO_ANALYTICS=true
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+export EDITOR=vi
+
+export ZELLIJ_AUTO_ATTACH="true"
+export ZELLIJ_AUTO_EXIT="false"
+
+export BUN_INSTALL="$XDG_DATA_HOME/bun"
+
+export PATH="$BUN_INSTALL/bin:$HOME/.cargo/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"
+
+
+# https://docs.brew.sh/Shell-Completion#configuring-completions-in-bash
+if type brew &>/dev/null; then
+  HOMEBREW_PREFIX="$(brew --prefix)"
+  if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+    source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+  else
+    for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*; do
+      [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+    done
+  fi
+fi
+
+# must be last
+if [ -f ~/.bashrc ]; then
+  . "$HOME"/.bashrc
+fi
+

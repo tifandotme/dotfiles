@@ -1,12 +1,14 @@
 README.md
 key.txt.age
-
-{{- if ne .chezmoi.hostname "darwin" }}
-~/work
-~/personal
+{{-  if ne .chezmoi.hostname "darwin" }}
+work/
+personal/
+.zprofile
+.zshrc
+.secrets
 {{- end }}
 
 {{- if ne .chezmoi.hostname "linux" }}
-
+.bashrc
+.bash_profile
 {{- end }}
-

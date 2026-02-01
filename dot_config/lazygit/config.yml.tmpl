@@ -1,0 +1,46 @@
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
+os:
+  open: "bash -c 'open {{filename}}'"
+git:
+  overrideGpg: true
+  # {{ if eq .chezmoi.os "darwin" -}}
+  pagers:
+    - pager: delta --paging=never # other configs in gitconfig
+      colorArg: always
+  # {{ end -}}
+
+gui:
+  expandFocusedSidePanel: true
+  expandedSidePanelWeight: 99
+  border: "single"
+  showPanelJumps: true
+  showFileTree: true
+  sidePanelWidth: 0.22
+  showBottomLine: false
+  theme:
+    selectedLineBgColor:
+      - reverse
+notARepository: "quit"
+promptToReturnFromSubprocess: false
+keybinding:
+  files:
+    commitChangesWithEditor: <disabled>
+# {{ if eq .chezmoi.os "darwin" -}}
+customCommands:
+  - key: "C"
+    context: "files"
+    description: "Run OpenCommit"
+    command: "opencommit -y"
+    output: "none"
+    loadingText: "Generating commit message.."
+  - key: "<c-r>"
+    context: global
+    description: "Open repository in browser"
+    command: "gh repo view --web"
+  - key: "<c-u>"
+    context: "localBranches,commits"
+    description: "Rebase onto upstream"
+    command: 'bash -c ''git remote get-url upstream > /dev/null 2>&1 || { echo "Error: upstream remote not found"; exit 1; } && git fetch upstream --tags && git rebase $(git describe --tags --abbrev=0 upstream/HEAD)'''
+    output: "log"
+# {{ end -}}

@@ -1,0 +1,46 @@
+{
+  "amp.permissions": [
+    {
+      "tool": "Bash",
+      "matches": {
+        "cmd": "*git commit*"
+      },
+      "action": "ask"
+    },
+    {
+      "tool": "Bash",
+      "matches": {
+        "cmd": "*git push*"
+      },
+      "action": "ask"
+    },
+    {
+      "tool": "Bash",
+      "matches": {
+        "cmd": "*rm -rf*"
+      },
+      "action": "ask"
+    }
+  ],
+  "amp.terminal.theme": "dark",
+  "amp.experimental.modes": ["bombadil"],
+
+  "amp.mcpServers": {
+    "chrome-devtools": {
+      "command": "bunx",
+      "args": [
+        "chrome-devtools-mcp@latest",
+        "--executablePath",
+        "/Applications/Helium.app/Contents/MacOS/Helium"
+      ]
+    },
+    "mem0": {
+      "command": "uvx",
+      "args": ["mem0-mcp-server"],
+      "env": {
+        "MEM0_API_KEY": "${MEM0_API_KEY}",
+        "MEM0_DEFAULT_USER_ID": "tifandotme"
+      }
+    }
+  }
+}

@@ -4,7 +4,7 @@
 
 $env.STARSHIP_SHELL = "nu"
 
-def create_left_prompt [ --hide] {
+def create_left_prompt [--hide] {
   let starship = if $hide == false {
     starship prompt --cmd-duration $env.CMD_DURATION_MS
   }
@@ -75,7 +75,7 @@ add_path ($env.ANDROID_HOME | path join emulator)
 add_path ($env.ANDROID_HOME | path join platform-tools)
 add_path ($env.HOMEBREW_REPOSITORY | path join opt postgresql@18 bin)
 add_path ($env.HOME | path join .antigravity antigravity bin)
-add_path ($env.NU_LIB_DIRS | path join bash-env-json)
+# add_path ($env.NU_LIB_DIRS | path join external bash-env-json) # deleted during chezmoi migration, check if shit breaks
 
 hide add_path
 
@@ -97,11 +97,11 @@ do --env {
   }
 
   let ssh_agent_env = ^ssh-agent -c
-  | lines
-  | first 2
-  | parse "setenv {name} {value};"
-  | transpose --header-row
-  | into record
+    | lines
+    | first 2
+    | parse "setenv {name} {value};"
+    | transpose --header-row
+    | into record
   load-env $ssh_agent_env
   $ssh_agent_env | save --force $ssh_agent_file
 }

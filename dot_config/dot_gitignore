@@ -18,3 +18,4 @@ vim/*
 
 yazi/plugins/*
 !yazi/plugins/folder-rules.yazi
+!yazi/plugins/chezmoi.yazi
