@@ -9,18 +9,20 @@
 # @raycast.icon 👷
 # @raycast.packageName CopilotUsage
 
-current_day=$(date +%d | sed 's/^0//')
+# Fetch Copilot usage JSON
+usage_json=$(copilot-usage 2>/dev/null)
 
-total_days=$(cal "$(date +%m)" "$(date +%Y)" | awk 'NF{last=$NF} END{print last}')
+if [ -n "$usage_json" ]; then
+  # Extract premium_interactions data using jq
+  percent_remaining=$(echo "$usage_json" | jq -r '.quota_snapshots.premium_interactions.percent_remaining')
+  remaining=$(echo "$usage_json" | jq -r '.quota_snapshots.premium_interactions.remaining')
 
-percentage=$(awk "BEGIN {printf \"%.1f\", ($current_day / $total_days) * 100}")
-
-# copilot_usage=$(bun fetch_copilot_usage "$1")
-usage=$(bun fetch_copilot_usage)
-if [ -n "$usage" ]; then
-  diff=$(awk "BEGIN {printf \"%.1f\", $usage - $percentage}")
-  sign=$(awk "BEGIN {if ($diff > 0) print \"+\"; else print \"\"}")
-  echo "${sign}${diff}%"
+  if [ -n "$percent_remaining" ] && [ "$percent_remaining" != "null" ] && [ -n "$remaining" ] && [ "$remaining" != "null" ]; then
+    # Round percent_remaining to nearest integer and format output
+    printf "%.0f%% (%s)\n" "$percent_remaining" "$remaining"
+  else
+    echo "Could not parse usage data"
+  fi
 else
   echo "Could not fetch Copilot usage"
 fi
