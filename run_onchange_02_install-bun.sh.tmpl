@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# Bun packages hash: # {{ list "@commitlint/cli" "@dotenvx/dotenvx" "@sourcegraph/amp" "actions-up" "fast-cli" "npm-check-updates" "opencode-ai" "opencommit" "oxfmt" "pkg" "skills" "vercel" | join "\n" | sha256sum }}
+
+if command -v bun &>/dev/null; then
+  desired_bun_packages=(
+    # {{ if eq .chezmoi.os "darwin" -}}
+    "@sourcegraph/amp"
+    "opencode-ai"
+    "npm-check-updates"
+    "oxfmt"
+    "pkg"
+    "skills"
+    "vercel"
+    "actions-up"
+    "opencommit"
+    # {{ end -}}
+    "@dotenvx/dotenvx"
+    "fast-cli"
+  )
+
+  # --json request to avoid the mess below: https://github.com/oven-sh/bun/issues/26222
+  installed_packages=$(bun pm ls -g 2>/dev/null | grep -E '^├──|^└──' | sed -E 's/^[├└]── //;s/@([0-9]+|git).*//' | sort)
+
+  for pkg in "${desired_bun_packages[@]}"; do
+    if ! echo "$installed_packages" | grep -qx "$pkg"; then
+      echo "Installing bun global package: $pkg"
+      bun add -g "$pkg"
+    fi
+  done
+
+  echo "$installed_packages" | while read -r pkg; do
+    if [[ -n "$pkg" ]] && ! [[ " ${desired_bun_packages[*]} " =~ $pkg ]]; then
+      echo "Removing unwanted bun global package: $pkg"
+      bun remove -g "$pkg"
+    fi
+  done
+fi

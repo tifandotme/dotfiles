@@ -2,188 +2,304 @@
 
 tap "oven-sh/bun"
 
-# Common packages (both macOS and Linux)
-brew "bandwhich"
-brew "bat"
-brew "bottom"
-brew "yazi"
-brew "zellij"
-brew "bun"
-brew "eza"
-brew "fastfetch"
-brew "gdu"
-brew "lazygit"
-brew "lazydocker"
-brew "fd"          # yazi: file searching
-brew "fzf"         # yazi: quick file subtree navigation
-brew "imagemagick" # yazi: Font, HEIC, JPEG XL preview
-brew "jq"          # yazi: JSON preview
-brew "poppler"     # yazi: PDF preview
-brew "resvg"       # yazi: SVG preview
-brew "ripgrep"     # yazi: file content searching
-brew "sevenzip"    # yazi: archive extraction and preview
-brew "zoxide"      # yazi: historical directories navigation
+# =============================================================================
+# CORE TERMINAL ECOSYSTEM
+# =============================================================================
+
+# Shells
+brew "fish"     # User-friendly command-line shell
+brew "nushell"  # Modern shell for the GitHub era
+brew "starship" # Cross-shell prompt for astronauts
+
+# Terminal multiplexers
+brew "zellij" # Pluggable terminal workspace with tmux-like features
+
+# Modern CLI replacements
+brew "bat"     # Cat clone with syntax highlighting and Git integration
+brew "bottom"  # Cross-platform graphical process/system monitor
+brew "eza"     # Modern, maintained replacement for ls
+brew "fd"      # Simple, fast alternative to find
+brew "fzf"     # Command-line fuzzy finder
+brew "ripgrep" # Fast grep alternative
+brew "tree"    # Display directories as trees
+brew "zoxide"  # Smarter cd command with memory
+
+# =============================================================================
+# FILE MANAGER (YAZI ECOSYSTEM)
+# =============================================================================
+
+brew "yazi" # Blazing fast terminal file manager
+
+# Yazi dependencies for previews
+brew "fd"          # File searching
+brew "fzf"         # Quick file subtree navigation
+brew "imagemagick" # Font, HEIC, JPEG XL preview
+brew "jq"          # JSON preview
+brew "poppler"     # PDF preview
+brew "resvg"       # SVG preview
+brew "ripgrep"     # File content searching
+brew "sevenzip"    # Archive extraction and preview
+brew "zoxide"      # Historical directories navigation
+
+# Additional yazi media support
+brew "ffmpeg"            # Video thumbnails
+brew "ffmpegthumbnailer" # Create thumbnails for video files
+brew "chafa"             # Unicode/ASCII/ANSI graphics renderer
+
+# =============================================================================
+# DEVELOPMENT - LANGUAGES & RUNTIMES
+# =============================================================================
+
+# JavaScript/TypeScript
+brew "oven-sh/bun/bun" # Fast JavaScript runtime, bundler, package manager
+
+# Go
+brew "golangci-lint" # Fast linters runner for Go
+brew "gopls"         # Language server for Go
+brew "templ"         # HTML templating language for Go
+
+# Python
+brew "uv" # Fast Python package installer and resolver
+
+# Polyglot runtime manager
+brew "mise" # Polyglot runtime manager (asdf rust clone)
+
+# =============================================================================
+# DEVELOPMENT - TOOLS & FORMATTERS
+# =============================================================================
+
+# Git tools
+brew "gh"        # GitHub CLI
+brew "git-delta" # Syntax-highlighting pager for git/diff output
+brew "gitleaks"  # Audit git repos for secrets
+brew "lazygit"   # Simple terminal UI for git commands
+
+# Shell scripting
+brew "actionlint" # Static checker for GitHub Actions workflow files
+brew "shellcheck" # Static analysis for shell scripts
+brew "shfmt"      # Autoformat shell script source code
+
+# General formatters
+brew "difftastic" # Diff that understands syntax
+tap "hougesen/tap"
+brew "hougesen/tap/kdlfmt" # Code formatter for KDL documents
+brew "superhtml"           # HTML Language Server & Templating Library
+brew "topiary"             # Uniform formatter for simple languages
+
+# Linters
+brew "tflint" # Linter for Terraform files
+
+# =============================================================================
+# CONTAINERS & VIRTUALIZATION
+# =============================================================================
+
+brew "colima"         # Container runtimes on macOS with minimal setup
+brew "ctop"           # Top-like interface for container metrics
+brew "docker"         # Pack, ship and run applications as containers
+brew "docker-compose" # Isolated development environments using Docker
+brew "lazydocker"     # Lazier way to manage everything Docker
+brew "skopeo"         # Work with remote container image registries
+
+# =============================================================================
+# DATABASES
+# =============================================================================
+
+brew "leveldb"       # Key-value storage library with ordered mapping
+brew "mysql"         # Open source relational database
+brew "postgresql@18" # Object-relational database system
+brew "redis"         # Persistent key-value database
+
+# =============================================================================
+# CLOUD & CLI TOOLS
+# =============================================================================
+
+# AWS
+brew "awscli" # Official Amazon AWS command-line interface
+
+# SSL/Certs
+brew "certbot" # Tool to obtain certs from Let's Encrypt
+brew "swaks"   # SMTP command-line test tool
+
+# Google Cloud (cask)
+
+# =============================================================================
+# SECURITY & NETWORKING
+# =============================================================================
+
+# Network utilities
+brew "bandwhich" # Terminal bandwidth utilization tool
+brew "gping"     # Ping, but with a graph
+brew "rustscan"  # Modern Day Portscanner
+
+# Android tools
+brew "scrcpy" # Display and control your Android device
+
+# =============================================================================
+# MEDIA & GRAPHICS TOOLS
+# =============================================================================
+
+# Image processing
+brew "exiftool" # Read and write EXIF metadata
+brew "graphviz" # Graph visualization software
+brew "optipng"  # PNG file optimizer
+brew "pastel"   # Command-line tool to generate/analyze colors
+
+# =============================================================================
+# DOCUMENTATION & CONTENT
+# =============================================================================
+
+brew "glow"           # Render markdown on the CLI
+brew "monolith"       # Save complete web pages as single HTML files
+brew "spotify_player" # Command driven spotify player
+brew "tealdeer"       # Fast tldr implementation in Rust
+brew "tidy-viewer"    # CLI CSV pretty printer
+brew "tokei"          # Count code quickly
+brew "trafilatura"    # Discovery, extraction for Web text
+brew "yt-dlp"         # Feature-rich audio/video downloader
+
+# =============================================================================
+# SYSTEM UTILITIES
+# =============================================================================
+
+brew "asciinema" # Record and share terminal sessions
+brew "batt"      # Control battery charging on Apple Silicon MacBooks
+brew "caligula"  # User-friendly TUI for disk imaging
+brew "fastfetch" # Like neofetch, but much faster
+brew "gdu"       # Disk usage analyzer with console interface
+brew "gnupg"     # GNU Privacy Guard (OpenPGP)
+
+# Mac cleaning
+brew "chezmoi" # Manage your dotfiles across multiple machines
+brew "mole"    # Deep clean and optimize your Mac
+brew "yadm"    # Yet Another Dotfiles Manager
+
+# Benchmarking
+brew "hyperfine" # Command-line benchmarking tool
+
+# Security research
+brew "sherlock"  # Hunt down social media accounts by username
+brew "slackdump" # Export Slack data without admin privileges
+
+# SSH
+brew "sshs" # Graphical command-line client for SSH
+
+# AI
+brew "aichat" # All-in-one AI-Powered CLI Chat & Copilot
+
+# =============================================================================
+# MACOS WINDOW MANAGEMENT & CUSTOMIZATION
+# =============================================================================
 
 # {{ if eq .chezmoi.os "darwin" -}}
 
 tap "felixkratz/formulae"
-brew "felixkratz/formulae/borders"
-brew "felixkratz/formulae/sketchybar"
+brew "felixkratz/formulae/borders"    # Window border system for macOS
+brew "felixkratz/formulae/sketchybar" # Custom macOS statusbar
 
-# dotfile management
-brew "chezmoi"
-brew "yadm"
-
-# Development tools
-brew "actionlint"
-brew "aichat"
-brew "ctop"
-brew "diff-pdf"
-brew "gitleaks"
-brew "gnupg"
-brew "mole"
-brew "shellcheck"
-brew "shfmt"
-brew "skopeo"
-brew "superhtml"
-brew "tflint"
-brew "tidy-viewer"
-brew "uv"
-
-# Cloud & CLI tools
-brew "awscli"
-brew "certbot"
-brew "swaks"
-
-# Databases
-brew "leveldb"
-# brew "libyaml"
-brew "mysql"
-brew "postgresql@18"
-brew "redis"
-
-# Security & networking
-brew "rustscan"
-
-# Android tools
-brew "scrcpy"
-
-# Media & graphics
-brew "exiftool"
-brew "ffmpegthumbnailer"
-brew "graphviz"
-brew "optipng"
-brew "pastel"
-
-# Documentation
-brew "glow"
-
-# General
-brew "asciinema"
-tap "philocalyst/tap" # caligula
-brew "caligula"
-brew "chafa"
-brew "colima"
-# brew "colima", restart_service: :changed
-brew "difftastic"
-brew "docker"
-brew "docker-compose"
-brew "ffmpeg" # yazi: video thumbnails
-brew "fish"
-brew "batt"
-brew "gh"
-brew "git-delta"
-brew "gping"
-tap "hougesen/tap"
-brew "hougesen/tap/kdlfmt"
-brew "hyperfine"
-brew "mise"
-brew "monolith"
-brew "neovim"
-brew "nushell"
-brew "sherlock"
-brew "slackdump"
-brew "spotify_player"
-brew "sshs"
-brew "starship"
-brew "tailscale"
-brew "tealdeer"
-brew "tokei"
-brew "topiary"
-brew "trafilatura"
-brew "tree"
-brew "yt-dlp"
-
-# Go tooling
-brew "golangci-lint"
-brew "gopls"
-brew "templ"
-
-# Development tools
-cask "bruno"
-cask "dbeaver-community"
-cask "db-browser-for-sqlite"
-cask "ghostty"
-cask "keycastr"
-cask "qmk-toolbox"
-cask "redis-insight"
-cask "sequel-ace"
-
-# Android tools
-cask "android-commandlinetools"
-cask "android-platform-tools"
-cask "openmtp"
-
-# Cloud & VPN
-cask "gcloud-cli"
-cask "openvpn-connect"
-cask "pritunl"
-cask "tailscale-app"
-cask "teamviewer"
-
-# Productivity
-cask "anki"
-cask "antigravity"
-cask "clickup"
-cask "craft"
-cask "handy"
-cask "legcord"
-cask "obsidian"
-cask "rocket"
-cask "sf-symbols"
-cask "zoom"
-
-# System utilities
-cask "crystalfetch"
+# Fonts for UI customization
 cask "font-sf-mono"
-cask "pearcleaner"
-cask "rustdesk"
-
-# Media & network
-cask "vlc"
-cask "wireshark-app"
-
-# Original casks
-cask "aerospace"
-cask "bitwarden"
 cask "font-sf-pro"
 cask "font-sketchybar-app-font"
-cask "handbrake-app"
-cask "iina"
-cask "linearmouse"
-cask "localsend"
-cask "notunes"
-cask "raycast"
-cask "spotify"
-cask "telegram"
-cask "temurin"
-cask "transmission"
-cask "utm"
-cask "whatsapp"
-cask "zed"
+cask "sf-symbols"
+
+# Window manager
+tap "nikitabobko/tap"
+cask "aerospace" # i3-like tiling window manager
+
+# Mouse/Input customization
+cask "linearmouse" # Customize mouse behavior
+
+# =============================================================================
+# DEVELOPMENT GUI APPLICATIONS
+# =============================================================================
+
+# API Development
+cask "bruno" # Open source IDE for exploring and testing APIs
+
+# Database clients
+cask "db-browser-for-sqlite"
+cask "dbeaver-community" # Universal database tool and SQL client
+cask "redis-insight"     # GUI for Redis application development
+cask "sequel-ace"        # MySQL/MariaDB database management
+
+# Editors
+cask "zed"         # Multiplayer code editor
+cask "antigravity" # AI Coding Agent IDE
+
+# Terminal emulator
+cask "ghostty" # Terminal emulator with GPU acceleration
+
+# Keyboard firmware
+cask "qmk-toolbox" # Toolbox companion for QMK Firmware
+
+# =============================================================================
+# CLOUD & VPN
+# =============================================================================
+
+cask "gcloud-cli"      # Set of tools to manage Google Cloud resources
+cask "openvpn-connect" # Client program for OpenVPN Access Server
+cask "pritunl"         # OpenVPN client
+cask "tailscale-app"   # Mesh VPN based on WireGuard
+cask "teamviewer"      # Remote access and connectivity software
+
+# =============================================================================
+# COMMUNICATION
+# =============================================================================
+
+cask "legcord"  # Custom Discord client
+cask "rocket"   # Emoji picker
+cask "telegram" # Messaging app
+
+cask "whatsapp" # Native desktop client for WhatsApp
+cask "zoom"     # Video communication platform
+
+# =============================================================================
+# PRODUCTIVITY & NOTES
+# =============================================================================
+
+cask "anki"     # Memory training application
+cask "clickup"  # Productivity platform for tasks, docs, goals
+cask "craft"    # Native document editor
+cask "obsidian" # Knowledge base on Markdown files
+
+# =============================================================================
+# MEDIA & ENTERTAINMENT
+# =============================================================================
+
+cask "handbrake-app" # Open-source video transcoder
+cask "iina"          # Free and open-source media player
+cask "spotify"       # Music streaming service
+cask "transmission"  # BitTorrent client
+cask "vlc"           # Multimedia player
+
+# =============================================================================
+# SYSTEM UTILITIES (GUI)
+# =============================================================================
+
+cask "bitwarden"    # Desktop password and login vault
+cask "crystalfetch" # UI for creating Windows installer ISO
+cask "handy"        # Speech to text application
+cask "keycastr"     # Open-source keystroke visualiser
+cask "localsend"    # Open-source cross-platform alternative to AirDrop
+cask "notunes"      # Prevent iTunes/Apple Music from launching
+cask "pearcleaner"  # Uninstall apps and remove leftover files
+cask "raycast"      # Control your tools with a few keystrokes
+
+# Remote desktop
+cask "rustdesk" # Open source virtual/remote desktop application
+
+# Android
+cask "android-commandlinetools" # Command-line tools for Android apps
+cask "android-platform-tools"   # Android SDK Platform-Tools
+cask "openmtp"                  # Android file transfer
+
+# Virtualization
+cask "temurin"       # Eclipse Temurin Java Development Kit
+cask "utm"           # Virtual machines UI using QEMU
+cask "wireshark-app" # Network protocol analyzer
 
 # {{ else if eq .chezmoi.os "linux" -}}
 
-# General
+# Linux-specific packages would go here
 
 # {{ end -}}
