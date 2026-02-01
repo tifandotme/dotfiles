@@ -1,9 +1,13 @@
-"$schema" = "https://yazi-rs.github.io/schemas/theme.json"
+#:schema https://yazi-rs.github.io/schemas/theme.json
+
+[indicator]
+[indicator.padding]
+open = "█"
+close = "█"
 
 [mgr]
 # sort_dir_first = true
 border_style = { fg = "gray" }
-preview_hovered = {  }
 count_selected = { fg = "black", bg = "yellow", bold = true }
 count_copied = { fg = "black", bg = "yellow", blink_rapid = true, bold = true }
 

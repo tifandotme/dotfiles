@@ -1,6 +1,7 @@
 README.md
 key.txt.age
-{{-  if ne .chezmoi.hostname "darwin" }}
+
+{{-  if ne .chezmoi.os "darwin" }}
 work/
 personal/
 .zprofile
@@ -8,7 +9,7 @@ personal/
 .secrets
 {{- end }}
 
-{{- if ne .chezmoi.hostname "linux" }}
+{{- if ne .chezmoi.os "linux" }}
 .bashrc
 .bash_profile
 {{- end }}
