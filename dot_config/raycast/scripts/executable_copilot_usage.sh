@@ -9,8 +9,10 @@
 # @raycast.icon 👷
 # @raycast.packageName CopilotUsage
 
+COPILOT_CMD="$HOME/.local/bin/copilot-usage"
+
 # Fetch Copilot usage JSON
-usage_json=$(copilot-usage 2>/dev/null)
+usage_json=$("$COPILOT_CMD" 2>/dev/null)
 
 if [ -n "$usage_json" ]; then
   # Extract premium_interactions data using jq
