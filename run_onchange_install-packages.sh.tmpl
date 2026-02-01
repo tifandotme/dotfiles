@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# Brewfile hash: # {{ include "dot_Brewfile.tmpl" | sha256sum }}
+
+if command -v brew &>/dev/null; then
+  brew bundle --file="# {{ .chezmoi.sourceDir }}/dot_Brewfile.tmpl"
+fi
