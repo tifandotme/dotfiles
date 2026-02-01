@@ -12,4 +12,6 @@ personal/
 {{- if ne .chezmoi.os "linux" }}
 .bashrc
 .bash_profile
+.config/user-dirs.dirs
+.config/user-dirs.locale
 {{- end }}
