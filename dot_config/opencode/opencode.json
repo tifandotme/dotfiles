@@ -6,6 +6,11 @@
   "small_model": "google/gemini-2.5-flash-lite",
 
   "permission": {
+    "bash": {
+      "git push *": "ask",
+      "git commit *": "ask",
+      "git add *": "ask"
+    },
     "external_directory": {
       "~/personal/**": "allow",
       "~/work/**": "allow",
