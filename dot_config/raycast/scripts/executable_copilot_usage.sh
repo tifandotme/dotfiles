@@ -9,6 +9,9 @@
 # @raycast.icon 👷
 # @raycast.packageName CopilotUsage
 
+# For Raycast: outputs "percent% (remaining)" (e.g., "45% (1234)")
+# For sketchybar: calls sketchybar --set to update label
+
 COPILOT_CMD="$HOME/.local/bin/copilot-usage"
 
 # Fetch Copilot usage JSON
@@ -21,10 +24,19 @@ if [ -n "$usage_json" ]; then
 
   if [ -n "$percent_remaining" ] && [ "$percent_remaining" != "null" ] && [ -n "$remaining" ] && [ "$remaining" != "null" ]; then
     # Round percent_remaining to nearest integer and format output
-    printf "%.0f%% (%s)\n" "$percent_remaining" "$remaining"
+    LABEL=$(printf "%.0f%% (%s)" "$percent_remaining" "$remaining")
   else
-    echo "Could not parse usage data"
+    LABEL="Could not parse usage data"
   fi
 else
-  echo "Could not fetch Copilot usage"
+  LABEL="Could not fetch Copilot usage"
+fi
+
+# Detect if running under sketchybar (NAME env var is set)
+if [ -n "$NAME" ]; then
+  # Running as sketchybar plugin
+  sketchybar --set "$NAME" label="$LABEL"
+else
+  # Running standalone (Raycast or manual)
+  echo "$LABEL"
 fi
