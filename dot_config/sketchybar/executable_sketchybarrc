@@ -106,7 +106,6 @@ sketchybar --add item spotify center \
   label.shadow.scroll_duration=300 \
   scroll_texts=on \
   "${GHOST[@]}" \
-  label.shadow.drawing=off \
   icon="􀑪" \
   drawing=off \
   update_freq=5 \
