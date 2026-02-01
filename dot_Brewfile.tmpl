@@ -1,31 +1,34 @@
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 
+tap "oven-sh/bun"
+
 # Common packages (both macOS and Linux)
 brew "bandwhich"
 brew "bat"
 brew "bottom"
+brew "bun"
 brew "eza"
 brew "fastfetch"
-brew "fd"
-brew "fzf"
-brew "imagemagick"
-brew "jq"
+brew "fd"  # yazi: file searching
+brew "fzf" # yazi: quick file subtree navigation
+brew "gdu"
+brew "imagemagick" # yazi: Font, HEIC, JPEG XL preview
+brew "jq"          # yazi: JSON preview
 brew "lazygit"
 brew "lazydocker"
-brew "poppler"
-brew "ripgrep"
-brew "sevenzip"
-brew "zoxide"
+brew "poppler"  # yazi: PDF preview
+brew "resvg"    # yazi: SVG preview
+brew "ripgrep"  # yazi: file content searching
+brew "sevenzip" # yazi: archive extraction and preview
+brew "zoxide"   # yazi: historical directories navigation
 
 # {{ if eq .chezmoi.os "darwin" -}}
 
-tap "hougesen/tap"
+# tap "hougesen/tap"
 tap "felixkratz/formulae"
 brew "felixkratz/formulae/borders"
 brew "felixkratz/formulae/sketchybar"
-tap "nikitabobko/tap"
-tap "oven-sh/bun"
-tap "teamookla/speedtest"
+tap "nikitabobko/tap" # aerospace
 
 # General
 brew "asciinema"
@@ -34,69 +37,54 @@ brew "colima", restart_service: :changed
 brew "difftastic"
 brew "docker"
 brew "docker-compose"
-brew "dua-cli"
-brew "ffmpeg"
+brew "ffmpeg" # yazi: video thumbnails
 brew "fish"
+brew "batt"
 brew "gh"
 brew "git-delta"
-brew "golangci-lint"
-brew "gopls"
 brew "gping"
 brew "hougesen/tap/kdlfmt"
 brew "hyperfine"
-brew "just"
 brew "mise"
 brew "monolith"
 brew "nushell"
-brew "oven-sh/bun/bun"
-brew "pnpm"
 brew "sherlock"
-brew "speedtest"
 brew "spotify_player"
 brew "sshs"
 brew "starship"
-brew "taplo"
-brew "templ"
 brew "tealdeer"
 brew "tokei"
 brew "topiary"
 brew "trafilatura"
 brew "yt-dlp"
 
+# Go tooling
+brew "golangci-lint"
+brew "gopls"
+brew "templ"
+
 # Casks
-cask "battery"
+cask "aerospace"
 cask "bitwarden"
-cask "discord"
-cask "eloston-chromium"
 cask "font-sf-pro"
 cask "font-sketchybar-app-font"
 cask "handbrake"
 cask "iina"
 cask "linearmouse"
 cask "localsend"
-cask "mullvadvpn"
-cask "notion"
 cask "notunes"
 cask "raycast"
-cask "slack"
 cask "spotify"
 cask "telegram"
 cask "temurin"
 cask "transmission"
 cask "utm"
-cask "visual-studio-code"
 cask "whatsapp"
 cask "zed"
 
 # {{ else if eq .chezmoi.os "linux" -}}
 
-tap "oven-sh/bun"
-brew "oven-sh/bun/bun"
-tap "teamookla/speedtest"
-brew "teamookla/speedtest/speedtest"
-
 # General
-brew "resvg"
 brew "yazi"
 brew "zellij"
 
