@@ -22,15 +22,14 @@ local function get_source_dir()
   return nil
 end
 
----@param cwd string Absolute path to check
 ---@return table<string, true> -- Set of managed file paths (absolute paths)
-local function get_managed_files(cwd)
+local function get_managed_files()
   local managed = {}
 
-  -- chezmoi managed <path> -p absolute returns managed entries under that path
-  -- with absolute paths - this is efficient as it only returns relevant entries
+  -- chezmoi managed -p absolute returns all managed entries with absolute paths
+  -- Don't pass a path argument to get everything
   local output, err = Command("chezmoi")
-      :arg({ "managed", cwd, "-p", "absolute" })
+      :arg({ "managed", "-p", "absolute" })
       :stdout(Command.PIPED)
       :stderr(Command.PIPED)
       :output()
@@ -46,25 +45,23 @@ local function get_managed_files(cwd)
   return managed
 end
 
----@param cwd string
 ---@param managed table<string, true>
-local add = ya.sync(function(st, cwd, managed)
+local add = ya.sync(function(st, managed)
   ---@cast st State
-  st.dirs[cwd] = managed
+  st.managed = managed
   ui.render()
 end)
 
----@param cwd string
-local remove = ya.sync(function(st, cwd)
+local remove = ya.sync(function(st)
   ---@cast st State
-  st.dirs[cwd] = nil
+  st.managed = nil
   ui.render()
 end)
 
 ---@param st State
 ---@param opts Options
 local function setup(st, opts)
-  st.dirs = {}
+  st.managed = nil
 
   opts = opts or {}
   opts.order = opts.order or 5000
@@ -78,15 +75,13 @@ local function setup(st, opts)
       return ""
     end
 
-    local url = self._file.url
-    local cwd = tostring(url.base or url.parent)
-    local managed = st.dirs[cwd]
-
+    local managed = st.managed
     if not managed then
       return ""
     end
 
     -- Check if this specific file is managed (using absolute path)
+    local url = self._file.url
     local abs_path = tostring(url)
     local is_managed = managed[abs_path]
 
@@ -105,21 +100,18 @@ end
 
 ---@type UnstableFetcher
 local function fetch(_, job)
-  local cwd = job.files[1].url.base or job.files[1].url.parent
-  local cwd_str = tostring(cwd)
-
   -- Check if chezmoi is configured by getting the source directory
   local source_dir = get_source_dir()
   if not source_dir then
-    remove(cwd_str)
+    remove()
     return true
   end
 
-  -- Get managed files for this specific directory (absolute paths)
-  local managed = get_managed_files(cwd_str)
+  -- Get all managed files (don't pass a path to get everything)
+  local managed = get_managed_files()
 
   -- Add to state
-  add(cwd_str, managed)
+  add(managed)
 
   return false
 end
