@@ -19,6 +19,7 @@ refreshPeriod = "168h"
 [".config/nushell/scripts/external/bash-env-nushell"."pull"]
 args = ["--rebase", "--autostash"]
 
+# if there is a new release, run `chezmoi apply -R` to force re-download
 [".local/bin/copilot-usage"]
 type = "file"
 url = "https://github.com/tifandotme/copilot-usage/releases/latest/download/copilot-usage"
