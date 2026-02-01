@@ -37,7 +37,16 @@ local commands = {
 function M:entry(job)
   local args = job.args or {}
   local cmd_name = args[1]
-  local flag = args[2]
+
+  -- Check for flags as named arguments (e.g., --encrypt becomes args.encrypt)
+  local flag = nil
+  if args.template then
+    flag = "--template"
+  elseif args.encrypt then
+    flag = "--encrypt"
+  elseif args[2] and string.sub(args[2], 1, 2) == "--" then
+    flag = args[2]
+  end
 
   local target = get_target()
   if not target then

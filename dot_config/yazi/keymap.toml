@@ -17,12 +17,12 @@ prepend_keymap = [
   { on = ["'", "h"], run = "plugin custom-shell history", desc = "Show custom-shell history" },
   { on = ["'", "z"], run = "plugin custom-shell -- custom nu 'zed $env.PWD'", desc = "Run Zed in current directory" },
   # chezmoi (with notifications) - using 'C' prefix for "Chezmoi"
-  { on = ["C", "a"], run = "plugin chezmoi-cmd add", desc = "chezmoi: add file to source state" },
-  { on = ["C", "t"], run = "plugin chezmoi-cmd add --template", desc = "chezmoi: add as template" },
-  { on = ["C", "e"], run = "plugin chezmoi-cmd add --encrypt", desc = "chezmoi: add and encrypt" },
-  { on = ["C", "f"], run = "plugin chezmoi-cmd forget", desc = "chezmoi: forget/remove from source state" },
-  { on = ["C", "p"], run = "plugin chezmoi-cmd apply", desc = "chezmoi: apply to destination" },
-  { on = ["C", "r"], run = "plugin chezmoi-cmd re-add", desc = "chezmoi: re-add current state" },
+  { on = ["C", "a"], run = "plugin chezmoi-cmd -- add", desc = "chezmoi: add file to source state" },
+  { on = ["C", "t"], run = "plugin chezmoi-cmd -- add --template", desc = "chezmoi: add as template" },
+  { on = ["C", "e"], run = "plugin chezmoi-cmd -- add --encrypt", desc = "chezmoi: add and encrypt" },
+  { on = ["C", "f"], run = "plugin chezmoi-cmd -- forget", desc = "chezmoi: forget/remove from source state" },
+  { on = ["C", "p"], run = "plugin chezmoi-cmd -- apply", desc = "chezmoi: apply to destination" },
+  { on = ["C", "r"], run = "plugin chezmoi-cmd -- re-add", desc = "chezmoi: re-add current state" },
   # Extra gotos
   { on = ["g", "w"], run = "cd ~/work", desc = "Go ~/work" },
   { on = ["g", "p"], run = "cd ~/personal", desc = "Go ~/personal" },
