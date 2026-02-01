@@ -1,1 +1,0 @@
-/Users/tifan/.config/sketchybar/plugins/toggle_theme.sh
