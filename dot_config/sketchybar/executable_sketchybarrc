@@ -167,6 +167,13 @@ sketchybar --add item amp_usage right \
   update_freq=300 \
   script="$PLUGIN_DIR/amp_usage.sh"
 
+sketchybar --add item copilot_usage right \
+  --set copilot_usage \
+  icon="􁎢" \
+  icon.padding_right=4 \
+  update_freq=300 \
+  script="$PLUGIN_DIR/copilot_usage.sh"
+
 sketchybar --add item network_speed right \
   --set network_speed \
   icon="􀴽" \
