@@ -1,9 +1,0 @@
-{
-  "type": "module",
-  "main": "index.ts",
-  "name": "fetch_amp_usage",
-  "private": true,
-  "devDependencies": {
-    "@types/bun": "^1.2.21"
-  }
-}
