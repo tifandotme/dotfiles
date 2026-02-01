@@ -26,14 +26,62 @@ brew "zoxide"      # yazi: historical directories navigation
 
 # {{ if eq .chezmoi.os "darwin" -}}
 
-# tap "hougesen/tap"
 tap "felixkratz/formulae"
 brew "felixkratz/formulae/borders"
 brew "felixkratz/formulae/sketchybar"
-tap "nikitabobko/tap" # aerospace
+
+# dotfile management
+brew "chezmoi"
+brew "yadm"
+
+# Development tools
+brew "actionlint"
+brew "aichat"
+brew "ctop"
+brew "diff-pdf"
+brew "gitleaks"
+brew "gnupg"
+brew "mole"
+brew "shellcheck"
+brew "shfmt"
+brew "skopeo"
+brew "superhtml"
+brew "tflint"
+brew "tidy-viewer"
+brew "uv"
+
+# Cloud & CLI tools
+brew "awscli"
+brew "certbot"
+brew "swaks"
+
+# Databases
+brew "leveldb"
+# brew "libyaml"
+brew "mysql"
+brew "postgresql@18"
+brew "redis"
+
+# Security & networking
+brew "rustscan"
+
+# Android tools
+brew "scrcpy"
+
+# Media & graphics
+brew "exiftool"
+brew "ffmpegthumbnailer"
+brew "graphviz"
+brew "optipng"
+brew "pastel"
+
+# Documentation
+brew "glow"
 
 # General
 brew "asciinema"
+tap "philocalyst/tap" # caligula
+brew "caligula"
 brew "chafa"
 brew "colima"
 # brew "colima", restart_service: :changed
@@ -46,19 +94,24 @@ brew "batt"
 brew "gh"
 brew "git-delta"
 brew "gping"
-# brew "hougesen/tap/kdlfmt"
+tap "hougesen/tap" # kdlfmt
+brew "kdlfmt"
 brew "hyperfine"
 brew "mise"
 brew "monolith"
+brew "neovim"
 brew "nushell"
 brew "sherlock"
+brew "slackdump"
 brew "spotify_player"
 brew "sshs"
 brew "starship"
+brew "tailscale"
 brew "tealdeer"
 brew "tokei"
 brew "topiary"
 brew "trafilatura"
+brew "tree"
 brew "yt-dlp"
 
 # Go tooling
@@ -66,7 +119,51 @@ brew "golangci-lint"
 brew "gopls"
 brew "templ"
 
-# Casks
+# Development tools
+cask "bruno"
+cask "dbeaver-community"
+cask "db-browser-for-sqlite"
+cask "ghostty"
+cask "keycastr"
+cask "qmk-toolbox"
+cask "redis-insight"
+cask "sequel-ace"
+
+# Android tools
+cask "android-commandlinetools"
+cask "android-platform-tools"
+cask "openmtp"
+
+# Cloud & VPN
+cask "gcloud-cli"
+cask "openvpn-connect"
+cask "pritunl"
+cask "tailscale-app"
+cask "teamviewer"
+
+# Productivity
+cask "anki"
+cask "antigravity"
+cask "clickup"
+cask "craft"
+cask "handy"
+cask "legcord"
+cask "obsidian"
+cask "rocket"
+cask "sf-symbols"
+cask "zoom"
+
+# System utilities
+cask "crystalfetch"
+cask "font-sf-mono"
+cask "pearcleaner"
+cask "rustdesk"
+
+# Media & network
+cask "vlc"
+cask "wireshark-app"
+
+# Original casks
 cask "aerospace"
 cask "bitwarden"
 cask "font-sf-pro"
