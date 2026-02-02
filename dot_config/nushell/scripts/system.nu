@@ -46,3 +46,19 @@ export def get-app-id [app_name: string] {
   }
   return $app_id
 }
+
+export def --wrapped sshs [...args] {
+  TERM=xterm-256color ^sshs ...$args
+}
+
+def --env yazi [...args] {
+  let tmp = (mktemp -t "yazi-cwd.XXXXXX")
+  ^yazi ...$args --cwd-file $tmp
+  let cwd = (open $tmp)
+  if $cwd != "" and $cwd != $env.PWD {
+    cd $cwd
+  }
+  rm -fp $tmp
+}
+
+export alias y = yazi

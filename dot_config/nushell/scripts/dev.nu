@@ -54,3 +54,7 @@ export def prep-excalidraw [
     _ls | where name =~ '(?i)\.(jpg|jpeg|png|webp)$' | where name !~ '_optimized' | each {|row| do $optimize $row.name }
   }
 }
+
+export def --wrapped amp [...args] {
+  EDITOR=zed _amp ...$args
+}

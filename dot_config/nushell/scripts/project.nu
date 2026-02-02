@@ -1,4 +1,4 @@
-export def open [default_project: string = ""] {
+export def open-project [default_project: string = ""] {
   try {
     mut project_dirs = []
     for base in [($env.HOME | path join 'personal') ($env.HOME | path join 'work')] {

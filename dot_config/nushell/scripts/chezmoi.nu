@@ -63,3 +63,14 @@ export def --wrapped brew [...args: string] {
 export def "lzg" [] {
   lazygit -p (chezmoi source-path)
 }
+
+# Open amp in chezmoi source directory
+export def "amp" [] {
+  cd (chezmoi source-path)
+  EDITOR=zed ^amp
+}
+
+# Open zed in chezmoi source directory
+export def "zed" [] {
+  ^zed (chezmoi source-path)
+}

@@ -4,7 +4,55 @@
 # > config env --default | nu-highlight | lines
 # > config nu --default | nu-highlight | lines
 
+# Command to tab name mapping for zellij auto-rename
+const ZELLIJ_CMD_MAP = {
+  y: yazi
+  yazi: yazi
+  btm: bottom
+  lzg: lazygit
+  lazygit: lazygit
+  spotify_player: spotify
+  bandwhich: bandwhich
+}
+
 $env.config = {
+  hooks: {
+    env_change: {
+      PWD: [
+        {|before, after|
+          if "ZELLIJ" not-in ($env | columns) { return }
+          let base_name = ($after | path basename)
+          $env._ZELLIJ_TAB_BASE_NAME = $base_name
+          zellij action rename-tab $base_name
+        }
+      ]
+    }
+    pre_execution: [
+      {
+        if "ZELLIJ" not-in ($env | columns) { return }
+        let cmdline = (commandline)
+        if ($cmdline | is-empty) { return }
+
+        let cmd = ($cmdline | str trim | split words | first)
+        let program = ($ZELLIJ_CMD_MAP | get -o $cmd)
+
+        if $program != null {
+          let base = ($env._ZELLIJ_TAB_BASE_NAME? | default ($env.PWD | path basename))
+          zellij action rename-tab $"($base) \(($program)\)"
+          $env._ZELLIJ_TAB_RENAMED = true
+        }
+      }
+    ]
+    pre_prompt: [
+      {
+        if ($env._ZELLIJ_TAB_RENAMED? == true) {
+          let base = ($env._ZELLIJ_TAB_BASE_NAME? | default ($env.PWD | path basename))
+          zellij action rename-tab $base
+          $env._ZELLIJ_TAB_RENAMED = false
+        }
+      }
+    ]
+  }
   completions: {
     external: {
       enable: true
@@ -207,7 +255,7 @@ use docker.nu
 use zellij.nu *
 use media.nu *
 use cloud.nu *
-use system.nu
+use system.nu *
 use project.nu *
 use dev.nu *
 use utils.nu *

@@ -1,8 +1,3 @@
-export def open-webui [] {
-  let path = $env.HOME | path join personal openweb-ui
-  docker compose up -f $path -d
-}
-
 export def "stop-all" [--stop-colima (-c)] {
   docker stop ...(docker ps -aq | lines | str trim)
   if ($stop_colima) {

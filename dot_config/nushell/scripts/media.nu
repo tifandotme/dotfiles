@@ -19,7 +19,7 @@ export def --wrapped "youtube-download" [
   if $audio {
     $cmd = ($cmd | append [-f 140])
   } else {
-    $cmd = ($cmd | append [--format-sort="res:720,codec:avc:m4a"])
+    $cmd = ($cmd | append [--format-sort "res:720,codec:avc:m4a"])
   }
 
   $cmd = ($cmd | append $rest)
