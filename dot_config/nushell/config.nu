@@ -194,13 +194,23 @@ $env.config = {
   ]
 }
 
-# Guarded package managers (must be before aliases.nu)
-use chezmoi.nu [bun brew]
+# Guarded package managers
+use chezmoi.nu [ bun brew ]
 use chezmoi.nu
 
-# Source scripts/*
-source aliases.nu
-source utils.nu
+# Core aliases (must source for global shell usage)
+source core.nu
+
+# Domain modules
+use git.nu
+use docker.nu
+use zellij.nu *
+use media.nu *
+use cloud.nu *
+use system.nu
+use project.nu *
+use dev.nu *
+use utils.nu *
 
 use updater.nu
 use cert.nu
