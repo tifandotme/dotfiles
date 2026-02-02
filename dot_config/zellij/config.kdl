@@ -251,24 +251,23 @@ plugins {
 pane_frames false
 show_startup_tips false
 theme "custom"
-
 themes {
     custom {
         frame_selected {
-            base 232 204 147
-            background 91 75 43
-            emphasis_0 228 193 116
-            emphasis_1 228 193 116
-            emphasis_2 228 193 116
-            emphasis_3 228 193 116
+            base 232 193 116
+            background 232 193 116
+            emphasis_0 91 75 43
+            emphasis_1 91 75 43
+            emphasis_2 91 75 43
+            emphasis_3 91 75 43
         }
         frame_unselected {
-            base 155 172 166
-            background 60 74 49
-            emphasis_0 155 172 166
-            emphasis_1 155 172 166
-            emphasis_2 155 172 166
-            emphasis_3 155 172 166
+            base 60 60 60
+            background 60 60 60
+            emphasis_0 100 100 100
+            emphasis_1 100 100 100
+            emphasis_2 100 100 100
+            emphasis_3 100 100 100
         }
         frame_highlight {
             base 255 193 127
