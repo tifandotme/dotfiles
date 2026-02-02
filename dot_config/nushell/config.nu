@@ -296,7 +296,6 @@ def banner [] {
     "`commands` to see all custom commands and aliases"
     "`cdi` to run an interractive zoxide"
     "Ctrl-Z to open Zed in current directory"
-    "Ctrl-V to open VSCode in current directory"
     "Ctrl-R to open history menu"
     "Ctrl-I to open commands menu"
     "Ctrl-H to open help menu"
