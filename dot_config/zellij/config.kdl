@@ -43,6 +43,16 @@ keybinds clear-defaults=true {
         bind "Ctrl e" {
             SwitchToMode "tmux"
         }
+        bind "Ctrl y" {
+            Run "nu" "-l" "-c" "keymaps" {
+                name "Keymaps"
+                floating true
+                close_on_exit true
+                hold_on_close false
+                height "80%"
+                y "10%"
+            }
+        }
         bind "Ctrl \\" {
             Run "nu" "-l" "-c" "open-project" {
                 // These are undocumented

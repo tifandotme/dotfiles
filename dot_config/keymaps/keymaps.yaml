@@ -1,0 +1,181 @@
+keymaps:
+  - program: aerospace
+    bindings:
+      # Main mode - Window focus
+      - key: alt+shift+h/j/k/l
+        description: Focus left/down/up/right
+      - key: alt+shift+f
+        description: Fullscreen (no outer gaps)
+      # Main mode - Layout
+      - key: alt+enter
+        description: Toggle floating/tiling
+      - key: alt+period
+        description: Cycle layouts (tiles horizontal vertical)
+      - key: alt+comma
+        description: Accordion layout horizontal
+      # Main mode - Resize
+      - key: alt+shift+minus
+        description: Resize smart -70
+      - key: alt+shift+equal
+        description: Resize smart +70
+      - key: alt+shift+0
+        description: Balance sizes
+      # Main mode - Workspaces
+      - key: cmd+1..5
+        description: Switch to workspace 1-5
+      - key: cmd+shift+1..5
+        description: Move window to workspace 1-5 and follow
+      - key: cmd+backtick
+        description: Switch to 0_misc workspace
+      - key: cmd+shift+backtick
+        description: Move window to 0_misc workspace
+      # Main mode - Modes
+      - key: cmd+shift+semicolon
+        description: Enter service mode
+      - key: cmd+shift+quote
+        description: Enter move mode
+      # Move mode
+      - key: h/j/k/l
+        description: Move window left/down/up/right
+        mode: move
+      - key: shift+h/j/k/l
+        description: Join-with left/down/up/right
+        mode: move
+      - key: esc/enter
+        description: Exit to main mode
+        mode: move
+      # Service mode
+      - key: esc
+        description: Reload config and exit to main mode
+        mode: service
+
+  - program: zellij
+    bindings:
+      # Global
+      - key: ctrl+g
+        description: Toggle locked mode
+      - key: ctrl+q
+        description: Quit zellij
+      # Tmux mode (ctrl+e)
+      - key: ctrl+e
+        description: Enter tmux mode
+      - key: c
+        description: New tab
+        mode: tmux
+      - key: "n/|"
+        description: New pane right
+        mode: tmux
+      - key: x
+        description: Close focus
+        mode: tmux
+      - key: f
+        description: Toggle floating panes
+        mode: tmux
+      - key: z
+        description: Toggle focus fullscreen
+        mode: tmux
+      - key: w
+        description: Open session manager
+        mode: tmux
+      - key: s
+        description: Toggle active sync tab
+        mode: tmux
+      - key: d
+        description: Detach
+        mode: tmux
+      - key: e
+        description: Edit scrollback
+        mode: tmux
+      - key: "["
+        description: Enter scroll mode
+        mode: tmux
+      - key: "/"
+        description: Enter search mode
+        mode: tmux
+      - key: ","
+        description: Rename tab
+        mode: tmux
+      - key: ctrl+e
+        description: Exit tmux mode
+        mode: tmux
+      # Custom launchers
+      - key: ctrl+backslash
+        description: Open project picker (nu open-project)
+      - key: ctrl+z
+        description: Open Zed in current directory
+      - key: ctrl+shift+c
+        description: Open Zed in chezmoi source directory
+      # Navigation
+      - key: alt+h/l
+        description: Move focus or tab left/right
+      - key: shift+super+[/]
+        description: Move focus or tab left/right
+      - key: ctrl+alt+h/l
+        description: Move tab left/right
+      - key: super+t
+        description: New tab
+      - key: super+w
+        description: Close tab
+      - key: alt+plus/minus
+        description: Resize increase/decrease
+      # Scroll/Search mode
+      - key: ctrl+c
+        description: Scroll to bottom and exit to normal
+        mode: scroll/search
+      - key: h/l
+        description: Page scroll up/down
+        mode: scroll/search
+      - key: j/k
+        description: Scroll down/up
+        mode: scroll/search
+      - key: d/u
+        description: Half page scroll down/up
+        mode: scroll/search
+      - key: /
+        description: Enter search mode
+        mode: scroll
+      - key: n/N
+        description: Search next/previous
+        mode: search
+      - key: c/w/o
+        description: Toggle case/wrap/whole word
+        mode: search
+      - key: e
+        description: Edit scrollback
+        mode: scroll
+
+  - program: nushell
+    bindings:
+      # History navigation (emacs/vi)
+      - key: ctrl+n
+        description: Next history item
+      - key: ctrl+p
+        description: Previous history item
+      # Completion and help
+      - key: ctrl+space
+        description: Complete history hint
+      - key: ctrl+h
+        description: Open help menu
+      - key: f1
+        description: Open interactive help menu
+      # Menus
+      - key: ctrl+t
+        description: Open fzf file menu
+      - key: ctrl+g
+        description: Open fzf directory menu
+      - key: ctrl+r
+        description: Open fzf history menu
+      - key: ctrl+x
+        description: Open visual history search (old default)
+      # Editing
+      - key: alt+enter
+        description: Insert newline
+      - key: ctrl+l
+        description: Clear screen
+      # Vi mode
+      - key: esc
+        description: Enter vi normal mode
+        mode: vi_insert
+      - key: i
+        description: Enter vi insert mode
+        mode: vi_normal

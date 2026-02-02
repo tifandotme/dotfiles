@@ -62,3 +62,38 @@ def --env yazi [...args] {
 }
 
 export alias y = yazi
+
+export def keymaps [filter?: string] {
+  let file = ($env.XDG_CONFIG_HOME | path join "keymaps" "keymaps.yaml")
+
+  if not ($file | path exists) {
+    print $"Keymaps file not found: ($file)"
+    return
+  }
+
+  let data = (open $file)
+  let entries = (
+    $data.keymaps | each {|k|
+      let program = $k.program
+      $k.bindings | each {|b|
+        {
+          program: $program
+          key: $b.key
+          description: $b.description
+          mode: ($b.mode? | default "")
+        }
+      }
+    } | flatten
+  )
+
+  let filtered = if ($filter | is-not-empty) {
+    $entries | where {|e| $e.program | str contains -i $filter }
+  } else {
+    $entries
+  }
+
+  $filtered | each {|e|
+    let mode_str = if ($e.mode | is-not-empty) { $" [($e.mode)]" } else { "" }
+    $"($e.program | fill -w 10) | ($e.key | fill -w 20) | ($e.description)($mode_str)"
+  } | str join (char nl) | fzf --header "Program    | Key                  | Description" --header-first
+}
