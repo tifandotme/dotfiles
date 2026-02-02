@@ -61,6 +61,9 @@ export def --wrapped brew [...args: string] {
 
 # Open lazygit in chezmoi source directory
 export def "lzg" [] {
+  if "ZELLIJ" in ($env | columns) {
+    zellij action rename-tab "chezmoi (lazygit)"
+  }
   lazygit -p (chezmoi source-path)
 }
 

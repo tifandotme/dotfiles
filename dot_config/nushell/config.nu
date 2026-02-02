@@ -19,7 +19,7 @@ $env.config = {
   hooks: {
     env_change: {
       PWD: [
-        {|before, after|
+        {|before after|
           if "ZELLIJ" not-in ($env | columns) { return }
           let base_name = ($after | path basename)
           $env._ZELLIJ_TAB_BASE_NAME = $base_name
@@ -33,11 +33,13 @@ $env.config = {
         let cmdline = (commandline)
         if ($cmdline | is-empty) { return }
 
-        let cmd = ($cmdline | str trim | split words | first)
-        let program = ($ZELLIJ_CMD_MAP | get -o $cmd)
+        let words = ($cmdline | str trim | split words)
+        let first = $words.0?
+        let program = ($ZELLIJ_CMD_MAP | get -o $first)
+          | default ($words | skip 1 | each {|w| $ZELLIJ_CMD_MAP | get -o $w } | where {|v| $v != null } | first)
 
-        if $program != null {
-          let base = ($env._ZELLIJ_TAB_BASE_NAME? | default ($env.PWD | path basename))
+        if ($program | is-not-empty) {
+          let base = $env._ZELLIJ_TAB_BASE_NAME? | default ($env.PWD | path basename)
           zellij action rename-tab $"($base) \(($program)\)"
           $env._ZELLIJ_TAB_RENAMED = true
         }
