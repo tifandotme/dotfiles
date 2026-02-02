@@ -117,20 +117,6 @@ $env.config = {
       mode: [emacs vi_normal vi_insert]
       event: {send: historyhintcomplete}
     }
-    {
-      name: move_history_up
-      modifier: control
-      keycode: char_k
-      mode: [emacs vi_normal vi_insert]
-      event: {send: up}
-    }
-    {
-      name: move_history_down
-      modifier: control
-      keycode: char_j
-      mode: [emacs vi_normal vi_insert]
-      event: {send: down}
-    }
     # { # unsed in go to bottom in list
     #   name: clear_scroll_back
     #   modifier: control
