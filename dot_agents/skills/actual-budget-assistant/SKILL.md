@@ -23,18 +23,28 @@ export ACTUAL_PASSWORD=yourpassword
 export ACTUAL_SYNC_ID=your-sync-id
 ```
 
+## Self-Signed Certificates
+
+If your Actual server uses a self-signed or custom CA certificate, set this environment variable:
+
+```bash
+export ACTUAL_ALLOW_SELF_SIGNED_CERTS=true
+```
+
+This disables TLS certificate verification for the API connection.
+
 ## How to Use
 
 When the user asks budget-related questions, use the scripts in `scripts/` directory to fetch data.
 
 ### Available Scripts
 
-| Script | Purpose |
-|--------|---------|
-| `list-accounts.js` | List all accounts with balances |
+| Script                 | Purpose                         |
+| ---------------------- | ------------------------------- |
+| `list-accounts.js`     | List all accounts with balances |
 | `list-transactions.js` | Query transactions with filters |
-| `get-balance.js` | Get account balance(s) |
-| `list-categories.js` | List budget categories |
+| `get-balance.js`       | Get account balance(s)          |
+| `list-categories.js`   | List budget categories          |
 
 ### Handling User Queries
 
@@ -69,7 +79,7 @@ If the user doesn't specify which account, run `list-accounts.js` first, then as
 The scripts accept flexible date formats:
 
 - `last january 2026` → January 2026
-- `january 2026` → January 2026  
+- `january 2026` → January 2026
 - `last month` → Previous full month
 - `this month` → Current month
 - `2026-01` → January 2026
@@ -78,6 +88,7 @@ The scripts accept flexible date formats:
 ### Fuzzy Account Matching
 
 Account names are matched case-insensitively:
+
 - `BCA` matches "BCA", "Rekening BCA", "My BCA Account"
 - If no match found, script lists all available accounts
 

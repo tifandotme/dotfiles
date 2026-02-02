@@ -29,34 +29,36 @@ export function checkEnv() {
   }
 }
 
-export async function loadActual() {
-  let apiModule;
+function getApiPath() {
   try {
-    apiModule = await import("@actual-app/api");
-  } catch (e) {
-    if (e.code === "ERR_MODULE_NOT_FOUND") {
-      // Try global npm install
-      const globalPath = getGlobalNpmPath();
-      if (globalPath) {
-        try {
-          const globalModulePath = `${globalPath}/@actual-app/api/dist/app/bundle.api.js`;
-          apiModule = await import(pathToFileURL(globalModulePath).href);
-        } catch {
-          console.error("Error: @actual-app/api not found.");
-          console.error("Install it: npm install -g @actual-app/api");
-          process.exit(1);
-        }
-      } else {
-        console.error("Error: @actual-app/api not found.");
-        console.error("Install it: npm install -g @actual-app/api");
-        process.exit(1);
-      }
-    } else {
-      throw e;
+    // Try local install first
+    const require = createRequire(import.meta.url);
+    const localPath = require.resolve("@actual-app/api/package.json");
+    return localPath.replace("/package.json", "/dist/index.js");
+  } catch {
+    // Try global npm install
+    const globalPath = getGlobalNpmPath();
+    if (globalPath) {
+      return `${globalPath}/@actual-app/api/dist/index.js`;
     }
+    return null;
+  }
+}
+
+export async function loadActual() {
+  const apiPath = getApiPath();
+  if (!apiPath) {
+    console.error("Error: @actual-app/api not found.");
+    console.error("Install it: npm install -g @actual-app/api");
+    process.exit(1);
   }
 
-  const api = apiModule.default || apiModule;
+  const api = await import(apiPath);
+
+  // For self-signed certificates
+  if (process.env.ACTUAL_ALLOW_SELF_SIGNED_CERTS === "true") {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+  }
 
   await api.init({
     serverURL: process.env.ACTUAL_SERVER_URL,
