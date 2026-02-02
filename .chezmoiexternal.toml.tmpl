@@ -19,10 +19,16 @@ refreshPeriod = "168h"
 [".config/nushell/scripts/external/bash-env-nushell"."pull"]
 args = ["--rebase", "--autostash"]
 
-# if there is a new release, run `chezmoi apply -R` to force re-download
 [".local/bin/copilot-usage"]
 type = "file"
-url = "https://github.com/tifandotme/copilot-usage/releases/latest/download/copilot-usage"
+url = "https://github.com/tifandotme/copilot-usage/releases/download/v0.2.0/copilot-usage"
 executable = true
 
+[".config/zellij/zjstatus.wasm"]
+type = "file"
+url = "https://github.com/dj95/zjstatus/releases/download/v0.22.0/zjstatus.wasm"
+
+[".config/zellij/zellij-forgot.wasm"]
+type = "file"
+url = "https://github.com/karimould/zellij-forgot/releases/download/0.4.2/zellij_forgot.wasm"
 {{ end -}}
