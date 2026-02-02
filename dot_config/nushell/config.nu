@@ -35,6 +35,7 @@ $env.config = {
 
         let words = ($cmdline | str trim | split words)
         let first = $words.0?
+        if ($first | is-empty) { return }
         let program = ($ZELLIJ_CMD_MAP | get -o $first)
           | default ($words | skip 1 | each {|w| $ZELLIJ_CMD_MAP | get -o $w } | where {|v| $v != null } | first)
 
