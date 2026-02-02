@@ -15,7 +15,7 @@ Extended examples for common integration patterns.
 Full example showing how to migrate all data from YNAB to Actual.
 
 ```javascript
-const api = require("@actual-app/api");
+const actual = require("@actual-app/api");
 const fs = require("fs");
 
 const CONFIG = {
@@ -27,9 +27,9 @@ const CONFIG = {
 async function migrateFromYNAB(ynabExportPath) {
   const ynabData = JSON.parse(fs.readFileSync(ynabExportPath, "utf8"));
 
-  await api.init(CONFIG);
+  await actual.init(CONFIG);
 
-  await api.runImport("YNAB-Import", async () => {
+  await actual.runImport("YNAB-Import", async () => {
     // Map YNAB IDs to Actual IDs
     const accountMap = new Map();
     const categoryMap = new Map();
@@ -37,7 +37,7 @@ async function migrateFromYNAB(ynabExportPath) {
 
     // Create accounts
     for (const ynabAcct of ynabData.accounts) {
-      const actualId = await api.createAccount(
+      const actualId = await actual.createAccount(
         {
           name: ynabAcct.name,
           type: mapAccountType(ynabAcct.type),
@@ -50,19 +50,19 @@ async function migrateFromYNAB(ynabExportPath) {
 
     // Create payees (optional - can rely on auto-creation)
     for (const ynabPayee of ynabData.payees) {
-      const actualId = await api.createPayee({ name: ynabPayee.name });
+      const actualId = await actual.createPayee({ name: ynabPayee.name });
       payeeMap.set(ynabPayee.id, actualId);
     }
 
     // Create categories and groups
     for (const ynabGroup of ynabData.category_groups) {
-      const groupId = await api.createCategoryGroup({
+      const groupId = await actual.createCategoryGroup({
         name: ynabGroup.name,
         is_income: ynabGroup.is_income,
       });
 
       for (const ynabCat of ynabGroup.categories) {
-        const catId = await api.createCategory({
+        const catId = await actual.createCategory({
           name: ynabCat.name,
           group_id: groupId,
           is_income: ynabCat.is_income,
@@ -76,35 +76,35 @@ async function migrateFromYNAB(ynabExportPath) {
       const actualAcctId = accountMap.get(ynabAcct.id);
       const transactions = ynabAcct.transactions.map((t) => ({
         date: t.date,
-        amount: api.utils.amountToInteger(t.amount / 1000), // YNAB uses milliunits
+        amount: actual.utils.amountToInteger(t.amount / 1000), // YNAB uses milliunits
         payee_name: t.payee_name || t.memo?.split(" ")[0] || "Unknown",
         category: categoryMap.get(t.category_id),
         notes: t.memo,
         cleared: t.cleared === "cleared",
       }));
 
-      await api.addTransactions(actualAcctId, transactions);
+      await actual.addTransactions(actualAcctId, transactions);
     }
 
     // Import budget amounts for current month
     const now = new Date();
     const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 
-    await api.batchBudgetUpdates(async () => {
+    await actual.batchBudgetUpdates(async () => {
       for (const ynabCat of ynabData.categories) {
         const actualCatId = categoryMap.get(ynabCat.id);
         if (actualCatId && ynabCat.budgeted) {
-          await api.setBudgetAmount(
+          await actual.setBudgetAmount(
             monthStr,
             actualCatId,
-            api.utils.amountToInteger(ynabCat.budgeted / 1000),
+            actual.utils.amountToInteger(ynabCat.budgeted / 1000),
           );
         }
       }
     });
   });
 
-  await api.shutdown();
+  await actual.shutdown();
 }
 
 function mapAccountType(ynabType) {
@@ -130,7 +130,7 @@ function mapAccountType(ynabType) {
 Import transactions from a bank CSV export with proper deduplication.
 
 ```javascript
-const api = require("@actual-app/api");
+const actual = require("@actual-app/api");
 const fs = require("fs");
 const { parse } = require("csv-parse/sync");
 
@@ -145,8 +145,8 @@ async function importBankCSV(accountId, csvPath, options = {}) {
   const csvData = fs.readFileSync(csvPath, "utf8");
   const records = parse(csvData, { columns: true, skip_empty_lines: true });
 
-  await api.init({ dataDir: "./actual-data" });
-  await api.loadBudget("my-budget");
+  await actual.init({ dataDir: "./actual-data" });
+  await actual.loadBudget("my-budget");
 
   const transactions = records.map((row, index) => {
     const amount = parseFloat(row[amountColumn]);
@@ -154,14 +154,14 @@ async function importBankCSV(accountId, csvPath, options = {}) {
 
     return {
       date,
-      amount: api.utils.amountToInteger(amount),
+      amount: actual.utils.amountToInteger(amount),
       payee_name: row[payeeColumn]?.trim() || "Unknown",
       imported_id: generateImportId(row, index),
       cleared: true,
     };
   });
 
-  const result = await api.importTransactions(accountId, transactions);
+  const result = await actual.importTransactions(accountId, transactions);
   console.log(
     `Imported: ${result.added.length} added, ${result.updated.length} updated`,
   );
@@ -170,7 +170,7 @@ async function importBankCSV(accountId, csvPath, options = {}) {
     console.error("Errors:", result.errors);
   }
 
-  await api.shutdown();
+  await actual.shutdown();
   return result;
 }
 
@@ -200,16 +200,16 @@ function generateImportId(row, index) {
 Find and report on scheduled/recurring transactions.
 
 ```javascript
-const api = require("@actual-app/api");
+const actual = require("@actual-app/api");
 
 async function generateRecurringReport() {
-  await api.init({ dataDir: "./actual-data" });
-  await api.loadBudget("my-budget");
+  await actual.init({ dataDir: "./actual-data" });
+  await actual.loadBudget("my-budget");
 
-  const schedules = await api.getSchedules();
-  const accounts = await api.getAccounts();
-  const payees = await api.getPayees();
-  const categories = await api.getCategories();
+  const schedules = await actual.getSchedules();
+  const accounts = await actual.getAccounts();
+  const payees = await actual.getPayees();
+  const categories = await actual.getCategories();
 
   const accountMap = Object.fromEntries(accounts.map((a) => [a.id, a]));
   const payeeMap = Object.fromEntries(payees.map((p) => [p.id, p]));
@@ -220,7 +220,7 @@ async function generateRecurringReport() {
     payee: payeeMap[s.payee]?.name || "Unknown",
     account: accountMap[s.account]?.name || "Unknown",
     category: categoryMap[s.category]?.name || "Uncategorized",
-    amount: api.utils.integerToAmount(s.amount),
+    amount: actual.utils.integerToAmount(s.amount),
     nextDue: s.date,
     repeats: formatRepetition(s.repeats),
     autoPosts: s.posts_transaction,
@@ -228,7 +228,7 @@ async function generateRecurringReport() {
   }));
 
   console.table(report);
-  await api.shutdown();
+  await actual.shutdown();
   return report;
 }
 
@@ -245,14 +245,14 @@ function formatRepetition(repeats) {
 Analyze spending by category for a date range.
 
 ```javascript
-const api = require("@actual-app/api");
+const actual = require("@actual-app/api");
 
 async function analyzeCategorySpending(startDate, endDate) {
-  await api.init({ dataDir: "./actual-data" });
-  await api.loadBudget("my-budget");
+  await actual.init({ dataDir: "./actual-data" });
+  await actual.loadBudget("my-budget");
 
-  const accounts = await api.getAccounts();
-  const categories = await api.getCategories();
+  const accounts = await actual.getAccounts();
+  const categories = await actual.getCategories();
   const categoryMap = Object.fromEntries(categories.map((c) => [c.id, c.name]));
 
   const spending = {};
@@ -260,7 +260,7 @@ async function analyzeCategorySpending(startDate, endDate) {
   for (const account of accounts) {
     if (account.closed || account.offbudget) continue;
 
-    const transactions = await api.getTransactions(
+    const transactions = await actual.getTransactions(
       account.id,
       startDate,
       endDate,
@@ -278,7 +278,7 @@ async function analyzeCategorySpending(startDate, endDate) {
   const sorted = Object.entries(spending)
     .map(([category, amount]) => ({
       category,
-      amount: api.utils.integerToAmount(amount),
+      amount: actual.utils.integerToAmount(amount),
       percentage: 0, // Calculated below
     }))
     .sort((a, b) => a.amount - b.amount);
@@ -289,7 +289,7 @@ async function analyzeCategorySpending(startDate, endDate) {
   console.log(`\nSpending Analysis: ${startDate} to ${endDate}`);
   console.table(sorted);
 
-  await api.shutdown();
+  await actual.shutdown();
   return sorted;
 }
 ```
@@ -299,17 +299,17 @@ async function analyzeCategorySpending(startDate, endDate) {
 Find uncleared transactions and calculate expected balances.
 
 ```javascript
-const api = require("@actual-app/api");
+const actual = require("@actual-app/api");
 
 async function reconciliationHelper(
   accountId,
   statementBalance,
   statementDate,
 ) {
-  await api.init({ dataDir: "./actual-data" });
-  await api.loadBudget("my-budget");
+  await actual.init({ dataDir: "./actual-data" });
+  await actual.loadBudget("my-budget");
 
-  const transactions = await api.getTransactions(
+  const transactions = await actual.getTransactions(
     accountId,
     "2020-01-01",
     statementDate,
@@ -321,18 +321,18 @@ async function reconciliationHelper(
   const unclearedTotal = uncleared.reduce((sum, t) => sum + t.amount, 0);
   const clearedBalance = cleared.reduce((sum, t) => sum + t.amount, 0);
 
-  const actualBalance = await api.getAccountBalance(
+  const actualBalance = await actual.getAccountBalance(
     accountId,
     new Date(statementDate),
   );
   const expectedBalance = clearedBalance;
   const difference =
-    statementBalance - api.utils.integerToAmount(expectedBalance);
+    statementBalance - actual.utils.integerToAmount(expectedBalance);
 
   console.log(`\nAccount Reconciliation Report`);
   console.log(`Statement Balance: $${statementBalance.toFixed(2)}`);
   console.log(
-    `Actual Balance: $${api.utils.integerToAmount(actualBalance).toFixed(2)}`,
+    `Actual Balance: $${actual.utils.integerToAmount(actualBalance).toFixed(2)}`,
   );
   console.log(`Difference: $${difference.toFixed(2)}`);
   console.log(`\nUncleared Transactions (${uncleared.length}):`);
@@ -340,12 +340,12 @@ async function reconciliationHelper(
     uncleared.map((t) => ({
       date: t.date,
       payee: t.payee_name || "Unknown",
-      amount: api.utils.integerToAmount(t.amount),
+      amount: actual.utils.integerToAmount(t.amount),
       notes: t.notes || "",
     })),
   );
 
-  await api.shutdown();
+  await actual.shutdown();
   return { difference, uncleared, expectedBalance };
 }
 ```
@@ -355,7 +355,7 @@ async function reconciliationHelper(
 Robust error handling with cleanup:
 
 ```javascript
-const api = require("@actual-app/api");
+const actual = require("@actual-app/api");
 
 class ActualClient {
   constructor(config) {
@@ -364,13 +364,13 @@ class ActualClient {
   }
 
   async connect() {
-    await api.init(this.config);
+    await actual.init(this.config);
     this.connected = true;
   }
 
   async disconnect() {
     if (this.connected) {
-      await api.shutdown();
+      await actual.shutdown();
       this.connected = false;
     }
   }
@@ -378,7 +378,7 @@ class ActualClient {
   async withConnection(callback) {
     try {
       await this.connect();
-      return await callback(api);
+      return await callback(actual);
     } catch (error) {
       console.error("Actual API Error:", error.message);
       throw error;
@@ -396,9 +396,9 @@ const client = new ActualClient({
 });
 
 async function safeOperation() {
-  return client.withConnection(async (api) => {
-    await api.downloadBudget("my-sync-id");
-    const accounts = await api.getAccounts();
+  return client.withConnection(async (actual) => {
+    await actual.downloadBudget("my-sync-id");
+    const accounts = await actual.getAccounts();
     // ... operations
     return accounts;
   });

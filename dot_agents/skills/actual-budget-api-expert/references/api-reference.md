@@ -2,23 +2,6 @@
 
 Complete reference for @actual-app/api methods and types.
 
-**Table of Contents**
-
-- [Types of Methods](#types-of-methods)
-- [Primitives](#primitives)
-- [Utility Functions](#utility-functions)
-- [Connection Methods](#connection-methods)
-- [Budget Methods](#budget-methods)
-- [Transaction Methods](#transaction-methods)
-- [Account Methods](#account-methods)
-- [Category Methods](#category-methods)
-- [Category Group Methods](#category-group-methods)
-- [Payee Methods](#payee-methods)
-- [Rule Methods](#rule-methods)
-- [Schedule Methods](#schedule-methods)
-- [Misc Methods](#misc-methods)
-- [HTTPS Configuration](#https-configuration)
-
 ## Types of Methods
 
 API methods are categorized into one of four types:
@@ -43,33 +26,7 @@ All `update` and `delete` methods take an `id` to specify the desired object. `u
 | `date`   | `string`  | `YYYY-MM-DD`                                                                                                                                                                                             |
 | `amount` | `integer` | A currency amount is an integer representing the value without any decimal places. Usually it's `value * 100`, but it depends on your currency. For example, a USD amount of `$120.30` would be `12030`. |
 
-## Utility Functions
-
-### utils.amountToInteger
-
-```javascript
-utils.amountToInteger(amount: number) → number
-```
-
-Convert a currency amount (e.g., `123.45`) to the integer format Actual uses internally (`12345`).
-
-```javascript
-const amountInt = api.utils.amountToInteger(120.3); // 12030
-```
-
-### utils.integerToAmount
-
-```javascript
-utils.integerToAmount(amount: number) → number
-```
-
-Convert an integer amount from Actual (e.g., `12345`) to a floating point number (`123.45`).
-
-```javascript
-const amountFloat = api.utils.integerToAmount(12030); // 120.30
-```
-
-## Connection Methods
+## Budget Methods
 
 ### getBudgetMonths
 
@@ -387,14 +344,24 @@ Merge source payees into target payee.
 
 Rules have conditions and actions that determine how transactions are processed.
 
-### Rule Type
+```javascript
+type ConditionOrAction = {
+  field: string;
+  op: string;
+  value: any;
+};
+```
 
-| Field        | Type                  | Notes             |
-| ------------ | --------------------- | ----------------- |
-| `id`         | `id`                  | Auto-generated    |
-| `conditions` | `ConditionOrAction[]` | Match conditions  |
-| `actions`    | `ConditionOrAction[]` | Actions to apply  |
-| `payee`      | `id`                  | Optional payee ID |
+### Rule Type (RuleEntity)
+
+| Field          | Type                  | Notes                     |
+| -------------- | --------------------- | ------------------------- |
+| `id`           | `id`                  | Auto-generated            |
+| `stage`        | `'pre' \| 'post'`     | When rule applies         |
+| `conditionsOp` | `'and' \| 'or'`       | How to combine conditions |
+| `conditions`   | `ConditionOrAction[]` | Match conditions          |
+| `actions`      | `ConditionOrAction[]` | Actions to apply          |
+| `payee`        | `id`                  | Optional payee ID         |
 
 ### getRules
 
@@ -411,14 +378,18 @@ getPayeeRules(payeeId: string) → Promise<Rule[]>
 ### createRule
 
 ```javascript
-createRule(rule: Rule) → Promise<string>
+createRule(rule: NewRuleEntity) → Promise<RuleEntity>
 ```
+
+Returns created rule with generated `id`.
 
 ### updateRule
 
 ```javascript
-updateRule(id: string, fields: object) → Promise<null>
+updateRule(rule: RuleEntity) → Promise<RuleEntity>
 ```
+
+Pass full rule object with `id` included. Returns updated rule.
 
 ### deleteRule
 
@@ -432,20 +403,42 @@ deleteRule(id: string) → Promise<null>
 
 Configuration for recurring schedules.
 
-### Schedule Type
+```javascript
+type RecurConfig = {
+  frequency: 'daily' | 'weekly' | 'monthly' | 'yearly';
+  interval?: number;                // Repeat every N frequency units
+  patterns?: RecurPattern[];        // Specific day patterns
+  skipWeekend?: boolean;            // Skip weekends
+  start: string;                    // Start date (YYYY-MM-DD)
+  endMode?: 'never' | 'after_n_occurrences' | 'on_date';
+  endOccurrences?: number;          // Number of occurrences (if endMode: 'after_n_occurrences')
+  endDate?: string;                 // End date (if endMode: 'on_date')
+  weekendSolveMode?: 'before' | 'after';  // Move to before/after weekend
+};
 
-| Field               | Type          | Notes             |
-| ------------------- | ------------- | ----------------- |
-| `id`                | `id`          | Auto-generated    |
-| `name`              | `string`      | Schedule name     |
-| `payee`             | `id`          | Payee ID          |
-| `account`           | `id`          | Account ID        |
-| `amount`            | `amount`      | Amount            |
-| `category`          | `id`          | Category ID       |
-| `date`              | `date`        | Next due date     |
-| `repeats`           | `RecurConfig` | Recurrence config |
-| `completed`         | `boolean`     | Completion flag   |
-| `posts_transaction` | `boolean`     | Auto-post flag    |
+type RecurPattern = {
+  value: number;
+  type: 'SU' | 'MO' | 'TU' | 'WE' | 'TH' | 'FR' | 'SA' | 'day';
+};
+```
+
+### Schedule Type (APIScheduleEntity)
+
+| Field               | Type                                       | Notes                                    |
+| ------------------- | ------------------------------------------ | ---------------------------------------- |
+| `id`                | `id`                                       | Auto-generated (read-only)               |
+| `name`              | `string`                                   | Schedule name                            |
+| `payee`             | `id`                                       | Payee ID (optional, defaults null)       |
+| `account`           | `id`                                       | Account ID (optional, defaults null)     |
+| `amount`            | `amount \| { num1: number; num2: number }` | Amount or range                          |
+| `amountOp`          | `'is' \| 'isapprox' \| 'isbetween'`        | Amount matching operator (required)      |
+| `category`          | `id`                                       | Category ID                              |
+| `date`              | `RecurConfig \| string`                    | Recurrence configuration                 |
+| `posts_transaction` | `boolean`                                  | Auto-post flag                           |
+| **Read-only:**      |                                            |                                          |
+| `rule`              | `id`                                       | Underlying rule ID (system-populated)    |
+| `next_date`         | `string`                                   | Next occurrence date (system-calculated) |
+| `completed`         | `boolean`                                  | Completion status (system-managed)       |
 
 ### getSchedules
 
@@ -456,14 +449,18 @@ getSchedules() → Promise<Schedule[]>
 ### createSchedule
 
 ```javascript
-createSchedule(schedule: Schedule) → Promise<string>
+createSchedule(schedule: Omit<APIScheduleEntity, 'id' | 'rule' | 'next_date' | 'completed'>) → Promise<string>
 ```
+
+Returns new schedule ID. Excludes read-only system fields (`rule`, `next_date`, `completed`).
 
 ### updateSchedule
 
 ```javascript
-updateSchedule(id: string, fields: object) → Promise<null>
+updateSchedule(id: string, fields: object, resetNextDate?: boolean) → Promise<string>
 ```
+
+Returns schedule ID. Set `resetNextDate` to recalculate next occurrence date.
 
 ### deleteSchedule
 
@@ -473,15 +470,113 @@ deleteSchedule(id: string) → Promise<null>
 
 ## Misc Methods
 
+### getBudgets
+
+```javascript
+getBudgets() → Promise<APIFileEntity[]>
+```
+
+Returns list of all budget files (locally cached or on remote server).
+
+```javascript
+type APIFileEntity = {
+  cloudFileId: string;
+  id?: string;
+  state?: 'remote';
+  groupId?: string;
+  name: string;
+  encryptKeyId?: string;
+  hasKey?: boolean;
+  owner?: string;
+  usersWithAccess?: string[];
+};
+```
+
+### sync
+
+```javascript
+sync() → Promise<null>
+```
+
+Synchronizes locally cached budget files with server's copy.
+
+### aqlQuery
+
+```javascript
+aqlQuery(query: Query) → Promise<any>
+```
+
+Runs an ActualQL query on the open budget. Replaces deprecated `runQuery`.
+
+### q
+
+```javascript
+q(table: string) → Query
+```
+
+Creates a new query builder for ActualQL.
+
+**Query Builder Methods:**
+
+| Method             | Description                |
+| ------------------ | -------------------------- |
+| `filter(expr)`     | Add filter condition       |
+| `unfilter(exprs?)` | Remove filter conditions   |
+| `select(exprs)`    | Select fields to return    |
+| `calculate(expr)`  | Calculate aggregate values |
+| `groupBy(exprs)`   | Group results              |
+| `orderBy(exprs)`   | Sort results               |
+| `limit(num)`       | Limit number of results    |
+| `offset(num)`      | Skip N results             |
+
 ### initConfig Type
 
 Configuration object for `init()`:
 
-| Field       | Type     | Notes                          |
-| ----------- | -------- | ------------------------------ |
-| `dataDir`   | `string` | Path to data directory         |
-| `serverURL` | `string` | Optional: Sync server URL      |
-| `password`  | `string` | Optional: Sync server password |
+**Base Config:**
+
+```javascript
+type BaseInitConfig = {
+  dataDir?: string;      // Directory for local data storage
+  verbose?: boolean;     // Enable verbose logging
+};
+```
+
+**Password authentication:**
+
+```javascript
+type PasswordAuthConfig = BaseInitConfig & {
+  serverURL: string;
+  password: string;
+  sessionToken?: never;
+};
+```
+
+**Session token authentication:**
+
+```javascript
+type SessionTokenAuthConfig = BaseInitConfig & {
+  serverURL: string;
+  sessionToken: string;
+  password?: never;
+};
+```
+
+**Local-only mode (no server):**
+
+```javascript
+type NoServerConfig = BaseInitConfig & {
+  serverURL?: undefined;
+  password?: never;
+  sessionToken?: never;
+};
+```
+
+**Full type:**
+
+```javascript
+type InitConfig = PasswordAuthConfig | SessionTokenAuthConfig | NoServerConfig;
+```
 
 ### init
 
@@ -503,6 +598,14 @@ sync() → Promise<null>
 
 Sync with server.
 
+### runImport
+
+```javascript
+runImport(budgetName: string, func: () => Promise<void>) → Promise<void>
+```
+
+Creates a new budget file and runs a custom importer function to populate it.
+
 ### runBankSync
 
 ```javascript
@@ -511,18 +614,18 @@ runBankSync(accountId?: string) → Promise<null>
 
 Sync transactions from linked bank accounts.
 
-### runImport
+### runQuery
 
 ```javascript
-runImport(accountId: string, filePath: string) → Promise<null>
+runQuery(query: ActualQLQuery) → Promise<any>
 ```
 
-Import transactions from file (OFX, QFX, CSV, etc.).
+Execute ActualQL query. **Deprecated:** Use `aqlQuery` instead.
 
 ### getBudgets
 
 ```javascript
-getBudgets() → Promise<BudgetFile[]>
+getBudgets() → Promise<APIFileEntity[]>
 ```
 
 Get available budgets.
@@ -530,7 +633,7 @@ Get available budgets.
 ### loadBudget
 
 ```javascript
-loadBudget(budgetId: string) → Promise<null>
+loadBudget(syncId: string) → Promise<null>
 ```
 
 Load budget file.
@@ -538,20 +641,10 @@ Load budget file.
 ### downloadBudget
 
 ```javascript
-downloadBudget(syncId: string, password?: { password: string }) → Promise<null>
+downloadBudget(syncId: string, options?: { password?: string }) → Promise<null>
 ```
 
-Download budget from sync server.
-
-For end-to-end encrypted budgets, pass the encryption password as an object:
-
-```javascript
-// Standard download
-await api.downloadBudget("sync-id");
-
-// With end-to-end encryption
-await api.downloadBudget("sync-id", { password: "encryption-password" });
-```
+Download budget from sync server. `options.password` is required for encrypted budgets.
 
 ### batchBudgetUpdates
 
@@ -560,29 +653,6 @@ batchBudgetUpdates(callback: () => Promise<void>) → Promise<null>
 ```
 
 Batch multiple budget operations for performance.
-
-### runImport
-
-```javascript
-runImport(name: string, callback: () => Promise<void>) → Promise<null>
-```
-
-**Bulk import mode for data migrations.** Creates a new budget file and runs the callback with optimized performance.
-
-Use this when migrating from other apps (YNAB, Mint, etc.). In this mode:
-
-- A new budget file is always created
-- Operations run faster than normal mode
-- Use `addTransactions` (not `importTransactions`) to avoid deduplication/rules
-
-```javascript
-await api.runImport("My-YNAB-Import", async () => {
-  for (const acct of ynabData.accounts) {
-    const id = await api.createAccount(convertAccount(acct));
-    await api.addTransactions(id, convertTransactions(acct.transactions));
-  }
-});
-```
 
 ### runQuery
 
@@ -600,28 +670,10 @@ getIDByName(type: string, name: string) → Promise<string | null>
 
 Look up ID by name for accounts, categories, payees, etc.
 
-## HTTPS Configuration
+### getAccountBalance
 
-When connecting to an Actual server using self-signed or custom CA certificates, additional Node.js configuration is required.
-
-### Option 1: Trust Specific Certificate (Recommended)
-
-Set the `NODE_EXTRA_CA_CERTS` environment variable to the path of your certificate file:
-
-```bash
-export NODE_EXTRA_CA_CERTS=/path/to/cert.pem
-node your-script.js
+```javascript
+getAccountBalance(id: string, cutoff?: Date) → Promise<number>
 ```
 
-### Option 2: Disable TLS Verification (Development Only)
-
-**Warning:** Not recommended for production or when connecting to other endpoints.
-
-```bash
-export NODE_TLS_REJECT_UNAUTHORIZED=0
-node your-script.js
-```
-
-### Option 3: OpenSSL Configuration
-
-Add your certificate to the OpenSSL CA directory. This depends on your Node.js build configuration. See [Node.js OpenSSL Strategy](https://github.com/nodejs/TSC/blob/main/OpenSSL-Strategy.md) for details.
+Get account balance up to a cutoff date.
