@@ -25,8 +25,7 @@ layout {
                 mode_prompt       "#[fg=$bg,bg=$fg_muted,bold]  PROMPT  "
                 mode_tmux         "#[fg=$bg,bg=$fg_muted,bold]  TMUX  " // ctrl-e (in normal mode)
 
-                hide_frame_except_for_search true
-                hide_frame_except_for_scroll true
+                hide_frame_for_single_pane "true"
 
                 tab_normal               "#[fg=$fg_muted,bg=$bg,bold]  {name}  {fullscreen_indicator}{sync_indicator}{floating_indicator}"
                 tab_active               "#[fg=$bg,bg=$fg_muted,bold]  {name}  {fullscreen_indicator}{sync_indicator}{floating_indicator}"
