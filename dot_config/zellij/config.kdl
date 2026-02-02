@@ -60,6 +60,13 @@ keybinds clear-defaults=true {
                 hold_on_close false
             }
         }
+        bind "Ctrl Shift c" {
+            Run "nu" "-l" "-c" "zed (chezmoi data --format=json | jq -r '.chezmoi.sourceDir')" {
+                in_place true
+                close_on_exit true
+                hold_on_close false
+            }
+        }
     }
     shared_except "locked" {
         bind "Alt +" {
