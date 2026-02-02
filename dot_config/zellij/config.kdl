@@ -250,4 +250,34 @@ plugins {
 }
 pane_frames false
 show_startup_tips false
+theme "custom"
+
+themes {
+    custom {
+        frame_selected {
+            base 232 204 147
+            background 91 75 43
+            emphasis_0 228 193 116
+            emphasis_1 228 193 116
+            emphasis_2 228 193 116
+            emphasis_3 228 193 116
+        }
+        frame_unselected {
+            base 155 172 166
+            background 60 74 49
+            emphasis_0 155 172 166
+            emphasis_1 155 172 166
+            emphasis_2 155 172 166
+            emphasis_3 155 172 166
+        }
+        frame_highlight {
+            base 255 193 127
+            background 91 75 43
+            emphasis_0 255 193 127
+            emphasis_1 255 193 127
+            emphasis_2 255 193 127
+            emphasis_3 255 193 127
+        }
+    }
+}
 
