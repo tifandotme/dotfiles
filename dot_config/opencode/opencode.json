@@ -19,7 +19,32 @@
   },
 
   "keybinds": {
-    "editor_open": "ctrl+o"
+    // closely match ampcode
+    "editor_open": "ctrl+g",
+    "command_list": "ctrl+o",
+    "session_list": "ctrl+r",
+    "input_submit": "return",
+    "input_newline": "shift+return",
+    "input_clear": "escape",
+    "history_previous": "ctrl+p",
+    "history_next": "ctrl+n",
+    "input_line_home": "ctrl+a",
+    "input_line_end": "ctrl+e",
+    "input_word_backward": "alt+left",
+    "input_word_forward": "alt+right",
+    "input_delete_word_backward": "alt+backspace,ctrl+w",
+    "input_delete": "delete,ctrl+d",
+    "input_delete_to_line_start": "ctrl+u",
+    "input_delete_to_line_end": "ctrl+k",
+    "input_paste": "ctrl+v",
+    "messages_page_up": "pageup",
+    "messages_page_down": "pagedown",
+    "messages_half_page_up": "ctrl+alt+u",
+    "messages_half_page_down": "ctrl+alt+d",
+    "messages_first": "home",
+    "messages_last": "end",
+    "messages_previous": "tab",
+    "messages_next": "shift+tab"
   },
 
   "mcp": {
@@ -28,6 +53,7 @@
       "command": [
         "bunx",
         "chrome-devtools-mcp@latest",
+        "--no-usage-statistics",
         "--executablePath",
         "/Applications/Helium.app/Contents/MacOS/Helium"
       ],

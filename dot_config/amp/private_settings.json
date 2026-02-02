@@ -31,6 +31,7 @@
       "command": "bunx",
       "args": [
         "chrome-devtools-mcp@latest",
+        "--no-usage-statistics",
         "--executablePath",
         "/Applications/Helium.app/Contents/MacOS/Helium"
       ]

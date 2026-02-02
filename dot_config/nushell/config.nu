@@ -187,12 +187,16 @@ $env.config = {
       }
       source: {|buffer position|
         history | get command | uniq | reverse | str join (char nl)
-        | fzf -f $buffer | lines
+        | fzf -f $buffer --tiebreak=index | lines
         | each {|v| {value: ($v | str trim)} }
       }
     }
   ]
 }
+
+# Guarded package managers (must be before aliases.nu)
+use chezmoi.nu [bun brew]
+use chezmoi.nu
 
 # Source scripts/*
 source aliases.nu
@@ -200,7 +204,6 @@ source utils.nu
 
 use updater.nu
 use cert.nu
-use chezmoi.nu
 
 # use mise.gen.nu
 source ~/.cache/mise/init.nu

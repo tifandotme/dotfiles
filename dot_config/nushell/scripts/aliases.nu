@@ -120,6 +120,15 @@ def sshs [] {
   TERM=xterm-256color _sshs
 }
 
+# zed
+
+alias _amp = amp
+def --wrapped amp [
+  ...args: string
+] {
+  do { EDITOR=zed _amp ...$args }
+}
+
 # ------- spotify_player -------
 
 def spo [...args] {
