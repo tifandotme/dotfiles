@@ -58,3 +58,8 @@ export def --wrapped brew [...args: string] {
 
   ^brew ...$args
 }
+
+# Open lazygit in chezmoi source directory
+export def "lzg" [] {
+  lazygit -p (chezmoi source-path)
+}
