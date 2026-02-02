@@ -53,12 +53,12 @@ export async function loadActual() {
     process.exit(1);
   }
 
-  const api = await import(apiPath);
-
-  // For self-signed certificates
+  // For self-signed certificates - must be set BEFORE importing the API
   if (process.env.ACTUAL_ALLOW_SELF_SIGNED_CERTS === "true") {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }
+
+  const api = await import(apiPath);
 
   await api.init({
     serverURL: process.env.ACTUAL_SERVER_URL,
