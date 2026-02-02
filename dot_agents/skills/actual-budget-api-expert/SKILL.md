@@ -1,6 +1,6 @@
 ---
 name: actual-budget-api-expert
-description: Integrate with Actual Budget via its JavaScript/Node.js API for personal finance automation. Use for managing budgets, transactions, accounts, categories, payees, rules, and schedules programmatically.
+description: Integrate with Actual Budget via its JavaScript/Node.js API for personal finance automation. Use when working with @actual-app/api for managing budgets, transactions, accounts, categories, payees, rules, and schedules programmatically. Triggers on import/export, bank sync automation, budget analysis, transaction processing, YNAB migration, or any Actual Budget API operations.
 ---
 
 # Actual Budget API
