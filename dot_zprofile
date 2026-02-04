@@ -3,7 +3,7 @@ export HOMEBREW_NO_ENV_HINTS=true
 export HOMEBREW_NO_ANALYTICS=true
 
 # https://skills.sh/docs/cli
-# export DISABLE_TELEMETRY=1
+export DISABLE_TELEMETRY=1
 
 # Fix `yadm encrypt` error in MacOS
 # https://yadm.io/docs/faq#encryption
