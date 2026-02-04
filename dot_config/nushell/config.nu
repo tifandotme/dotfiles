@@ -12,6 +12,7 @@ const ZELLIJ_CMD_MAP = {
   lzg: lazygit
   lazygit: lazygit
   spotify_player: spotify
+  amp: amp
   bandwhich: bandwhich
 }
 
