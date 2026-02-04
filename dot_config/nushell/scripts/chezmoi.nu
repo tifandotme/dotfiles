@@ -68,16 +68,6 @@ export def "lzg" [] {
   lazygit -p (chezmoi source-path)
 }
 
-# Open amp in chezmoi source directory
-export def "amp" [] {
-  if "ZELLIJ" in ($env | columns) {
-    zellij action rename-tab "chezmoi (amp)"
-  }
-
-  cd (chezmoi source-path)
-  EDITOR=zed ^amp
-}
-
 # Open zed in chezmoi source directory
 export def "zed" [] {
   ^zed (chezmoi source-path)
