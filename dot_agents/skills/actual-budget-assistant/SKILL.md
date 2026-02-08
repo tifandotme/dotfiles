@@ -56,7 +56,7 @@ This handles Cloud Run cold starts gracefully while ensuring fresh data.
 
 When the user asks budget-related questions:
 
-1. **Claude resolves natural language to structured values:**
+1. **This skill resolves natural language to structured values:**
    - Account names ("BCA") → account IDs using `utils.js` helpers
    - Date ranges ("last month") → ISO 8601 dates using `utils.js` helpers
 
@@ -75,7 +75,7 @@ When the user asks budget-related questions:
 
 **User asks: "List my transactions in account BCA in last january 2026"**
 
-Claude resolves:
+The skill resolves:
 - "BCA" → account ID via `findAccountByName(api, "BCA")`
 - "last january 2026" → dates via `parseDateRange("last january 2026")`
 
@@ -86,7 +86,7 @@ node scripts/actual-cli.js transactions --account-id="abc-123" --start="2026-01-
 
 **User asks: "What's my BCA balance?"**
 
-Claude resolves account name, then:
+The skill resolves account name, then:
 ```bash
 node scripts/actual-cli.js balance --account-id="abc-123"
 ```
@@ -107,7 +107,7 @@ If the user doesn't specify which account, run `accounts` command first, then as
 
 ### Helper Functions (in utils.js)
 
-Claude uses these to resolve natural language before calling the CLI:
+These functions resolve natural language before calling the CLI:
 
 ```javascript
 // Parse date ranges to ISO 8601 format
