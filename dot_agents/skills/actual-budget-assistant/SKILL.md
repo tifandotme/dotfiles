@@ -10,11 +10,13 @@ Query your Actual Budget data using natural language. Fast, offline-capable, and
 ## Prerequisites
 
 1. **Install the Actual Budget API package:**
+
    ```bash
    npm install -g @actual-app/api
    ```
 
 2. **Set your server credentials:**
+
    ```bash
    export ACTUAL_SERVER_URL=https://actual.example.com
    export ACTUAL_PASSWORD=yourpassword
@@ -22,6 +24,7 @@ Query your Actual Budget data using natural language. Fast, offline-capable, and
    ```
 
 3. **Self-signed certificates (if needed):**
+
    ```bash
    export ACTUAL_ALLOW_SELF_SIGNED_CERTS=true
    ```
@@ -50,17 +53,22 @@ node scripts/actual-cli.js balance
 ## Features
 
 ### 1. Offline Mode (`--offline`)
+
 Works entirely from local cache. No server connection needed. Fast and reliable.
 
 ### 2. Account Name Resolution
+
 Use partial names instead of UUIDs:
+
 - `--account=jago` matches "Jago (Utama+GoPay)"
 - `--account=bca` matches "BCA"
 
 ### 3. Clean Output
+
 Filters API noise (TLS warnings, breadcrumbs, sync logs) automatically. Only shows the data you want.
 
 ### 4. Graceful Sync Failures
+
 If server sync fails, automatically falls back to cached data.
 
 ## CLI Reference
@@ -84,14 +92,14 @@ Examples:
 
 ## Natural Language Queries
 
-| User asks | What happens |
-|-----------|--------------|
-| "What's my BCA balance?" | Resolves "BCA" → account ID → runs `balance` |
+| User asks                              | What happens                                   |
+| -------------------------------------- | ---------------------------------------------- |
+| "What's my BCA balance?"               | Resolves "BCA" → account ID → runs `balance`   |
 | "List transactions in Jago last month" | Resolves dates + account → runs `transactions` |
-| "Export my spending to CSV" | Runs `transactions` with CSV output |
+| "Export my spending to CSV"            | Runs `transactions` with CSV output            |
 
 ## Pro Tips
 
 - **Always use `--offline`** for instant reads (data is cached locally)
-- **Date formats**: `2026-01-01`, `2026-01` (full month), or natural language
+- **Date formats**: `2026-01-01`, `2026-01` (full month)
 - **First run** must download budget from server (or use `setup-budget.js`)

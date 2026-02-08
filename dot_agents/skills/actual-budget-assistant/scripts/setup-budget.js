@@ -1,34 +1,9 @@
 #!/usr/bin/env node
 
-import { createRequire } from "module";
-import { execSync } from "child_process";
+import { getApiPath } from './utils.js';
 import { existsSync, mkdirSync } from "fs";
 import { homedir } from "os";
 import path from "path";
-
-const require = createRequire(import.meta.url);
-
-function getGlobalNpmPath() {
-  try {
-    return execSync("npm root -g", { encoding: "utf8" }).trim();
-  } catch {
-    return null;
-  }
-}
-
-function getApiPath() {
-  try {
-    const require = createRequire(import.meta.url);
-    const localPath = require.resolve("@actual-app/api/package.json");
-    return localPath.replace("/package.json", "/dist/index.js");
-  } catch {
-    const globalPath = getGlobalNpmPath();
-    if (globalPath) {
-      return `${globalPath}/@actual-app/api/dist/index.js`;
-    }
-    return null;
-  }
-}
 
 async function main() {
   const apiPath = getApiPath();
