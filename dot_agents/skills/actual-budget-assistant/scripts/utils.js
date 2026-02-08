@@ -1,6 +1,6 @@
 import { createRequire } from "module";
 import { execSync } from "child_process";
-import { readdirSync, existsSync } from "fs";
+import { readdirSync, existsSync, statSync } from "fs";
 import { homedir } from "os";
 import path from "path";
 
@@ -29,21 +29,22 @@ function getApiPath() {
 }
 
 function findLocalBudget() {
-  const localShareDir = path.join(homedir(), ".local/share/actual");
+  // Use a hidden temp directory for local budget storage
+  const tempDir = path.join(homedir(), ".cache/actual-budget-assistant");
 
-  if (!existsSync(localShareDir)) {
+  if (!existsSync(tempDir)) {
     return null;
   }
 
   try {
-    const entries = readdirSync(localShareDir, { withFileTypes: true });
+    const entries = readdirSync(tempDir, { withFileTypes: true });
     const budgetDir = entries.find(
       (e) => e.isDirectory() && e.name.match(/^My-Finances-[a-f0-9]+/i),
     );
 
     if (budgetDir) {
       return {
-        dataDir: localShareDir,
+        dataDir: tempDir,
         budgetId: budgetDir.name,
       };
     }
@@ -56,6 +57,23 @@ function findLocalBudget() {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getCacheAgeMinutes(dataDir, budgetId) {
+  try {
+    const budgetPath = path.join(dataDir, budgetId);
+    const stats = statSync(budgetPath);
+    const ageMs = Date.now() - stats.mtimeMs;
+    return ageMs / (1000 * 60); // Convert to minutes
+  } catch {
+    return Infinity; // If we can't check, assume stale
+  }
+}
+
+function formatDuration(minutes) {
+  if (minutes < 1) return "<1 min";
+  if (minutes < 60) return `${Math.round(minutes)} min`;
+  return `${Math.round(minutes / 60)} hr`;
 }
 
 async function syncWithRetry(api, maxRetries = 3) {
@@ -76,7 +94,9 @@ async function syncWithRetry(api, maxRetries = 3) {
   }
 }
 
-export async function loadActual() {
+export async function loadActual(options = {}) {
+  const { offline = false } = options;
+  
   const apiPath = getApiPath();
   if (!apiPath) {
     console.error("Error: @actual-app/api not found.");
@@ -85,58 +105,75 @@ export async function loadActual() {
   }
 
   const api = await import(apiPath);
-  
-  const localBudget = findLocalBudget();
-  
+
   const serverURL = process.env.ACTUAL_SERVER_URL;
   const password = process.env.ACTUAL_PASSWORD;
   const syncId = process.env.ACTUAL_SYNC_ID;
-  
+
+  const localBudget = findLocalBudget();
+
   if (!localBudget) {
-    console.error("Error: No local budget found at ~/.local/share/actual/My-Finances-*");
-    console.error("\nSetup:");
-    console.error("  mkdir -p ~/.local/share/actual");
-    console.error("  cp -r ~/path/to/budget/My-Finances-* ~/.local/share/actual/");
-    process.exit(1);
+    // No cache - must sync first
+    if (offline || !serverURL || !password || !syncId) {
+      console.error("Error: No local budget found.");
+      if (!offline) {
+        console.error("Run setup-budget.js first to download your budget.");
+      }
+      process.exit(1);
+    }
   }
-  
-  const hasServerCreds = serverURL && password && syncId;
-  
+
   if (process.env.ACTUAL_ALLOW_SELF_SIGNED_CERTS === "true") {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }
-  
+
   try {
-    if (hasServerCreds) {
-      // Online mode: connect to server and sync
+    // In offline mode, init without server credentials
+    if (offline || !serverURL || !password || !syncId) {
       await api.init({
-        dataDir: localBudget.dataDir,
+        dataDir: localBudget?.dataDir || path.join(homedir(), ".cache/actual-budget-assistant"),
+      });
+    } else {
+      await api.init({
+        dataDir: localBudget?.dataDir || path.join(homedir(), ".cache/actual-budget-assistant"),
         serverURL,
         password,
       });
-      
-      await api.loadBudget(localBudget.budgetId);
-      await syncWithRetry(api, 3);
-      console.error("[Synced] Budget updated from server");
-    } else {
-      // Offline mode: local budget only
-      await api.init({
-        dataDir: localBudget.dataDir,
-      });
-      
-      await api.loadBudget(localBudget.budgetId);
-      console.error("[Offline mode] Using local budget (no server sync)");
     }
-    
+
+    if (!localBudget) {
+      console.error("Downloading budget for the first time...");
+      await api.downloadBudget(syncId);
+      console.error("✓ Budget downloaded successfully");
+      // Re-find the budget now that it exists
+      const newBudget = findLocalBudget();
+      await api.loadBudget(newBudget.budgetId);
+    } else {
+      await api.loadBudget(localBudget.budgetId);
+    }
+
+    // Sync only if not in offline mode and cache is stale
+    if (!offline && serverURL && password && syncId) {
+      const cacheAgeMinutes = getCacheAgeMinutes(localBudget?.dataDir || path.join(homedir(), ".cache/actual-budget-assistant"), localBudget?.budgetId || "");
+      const CACHE_MAX_AGE_MINUTES = 60;
+
+      if (cacheAgeMinutes > CACHE_MAX_AGE_MINUTES) {
+        console.error(`[Cache ${formatDuration(cacheAgeMinutes)} old] Syncing...`);
+        try {
+          await syncWithRetry(api, 3);
+          console.error("[Synced]");
+        } catch (syncErr) {
+          console.error(`[Sync failed: ${syncErr.message}]`);
+        }
+      } else {
+        console.error(`[Cache ${formatDuration(cacheAgeMinutes)} old]`);
+      }
+    }
+
     return {
       api,
       shutdown: async () => {
-        try {
-          await api.shutdown();
-        } catch (err) {
-          // Shutdown sync errors are cosmetic - data already synced on load
-          // Cloud Run cold starts can cause transient failures here
-        }
+        await api.shutdown();
       },
     };
   } catch (err) {
@@ -265,35 +302,5 @@ export async function findAccountByName(api, name) {
 }
 
 export function formatAmount(amount) {
-  return (amount / 100).toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
-}
-
-export function formatAmountIDR(amount) {
-  // Convert from cents to IDR (divide by 10 for IDR cents -> IDR)
-  const idr = Math.abs(amount / 1000);
-  return idr.toLocaleString("id-ID", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
-
-export function formatAsCsv(transactions, options = {}) {
-  const headers = options.headers || ["Date", "Description", "Type", "Amount (IDR)"];
-  const lines = [headers.join(",")];
-
-  for (const tx of transactions) {
-    if (tx.is_child) continue; // Skip split children
-
-    const date = tx.date;
-    const desc = (tx.notes || "-").replace(/,/g, ";").replace(/"/g, '""');
-    const type = tx.amount < 0 ? "Debit" : "Credit";
-    const amount = formatAmountIDR(tx.amount);
-
-    lines.push(`"${date}","${desc}",${type},${amount}`);
-  }
-
-  return lines.join("\n");
+  return amount / 100;
 }
