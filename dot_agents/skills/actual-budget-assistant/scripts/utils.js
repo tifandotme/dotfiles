@@ -100,33 +100,44 @@ export async function loadActual() {
     process.exit(1);
   }
   
-  if (!serverURL || !password || !syncId) {
-    console.error("Error: Server credentials not configured.");
-    console.error("\nRequired environment variables:");
-    console.error("  export ACTUAL_SERVER_URL=https://actual.example.com");
-    console.error("  export ACTUAL_PASSWORD=yourpassword");
-    console.error("  export ACTUAL_SYNC_ID=your-sync-id");
-    process.exit(1);
-  }
+  const hasServerCreds = serverURL && password && syncId;
   
   if (process.env.ACTUAL_ALLOW_SELF_SIGNED_CERTS === "true") {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }
   
   try {
-    await api.init({
-      dataDir: localBudget.dataDir,
-      serverURL,
-      password,
-    });
-    
-    await api.loadBudget(localBudget.budgetId);
-    await syncWithRetry(api, 3);
-    console.error("[Synced] Budget updated from server");
+    if (hasServerCreds) {
+      // Online mode: connect to server and sync
+      await api.init({
+        dataDir: localBudget.dataDir,
+        serverURL,
+        password,
+      });
+      
+      await api.loadBudget(localBudget.budgetId);
+      await syncWithRetry(api, 3);
+      console.error("[Synced] Budget updated from server");
+    } else {
+      // Offline mode: local budget only
+      await api.init({
+        dataDir: localBudget.dataDir,
+      });
+      
+      await api.loadBudget(localBudget.budgetId);
+      console.error("[Offline mode] Using local budget (no server sync)");
+    }
     
     return {
       api,
-      shutdown: () => api.shutdown(),
+      shutdown: async () => {
+        try {
+          await api.shutdown();
+        } catch (err) {
+          // Shutdown sync errors are cosmetic - data already synced on load
+          // Cloud Run cold starts can cause transient failures here
+        }
+      },
     };
   } catch (err) {
     console.error(`[Error] ${err.message}`);

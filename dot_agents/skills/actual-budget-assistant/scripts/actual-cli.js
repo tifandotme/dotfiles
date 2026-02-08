@@ -15,8 +15,8 @@ const COMMANDS = {
   },
   balance: {
     desc: 'Get account balance(s)',
-    args: ['account-id'],
-    flags: ['json'],
+    args: [],
+    flags: ['account-id', 'json'],
   },
   transactions: {
     desc: 'Query transactions',
