@@ -17,9 +17,7 @@ npm install -g @actual-app/api
 
 ## Connection Setup
 
-**Required:** Both local budget AND server credentials must be configured.
-
-### 1. Local Budget
+### 1. Local Budget (Required)
 
 Copy your synced budget to:
 
@@ -28,13 +26,17 @@ mkdir -p ~/.local/share/actual
 cp -r ~/path/to/synced/budget/My-Finances-* ~/.local/share/actual/
 ```
 
-### 2. Server Credentials
+### 2. Server Credentials (Optional)
+
+For live sync with server, set these environment variables:
 
 ```bash
 export ACTUAL_SERVER_URL=https://actual.example.com
 export ACTUAL_PASSWORD=yourpassword
 export ACTUAL_SYNC_ID=your-sync-id
 ```
+
+Without server credentials, the skill works in **offline mode** using only the local budget.
 
 ### 3. Self-Signed Certificates (if needed)
 
@@ -44,11 +46,15 @@ export ACTUAL_ALLOW_SELF_SIGNED_CERTS=true
 
 ## Connection Behavior
 
-On every run:
+**With server credentials:**
 1. Loads local budget from `~/.local/share/actual/My-Finances-*`
 2. Connects to server using env vars
 3. **Syncs with server** (3 retries with exponential backoff: 1s, 2s, 4s)
 4. **If sync fails:** Script exits with error (no stale data fallback)
+
+**Without server credentials (offline mode):**
+1. Loads local budget from `~/.local/share/actual/My-Finances-*`
+2. Works with local data only (no sync)
 
 This handles Cloud Run cold starts gracefully while ensuring fresh data.
 
