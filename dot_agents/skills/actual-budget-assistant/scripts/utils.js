@@ -4,9 +4,7 @@ import { readdirSync, existsSync, statSync } from "fs";
 import { homedir } from "os";
 import path from "path";
 
-const require = createRequire(import.meta.url);
-
-function getGlobalNpmPath() {
+export function getGlobalNpmPath() {
   try {
     return execSync("npm root -g", { encoding: "utf8" }).trim();
   } catch {
@@ -14,7 +12,7 @@ function getGlobalNpmPath() {
   }
 }
 
-function getApiPath() {
+export function getApiPath() {
   try {
     const require = createRequire(import.meta.url);
     const localPath = require.resolve("@actual-app/api/package.json");
@@ -180,106 +178,6 @@ export async function loadActual(options = {}) {
     console.error(`[Error] ${err.message}`);
     process.exit(1);
   }
-}
-
-export function parseDateRange(input) {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-
-  // Handle "last january 2026" format
-  const monthNames = [
-    "january",
-    "february",
-    "march",
-    "april",
-    "may",
-    "june",
-    "july",
-    "august",
-    "september",
-    "october",
-    "november",
-    "december",
-  ];
-
-  const lower = input.toLowerCase().trim();
-
-  // last monthname year (e.g., "last january 2026")
-  const lastMonthMatch = lower.match(/last\s+(\w+)\s+(\d{4})/);
-  if (lastMonthMatch) {
-    const monthIdx = monthNames.indexOf(lastMonthMatch[1].toLowerCase());
-    const year = parseInt(lastMonthMatch[2], 10);
-    if (monthIdx !== -1) {
-      const start = new Date(year, monthIdx, 1);
-      const end = new Date(year, monthIdx + 1, 0);
-      return {
-        start: formatDate(start),
-        end: formatDate(end),
-      };
-    }
-  }
-
-  // monthname year (e.g., "january 2026")
-  const monthYearMatch = lower.match(/^(\w+)\s+(\d{4})$/);
-  if (monthYearMatch) {
-    const monthIdx = monthNames.indexOf(monthYearMatch[1].toLowerCase());
-    const year = parseInt(monthYearMatch[2], 10);
-    if (monthIdx !== -1) {
-      const start = new Date(year, monthIdx, 1);
-      const end = new Date(year, monthIdx + 1, 0);
-      return {
-        start: formatDate(start),
-        end: formatDate(end),
-      };
-    }
-  }
-
-  // "last month"
-  if (lower === "last month") {
-    const lastMonth = month === 0 ? 11 : month - 1;
-    const lastMonthYear = month === 0 ? year - 1 : year;
-    const start = new Date(lastMonthYear, lastMonth, 1);
-    const end = new Date(lastMonthYear, lastMonth + 1, 0);
-    return {
-      start: formatDate(start),
-      end: formatDate(end),
-    };
-  }
-
-  // "this month"
-  if (lower === "this month") {
-    const start = new Date(year, month, 1);
-    const end = new Date(year, month + 1, 0);
-    return {
-      start: formatDate(start),
-      end: formatDate(end),
-    };
-  }
-
-  // YYYY-MM-DD format
-  if (/^\d{4}-\d{2}-\d{2}$/.test(lower)) {
-    return { start: lower, end: lower };
-  }
-
-  // YYYY-MM format (full month)
-  if (/^\d{4}-\d{2}$/.test(lower)) {
-    const [y, m] = lower.split("-").map(Number);
-    const start = new Date(y, m - 1, 1);
-    const end = new Date(y, m, 0);
-    return {
-      start: formatDate(start),
-      end: formatDate(end),
-    };
-  }
-
-  throw new Error(
-    `Cannot parse date: "${input}". Try formats like "last january 2026", "january 2026", "2026-01", or "2026-01-15"`,
-  );
-}
-
-function formatDate(date) {
-  return date.toISOString().split("T")[0];
 }
 
 export async function findAccountByName(api, name) {
