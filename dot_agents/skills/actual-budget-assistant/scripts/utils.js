@@ -1,6 +1,8 @@
 import { createRequire } from "module";
 import { execSync } from "child_process";
-import { pathToFileURL } from "url";
+import { readdirSync, existsSync } from "fs";
+import { homedir } from "os";
+import path from "path";
 
 const require = createRequire(import.meta.url);
 
@@ -12,36 +14,65 @@ function getGlobalNpmPath() {
   }
 }
 
-export function checkEnv() {
-  const required = ["ACTUAL_SERVER_URL", "ACTUAL_PASSWORD", "ACTUAL_SYNC_ID"];
-  const missing = required.filter((v) => !process.env[v]);
-
-  if (missing.length > 0) {
-    console.error("Error: Missing required environment variables:");
-    for (const v of missing) {
-      console.error(`  - ${v}`);
-    }
-    console.error("\nSet them as environment variables:");
-    console.error("  export ACTUAL_SERVER_URL=https://actual.example.com");
-    console.error("  export ACTUAL_PASSWORD=yourpassword");
-    console.error("  export ACTUAL_SYNC_ID=your-sync-id");
-    process.exit(1);
-  }
-}
-
 function getApiPath() {
   try {
-    // Try local install first
     const require = createRequire(import.meta.url);
     const localPath = require.resolve("@actual-app/api/package.json");
     return localPath.replace("/package.json", "/dist/index.js");
   } catch {
-    // Try global npm install
     const globalPath = getGlobalNpmPath();
     if (globalPath) {
       return `${globalPath}/@actual-app/api/dist/index.js`;
     }
     return null;
+  }
+}
+
+function findLocalBudget() {
+  const localShareDir = path.join(homedir(), ".local/share/actual");
+
+  if (!existsSync(localShareDir)) {
+    return null;
+  }
+
+  try {
+    const entries = readdirSync(localShareDir, { withFileTypes: true });
+    const budgetDir = entries.find(
+      (e) => e.isDirectory() && e.name.match(/^My-Finances-[a-f0-9]+/i),
+    );
+
+    if (budgetDir) {
+      return {
+        dataDir: localShareDir,
+        budgetId: budgetDir.name,
+      };
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function syncWithRetry(api, maxRetries = 3) {
+  let delay = 1000; // Start at 1s
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      await api.sync();
+      return;
+    } catch (err) {
+      if (i === maxRetries - 1) {
+        throw err;
+      }
+      console.error(`[Sync attempt ${i + 1}/${maxRetries} failed, retrying in ${delay}ms...]`);
+      await sleep(delay);
+      delay = Math.min(delay * 2, 30000);
+    }
   }
 }
 
@@ -53,24 +84,54 @@ export async function loadActual() {
     process.exit(1);
   }
 
-  // For self-signed certificates - must be set BEFORE importing the API
+  const api = await import(apiPath);
+  
+  const localBudget = findLocalBudget();
+  
+  const serverURL = process.env.ACTUAL_SERVER_URL;
+  const password = process.env.ACTUAL_PASSWORD;
+  const syncId = process.env.ACTUAL_SYNC_ID;
+  
+  if (!localBudget) {
+    console.error("Error: No local budget found at ~/.local/share/actual/My-Finances-*");
+    console.error("\nSetup:");
+    console.error("  mkdir -p ~/.local/share/actual");
+    console.error("  cp -r ~/path/to/budget/My-Finances-* ~/.local/share/actual/");
+    process.exit(1);
+  }
+  
+  if (!serverURL || !password || !syncId) {
+    console.error("Error: Server credentials not configured.");
+    console.error("\nRequired environment variables:");
+    console.error("  export ACTUAL_SERVER_URL=https://actual.example.com");
+    console.error("  export ACTUAL_PASSWORD=yourpassword");
+    console.error("  export ACTUAL_SYNC_ID=your-sync-id");
+    process.exit(1);
+  }
+  
   if (process.env.ACTUAL_ALLOW_SELF_SIGNED_CERTS === "true") {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }
-
-  const api = await import(apiPath);
-
-  await api.init({
-    serverURL: process.env.ACTUAL_SERVER_URL,
-    password: process.env.ACTUAL_PASSWORD,
-  });
-
-  await api.downloadBudget(process.env.ACTUAL_SYNC_ID);
-
-  return {
-    api,
-    shutdown: () => api.shutdown(),
-  };
+  
+  try {
+    await api.init({
+      dataDir: localBudget.dataDir,
+      serverURL,
+      password,
+    });
+    
+    await api.loadBudget(localBudget.budgetId);
+    await syncWithRetry(api, 3);
+    console.error("[Synced] Budget updated from server");
+    
+    return {
+      api,
+      shutdown: () => api.shutdown(),
+    };
+  } catch (err) {
+    console.error(`[Error] ${err.message}`);
+    process.exit(1);
+  }
 }
 
 export function parseDateRange(input) {
@@ -197,4 +258,31 @@ export function formatAmount(amount) {
     style: "currency",
     currency: "USD",
   });
+}
+
+export function formatAmountIDR(amount) {
+  // Convert from cents to IDR (divide by 10 for IDR cents -> IDR)
+  const idr = Math.abs(amount / 1000);
+  return idr.toLocaleString("id-ID", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+export function formatAsCsv(transactions, options = {}) {
+  const headers = options.headers || ["Date", "Description", "Type", "Amount (IDR)"];
+  const lines = [headers.join(",")];
+
+  for (const tx of transactions) {
+    if (tx.is_child) continue; // Skip split children
+
+    const date = tx.date;
+    const desc = (tx.notes || "-").replace(/,/g, ";").replace(/"/g, '""');
+    const type = tx.amount < 0 ? "Debit" : "Credit";
+    const amount = formatAmountIDR(tx.amount);
+
+    lines.push(`"${date}","${desc}",${type},${amount}`);
+  }
+
+  return lines.join("\n");
 }
