@@ -241,7 +241,7 @@ source core.nu
 
 # Domain modules
 use git.nu
-use docker.nu
+use docker.nu *
 use zellij.nu *
 use media.nu *
 use cloud.nu *
