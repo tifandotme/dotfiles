@@ -25,7 +25,9 @@ export def --wrapped bun [...args: string] {
   let has_global = ($args | any {|a| $a in ["-g" "--global"] })
   let has_add_or_remove = ($args | any {|a| $a in ["add" "remove" "rm"] })
 
-  if $has_global and $has_add_or_remove {
+  let is_cache_op = ($args | any {|a| $a == "cache" })
+
+  if ($has_global and $has_add_or_remove) and not $is_cache_op {
     print $"(ansi red_bold)🚫 NOPE!(ansi reset)"
     print ""
     print "You don't manually manage global packages, you absolute donut."
