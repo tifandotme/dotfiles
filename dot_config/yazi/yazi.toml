@@ -6,6 +6,12 @@
 append_fetchers = [
   { id = "chezmoi", url = "*/", name = "chezmoi", run = "chezmoi", prio = "low" },
 ]
+# Disable image/video/PDF previews to avoid chafa escape sequence leak triggering rename
+prepend_previewers = [
+  { mime = "image/*", run = "noop" },
+  { mime = "video/*", run = "noop" },
+  { mime = "application/pdf", run = "noop" },
+]
 
 [mgr]
 ratio = [0, 3, 3]
