@@ -46,6 +46,9 @@ node scripts/actual-cli.js balance --account=jago --offline
 # Transactions for a date range
 node scripts/actual-cli.js transactions --start=2026-01-01 --end=2026-01-31 --account=bca --offline
 
+# Import transactions from JSON
+node scripts/actual-cli.js import --data='[{"date":"2026-01-15","account":"uuid","payee":"Starbucks","amount":450}]'
+
 # Full power (sync with server)
 node scripts/actual-cli.js balance
 ```
@@ -79,6 +82,7 @@ Usage: actual-cli.js <command> [options]
 Commands:
   transactions --start=DATE --end=DATE [--account=NAME] [--limit=N]
   balance [--account=NAME]
+  import --data='JSON_ARRAY'
 
 Options:
   --offline    Work from cache only (no server sync)
@@ -88,7 +92,35 @@ Examples:
   actual-cli.js transactions --start=2026-01-01 --end=2026-01-31 --account=jago
   actual-cli.js balance --account=bca
   actual-cli.js balance --offline
+  actual-cli.js import --data='[{"date":"2026-01-15","account":"uuid","payee":"Starbucks","amount":4.50}]'
 ```
+
+### Import Command
+
+Import transactions from inline JSON. Use shell quotes to pass the data.
+
+**JSON Format:**
+```json
+[
+  {
+    "date": "2026-01-15",
+    "account": "account-uuid",
+    "amount": 4.50,
+    "payee": "Starbucks",
+    "note": "Morning coffee"
+  }
+]
+```
+
+**Required fields:** `date`, `account`, `amount`
+
+- `date`: YYYY-MM-DD format
+- `account`: Account UUID (not name - must be actual ID)
+- `amount`: Decimal number (positive = income, negative = expense)
+- `payee`: Optional payee name
+- `note`: Optional note/memo
+
+The API handles deduplication automatically based on transaction data.
 
 ## Natural Language Queries
 

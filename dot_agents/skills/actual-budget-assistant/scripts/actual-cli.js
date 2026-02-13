@@ -27,7 +27,25 @@ const NOISE_PATTERNS = [
   /^\s*message: /,
   /^\s*category: /,
   /^\s*\}$/,
-  /^\s*\{[^}]*\}$/,
+  /Performing transaction reconciliation/,
+  /Debug data for the operations/,
+  /transactionsStep\d+:/,
+  /payee_name:/,
+  /trans: \[Object\]/,
+  /subtransactions:/,
+  /match:/,
+  /fuzzyDataset:/,
+  /updatedPreview:/,
+  /ignored:/,
+  /imported_id:/,
+  /imported_payee:/,
+  /raw_synced_data:/,
+  /^\s+id: '/,
+  /^\s+payee: '/,
+  /^\s+notes: '/,
+  /^\s+cleared:/,
+  /^\s+added: /,
+  /^\s+updated: /,
 ];
 
 function isNoise(line) {
@@ -80,6 +98,7 @@ async function runInner() {
 Commands:
   transactions --start=DATE --end=DATE [--account=NAME] [--limit=N]
   balance [--account=NAME] [--all]
+  import --data='[{date,account,payee,note,amount}]'
 
 Options:
   --offline    Work from cache only (no server sync)
@@ -90,17 +109,21 @@ Examples:
   actual-cli.js transactions --start=2026-01-01 --end=2026-01-31 --account=jago
   actual-cli.js balance --account=bca
   actual-cli.js balance --offline
-  actual-cli.js balance --all`);
+  actual-cli.js balance --all
+  actual-cli.js import --data='[{"date":"2026-02-08","account":"uuid","payee":"Starbucks","note":"Coffee","amount":450}]'`);
     process.exit(args.flags.help ? 0 : 1);
   }
 
+  // Import command always syncs to server (no offline mode)
+  const isOffline = args.command === 'import' ? false : args.flags.offline;
   const { api, shutdown } = await loadActual({
-    offline: args.flags.offline,
+    offline: isOffline,
   });
 
   try {
     if (args.command === 'transactions') await cmdTransactions(api, args.flags);
     else if (args.command === 'balance') await cmdBalance(api, args.flags);
+    else if (args.command === 'import') await cmdImport(api, args.flags);
     else {
       console.error(`Unknown command: ${args.command}`);
       process.exit(1);
@@ -207,16 +230,86 @@ async function cmdBalance(api, flags) {
     ? allAccounts.filter(a => a.id === accountId)
     : allAccounts.filter(a => !a.closed || flags.all);
 
-  const lines = ['Account,Balance,Status'];
+  const lines = ['UUID,Account,Balance,Status'];
 
   for (const acc of accounts) {
     const balance = await api.getAccountBalance(acc.id);
     const name = acc.name.replace(/,/g, ';').replace(/"/g, '""');
     const status = acc.closed ? 'closed' : 'open';
-    lines.push(`"${name}",${formatAmount(balance)},${status}`);
+    lines.push(`"${acc.id}","${name}",${formatAmount(balance)},${status}`);
   }
 
   console.log(lines.join('\n'));
+}
+
+async function cmdImport(api, flags) {
+  if (!flags.data) {
+    console.error('Error: --data is required');
+    process.exit(1);
+  }
+
+  let transactions;
+  try {
+    transactions = JSON.parse(flags.data);
+  } catch (err) {
+    console.error('Error: Invalid JSON in --data');
+    process.exit(1);
+  }
+
+  if (!Array.isArray(transactions)) {
+    console.error('Error: --data must be a JSON array');
+    process.exit(1);
+  }
+
+  // Transform transactions
+  const importTxns = transactions.map((t, idx) => {
+    if (!t.date || !t.account || !t.amount) {
+      console.error(`Error: Transaction ${idx} missing required field (date, account, or amount)`);
+      process.exit(1);
+    }
+
+    return {
+      date: t.date,
+      account: t.account,
+      amount: t.amount * 100,
+      payee_name: t.payee || null,
+      notes: t.note || null,
+    };
+  });
+
+  // Group by account and import
+  const byAccount = new Map();
+  for (const t of importTxns) {
+    if (!byAccount.has(t.account)) {
+      byAccount.set(t.account, []);
+    }
+    byAccount.get(t.account).push(t);
+  }
+
+  let totalAdded = 0;
+  let totalUpdated = 0;
+  let totalErrors = 0;
+
+  // Suppress console.log during import (Actual API is noisy)
+  const originalLog = console.log;
+  console.log = () => {};
+
+  try {
+    for (const [accountId, txns] of byAccount) {
+      const result = await api.importTransactions(accountId, txns);
+      totalAdded += result.added.length;
+      totalUpdated += result.updated.length;
+      totalErrors += result.errors.length;
+    }
+  } finally {
+    console.log = originalLog;
+  }
+
+  console.log(JSON.stringify({
+    added: totalAdded,
+    updated: totalUpdated,
+    errors: totalErrors
+  }));
 }
 
 // Main entry: wrap unless already inner worker
