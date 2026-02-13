@@ -45,7 +45,7 @@ $env.DOCKER_HOST = $"unix://($env.XDG_CONFIG_HOME | path join colima)/default/do
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
 $env.DENO_INSTALL = ($env.XDG_DATA_HOME | path join deno)
-$env.PNPM_HOME = ($env.XDG_DATA_HOME | path join pnpm)
+# $env.PNPM_HOME = ($env.XDG_DATA_HOME | path join pnpm)
 $env.NU_LIB_DIRS = ($nu.default-config-dir | path join scripts)
 
 $env.ANDROID_HOME = ($env.HOME | path join Library Android sdk)
@@ -69,7 +69,7 @@ def --env add_path [path: string] {
 add_path ($env.HOME | path join .local bin)
 add_path ($env.HOME | path join .local share bun bin)
 add_path ($env.HOME | path join .local share mise shims)
-add_path ($env.HOME | path join .local share pnpm)
+# add_path ($env.HOME | path join .local share pnpm)
 add_path ($env.HOME | path join .cargo bin)
 add_path ($env.ANDROID_HOME | path join emulator)
 add_path ($env.ANDROID_HOME | path join platform-tools)
