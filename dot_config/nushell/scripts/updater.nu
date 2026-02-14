@@ -29,6 +29,11 @@ export def start [] {
     print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)pnpm(ansi reset) global packages"
     pnpm update --global --latest
   }
+
+  if (which skills | is-not-empty) {
+    print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)skills(ansi reset) packages"
+    skills update
+  }
 }
 
 # Clean caches and uninstall unused packages (do this rarely)
