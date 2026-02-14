@@ -44,7 +44,7 @@ export def --wrapped bun [...args: string] {
 
 # Guard brew package operations — use chezmoi instead
 export def --wrapped brew [...args: string] {
-  let has_forbidden = ($args | any {|a| $a in ["install" "uninstall" "remove" "reinstall" "tap" "untap"] })
+  let has_forbidden = ($args | any {|a| $a in ["install" "uninstall" "remove" "reinstall" "tap" "untap" "rm"] })
 
   if $has_forbidden {
     print $"(ansi red_bold)🚫 HELL NO!(ansi reset)"
