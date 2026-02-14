@@ -28,32 +28,8 @@ export def open-project [default_project: string = ""] {
     let last_tab_index = zellij action query-tab-names | split row "\n" | length
     zellij action go-to-tab $last_tab_index
 
-    zellij action new-tab --name $dir_name --cwd $absolute_path
-    zellij action new-tab --name $"($dir_name)\\(git\\)"
-    zellij run --close-on-exit --cwd $absolute_path -- nu -c lazygit
-    zellij action focus-previous-pane; zellij action close-pane
-    zellij action go-to-previous-tab
+    zellij action new-tab --cwd $absolute_path --name $dir_name
   } catch {
     print "No project directory found."
   }
-}
-
-export def open-runner [] {
-  let response = input $"(ansi yellow)Open actions-runner? (Y/n): (ansi reset)" | str downcase
-  let include_runner = $response == "y" or $response == ""
-
-  if $include_runner == false {
-    return
-  }
-
-  let absolute_path = $env.HOME | path join "work/actions-runner"
-  let dir_name = "runner"
-
-  let last_tab_index = zellij action query-tab-names | split row "\n" | length
-  zellij action go-to-tab $last_tab_index
-
-  zellij action new-tab --name $dir_name --cwd $absolute_path
-  zellij run --close-on-exit --cwd $absolute_path -- nu -c "./run.sh"
-  zellij action focus-previous-pane; zellij action close-pane
-  zellij action go-to-previous-tab
 }

@@ -55,8 +55,6 @@ keybinds clear-defaults=true {
         }
         bind "Ctrl \\" {
             Run "nu" "-l" "-c" "open-project" {
-                // These are undocumented
-                // https://github.com/zellij-org/zellij/blob/ea57d9a73026bbc6f9c7f1a7803067ad365584cb/zellij-utils/src/kdl/mod.rs#L1497
                 name "Open project"
                 floating true
                 close_on_exit true

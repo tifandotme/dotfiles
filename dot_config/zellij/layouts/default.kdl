@@ -3,8 +3,6 @@ layout {
         children
 
         pane size=1 borderless=true {
-            // zjstatus v0.22.0
-            // On MacOS, the plugin location cannot be https and should be local
             plugin location="file:~/.config/zellij/zjstatus.wasm" {
                 // color_fg_muted "#9baca6"
                 color_fg_muted "#e8c174"
