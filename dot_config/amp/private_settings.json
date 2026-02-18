@@ -27,12 +27,17 @@
         "cmd": "*context7*"
       },
       "action": "allow"
+    },
+    {
+      "tool": "Bash",
+      "matches": {
+        "cmd": "*bw*"
+      },
+      "action": "ask"
     }
   ],
   "amp.terminal.theme": "dark",
-  "amp.experimental.modes": [
-    "bombadil"
-  ],
+  "amp.experimental.modes": ["bombadil"],
   "amp.git.commit.coauthor.enabled": false,
 
   "amp.mcpServers": {
@@ -47,9 +52,7 @@
     },
     "mem0": {
       "command": "uvx",
-      "args": [
-        "mem0-mcp-server"
-      ],
+      "args": ["mem0-mcp-server"],
       "env": {
         "MEM0_API_KEY": "${MEM0_API_KEY}",
         "MEM0_DEFAULT_USER_ID": "tifandotme"

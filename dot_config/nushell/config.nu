@@ -23,8 +23,9 @@ $env.config = {
         {|before after|
           if "ZELLIJ" not-in ($env | columns) { return }
           let base_name = ($after | path basename)
-          $env._ZELLIJ_TAB_BASE_NAME = $base_name
-          zellij action rename-tab $base_name
+          let name = if ($base_name | is-empty) { $after } else { $base_name }
+          $env._ZELLIJ_TAB_BASE_NAME = $name
+          zellij action rename-tab $name
         }
       ]
     }
@@ -41,7 +42,7 @@ $env.config = {
           | default ($words | skip 1 | each {|w| $ZELLIJ_CMD_MAP | get -o $w } | where {|v| $v != null } | first)
 
         if ($program | is-not-empty) {
-          let base = $env._ZELLIJ_TAB_BASE_NAME? | default ($env.PWD | path basename)
+          let base = $env._ZELLIJ_TAB_BASE_NAME? | default (let b = ($env.PWD | path basename); if ($b | is-empty) { $env.PWD } else { $b })
           zellij action rename-tab $"($base) \(($program)\)"
           $env._ZELLIJ_TAB_RENAMED = true
         }
@@ -50,7 +51,7 @@ $env.config = {
     pre_prompt: [
       {
         if ($env._ZELLIJ_TAB_RENAMED? == true) {
-          let base = ($env._ZELLIJ_TAB_BASE_NAME? | default ($env.PWD | path basename))
+          let base = $env._ZELLIJ_TAB_BASE_NAME? | default (let b = ($env.PWD | path basename); if ($b | is-empty) { $env.PWD } else { $b })
           zellij action rename-tab $base
           $env._ZELLIJ_TAB_RENAMED = false
         }

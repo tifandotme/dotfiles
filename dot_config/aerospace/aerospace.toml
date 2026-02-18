@@ -210,6 +210,10 @@ run = "move-node-to-workspace 0_misc"
 if.app-id = "com.colliderli.iina"
 run = "move-node-to-workspace 0_misc"
 
+[[on-window-detected]]
+if.app-id = "com.tinyspeck.slackmacgap"
+run = "move-node-to-workspace 0_misc"
+
 # Document viewers
 # [[on-window-detected]]
 # if.app-id = 'com.apple.Preview'
