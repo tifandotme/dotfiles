@@ -99,17 +99,17 @@ sketchybar --add item front_app left \
 #   --subscribe spotify spotify_update
 
 # SPOTIFY-PLAYER TUI
-sketchybar --add item spotify center \
-  --set spotify \
-  label.max_chars=40 \
-  label.scroll_duration=300 \
-  label.shadow.scroll_duration=300 \
-  scroll_texts=on \
-  "${GHOST[@]}" \
-  icon="􀑪" \
-  drawing=off \
-  update_freq=5 \
-  script="$PLUGIN_DIR/spotify.sh"
+# sketchybar --add item spotify center \
+#   --set spotify \
+#   label.max_chars=40 \
+#   label.scroll_duration=300 \
+#   label.shadow.scroll_duration=300 \
+#   scroll_texts=on \
+#   "${GHOST[@]}" \
+#   icon="􀑪" \
+#   drawing=off \
+#   update_freq=5 \
+#   script="$PLUGIN_DIR/spotify.sh"
 
 # --------------- RIGHT
 
@@ -187,12 +187,12 @@ sketchybar --add item network_speed right \
 #   script="$PLUGIN_DIR/vpn.sh" \
 #   --subscribe vpn wifi_change front_app_switched
 
-# sketchybar --add item slack right \
-#   --set slack \
-#   update_freq=15 \
-#   click_script="open -a 'Slack'" \
-#   script="$PLUGIN_DIR/slack.sh" \
-#   --subscribe slack system_woke
+sketchybar --add item slack right \
+  --set slack \
+  update_freq=15 \
+  click_script="open -a 'Slack'" \
+  script="$PLUGIN_DIR/slack.sh" \
+  --subscribe slack system_woke
 
 # sketchybar --add item theme_toggle right \
 #   --set theme_toggle \
