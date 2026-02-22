@@ -203,6 +203,10 @@ if.app-id = "com.hnc.Discord"
 run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
+if.app-id = "app.legcord.Legcord"
+run = "move-node-to-workspace 0_misc"
+
+[[on-window-detected]]
 if.app-id = "com.apple.Safari.WebApp.2ADBBBBB-FD36-42E8-8053-EC3A72FBAC90"
 run = "move-node-to-workspace 0_misc"
 

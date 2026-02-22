@@ -18,11 +18,31 @@ export def start [] {
   if (which ya | is-not-empty) {
     print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)yazi(ansi reset) packages"
     ya pkg upgrade
+
+    # Yazi packages may modify package.toml - sync back to chezmoi
+    if (which chezmoi | is-not-empty) {
+      print $"\n(ansi green_bold)==>(ansi reset) Syncing (ansi green)yazi package.toml(ansi reset) to chezmoi"
+      chezmoi add ~/.config/yazi/package.toml
+    }
   }
 
   if (which bun | is-not-empty) {
     print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)bun(ansi reset) global packages"
+
+    # Pinned packages: name -> exact version to preserve
+    let pinned = {
+      "@sourcegraph/amp": "0.0.1771747379-gbb5ca2"
+    }
+
+    # Run update
     bun update --global --latest
+
+    # Re-pin packages to locked versions after update
+    $pinned | columns | each {|name|
+      let version = $pinned | get $name
+      print $"(ansi yellow)↺(ansi reset) Re-pinning ($name)@($version)"
+      bun install -g $"($name)@($version)"
+    }
   }
 
   if (which pnpm | is-not-empty) {
