@@ -166,12 +166,12 @@ sketchybar --add item amp_usage right \
   update_freq=300 \
   script="$PLUGIN_DIR/amp_usage.sh"
 
-sketchybar --add item copilot_usage right \
-  --set copilot_usage \
-  icon="􁎢" \
-  icon.padding_right=4 \
-  update_freq=300 \
-  script="$PLUGIN_DIR/copilot_usage.sh"
+# sketchybar --add item copilot_usage right \
+#   --set copilot_usage \
+#   icon="􁎢" \
+#   icon.padding_right=4 \
+#   update_freq=300 \
+#   script="$PLUGIN_DIR/copilot_usage.sh"
 
 sketchybar --add item network_speed right \
   --set network_speed \
@@ -189,7 +189,7 @@ sketchybar --add item network_speed right \
 
 sketchybar --add item slack right \
   --set slack \
-  update_freq=15 \
+  update_freq=5 \
   click_script="open -a 'Slack'" \
   script="$PLUGIN_DIR/slack.sh" \
   --subscribe slack system_woke
