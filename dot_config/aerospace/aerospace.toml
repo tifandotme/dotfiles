@@ -195,7 +195,7 @@ if.app-id = "net.whatsapp.WhatsApp"
 run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
-if.app-id = "com.tdesktop.Telegram"
+if.app-id = "ru.keepcoder.Telegram"
 run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]

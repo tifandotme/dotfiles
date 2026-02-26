@@ -41,14 +41,17 @@
   "amp.git.commit.coauthor.enabled": false,
 
   "amp.mcpServers": {
-    "chrome-devtools": {
+    "n8n-mcp": {
       "command": "bunx",
-      "args": [
-        "chrome-devtools-mcp@latest",
-        "--no-usage-statistics",
-        "--executablePath",
-        "/Applications/Helium.app/Contents/MacOS/Helium"
-      ]
+      "args": ["n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_MCP_TELEMETRY_DISABLED": "true",
+        "N8N_API_URL": "https://n8n.tifan.me",
+        "N8N_API_KEY": "${N8N_API_KEY}"
+      }
     },
     "mem0": {
       "command": "uvx",

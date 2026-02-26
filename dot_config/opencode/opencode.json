@@ -48,17 +48,18 @@
   },
 
   "mcp": {
-    "chrome-devtools": {
+    "n8n-mcp": {
       "type": "local",
-      "command": [
-        "bunx",
-        "chrome-devtools-mcp@latest",
-        "--no-usage-statistics",
-        "--executablePath",
-        "/Applications/Helium.app/Contents/MacOS/Helium"
-      ],
-      "enabled": true,
-      "environment": {}
+      "command": ["bunx", "n8n-mcp"],
+      "environment": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_MCP_TELEMETRY_DISABLED": "true",
+        "N8N_API_URL": "https://n8n.tifan.me",
+        "N8N_API_KEY": "{env:N8N_API_KEY}"
+      },
+      "enabled": true
     },
     "mem0": {
       "type": "local",
