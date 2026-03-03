@@ -25,10 +25,12 @@ FREE_REMAINING=$(echo "$FREE_MATCH" | cut -d'$' -f2 | cut -d'/' -f1)
 FREE_TOTAL=$(echo "$FREE_MATCH" | cut -d'$' -f3)
 
 # Parse individual credits: "$91.81 remaining"
-CREDITS=$(echo "$OUTPUT" | grep -oE 'Individual credits: \$[0-9.]+' | grep -oE '[0-9.]+$')
+# CREDITS=$(echo "$OUTPUT" | grep -oE 'Individual credits: \$[0-9.]+' | grep -oE '[0-9.]+$')
 
-if [ -n "$FREE_REMAINING" ] && [ -n "$CREDITS" ]; then
-  LABEL="${FREE_REMAINING}/${FREE_TOTAL} ${CREDITS}"
+if [ -n "$FREE_REMAINING" ]; then
+  # if [ -n "$FREE_REMAINING" ] && [ -n "$CREDITS" ]; then
+  # LABEL="${FREE_REMAINING}/${FREE_TOTAL} ${CREDITS}"
+  LABEL="${FREE_REMAINING}/${FREE_TOTAL}"
 else
   LABEL="N/A"
 fi
