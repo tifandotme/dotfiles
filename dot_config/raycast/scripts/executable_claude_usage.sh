@@ -32,24 +32,30 @@ else
 
   SESSION=$(echo "$RESPONSE" | jq -r '.five_hour.utilization' 2>/dev/null)
   WEEKLY=$(echo "$RESPONSE" | jq -r '.seven_day.utilization' 2>/dev/null)
-  RESETS_AT=$(echo "$RESPONSE" | jq -r '.five_hour.resets_at' 2>/dev/null)
+  SESSION_RESETS_AT=$(echo "$RESPONSE" | jq -r '.five_hour.resets_at' 2>/dev/null)
+  WEEKLY_RESETS_AT=$(echo "$RESPONSE" | jq -r '.seven_day.resets_at' 2>/dev/null)
 
   if [ -z "$SESSION" ] || [ "$SESSION" = "null" ]; then
     LABEL="N/A"
   else
-    RESETS_EPOCH=$(date -j -u -f "%Y-%m-%dT%H:%M:%S" "${RESETS_AT%%.*}" "+%s" 2>/dev/null)
+    # Session: countdown to reset
+    SESSION_EPOCH=$(date -j -u -f "%Y-%m-%dT%H:%M:%S" "${SESSION_RESETS_AT%%.*}" "+%s" 2>/dev/null)
     NOW_EPOCH=$(date "+%s")
-    DELTA=$((RESETS_EPOCH - NOW_EPOCH))
+    DELTA=$((SESSION_EPOCH - NOW_EPOCH))
     if [ "$DELTA" -gt 0 ]; then
       MINS=$((DELTA / 60))
       H=$((MINS / 60))
       M=$((MINS % 60))
-      [ "$H" -gt 0 ] && RESET_STR="${H}h${M}m" || RESET_STR="${M}m"
+      [ "$H" -gt 0 ] && SESSION_RESET="${H}h${M}m" || SESSION_RESET="${M}m"
     else
-      RESET_STR="0m"
+      SESSION_RESET="0m"
     fi
 
-    LABEL="${SESSION}(${RESET_STR}) ${WEEKLY}"
+    # Weekly: absolute day+time in local timezone
+    WEEKLY_EPOCH=$(date -j -u -f "%Y-%m-%dT%H:%M:%S" "${WEEKLY_RESETS_AT%%.*}" "+%s" 2>/dev/null)
+    WEEKLY_RESET=$(date -r "$WEEKLY_EPOCH" "+%a %H:%M" 2>/dev/null)
+
+    LABEL="${SESSION}(${SESSION_RESET}) ${WEEKLY}(${WEEKLY_RESET})"
   fi
 fi
 
