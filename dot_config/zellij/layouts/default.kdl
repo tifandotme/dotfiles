@@ -10,7 +10,7 @@ layout {
                 // color_bg       "#3c4a31"
                 color_bg       "#5b4b2b"
 
-                format_left  "#[fg=$fg,bg=$bg]  {tabs}"
+                format_left  "#[fg=$fg,bg=$bg] {tabs}"
                 format_space "#[bg=$bg]"
                 format_right "{mode}"
                 
@@ -25,8 +25,8 @@ layout {
 
                 hide_frame_for_single_pane "true"
 
-                tab_normal               "#[fg=$fg_muted,bg=$bg,bold]  {name}  {fullscreen_indicator}{sync_indicator}{floating_indicator}"
-                tab_active               "#[fg=$bg,bg=$fg_muted,bold]  {name}  {fullscreen_indicator}{sync_indicator}{floating_indicator}"
+                tab_normal               "#[fg=$fg_muted,bg=$bg,bold] {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
+                tab_active               "#[fg=$bg,bg=$fg_muted,bold] {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
                 tab_fullscreen_indicator " " // z (in tmux mode)
                 tab_sync_indicator       " " // s (in tmux mode)
                 tab_floating_indicator   " " // f (in tmux mode)
