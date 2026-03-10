@@ -12,10 +12,47 @@
       "Bash(bw *)"
     ]
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "skipDangerousModePermissionPrompt": true,
   "statusLine": {
     "type": "command",
     "command": "bun x ccusage statusline",
     "padding": 0
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Claude needs your input\" with title \"Claude Code\" subtitle \"Permission required\" sound name \"Glass\"'"
+          }
+        ]
+      },
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Claude is done, waiting for you\" with title \"Claude Code\" subtitle \"Session idle\" sound name \"Ping\"'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Task complete\" with title \"Claude Code\" subtitle \"Session finished\" sound name \"Hero\"'"
+          }
+        ]
+      }
+    ]
   }
 }
