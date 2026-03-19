@@ -37,14 +37,14 @@ if grep -q '^\[delta\]' "$CONFIG_FILE"; then
         BEGIN { in_delta=0; done=0 }
         /^\[delta\]/ { print; in_delta=1; next }
         in_delta && /^[[:space:]]*light[[:space:]]*=/ {
-            if (!done) { print "    light = " newval; done=1 }
+            if (!done) { print "\tlight = " newval; done=1 }
             next
         }
-        in_delta && /^\[/ { if (!done) { print "    light = " newval; done=1 }; in_delta=0 }
+        in_delta && /^\[/ { if (!done) { print "\tlight = " newval; done=1 }; in_delta=0 }
         { print }
-        END { if (in_delta && !done) print "    light = " newval }
+        END { if (in_delta && !done) print "\tlight = " newval }
     ' "$CONFIG_FILE" >"$CONFIG_FILE.tmp" && mv "$CONFIG_FILE.tmp" "$CONFIG_FILE"
 else
   # If [delta] section missing, add it at the end
-  printf "\n[delta]\n    light = %s\n" "$NEW_VAL" >>"$CONFIG_FILE"
+  printf "\n[delta]\n\tlight = %s\n" "$NEW_VAL" >>"$CONFIG_FILE"
 fi
