@@ -1,6 +1,6 @@
 # ------------------------------ GENERAL ---------------------------------------
 
-macos-titlebar-style = "hidden"
+macos-titlebar-style = hidden
 
 confirm-close-surface = false
 # useless inside zellij
