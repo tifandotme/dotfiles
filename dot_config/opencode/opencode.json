@@ -18,57 +18,19 @@
     }
   },
 
-  "keybinds": {
-    // closely match ampcode
-    "editor_open": "ctrl+g",
-    "command_list": "ctrl+o",
-    "session_list": "ctrl+r",
-    "input_submit": "return",
-    "input_newline": "shift+return",
-    "input_clear": "escape",
-    "history_previous": "ctrl+p",
-    "history_next": "ctrl+n",
-    "input_line_home": "ctrl+a",
-    "input_line_end": "ctrl+e",
-    "input_word_backward": "alt+left",
-    "input_word_forward": "alt+right",
-    "input_delete_word_backward": "alt+backspace,ctrl+w",
-    "input_delete": "delete,ctrl+d",
-    "input_delete_to_line_start": "ctrl+u",
-    "input_delete_to_line_end": "ctrl+k",
-    "input_paste": "ctrl+v",
-    "messages_page_up": "pageup",
-    "messages_page_down": "pagedown",
-    "messages_half_page_up": "ctrl+alt+u",
-    "messages_half_page_down": "ctrl+alt+d",
-    "messages_first": "home",
-    "messages_last": "end",
-    "messages_previous": "tab",
-    "messages_next": "shift+tab"
-  },
-
   "mcp": {
-    "n8n-mcp": {
-      "type": "local",
-      "command": ["bunx", "n8n-mcp"],
-      "environment": {
-        "MCP_MODE": "stdio",
-        "LOG_LEVEL": "error",
-        "DISABLE_CONSOLE_OUTPUT": "true",
-        "N8N_MCP_TELEMETRY_DISABLED": "true",
-        "N8N_API_URL": "https://n8n.tifan.me",
-        "N8N_API_KEY": "{env:N8N_API_KEY}"
-      },
-      "enabled": true
-    },
-    "mem0": {
-      "type": "local",
-      "command": ["uvx", "mem0-mcp-server"],
-      "environment": {
-        "MEM0_API_KEY": "{env:MEM0_API_KEY}",
-        "MEM0_DEFAULT_USER_ID": "tifandotme"
-      },
-      "enabled": true
-    }
+    // "n8n-mcp": {
+    //   "type": "local",
+    //   "command": ["bunx", "n8n-mcp"],
+    //   "environment": {
+    //     "MCP_MODE": "stdio",
+    //     "LOG_LEVEL": "error",
+    //     "DISABLE_CONSOLE_OUTPUT": "true",
+    //     "N8N_MCP_TELEMETRY_DISABLED": "true",
+    //     "N8N_API_URL": "https://n8n.tifan.me",
+    //     "N8N_API_KEY": "{env:N8N_API_KEY}"
+    //   },
+    //   "enabled": true
+    // }
   }
 }
