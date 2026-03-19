@@ -27,6 +27,8 @@ alias cm = chezmoi
 
 alias oc = opencode
 
+def clauded [] { claude --dangerously-skip-permissions }
+
 alias _btm = btm
 
 alias tf = trafilatura

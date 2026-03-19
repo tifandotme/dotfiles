@@ -226,8 +226,10 @@ $env.config = {
         description_text: yellow
       }
       source: {|buffer position|
-        history | get command | uniq | reverse | str join (char nl)
-        | fzf -f $buffer --tiebreak=index | lines
+        history | get command | uniq | reverse | str join (char -i 0)
+        | fzf --read0 --print0 -f $buffer --tiebreak=index
+        | split row (char -i 0)
+        | where {|v| ($v | str trim) != "" }
         | each {|v| {value: ($v | str trim)} }
       }
     }
@@ -260,17 +262,17 @@ source ~/.cache/mise/init.nu
 source zoxide.gen.nu
 use external/bash-env-nushell/bash-env.nu
 
-if "ZELLIJ" not-in ($env | columns) {
-  if $env.ZELLIJ_AUTO_ATTACH == true {
-    ^zellij attach --create $env.USER
-  } else {
-    ^zellij
-  }
+# if "ZELLIJ" not-in ($env | columns) {
+#   if $env.ZELLIJ_AUTO_ATTACH == true {
+#     ^zellij attach --create $env.USER
+#   } else {
+#     ^zellij
+#   }
 
-  if $env.ZELLIJ_AUTO_EXIT == true {
-    exit
-  }
-}
+#   if $env.ZELLIJ_AUTO_EXIT == true {
+#     exit
+#   }
+# }
 
 def banner [] {
   let ellie = [
