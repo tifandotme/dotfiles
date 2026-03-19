@@ -192,6 +192,11 @@ brew "sshs" # Graphical command-line client for SSH
 # AI
 brew "aichat" # All-in-one AI-Powered CLI Chat & Copilot
 
+# Basecamp tools
+# TODO: Switch back to basecamp/tap once https://github.com/basecamp/fizzy-cli/issues/107 is resolved
+tap "robzolkos/fizzy-cli"
+brew "fizzy-cli" # Fizzy CLI and Agent Skills
+
 # =============================================================================
 # MACOS WINDOW MANAGEMENT & CUSTOMIZATION
 # =============================================================================
@@ -224,6 +229,7 @@ cask "db-browser-for-sqlite"
 cask "dbeaver-community" # Universal database tool and SQL client
 cask "redis-insight"     # GUI for Redis application development
 cask "sequel-ace"        # MySQL/MariaDB database management
+cask "tableplus"         # Native GUI tool for relational databases
 
 # Editors
 cask "zed"         # Multiplayer code editor
@@ -231,6 +237,7 @@ cask "antigravity" # AI Coding Agent IDE
 
 # Terminal emulator
 cask "ghostty" # Terminal emulator with GPU acceleration
+cask "cmux"    # Ghostty-based terminal with vertical tabs for AI coding agents
 
 # Keyboard firmware
 cask "qmk-toolbox" # Toolbox companion for QMK Firmware
