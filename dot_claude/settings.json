@@ -1,58 +1,97 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "env": {
-    "CLAUDE_CODE_ENABLE_TELEMETRY": "0"
-  },
-  "permissions": {
-    "allow": [
-      "Bash(git commit)",
-      "Bash(git push)",
-      "Bash(rm -rf *)",
-      "Bash(*context7*)",
-      "Bash(bw *)"
-    ]
-  },
   "attribution": {
     "commit": "",
     "pr": ""
   },
-  "skipDangerousModePermissionPrompt": true,
-  "statusLine": {
-    "type": "command",
-    "command": "bun x ccusage statusline",
-    "padding": 0
+  "permissions": {
+    "allow": [
+      "Bash(*context7*)",
+      "Bash(mkdir:*)",
+      "Bash(go:*)",
+      "Bash(ls:*)",
+      "Bash(git:*)",
+      "Bash(gh:*)",
+      "Bash(mv:*)",
+      "Bash(echo:*)",
+      "Bash(sed:*)",
+      "Bash(source:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(pkill:*)",
+      "Bash(touch:*)",
+      "Bash(grep:*)",
+      "Bash(sqlite3:*)",
+      "Bash(curl:*)",
+      "Bash(rg:*)",
+      "Bash(chmod:*)",
+      "Bash(lsof:*)",
+      "Bash(make:*)",
+      "Bash(PORT=:*)",
+      "Bash(find:*)",
+      "Bash(docker:*)",
+      "Bash(poetry:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(chezmoi apply:*)"
+    ],
+    "deny": [],
+    "defaultMode": "default"
   },
+  "model": "opusplan",
   "hooks": {
     "Notification": [
       {
-        "matcher": "permission_prompt",
+        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "osascript -e 'display notification \"Claude needs your input\" with title \"Claude Code\" subtitle \"Permission required\" sound name \"Glass\"'"
-          }
-        ]
-      },
-      {
-        "matcher": "idle_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "osascript -e 'display notification \"Claude is done, waiting for you\" with title \"Claude Code\" subtitle \"Session idle\" sound name \"Ping\"'"
+            "command": "~/.claude/hooks/cmux-notify.sh"
           }
         ]
       }
     ],
     "Stop": [
       {
-        "matcher": "*",
+        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "osascript -e 'display notification \"Task complete\" with title \"Claude Code\" subtitle \"Session finished\" sound name \"Hero\"'"
+            "command": "~/.claude/hooks/cmux-notify.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/cmux-notify.sh"
           }
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bun x ccusage statusline --no-offline --visual-burn-rate emoji --cost-source both",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true
+  },
+  "spinnerTipsEnabled": false,
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": [
+      "Waiting for response"
+    ]
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "ui.showBanner": false,
+  "voiceEnabled": true
 }
