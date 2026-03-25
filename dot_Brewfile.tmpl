@@ -1,7 +1,5 @@
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 
-tap "oven-sh/bun"
-
 # =============================================================================
 # CORE TERMINAL ECOSYSTEM
 # =============================================================================
@@ -51,6 +49,7 @@ brew "chafa"             # Unicode/ASCII/ANSI graphics renderer
 # =============================================================================
 
 # JavaScript/TypeScript
+tap "oven-sh/bun"
 brew "oven-sh/bun/bun" # Fast JavaScript runtime, bundler, package manager
 
 # Go
@@ -267,6 +266,11 @@ cask "zoom"     # Video communication platform
 # =============================================================================
 # PRODUCTIVITY & NOTES
 # =============================================================================
+
+# Meeting transcription and note-taking
+tap "silverstein/tap"
+cask "minutes" # AI meeting transcription and note-taking
+brew "minutes" # CLI for meeting transcription
 
 cask "anki" # Memory training application
 cask "slack"
