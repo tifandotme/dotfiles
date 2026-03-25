@@ -29,6 +29,8 @@ alias oc = opencode
 
 def clauded [] { claude --dangerously-skip-permissions }
 
+def claudea [] { claude --enable-auto-mode }
+
 alias _btm = btm
 
 alias tf = trafilatura
