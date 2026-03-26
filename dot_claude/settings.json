@@ -38,7 +38,7 @@
       "Bash(chezmoi apply:*)"
     ],
     "deny": [],
-    "defaultMode": "default"
+    "defaultMode": "auto"
   },
   "model": "opusplan",
   "hooks": {
@@ -91,7 +91,8 @@
       "Waiting for response"
     ]
   },
+  "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "ui.showBanner": false,
-  "voiceEnabled": true
+  "skipAutoPermissionPrompt": true
 }
