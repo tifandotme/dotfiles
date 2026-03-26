@@ -84,7 +84,7 @@ Fill the PR template with **focus on WHY, not WHAT**:
 
 **Do NOT** summarize what changed — that's visible in commits and diff.
 
-Use clear, concise language. Avoid AI-sounding phrases.
+Use clear, concise language. Avoid AI-sounding phrases. **Never use em-dashes (—)**, use commas or separate sentences instead.
 
 ## Create the PR
 
