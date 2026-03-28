@@ -26,8 +26,9 @@ export def --env open-project [default_project: string = ""] {
     let absolute_path = $"($env.HOME)/($chosen_project)"
 
     if "CMUX_SOCKET_PATH" in ($env | columns) {
-      cmux new-workspace --cwd $absolute_path
-      cmux rename-workspace $dir_name
+      let new_ws = (cmux new-workspace --cwd $absolute_path | parse "OK {handle}" | get handle | first)
+      cmux select-workspace --workspace $new_ws
+      cmux rename-workspace --workspace $new_ws $dir_name
     } else {
       cd $absolute_path
     }
