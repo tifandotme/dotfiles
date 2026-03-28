@@ -1,4 +1,4 @@
-export def open-project [default_project: string = ""] {
+export def --env open-project [default_project: string = ""] {
   try {
     mut project_dirs = []
     for base in [($env.HOME | path join 'personal') ($env.HOME | path join 'work')] {
@@ -25,10 +25,13 @@ export def open-project [default_project: string = ""] {
     let dir_name = $chosen_project | split row "/" | last
     let absolute_path = $"($env.HOME)/($chosen_project)"
 
-    let last_tab_index = zellij action query-tab-names | split row "\n" | length
-    zellij action go-to-tab $last_tab_index
-
-    zellij action new-tab --cwd $absolute_path --name $dir_name
+    if "CMUX_SOCKET_PATH" in ($env | columns) {
+      let new_ws = (cmux new-workspace --cwd $absolute_path | parse "OK {handle}" | get handle | first)
+      cmux select-workspace --workspace $new_ws
+      cmux rename-workspace --workspace $new_ws $dir_name
+    } else {
+      cd $absolute_path
+    }
   } catch {
     print "No project directory found."
   }
