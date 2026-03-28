@@ -4,61 +4,7 @@
 # > config env --default | nu-highlight | lines
 # > config nu --default | nu-highlight | lines
 
-# Command to tab name mapping for zellij auto-rename
-const ZELLIJ_CMD_MAP = {
-  y: yazi
-  yazi: yazi
-  btm: bottom
-  lzg: lazygit
-  lazygit: lazygit
-  spotify_player: spotify
-  amp: amp
-  claude: cc
-  bandwhich: bandwhich
-}
-
 $env.config = {
-  hooks: {
-    env_change: {
-      PWD: [
-        {|before after|
-          if "ZELLIJ" not-in ($env | columns) { return }
-          let base_name = ($after | path basename)
-          let name = if ($base_name | is-empty) { $after } else { $base_name }
-          $env._ZELLIJ_TAB_BASE_NAME = $name
-          zellij action rename-tab $name
-        }
-      ]
-    }
-    pre_execution: [
-      {
-        if "ZELLIJ" not-in ($env | columns) { return }
-        let cmdline = (commandline)
-        if ($cmdline | is-empty) { return }
-
-        let words = ($cmdline | str trim | split words)
-        let first = $words.0?
-        if ($first | is-empty) { return }
-        let program = ($ZELLIJ_CMD_MAP | get -o $first)
-          | default ($words | skip 1 | each {|w| $ZELLIJ_CMD_MAP | get -o $w } | where {|v| $v != null } | first)
-
-        if ($program | is-not-empty) {
-          let base = $env._ZELLIJ_TAB_BASE_NAME? | default ( let b = ($env.PWD | path basename); if ($b | is-empty) { $env.PWD } else { $b })
-          zellij action rename-tab $"($base) \(($program)\)"
-          $env._ZELLIJ_TAB_RENAMED = true
-        }
-      }
-    ]
-    pre_prompt: [
-      {
-        if ($env._ZELLIJ_TAB_RENAMED? == true) {
-          let base = $env._ZELLIJ_TAB_BASE_NAME? | default ( let b = ($env.PWD | path basename); if ($b | is-empty) { $env.PWD } else { $b })
-          zellij action rename-tab $base
-          $env._ZELLIJ_TAB_RENAMED = false
-        }
-      }
-    ]
-  }
   completions: {
     external: {
       enable: true
@@ -246,7 +192,6 @@ source core.nu
 # Domain modules
 use git.nu
 use docker.nu *
-use zellij.nu *
 use media.nu *
 use cloud.nu *
 use system.nu *
@@ -261,18 +206,6 @@ use cert.nu
 source ~/.cache/mise/init.nu
 source zoxide.gen.nu
 use external/bash-env-nushell/bash-env.nu
-
-# if "ZELLIJ" not-in ($env | columns) {
-#   if $env.ZELLIJ_AUTO_ATTACH == true {
-#     ^zellij attach --create $env.USER
-#   } else {
-#     ^zellij
-#   }
-
-#   if $env.ZELLIJ_AUTO_EXIT == true {
-#     exit
-#   }
-# }
 
 def banner [] {
   let ellie = [

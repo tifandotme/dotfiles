@@ -28,26 +28,11 @@ y() {
   rm -f "$tmp"
 }
 
-alias z="zellij"
-alias zka="zellij delete-all-sessions --force --yes && zellij kill-all-sessions --yes"
-
 alias yal="yadm list -a"
 alias yag="yadm enter lazygit --work-tree ~"
 
 # ALIASES_END
 
 eval "$(starship init bash)"
-
-if [[ -z "$ZELLIJ" ]]; then
-  if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-    zellij attach --create $USER
-  else
-    zellij
-  fi
-
-  if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
-    exit
-  fi
-fi
 
 eval "$(zoxide init --cmd cd bash)"

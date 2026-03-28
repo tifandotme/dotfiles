@@ -9,9 +9,6 @@ export XDG_STATE_HOME="$HOME/.local/state"
 
 export EDITOR=vi
 
-export ZELLIJ_AUTO_ATTACH="true"
-export ZELLIJ_AUTO_EXIT="false"
-
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
 
 export PATH="$BUN_INSTALL/bin:$HOME/.cargo/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"

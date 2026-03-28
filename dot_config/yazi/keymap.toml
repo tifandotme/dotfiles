@@ -3,8 +3,8 @@
 [mgr]
 prepend_keymap = [
   # https://yazi-rs.github.io/docs/tips/#dropping-to-shell
-  # prompt will say "in yazi", see starship conf file
-  { on = "!", run = 'shell -- zellij action new-pane --floating -- bash -c "export YAZI_ID=$YAZI_ID; exec $SHELL"', desc = "Open shell here" },
+  # Opens a new cmux workspace if available, otherwise shell in place
+  { on = "!", run = 'shell --interactive', desc = "Open shell here" },
   # https://yazi-rs.github.io/docs/tips/#cd-to-git-root
   { on = ["g", "r"], run = 'shell -- ya emit cd "$(git rev-parse --show-toplevel)"', desc = "Change directory to git root" },
   # https://github.com/yazi-rs/plugins/tree/main/smart-enter.yazi
