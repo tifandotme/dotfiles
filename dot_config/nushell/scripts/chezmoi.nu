@@ -45,8 +45,9 @@ export def --wrapped bun [...args: string] {
 # Guard brew package operations — use chezmoi instead
 export def --wrapped brew [...args: string] {
   let has_forbidden = ($args | any {|a| $a in ["install" "uninstall" "remove" "reinstall" "tap" "untap" "rm"] })
+  let bypass_guard = ($env.CHEZMOI_BYPASS_BREW_GUARD? | default "0") == "1"
 
-  if $has_forbidden {
+  if ($has_forbidden and not $bypass_guard) {
     print $"(ansi red_bold)🚫 HELL NO!(ansi reset)"
     print ""
     print "You don't manually manage packages, you magnificent walnut."
@@ -55,6 +56,8 @@ export def --wrapped brew [...args: string] {
     print $"  (ansi cyan)($BREW_FILE)(ansi reset)"
     print ""
     print $"Then run: (ansi green)chezmoi apply(ansi reset)"
+    print ""
+    print "Bypass with CHEZMOI_BYPASS_BREW_GUARD=1"
     return
   }
 
