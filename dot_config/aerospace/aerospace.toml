@@ -280,5 +280,9 @@ run = "layout floating"
 if.app-id = "org.openvpn.client.app"
 run = "layout floating"
 
+[[on-window-detected]]
+if.app-id = "com.apple.Stickies"
+run = "layout floating"
+
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 # s = ['layout sticky tiling', 'mode main']

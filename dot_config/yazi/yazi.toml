@@ -8,9 +8,9 @@ append_fetchers = [
 ]
 # Disable image/video/PDF previews to avoid chafa escape sequence leak triggering rename
 # prepend_previewers = [
-  # { mime = "image/*", run = "noop" },
-  # { mime = "video/*", run = "noop" },
-  # { mime = "application/pdf", run = "noop" },
+# { mime = "image/*", run = "noop" },
+# { mime = "video/*", run = "noop" },
+# { mime = "application/pdf", run = "noop" },
 # ]
 
 [mgr]
@@ -30,3 +30,8 @@ prepend_rules = [
 play = [{ run = 'open "$@" -a IINA', orphan = true, for = "unix" }]
 # setting TERM because we overrides TERM inside Yazi which is invalid according to vi
 edit = [{ run = 'TERM=ansi $EDITOR "$@"', block = true, for = "unix" }]
+
+[preview]
+max_width = 1200
+image_quality = 50
+image_delay = 100

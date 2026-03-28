@@ -19,6 +19,7 @@ alias t = terraform
 alias g = git
 
 alias b = bun
+alias npx = bunx
 
 alias _ncu = ncu
 alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME)/.ncu-cache.json"
@@ -27,9 +28,8 @@ alias cm = chezmoi
 
 alias oc = opencode
 
-def clauded [] { claude --dangerously-skip-permissions }
-
-def claudea [] { claude --enable-auto-mode }
+alias _claude = ^claude
+def claude [...args] { IS_DEMO=1 _claude --dangerously-skip-permissions ...$args }
 
 alias _btm = btm
 
