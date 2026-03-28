@@ -12,17 +12,25 @@
 - Git default branch: `master`
 - Always use `--no-pager` flag AFTER `git` (e.g., `git --no-pager diff`)
 
-## Web Search
+## Web Search & Content Extraction
 
-ALWAYS use Tavily search skill, never use default web search
+ALWAYS use specialized skills, default web search/fetch tool is just last-resort fallback.
+
+**Priority order:**
+
+1. `context7` - Library/framework docs (React, Next.js, FastAPI, etc.) — prioritized for docs
+2. `search` - General web search, current events, fallback for docs
+3. `crawl` - Bulk download sites/knowledge bases for offline analysis
+4. `extract` - Pull content from specific URLs you already know
+
+## GitHub Interactions
+
+For ANY interaction with github.com (reading issues, PRs, READMEs, repos, releases, etc.):
+
+1. MUST load `gh-cli` skill first (read the SKILL.md)
+2. Then use `gh` CLI commands as documented in the skill
+3. NEVER use web search or built-in fetch tools for GitHub content
 
 ## Browser Automation
 
-Use `agent-browser` for web automation. Run `agent-browser --help` for all commands.
-
-Core workflow:
-
-1. `agent-browser open <url>` - Navigate to page
-2. `agent-browser snapshot -i` - Get interactive elements with refs (@e1, @e2)
-3. `agent-browser click @e1` / `fill @e2 "text"` - Interact using refs
-4. Re-snapshot after page changes
+Use `cmux-browser` for web automation inside cmux webviews. Load the skill for full command reference.
