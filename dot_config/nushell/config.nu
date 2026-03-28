@@ -117,6 +117,16 @@ $env.config = {
       mode: [emacs vi_normal vi_insert]
       event: {send: menu name: fzf_history}
     }
+    {
+      name: open_project
+      modifier: control
+      keycode: char_b
+      mode: [emacs vi_normal vi_insert]
+      event: {
+        send: executehostcommand
+        cmd: "open-project"
+      }
+    }
   ]
 
   menus: [
