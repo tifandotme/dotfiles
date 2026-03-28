@@ -25,7 +25,7 @@ export def --env open-project [default_project: string = ""] {
     let dir_name = $chosen_project | split row "/" | last
     let absolute_path = $"($env.HOME)/($chosen_project)"
 
-    if "CMUX_SOCKET" in ($env | columns) {
+    if "CMUX_SOCKET_PATH" in ($env | columns) {
       cmux new-workspace --cwd $absolute_path
       cmux rename-workspace $dir_name
     } else {
