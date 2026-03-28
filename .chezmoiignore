@@ -2,6 +2,13 @@
 README.md
 key.txt.age
 
+AGENTS.md
+CLAUDE.md
+.config/nushell/AGENTS.md
+.config/nushell/CLAUDE.md
+.config/sketchybar/AGENTS.md
+.config/sketchybar/CLAUDE.md
+
 {{-  if ne .chezmoi.os "darwin" }}
 work/
 personal/
