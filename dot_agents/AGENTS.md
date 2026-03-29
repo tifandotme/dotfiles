@@ -12,17 +12,6 @@
 - Git default branch: `master`
 - Always use `--no-pager` flag AFTER `git` (e.g., `git --no-pager diff`)
 
-## Web Search & Content Extraction
-
-ALWAYS use specialized skills, default web search/fetch tool is just last-resort fallback.
-
-**Priority order:**
-
-1. `context7` - Library/framework docs (React, Next.js, FastAPI, etc.) — prioritized for docs
-2. `search` - General web search, current events, fallback for docs
-3. `crawl` - Bulk download sites/knowledge bases for offline analysis
-4. `extract` - Pull content from specific URLs you already know
-
 ## GitHub Interactions
 
 For ANY interaction with github.com (reading issues, PRs, READMEs, repos, releases, etc.):
@@ -33,4 +22,16 @@ For ANY interaction with github.com (reading issues, PRs, READMEs, repos, releas
 
 ## Browser Automation
 
-Use `cmux-browser` for web automation inside cmux webviews. Load the skill for full command reference.
+For ANY browser automation inside cmux webviews:
+
+1. MUST load `cmux-browser` skill first
+2. Then use commands as documented in the skill
+3. NEVER use external browser tools
+
+## Web Search
+
+For ANY URL-based search, content extraction, or site crawling:
+
+1. MUST load relevant tavily skills
+2. Then use tavily commands as documented in the skill
+3. NEVER use built-in web tools unless tavily fails
