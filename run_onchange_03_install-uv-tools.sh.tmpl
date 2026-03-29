@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# UV tools hash: # {{ list "tavily-cli" "openai-whisper" | join "\n" | sha256sum }}
+
+if command -v uv &>/dev/null; then
+  desired_uv_tools=(
+    # {{ if eq .chezmoi.os "darwin" -}}
+    "tavily-cli"
+    "openai-whisper"
+    # {{ end -}}
+  )
+
+  installed_tools=$(uv tool list 2>/dev/null | grep -E '^\w' | awk '{print $1}' | sort)
+
+  for tool in "${desired_uv_tools[@]}"; do
+    if ! echo "$installed_tools" | grep -qx "$tool"; then
+      echo "Installing uv tool: $tool"
+      uv tool install "$tool"
+    fi
+  done
+
+  echo "$installed_tools" | while read -r tool; do
+    if [[ -n "$tool" ]] && ! [[ " ${desired_uv_tools[*]} " =~ $tool ]]; then
+      echo "Removing unwanted uv tool: $tool"
+      uv tool uninstall "$tool"
+    fi
+  done
+fi
