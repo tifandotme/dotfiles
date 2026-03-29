@@ -8,24 +8,55 @@ if ! pgrep -f "Slack" >/dev/null; then
   exit 0
 fi
 
-# Get unread count using lsappinfo
-UNREAD_COUNT=$(lsappinfo info -only StatusLabel Slack | sed -n 's/.*"label"="\(.*\)".*/\1/p' 2>/dev/null)
+# Get badge label from lsappinfo
+BADGE_LABEL=$(lsappinfo info -only StatusLabel Slack | sed -n 's/.*"label"="\(.*\)".*/\1/p' 2>/dev/null)
 
-# Clean up count and default to 0 if empty
-UNREAD_COUNT=${UNREAD_COUNT//[^0-9]/}
-[ -z "$UNREAD_COUNT" ] && UNREAD_COUNT=0
+# Extract just the number
+BADGE_NUMBER=${BADGE_LABEL//[^0-9]/}
+[ -z "$BADGE_NUMBER" ] && BADGE_NUMBER=0
 
-# Update display
-if [ "$UNREAD_COUNT" -gt 0 ]; then
-  sketchybar --set "$NAME" \
-    icon="􀋚" \
-    label="$UNREAD_COUNT" \
-    icon.color="${DANGER}" \
-    drawing=on
+# Check if badge contains "Later" (case insensitive)
+HAS_LATER=0
+if echo "$BADGE_LABEL" | grep -qi "later"; then
+  HAS_LATER=1
+fi
+
+# Slack includes "Later" items in the badge count - there's no clean API to separate them
+# Options:
+# 1. Disable "Show badge for items in Later" in Slack Preferences > Notifications
+# 2. Use this script's simple indicator mode (set below)
+
+USE_SIMPLE_INDICATOR=false
+
+if [ "$USE_SIMPLE_INDICATOR" = true ]; then
+  # Simple mode: just show if there's activity
+  if [ "$BADGE_NUMBER" -gt 0 ]; then
+    sketchybar --set "$NAME" \
+      icon="􀋚" \
+      label="" \
+      icon.color="${DANGER}" \
+      drawing=on
+  else
+    sketchybar --set "$NAME" \
+      icon="􀋚" \
+      label="" \
+      icon.color="${ACCENT}" \
+      drawing=on
+  fi
 else
-  sketchybar --set "$NAME" \
-    icon="􀋚" \
-    label="0" \
-    icon.color="${ACCENT}" \
-    drawing=on
+  # Count mode (includes Later items - Slack limitation)
+  # Consider switching to simple mode or disabling Later badge in Slack prefs
+  if [ "$BADGE_NUMBER" -gt 0 ]; then
+    sketchybar --set "$NAME" \
+      icon="􀋚" \
+      label="$BADGE_NUMBER" \
+      icon.color="${DANGER}" \
+      drawing=on
+  else
+    sketchybar --set "$NAME" \
+      icon="􀋚" \
+      label="0" \
+      icon.color="${ACCENT}" \
+      drawing=on
+  fi
 fi
