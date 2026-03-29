@@ -76,11 +76,6 @@
       }
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bun x ccusage statusline --no-offline --visual-burn-rate emoji --cost-source both",
-    "padding": 0
-  },
   "enabledPlugins": {
     "typescript-lsp@claude-plugins-official": true
   },
@@ -94,5 +89,10 @@
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "ui.showBanner": false,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "statusLine": {
+    "type": "command",
+    "command": "bunx -y ccstatusline@latest",
+    "padding": 0
+  }
 }
