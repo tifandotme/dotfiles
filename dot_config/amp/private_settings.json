@@ -20,20 +20,6 @@
         "cmd": "*rm -rf*"
       },
       "action": "ask"
-    },
-    {
-      "tool": "Bash",
-      "matches": {
-        "cmd": "*context7*"
-      },
-      "action": "allow"
-    },
-    {
-      "tool": "Bash",
-      "matches": {
-        "cmd": "*bw*"
-      },
-      "action": "ask"
     }
   ],
   "amp.terminal.theme": "dark",
