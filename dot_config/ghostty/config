@@ -37,3 +37,5 @@ split-divider-color = #000000
 
 # -------------- MODIFIED
 # keybind = super+r=reload_config
+
+keybind = super+s=write_scrollback_file:open

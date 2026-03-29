@@ -243,6 +243,6 @@ def banner [] {
   print $"(ansi green)($ellie.3)  (ansi yellow)  (ansi yellow_italic)($tips | shuffle | first)(ansi reset)"
 }
 
-if $nu.is-interactive {
-  banner
-}
+# if $nu.is-interactive {
+#   banner
+# }
