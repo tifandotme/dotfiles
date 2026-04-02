@@ -6,7 +6,6 @@
   },
   "permissions": {
     "allow": [
-      "Bash(*context7*)",
       "Bash(mkdir:*)",
       "Bash(go:*)",
       "Bash(ls:*)",
@@ -76,8 +75,14 @@
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "bunx -y ccstatusline@latest",
+    "padding": 0
+  },
   "enabledPlugins": {
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "slack@claude-plugins-official": true
   },
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
@@ -88,11 +93,6 @@
   },
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "ui.showBanner": false,
   "skipAutoPermissionPrompt": true,
-  "statusLine": {
-    "type": "command",
-    "command": "bunx -y ccstatusline@latest",
-    "padding": 0
-  }
+  "ui.showBanner": false
 }
