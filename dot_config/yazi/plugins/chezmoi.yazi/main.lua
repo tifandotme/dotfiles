@@ -3,11 +3,21 @@
 -- Chezmoi indicator plugin for Yazi
 -- Shows an indicator for files managed by chezmoi (dotfiles manager)
 
+---@param path string
+---@return string
+local function normalize_path(path)
+  if path == "/" then
+    return path
+  end
+
+  return path:gsub("/+$", "")
+end
+
 ---@return string?
 local function get_source_dir()
   -- chezmoi source-path returns the source directory when no target specified
   -- Works from any directory, returns empty if chezmoi is not configured
-  local output, err = Command("chezmoi")
+  local output = Command("chezmoi")
       :arg({ "source-path" })
       :stdout(Command.PIPED)
       :stderr(Command.PIPED)
@@ -22,25 +32,33 @@ local function get_source_dir()
   return nil
 end
 
----@return table<string, true> -- Set of managed file paths (absolute paths)
-local function get_managed_files()
-  local managed = {}
-
-  -- chezmoi managed -p absolute returns all managed entries with absolute paths
-  -- Don't pass a path argument to get everything
-  local output, err = Command("chezmoi")
-      :arg({ "managed", "-p", "absolute" })
+---@param managed table<string, true>
+---@param path_style string
+local function add_managed_files(managed, path_style)
+  local output = Command("chezmoi")
+      :arg({ "managed", "-p", path_style })
       :stdout(Command.PIPED)
       :stderr(Command.PIPED)
       :output()
 
-  if output and output.status.success then
-    for line in output.stdout:gmatch("[^\r\n]+") do
-      if line ~= "" then
-        managed[line] = true
-      end
+  if not output or not output.status.success then
+    return
+  end
+
+  for line in output.stdout:gmatch("[^\r\n]+") do
+    if line ~= "" then
+      managed[normalize_path(line)] = true
     end
   end
+end
+
+---@return table<string, true> -- Set of managed file paths (absolute paths)
+local function get_managed_files()
+  local managed = {}
+
+  -- Support browsing both the destination tree and the chezmoi source tree.
+  add_managed_files(managed, "absolute")
+  add_managed_files(managed, "source-absolute")
 
   return managed
 end
@@ -80,9 +98,8 @@ local function setup(st, opts)
       return ""
     end
 
-    -- Check if this specific file is managed (using absolute path)
-    local url = self._file.url
-    local abs_path = tostring(url)
+    -- Compare against Yazi's normalized filesystem path, not the raw URL object.
+    local abs_path = normalize_path(tostring(self._file.path))
     local is_managed = managed[abs_path]
 
     if is_managed then
@@ -113,7 +130,7 @@ local function fetch(_, job)
   -- Add to state
   add(managed)
 
-  return false
+  return true
 end
 
 return { setup = setup, fetch = fetch }

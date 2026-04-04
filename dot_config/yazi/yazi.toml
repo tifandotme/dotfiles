@@ -4,7 +4,8 @@
 
 [plugin]
 append_fetchers = [
-  { id = "chezmoi", url = "*/", name = "chezmoi", run = "chezmoi", prio = "low" },
+  { id = "chezmoi", url = "*/", run = "chezmoi", prio = "low" },
+  { id = "chezmoi", url = "local://*", run = "chezmoi", prio = "low" },
 ]
 # Disable image/video/PDF previews to avoid chafa escape sequence leak triggering rename
 # prepend_previewers = [
