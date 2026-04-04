@@ -182,7 +182,7 @@ sketchybar --add item claude_usage right \
 
 sketchybar --add item codex_usage right \
   --set codex_usage \
-  icon="􀤙" \
+  icon="􀘾" \
   icon.padding_right=4 \
   update_freq=900 \
   script="$PLUGIN_DIR/codex_usage.sh"
