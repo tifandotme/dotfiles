@@ -1,4 +1,9 @@
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# {{ $isDarwin := eq .chezmoi.os "darwin" -}}
+# {{ $isServer := eq .chezmoi.hostname "box" -}}
+
+# NOTE: Packages outside conditionals install on ALL machines (macOS + VPS).
+# Wrap macOS/desktop-only packages in: # {{ if $isDarwin -}} ... # {{ end -}}
 
 # =============================================================================
 # CORE TERMINAL ECOSYSTEM
@@ -26,25 +31,28 @@ brew "zoxide"  # Smarter cd command with memory
 brew "yazi" # Blazing fast terminal file manager
 
 # Yazi dependencies for previews
-brew "fd"          # File searching
-brew "fzf"         # Quick file subtree navigation
-brew "imagemagick" # Font, HEIC, JPEG XL preview
-brew "jq"          # JSON preview
-brew "poppler"     # PDF preview
-brew "resvg"       # SVG preview
-brew "ripgrep"     # File content searching
-brew "sevenzip"    # Archive extraction and preview
-brew "zoxide"      # Historical directories navigation
+brew "fd"       # File searching
+brew "fzf"      # Quick file subtree navigation
+brew "jq"       # JSON preview
+brew "ripgrep"  # File content searching
+brew "sevenzip" # Archive extraction and preview
+brew "zoxide"   # Historical directories navigation
 
-# Additional yazi media support
+# {{ if $isDarwin -}}
+# Yazi visual preview dependencies (require GUI terminal)
+brew "imagemagick"       # Font, HEIC, JPEG XL preview
+brew "poppler"           # PDF preview
+brew "resvg"             # SVG preview
 brew "ffmpeg"            # Video thumbnails
 brew "ffmpegthumbnailer" # Create thumbnails for video files
 brew "chafa"             # Unicode/ASCII/ANSI graphics renderer
+# {{ end -}}
 
 # =============================================================================
 # DEVELOPMENT - LANGUAGES & RUNTIMES
 # =============================================================================
 
+# {{ if $isDarwin -}}
 # JavaScript/TypeScript
 tap "oven-sh/bun"
 brew "oven-sh/bun/bun" # Fast JavaScript runtime, bundler, package manager
@@ -53,6 +61,7 @@ brew "oven-sh/bun/bun" # Fast JavaScript runtime, bundler, package manager
 brew "golangci-lint" # Fast linters runner for Go
 brew "gopls"         # Language server for Go
 brew "templ"         # HTML templating language for Go
+# {{ end -}}
 
 # Python
 brew "uv" # Fast Python package installer and resolver
@@ -61,20 +70,24 @@ brew "uv" # Fast Python package installer and resolver
 brew "mise" # Polyglot runtime manager (asdf rust clone)
 
 # =============================================================================
+# GIT TOOLS
+# =============================================================================
+
+brew "gh"        # GitHub CLI
+brew "git-delta" # Syntax-highlighting pager for git/diff output
+brew "gitleaks"  # Audit git repos for secrets
+brew "lazygit"   # Simple terminal UI for git commands
+
+# =============================================================================
 # DEVELOPMENT - TOOLS & FORMATTERS
 # =============================================================================
 
+# {{ if $isDarwin -}}
 # AI coding assistants
 cask "claude"
 cask "claude-code"
 
 brew "models"
-
-# Git tools
-brew "gh"        # GitHub CLI
-brew "git-delta" # Syntax-highlighting pager for git/diff output
-brew "gitleaks"  # Audit git repos for secrets
-brew "lazygit"   # Simple terminal UI for git commands
 
 # Shell scripting
 brew "actionlint" # Static checker for GitHub Actions workflow files
@@ -90,6 +103,7 @@ brew "topiary"             # Uniform formatter for simple languages
 
 # Linters
 brew "tflint" # Linter for Terraform files
+# {{ end -}}
 
 # =============================================================================
 # CONTAINERS & VIRTUALIZATION
@@ -129,6 +143,7 @@ brew "swaks"   # SMTP command-line test tool
 # SECURITY & NETWORKING
 # =============================================================================
 
+# {{ if $isDarwin -}}
 # Network utilities
 brew "bandwhich" # Terminal bandwidth utilization tool
 brew "gping"     # Ping, but with a graph
@@ -136,68 +151,69 @@ brew "rustscan"  # Modern Day Portscanner
 
 # Android tools
 brew "scrcpy" # Display and control your Android device
+# {{ end -}}
 
 # =============================================================================
 # MEDIA & GRAPHICS TOOLS
 # =============================================================================
 
+# {{ if $isDarwin -}}
 # Image processing
 brew "exiftool" # Read and write EXIF metadata
 brew "graphviz" # Graph visualization software
 brew "optipng"  # PNG file optimizer
 brew "pastel"   # Command-line tool to generate/analyze colors
+# {{ end -}}
 
 # =============================================================================
 # DOCUMENTATION & CONTENT
 # =============================================================================
 
-brew "glow"           # Render markdown on the CLI
+brew "glow"     # Render markdown on the CLI
+brew "tealdeer" # Fast tldr implementation in Rust
+brew "tokei"    # Count code quickly
+
+# {{ if $isDarwin -}}
 brew "monolith"       # Save complete web pages as single HTML files
 brew "spotify_player" # Command driven spotify player
-brew "tealdeer"       # Fast tldr implementation in Rust
 brew "tidy-viewer"    # CLI CSV pretty printer
-brew "tokei"          # Count code quickly
 brew "trafilatura"    # Discovery, extraction for Web text
 brew "yt-dlp"         # Feature-rich audio/video downloader
+# {{ end -}}
 
 # =============================================================================
 # SYSTEM UTILITIES
 # =============================================================================
 
-brew "asciinema" # Record and share terminal sessions
-brew "batt"      # Control battery charging on Apple Silicon MacBooks
-brew "caligula"  # User-friendly TUI for disk imaging
+brew "chezmoi"   # Manage your dotfiles across multiple machines
 brew "fastfetch" # Like neofetch, but much faster
 brew "gdu"       # Disk usage analyzer with console interface
 brew "gnupg"     # GNU Privacy Guard (OpenPGP)
-
-# Mac cleaning
-brew "chezmoi" # Manage your dotfiles across multiple machines
-brew "mole"    # Deep clean and optimize your Mac
-
-# Benchmarking
 brew "hyperfine" # Command-line benchmarking tool
+brew "sshs"      # Graphical command-line client for SSH
+brew "aichat"    # All-in-one AI-Powered CLI Chat & Copilot
+
+# {{ if $isDarwin -}}
+brew "asciinema" # Record and share terminal sessions
+brew "batt"      # Control battery charging on Apple Silicon MacBooks
+brew "caligula"  # User-friendly TUI for disk imaging
+brew "mole"      # Deep clean and optimize your Mac
 
 # Security research
 brew "sherlock"  # Hunt down social media accounts by username
 brew "slackdump" # Export Slack data without admin privileges
 
-# SSH
-brew "sshs" # Graphical command-line client for SSH
-
-# AI
-brew "aichat" # All-in-one AI-Powered CLI Chat & Copilot
-
 # Basecamp tools
 # TODO: Switch back to basecamp/tap once https://github.com/basecamp/fizzy-cli/issues/107 is resolved
 tap "robzolkos/fizzy-cli"
 brew "fizzy-cli" # Fizzy CLI and Agent Skills
+# {{ end -}}
 
 # =============================================================================
 # MACOS WINDOW MANAGEMENT & CUSTOMIZATION
 # =============================================================================
 
-# {{ if eq .chezmoi.os "darwin" -}}
+# {{ if $isDarwin -}}
 
 tap "felixkratz/formulae"
 brew "felixkratz/formulae/borders"    # Window border system for macOS
@@ -263,11 +279,6 @@ cask "zoom"     # Video communication platform
 # PRODUCTIVITY & NOTES
 # =============================================================================
 
-# Meeting transcription and note-taking
-tap "silverstein/tap"
-cask "minutes" # AI meeting transcription and note-taking
-brew "minutes" # CLI for meeting transcription
-
 cask "anki" # Memory training application
 cask "slack"
 cask "craft"    # Native document editor
@@ -308,9 +319,5 @@ cask "openmtp"                  # Android file transfer
 cask "temurin" # Eclipse Temurin Java Development Kit
 # cask "utm"           # Virtual machines UI using QEMU
 cask "wireshark-app" # Network protocol analyzer
-
-# {{ else if eq .chezmoi.os "linux" -}}
-
-# Linux-specific packages would go here
 
 # {{ end -}}
