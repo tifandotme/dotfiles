@@ -6,6 +6,7 @@ macOS-first dotfiles managed by chezmoi with age encryption. Primary shell is Nu
 
 - `dot_Brewfile.tmpl` — Homebrew packages (platform-guarded)
 - `run_onchange_02_install-bun.sh.tmpl` — Bun globals (declarative)
+- `run_onchange_03_install-uv-tools.sh.tmpl` — uv-managed Python tools
 - `dot_config/mise/config.toml` — runtime versions
 
 ## Definition of Done
