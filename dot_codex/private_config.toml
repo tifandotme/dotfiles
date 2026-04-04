@@ -1,0 +1,27 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+model = "gpt-5.4"
+model_reasoning_effort = "medium"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "disabled"
+
+[features]
+codex_hooks = true
+
+[projects."/Users/tifan/.local/share/chezmoi"]
+trust_level = "trusted"
+
+[tui]
+theme = "ansi"
+status_line = [
+  "model-with-reasoning",
+  "current-dir",
+  "git-branch",
+  "context-used",
+  "five-hour-limit",
+  "weekly-limit"
+]
+notifications = true
+notification_method = "auto"
+show_tooltips = false
