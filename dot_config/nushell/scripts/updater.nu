@@ -31,7 +31,7 @@ export def start [] {
 
     # Pinned packages: name -> exact version to preserve
     let pinned = {
-      "@sourcegraph/amp": "0.0.1771243550-geaf318"
+      # "@sourcegraph/amp": "0.0.1771243550-geaf318"
     }
 
     # Run update
