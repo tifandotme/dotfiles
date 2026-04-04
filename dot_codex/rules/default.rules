@@ -1,5 +1,4 @@
-prefix_rule(pattern=["ctx7", "library"], decision="allow")
-prefix_rule(pattern=["ctx7", "docs"], decision="allow")
-prefix_rule(pattern=["tvly", "extract"], decision="allow")
+prefix_rule(pattern=["ctx7"], decision="allow")
+prefix_rule(pattern=["tvly"], decision="allow")
 prefix_rule(pattern=["gh", "repo", "view"], decision="allow")
 prefix_rule(pattern=["gh", "api"], decision="allow")
