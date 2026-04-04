@@ -1,7 +1,7 @@
 --- @since 26.1.1
 
 -- Chezmoi indicator plugin for Yazi
--- Shows an indicator for files managed by chezmoi (dotfiles manager)
+-- Shows indicators for plain and encrypted chezmoi-managed files
 
 ---@param path string
 ---@return string
@@ -32,11 +32,24 @@ local function get_source_dir()
   return nil
 end
 
----@param managed table<string, true>
+---@param paths table<string, true>
 ---@param path_style string
-local function add_managed_files(managed, path_style)
-  local output = Command("chezmoi")
-      :arg({ "managed", "-p", path_style })
+---@param include_types string?
+local function add_managed_files(paths, path_style, include_types)
+  local args = { "managed" }
+  if include_types and include_types ~= "" then
+    table.insert(args, "--include")
+    table.insert(args, include_types)
+  end
+  table.insert(args, "-p")
+  table.insert(args, path_style)
+
+  local cmd = Command("chezmoi")
+  for _, arg in ipairs(args) do
+    cmd = cmd:arg(arg)
+  end
+
+  local output = cmd
       :stdout(Command.PIPED)
       :stderr(Command.PIPED)
       :output()
@@ -47,32 +60,37 @@ local function add_managed_files(managed, path_style)
 
   for line in output.stdout:gmatch("[^\r\n]+") do
     if line ~= "" then
-      managed[normalize_path(line)] = true
+      paths[normalize_path(line)] = true
     end
   end
 end
 
----@return table<string, true> -- Set of managed file paths (absolute paths)
+---@return { managed: table<string, true>, encrypted: table<string, true> }
 local function get_managed_files()
   local managed = {}
+  local encrypted = {}
 
   -- Support browsing both the destination tree and the chezmoi source tree.
-  add_managed_files(managed, "absolute")
-  add_managed_files(managed, "source-absolute")
+  for _, path_style in ipairs({ "absolute", "source-absolute" }) do
+    add_managed_files(managed, path_style)
+    add_managed_files(encrypted, path_style, "encrypted")
+  end
 
-  return managed
+  return { managed = managed, encrypted = encrypted }
 end
 
----@param managed table<string, true>
-local add = ya.sync(function(st, managed)
+---@param state { managed: table<string, true>, encrypted: table<string, true> }
+local add = ya.sync(function(st, state)
   ---@cast st State
-  st.managed = managed
+  st.managed = state.managed
+  st.encrypted = state.encrypted
   ui.render()
 end)
 
 local remove = ya.sync(function(st)
   ---@cast st State
   st.managed = nil
+  st.encrypted = nil
   ui.render()
 end)
 
@@ -80,12 +98,14 @@ end)
 ---@param opts Options
 local function setup(st, opts)
   st.managed = nil
+  st.encrypted = nil
 
   opts = opts or {}
   opts.order = opts.order or 5000
 
   -- Icon and styling (hardcoded, no theme.toml needed)
   local sign = ""
+  local encrypted_sign = "󰌾"
   local unmanaged_sign = ""
 
   Linemode:children_add(function(self)
@@ -94,15 +114,19 @@ local function setup(st, opts)
     end
 
     local managed = st.managed
-    if not managed then
+    local encrypted = st.encrypted
+    if not managed or not encrypted then
       return ""
     end
 
     -- Compare against Yazi's normalized filesystem path, not the raw URL object.
     local abs_path = normalize_path(tostring(self._file.path))
+    local is_encrypted = encrypted[abs_path]
     local is_managed = managed[abs_path]
 
-    if is_managed then
+    if is_encrypted then
+      return ui.Span("" .. encrypted_sign)
+    elseif is_managed then
       -- Always return with style to ensure consistent rendering
       -- (border radius issue is a Yazi limitation with children_add)
       return ui.Span("" .. sign)
