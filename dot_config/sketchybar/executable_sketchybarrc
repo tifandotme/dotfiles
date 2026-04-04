@@ -180,6 +180,13 @@ sketchybar --add item claude_usage right \
   update_freq=900 \
   script="$PLUGIN_DIR/claude_usage.sh"
 
+sketchybar --add item codex_usage right \
+  --set codex_usage \
+  icon="􀤙" \
+  icon.padding_right=4 \
+  update_freq=900 \
+  script="$PLUGIN_DIR/codex_usage.sh"
+
 sketchybar --add item network_speed right \
   --set network_speed \
   icon="􀴽" \
