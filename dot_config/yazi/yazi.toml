@@ -26,12 +26,14 @@ show_hidden = true
 
 [open]
 prepend_rules = [
+  { url = "*.csv", use = "view_csv" },
   { mime = "text/*", use = "edit" },
   { mime = "video/*", use = "play" },
 ]
 
 [opener]
 play = [{ run = 'open "$@" -a IINA', orphan = true, for = "unix" }]
+view_csv = [{ run = 'tv -a -f -e "$1" | bat --plain --paging=always --wrap=never', block = true, for = "unix" }]
 # setting TERM because we overrides TERM inside Yazi which is invalid according to vi
 edit = [{ run = 'TERM=ansi $EDITOR "$@"', block = true, for = "unix" }]
 
