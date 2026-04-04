@@ -2,14 +2,21 @@
 
 model = "gpt-5.4"
 model_reasoning_effort = "medium"
+plan_mode_reasoning_effort = "high"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 web_search = "disabled"
 
-[features]
-codex_hooks = true
+# [features]
+# codex_hooks = true
 
 [projects."/Users/tifan/.local/share/chezmoi"]
+trust_level = "trusted"
+
+[projects."/Users/tifan/personal"]
+trust_level = "trusted"
+
+[projects."/Users/tifan/work"]
 trust_level = "trusted"
 
 [tui]
