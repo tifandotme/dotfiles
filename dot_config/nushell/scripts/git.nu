@@ -18,10 +18,3 @@ export def "rebase-release" [remote = "upstream"] {
 export def "loggy" [] {
   git log --oneline (git describe --tags --abbrev=0 upstream/HEAD)
 }
-
-# Delete release + tag (local and remote)
-export def "revert-release" [tag: string] {
-  gh release delete $tag -y
-  git push origin --delete $tag
-  git tag -d $tag
-}
