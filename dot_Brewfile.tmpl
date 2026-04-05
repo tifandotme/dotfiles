@@ -193,6 +193,8 @@ brew "gnupg"     # GNU Privacy Guard (OpenPGP)
 brew "hyperfine" # Command-line benchmarking tool
 brew "sshs"      # Graphical command-line client for SSH
 brew "aichat"    # All-in-one AI-Powered CLI Chat & Copilot
+tap "gromgit/brewtils"
+brew "gromgit/brewtils/taproom" # TUI for browsing Homebrew taps and formulae
 
 # {{ if $isDarwin -}}
 brew "asciinema" # Record and share terminal sessions
@@ -245,7 +247,8 @@ cask "sequel-ace"        # MySQL/MariaDB database management
 cask "tableplus"         # Native GUI tool for relational databases
 
 # Editors
-cask "zed" # Multiplayer code editor
+cask "cursor" # AI-powered code editor
+cask "zed"    # Multiplayer code editor
 
 # Terminal emulator
 cask "ghostty" # Terminal emulator with GPU acceleration

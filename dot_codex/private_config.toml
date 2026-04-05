@@ -13,10 +13,7 @@ web_search = "disabled"
 [projects."/Users/tifan/.local/share/chezmoi"]
 trust_level = "trusted"
 
-[projects."/Users/tifan/personal"]
-trust_level = "trusted"
-
-[projects."/Users/tifan/work"]
+[projects."/Users/tifan/personal/resume"]
 trust_level = "trusted"
 
 [tui]

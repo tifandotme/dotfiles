@@ -390,7 +390,7 @@ fi
 if [ -n "${NAME:-}" ]; then
   sketchybar --set "$NAME" label="$LABEL"
   if pgrep -x "codex" >/dev/null 2>&1; then
-    sketchybar --set "$NAME" update_freq=180
+    sketchybar --set "$NAME" update_freq=60
   else
     sketchybar --set "$NAME" update_freq=900
   fi
