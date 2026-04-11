@@ -1,32 +1,32 @@
 {
   "edit_predictions": {
-    "provider": "mercury"
+    "provider": "mercury",
   },
   "when_closing_with_no_tabs": "keep_window_open",
   "confirm_quit": true,
   "on_last_window_closed": "quit_app",
   "telemetry": {
     "diagnostics": false,
-    "metrics": false
+    "metrics": false,
   },
   "base_keymap": "VSCode",
   "theme": {
     "dark": "Neo Gruber Darker",
     "light": "Gruvbox Light Hard",
-    "mode": "system"
+    "mode": "system",
   },
   "restore_on_startup": "last_workspace",
   "format_on_save": "off",
   "file_finder": {
-    "file_icons": false
+    "file_icons": false,
   },
   "collaboration_panel": {
-    "button": true
+    "button": true,
   },
   "project_panel": {
     "default_width": 300,
     "indent_guides": {
-      "show": "never"
+      "show": "never",
     },
     "dock": "right",
     "entry_spacing": "standard",
@@ -34,24 +34,24 @@
     "indent_size": 20,
     "folder_icons": false,
     "file_icons": false,
-    "hide_root": true
+    "hide_root": true,
   },
   "outline_panel": {
     "default_width": 300,
     "indent_guides": {
-      "show": "never"
+      "show": "never",
     },
     "dock": "left",
-    "auto_fold_dirs": true
+    "auto_fold_dirs": true,
   },
   "git_panel": {
-    "button": false
+    "button": false,
   },
   "terminal": {
-    "button": false
+    "button": false,
   },
   "notification_panel": {
-    "button": false
+    "button": false,
   },
   "buffer_font_family": "CommitMono Nerd Font",
   "buffer_font_size": 12.5,
@@ -71,33 +71,33 @@
     "show_other_hints": false,
     "show_background": false,
     "edit_debounce_ms": 700,
-    "scroll_debounce_ms": 50
+    "scroll_debounce_ms": 50,
   },
   "git": {
     "inline_blame": {
-      "enabled": true
-    }
+      "enabled": true,
+    },
   },
   "vim_mode": true,
   "vim": {
     "highlight_on_yank_duration": 300,
     "toggle_relative_line_numbers": true,
-    "use_system_clipboard": "on_yank"
+    "use_system_clipboard": "on_yank",
   },
   "buffer_font_features": {
-    "calt": false
+    "calt": false,
   },
   "diagnostics": {
     "inline": {
-      "enabled": false
-    }
+      "enabled": false,
+    },
   },
   "lsp": {
     "tailwindcss-language-server": {
       "settings": {
-        "classAttributes": ["class", "className", "ngClass", "styles"]
-      }
-    }
+        "classAttributes": ["class", "className", "ngClass", "styles"],
+      },
+    },
   },
   "languages": {
     "Python": {
@@ -111,9 +111,9 @@
       "formatter": {
         "external": {
           "command": "uvx",
-          "arguments": ["ruff", "format", "--stdin-filename", "{buffer_path}"]
-        }
-      }
+          "arguments": ["ruff", "format", "--stdin-filename", "{buffer_path}"],
+        },
+      },
     },
     "HTML": {
       "language_servers": ["superhtml"],
@@ -121,9 +121,9 @@
       "formatter": {
         "external": {
           "command": "superhtml",
-          "arguments": ["fmt", "--stdin"]
-        }
-      }
+          "arguments": ["fmt", "--stdin"],
+        },
+      },
     },
     "XML": {
       "language_servers": ["superhtml"],
@@ -131,65 +131,66 @@
       "formatter": {
         "external": {
           "command": "superhtml",
-          "arguments": ["fmt", "--stdin"]
-        }
-      }
+          "arguments": ["fmt", "--stdin"],
+        },
+      },
     },
     "Shell Script": {
       "formatter": {
         "external": {
           "command": "shfmt",
-          "arguments": ["--filename", "{buffer_path}", "--indent", "2"]
-        }
+          "arguments": ["--filename", "{buffer_path}", "--indent", "2"],
+        },
       },
-      "format_on_save": "on"
+      "format_on_save": "on",
     },
     "Kdl": {
       "formatter": {
         "external": {
           "command": "kdlfmt",
-          "arguments": ["format", "--stdin"]
-        }
+          "arguments": ["format", "--stdin"],
+        },
       },
-      "format_on_save": "on"
+      "format_on_save": "on",
     },
     "Nu": {
       "tab_size": 4,
       "formatter": {
         "external": {
-          "command": "/Users/tifan/.config/nushell/scripts/external/topiary-nushell/format.nu"
-        }
+          "command": "/Users/tifan/.config/nushell/scripts/external/topiary-nushell/format.nu",
+        },
       },
-      "format_on_save": "on"
+      "format_on_save": "on",
     },
     "CSS": {
-      "tab_size": 2
+      "tab_size": 2,
     },
     "Lua": {
-      "tab_size": 2
+      "tab_size": 2,
     },
     "Markdown": {
-      "show_edit_predictions": true
-    }
+      "show_edit_predictions": true,
+    },
   },
   "file_scan_exclusions": [
     "**/node_modules",
     "**/dist",
     "**/docker/buildx",
-    "**/docker/contexts"
+    "**/docker/contexts",
   ],
   "file_types": {
-    "Templ": [".chezmoiignore", "*.tmpl"],
+    "Templ": ["*.tmpl"],
     "Jinja2": ["*#template*", "*##*"],
+    "Git Ignore": [".chezmoiignore"],
     "Shell Script": [
       ".bash_profile*",
       ".bashrc*",
       "bash_aliases",
       "*Brewfile*",
-      "secrets"
+      "secrets",
     ],
     "Git Config": ["config"],
     "YAML": ["*yml*", "*yaml*"],
-    "TOML": ["*toml*"]
-  }
+    "TOML": ["*toml*"],
+  },
 }
