@@ -29,18 +29,12 @@ brew "zoxide"  # Smarter cd command with memory
 # =============================================================================
 
 brew "yazi" # Blazing fast terminal file manager
-
-# Yazi dependencies for previews
-brew "fd"       # File searching
-brew "fzf"      # Quick file subtree navigation
+# Yazi previews: uses fd, fzf, ripgrep, zoxide from "Modern CLI replacements" above; plus:
 brew "jq"       # JSON preview
-brew "ripgrep"  # File content searching
 brew "sevenzip" # Archive extraction and preview
-brew "zoxide"   # Historical directories navigation
 
 # {{- if $isDarwin -}}
 
-# Yazi visual preview dependencies (require GUI terminal)
 brew "imagemagick"       # Font, HEIC, JPEG XL preview
 brew "poppler"           # PDF preview
 brew "resvg"             # SVG preview
@@ -53,7 +47,6 @@ brew "ffmpegthumbnailer" # Create thumbnails for video files
 # DEVELOPMENT - LANGUAGES & RUNTIMES
 # =============================================================================
 
-# {{ if $isDarwin -}}
 # JavaScript/TypeScript
 tap "oven-sh/bun"
 brew "oven-sh/bun/bun" # Fast JavaScript runtime, bundler, package manager
@@ -62,7 +55,6 @@ brew "oven-sh/bun/bun" # Fast JavaScript runtime, bundler, package manager
 brew "golangci-lint" # Fast linters runner for Go
 brew "gopls"         # Language server for Go
 brew "templ"         # HTML templating language for Go
-# {{ end -}}
 
 # Python
 brew "uv" # Fast Python package installer and resolver
@@ -83,12 +75,12 @@ brew "lazygit"   # Simple terminal UI for git commands
 # DEVELOPMENT - TOOLS & FORMATTERS
 # =============================================================================
 
-# {{ if $isDarwin -}}
 # AI coding assistants
-cask "claude"
-cask "claude-code"
-
-brew "models"
+# {{ if $isDarwin -}}
+cask "claude" # Anthropic's official Claude desktop app
+# {{- end }}
+cask "claude-code" # Terminal-based AI coding assistant
+brew "models"      # TUI/CLI for browsing AI models, benchmarks, and coding agents
 
 # Shell scripting
 brew "actionlint" # Static checker for GitHub Actions workflow files
@@ -104,7 +96,6 @@ brew "topiary"             # Uniform formatter for simple languages
 
 # Linters
 brew "tflint" # Linter for Terraform files
-# {{ end -}}
 
 # =============================================================================
 # CONTAINERS & VIRTUALIZATION
@@ -135,33 +126,33 @@ brew "redis"         # Persistent key-value database
 brew "certbot" # Tool to obtain certs from Let's Encrypt
 brew "swaks"   # SMTP command-line test tool
 
-# Google Cloud (cask)
-
 # =============================================================================
 # SECURITY & NETWORKING
 # =============================================================================
 
-# {{ if $isDarwin -}}
 # Network utilities
 brew "bandwhich" # Terminal bandwidth utilization tool
 brew "gping"     # Ping, but with a graph
 brew "rustscan"  # Modern Day Portscanner
 
+# {{ if $isDarwin -}}
 # Android tools
 brew "scrcpy" # Display and control your Android device
-# {{ end -}}
+# {{- end }}
+
+# {{ if $isDarwin -}}
 
 # =============================================================================
 # MEDIA & GRAPHICS TOOLS
 # =============================================================================
 
-# {{ if $isDarwin -}}
 # Image processing
 brew "exiftool" # Read and write EXIF metadata
 brew "graphviz" # Graph visualization software
 brew "optipng"  # PNG file optimizer
 brew "pastel"   # Command-line tool to generate/analyze colors
-# {{ end -}}
+
+# {{- end }}
 
 # =============================================================================
 # DOCUMENTATION & CONTENT
@@ -178,7 +169,7 @@ brew "spotify_player" # Command driven spotify player
 brew "tidy-viewer"    # CLI CSV pretty printer
 brew "trafilatura"    # Discovery, extraction for Web text
 brew "yt-dlp"         # Feature-rich audio/video downloader
-# {{ end -}}
+# {{- end }}
 
 # =============================================================================
 # SYSTEM UTILITIES
@@ -190,31 +181,28 @@ brew "gdu"       # Disk usage analyzer with console interface
 brew "gnupg"     # GNU Privacy Guard (OpenPGP)
 brew "hyperfine" # Command-line benchmarking tool
 brew "sshs"      # Graphical command-line client for SSH
-brew "aichat"    # All-in-one AI-Powered CLI Chat & Copilot
 tap "gromgit/brewtils"
 brew "gromgit/brewtils/taproom" # TUI for browsing Homebrew taps and formulae
+brew "asciinema"                # Record and share terminal sessions
 
 # {{ if $isDarwin -}}
-brew "asciinema" # Record and share terminal sessions
 brew "batt"      # Control battery charging on Apple Silicon MacBooks
 brew "caligula"  # User-friendly TUI for disk imaging
 brew "mole"      # Deep clean and optimize your Mac
-
-# Security research
 brew "sherlock"  # Hunt down social media accounts by username
 brew "slackdump" # Export Slack data without admin privileges
+# {{- end }}
 
 # Basecamp tools
 # TODO: Switch back to basecamp/tap once https://github.com/basecamp/fizzy-cli/issues/107 is resolved
 tap "robzolkos/fizzy-cli"
 brew "fizzy-cli" # Fizzy CLI and Agent Skills
-# {{ end -}}
+
+# {{ if $isDarwin -}}
 
 # =============================================================================
 # MACOS WINDOW MANAGEMENT & CUSTOMIZATION
 # =============================================================================
-
-# {{ if $isDarwin -}}
 
 tap "felixkratz/formulae"
 brew "felixkratz/formulae/borders"    # Window border system for macOS
@@ -229,9 +217,6 @@ cask "sf-symbols"
 # Window manager
 tap "nikitabobko/tap"
 cask "aerospace" # i3-like tiling window manager
-
-# Mouse/Input customization
-# cask "linearmouse" # Customize mouse behavior
 
 # =============================================================================
 # DEVELOPMENT GUI APPLICATIONS
@@ -271,10 +256,8 @@ cask "teamviewer"      # Remote access and connectivity software
 # COMMUNICATION
 # =============================================================================
 
-cask "legcord" # Custom Discord client
-# cask "rocket"   # Emoji picker
+cask "legcord"  # Custom Discord client
 cask "telegram" # Messaging app
-
 cask "whatsapp" # Native desktop client for WhatsApp
 cask "zoom"     # Video communication platform
 
@@ -282,8 +265,8 @@ cask "zoom"     # Video communication platform
 # PRODUCTIVITY & NOTES
 # =============================================================================
 
-cask "anki" # Memory training application
-cask "slack"
+cask "anki"     # Memory training application
+cask "slack"    # Team communication and collaboration software
 cask "craft"    # Native document editor
 cask "obsidian" # Knowledge base on Markdown files
 
@@ -295,14 +278,12 @@ cask "handbrake-app" # Open-source video transcoder
 cask "iina"          # Free and open-source media player
 cask "spotify"       # Music streaming service
 cask "transmission"  # BitTorrent client
-# cask "vlc"           # Multimedia player
 
 # =============================================================================
 # SYSTEM UTILITIES (GUI)
 # =============================================================================
 
-cask "bitwarden" # Desktop password and login vault
-brew "bitwarden-cli"
+cask "bitwarden"    # Desktop password and login vault
 cask "crystalfetch" # UI for creating Windows installer ISO
 cask "handy"        # Speech to text application
 cask "keycastr"     # Open-source keystroke visualiser
