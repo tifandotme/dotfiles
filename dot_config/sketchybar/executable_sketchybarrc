@@ -187,6 +187,14 @@ sketchybar --add item codex_usage right \
   update_freq=900 \
   script="$PLUGIN_DIR/codex_usage.sh"
 
+# Cursor usage: no published API rate limits; ~3min poll balances freshness vs load
+sketchybar --add item cursor_usage right \
+  --set cursor_usage \
+  icon="􀘾" \
+  icon.padding_right=4 \
+  update_freq=180 \
+  script="$PLUGIN_DIR/cursor_usage.sh"
+
 sketchybar --add item network_speed right \
   --set network_speed \
   icon="􀴽" \
