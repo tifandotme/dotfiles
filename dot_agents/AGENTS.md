@@ -1,3 +1,7 @@
+---
+alwaysApply: true
+---
+
 # Global Agent Configuration
 
 ## Identity & Tone
@@ -41,6 +45,14 @@ For ANY URL-based search, content extraction, or site crawling:
 When running CLI tools from npm packages:
 
 - Use `bunx` instead of `npx`
+
+## Writing Prose
+
+When writing new file for humans to read (does not apply to chat responses):
+
+1. Load `writing-clearly-and-concisely` first (structure, active voice, concision)
+2. Load `humanizer` last (strip AI patterns, add voice)
+3. Never use em dashes
 
 ## Library Documentation
 
