@@ -38,15 +38,16 @@ brew "ripgrep"  # File content searching
 brew "sevenzip" # Archive extraction and preview
 brew "zoxide"   # Historical directories navigation
 
-# {{ if $isDarwin -}}
+# {{- if $isDarwin -}}
+
 # Yazi visual preview dependencies (require GUI terminal)
 brew "imagemagick"       # Font, HEIC, JPEG XL preview
 brew "poppler"           # PDF preview
 brew "resvg"             # SVG preview
 brew "ffmpeg"            # Video thumbnails
 brew "ffmpegthumbnailer" # Create thumbnails for video files
-brew "chafa"             # Unicode/ASCII/ANSI graphics renderer
-# {{ end -}}
+
+# {{- end }}
 
 # =============================================================================
 # DEVELOPMENT - LANGUAGES & RUNTIMES
@@ -129,9 +130,6 @@ brew "redis"         # Persistent key-value database
 # =============================================================================
 # CLOUD & CLI TOOLS
 # =============================================================================
-
-# AWS
-# brew "awscli" # Official Amazon AWS command-line interface
 
 # SSL/Certs
 brew "certbot" # Tool to obtain certs from Let's Encrypt

@@ -1,3 +1,5 @@
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+
 .Brewfile
 README.md
 key.txt.age
@@ -9,17 +11,21 @@ CLAUDE.md
 .config/sketchybar/AGENTS.md
 .config/sketchybar/CLAUDE.md
 
-{{-  if ne .chezmoi.os "darwin" }}
+# {{ if ne .chezmoi.os "darwin" -}}
+
 work/
 personal/
 .zprofile
 .zshrc
 .secrets
-{{- end }}
 
-{{- if ne .chezmoi.os "linux" }}
+# {{- end -}}
+
+# {{ if ne .chezmoi.hostname "box" -}}
+
 .bashrc
 .bash_profile
 .config/user-dirs.dirs
 .config/user-dirs.locale
-{{- end }}
+
+# {{- end -}}
