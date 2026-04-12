@@ -31,8 +31,11 @@ alias oc = opencode
 alias _claude = ^claude
 def claude [...args] { IS_DEMO=1 _claude --dangerously-skip-permissions --no-chrome ...$args }
 
-alias _cursor_agent = ^cursor-agent
-def --wrapped cursor-agent [...args] { _cursor_agent --yolo ...$args }
+alias _cursor-gui = ^cursor
+def --wrapped cursor-gui [...args] { _cursor-gui --chat ...$args }
+
+alias _cursor-agent = ^cursor-agent
+def --wrapped cursor [...args] { _cursor-agent --yolo ...$args }
 
 alias _btm = btm
 
