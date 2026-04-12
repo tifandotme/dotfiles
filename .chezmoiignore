@@ -25,6 +25,8 @@ personal/
 .config/raycast
 .config/keymaps
 .config/colima
+.config/zed
+.config/spotify-player
 
 # {{- end -}}
 
