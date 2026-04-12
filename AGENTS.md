@@ -1,6 +1,6 @@
 # Chezmoi Dotfiles
 
-macOS-first dotfiles managed by chezmoi with age encryption. Primary shell is Nushell; Zsh/Bash are legacy. Config spans 30+ tools across terminal emulators, editors, window management, status bars, and dev tooling. Sub-AGENTS.md files exist for high-complexity areas.
+macOS-first dotfiles managed by chezmoi with age encryption. Primary shell is Nushell. Config spans 30+ tools across terminal emulators, editors, window management, status bars, and dev tooling. Sub-AGENTS.md files exist for high-complexity areas.
 
 ### Package Management
 

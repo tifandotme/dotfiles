@@ -1,6 +1,5 @@
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 
-.Brewfile
 README.md
 key.txt.age
 
