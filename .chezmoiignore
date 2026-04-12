@@ -37,6 +37,7 @@ personal/
 .config/zellij
 .bashrc
 .bash_profile
+.inputrc
 .config/user-dirs.dirs
 .config/user-dirs.locale
 
