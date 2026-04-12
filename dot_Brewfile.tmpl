@@ -108,7 +108,9 @@ brew "tflint" # Linter for Terraform files
 # CONTAINERS & VIRTUALIZATION
 # =============================================================================
 
-brew "colima"         # Container runtimes on macOS with minimal setup
+# {{ if $isDarwin -}}
+brew "colima" # Container runtimes on macOS with minimal setup
+# {{- end }}
 brew "ctop"           # Top-like interface for container metrics
 brew "docker"         # Pack, ship and run applications as containers
 brew "docker-compose" # Isolated development environments using Docker

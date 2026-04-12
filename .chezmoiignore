@@ -24,6 +24,7 @@ personal/
 .config/aerospace
 .config/raycast
 .config/keymaps
+.config/colima
 
 # {{- end -}}
 
