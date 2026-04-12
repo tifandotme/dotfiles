@@ -9,7 +9,7 @@ export XDG_STATE_HOME="$HOME/.local/state"
 
 export EDITOR=vi
 
-export ZELLIJ_AUTO_ATTACH="true"
+export ZELLIJ_AUTO_ATTACH="false"
 export ZELLIJ_AUTO_EXIT="false"
 
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
@@ -27,6 +27,8 @@ if type brew &>/dev/null; then
     done
   fi
 fi
+
+eval "$(mise activate bash)"
 
 # must be last
 if [ -f ~/.bashrc ]; then
