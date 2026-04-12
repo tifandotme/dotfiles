@@ -1,24 +1,15 @@
 # dotfiles
 
-Dotfiles managed with `chezmoi` for two machines:
+Dotfiles for exactly two machines:
 
 - a main macOS machine
 - an Ubuntu VPS named `box`
 
-This repo is built around that setup. Shared config lives in common files. OS-specific and host-specific behavior is handled with `chezmoi` templates and ignore rules.
-
-Main pieces:
-
-- manages shell, editor, and app config with `chezmoi`
-- installs Homebrew packages from [`dot_Brewfile.tmpl`](./dot_Brewfile.tmpl)
-- installs Bun globals from [`run_onchange_02_install-bun.sh.tmpl`](./run_onchange_02_install-bun.sh.tmpl)
-- installs uv tools from [`run_onchange_03_install-uv-tools.sh.tmpl`](./run_onchange_03_install-uv-tools.sh.tmpl)
-
-It also uses `age` for encrypted files. The encryption config lives in [`.chezmoi.toml.tmpl`](./.chezmoi.toml.tmpl).
+`README.md` is source-repo documentation only. It is listed in [`.chezmoiignore`](./.chezmoiignore), so it is not managed into `$HOME`.
 
 ## Fresh machine setup
 
-`chezmoi`'s normal bootstrap flow still applies: install `chezmoi`, then run `chezmoi init --apply ...`. The prep differs a bit between the macOS machine and the Ubuntu VPS.
+On first apply, `chezmoi` prompts for the passphrase for [`key.txt.age`](./key.txt.age) and writes the decrypted key to `~/.config/chezmoi/key.txt` via [`run_onchange_before_decrypt-private-key.sh.tmpl`](./run_onchange_before_decrypt-private-key.sh.tmpl).
 
 ### macOS main machine
 
@@ -28,17 +19,17 @@ It also uses `age` for encrypted files. The encryption config lives in [`.chezmo
 xcode-select --install
 ```
 
-2. Install Homebrew.
+2. Install Homebrew before the first apply.
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
+This repo runs `brew bundle` during apply through [`run_onchange_01_install-homebrew.sh.tmpl`](./run_onchange_01_install-homebrew.sh.tmpl). It does not install Homebrew for you.
+
 3. Make sure GitHub SSH access works.
 
-This repo pulls external git repos from [`.chezmoiexternal.toml`](./.chezmoiexternal.toml), and those URLs use `git@github.com:...`.
-
-If SSH is not set up, the first apply can fail when `chezmoi` tries to pull those externals.
+[`.chezmoiexternal.toml`](./.chezmoiexternal.toml) pulls external repos via `git@github.com:...`, even if the main repo is cloned over HTTPS.
 
 4. Install `chezmoi`.
 
@@ -58,8 +49,6 @@ If you prefer HTTPS for the main repo, that also works:
 chezmoi init --apply https://github.com/tifandotme/dotfiles.git
 ```
 
-This matters on macOS because the first apply renders the Brewfile and runs `brew bundle`.
-
 ### Ubuntu VPS
 
 1. Install base packages.
@@ -77,7 +66,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)"
 
 3. Make sure GitHub SSH access works.
 
-The main repo can be cloned over HTTPS, but [`.chezmoiexternal.toml`](./.chezmoiexternal.toml) uses SSH URLs for external repos.
+The main repo can be cloned over HTTPS, but [`.chezmoiexternal.toml`](./.chezmoiexternal.toml) still uses SSH URLs for external repos.
 
 4. Initialize and apply the repo.
 
@@ -89,35 +78,4 @@ If `chezmoi` is not on your path yet, run it from `~/.local/bin/chezmoi`.
 
 On Ubuntu, `chezmoi` will skip the macOS-only files. Host-specific files for `box` still apply.
 
-## What the first apply does
-
-On either machine, the first apply will:
-
-- ask for the passphrase needed to decrypt [`key.txt.age`](./key.txt.age)
-- write the decrypted age identity to `~/.config/chezmoi/key.txt` via [`run_onchange_before_decrypt-private-key.sh.tmpl`](./run_onchange_before_decrypt-private-key.sh.tmpl)
-- run `brew bundle` if `brew` is available
-- install Bun global packages if `bun` is available
-- install uv tools if `uv` is available
-- pull external repos declared in [`.chezmoiexternal.toml`](./.chezmoiexternal.toml)
-
-Depending on network speed and how much Homebrew has to install, this can take a while.
-
-## After bootstrap
-
-Open a new terminal session after the first apply so shell changes and new tools are on your path.
-
-Useful commands:
-
-```bash
-chezmoi diff
-chezmoi apply
-chezmoi update
-chezmoi doctor
-```
-
-## Notes
-
-- This repo is tailored to one macOS machine and one Ubuntu VPS.
-- Some files only apply on macOS.
-- Some files only apply on the host named `box`.
-- If Homebrew, Bun, or uv were installed partway through setup, run `chezmoi apply` again once they are available.
+Open a new terminal session after bootstrap so new tools and shell config are on your path.
