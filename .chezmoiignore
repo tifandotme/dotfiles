@@ -17,6 +17,7 @@ personal/
 .zprofile
 .zshrc
 .secrets
+.config/cmux
 
 # {{- end -}}
 
