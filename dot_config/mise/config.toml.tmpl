@@ -1,10 +1,14 @@
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+
 [tools]
 go = "latest"
 node = "lts"
 python = "latest"
 rust = "latest"
+# {{ if eq .chezmoi.os "darwin" -}}
 ruby = "latest"
 "gem:kamal" = "latest"
+# {{- end }}
 terraform = "latest"
 
 [settings]
