@@ -1,11 +1,9 @@
-# dotfiles
+# ~/.\*
 
 Dotfiles for exactly two machines:
 
 - a main macOS machine
 - an Ubuntu VPS named `box`
-
-`README.md` is source-repo documentation only. It is listed in [`.chezmoiignore`](./.chezmoiignore), so it is not managed into `$HOME`.
 
 ## Fresh machine setup
 
@@ -61,7 +59,7 @@ sudo apt install -y curl git
 2. Install `chezmoi` with the official installer.
 
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)"
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply $GITHUB_USERNAME
 ```
 
 3. Make sure GitHub SSH access works.
