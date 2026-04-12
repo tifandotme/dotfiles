@@ -10,8 +10,10 @@
 # =============================================================================
 
 # Shells
+# {{ if $isDarwin -}}
 brew "fish"     # User-friendly command-line shell
 brew "nushell"  # Modern shell for the GitHub era
+# {{- end }}
 brew "starship" # Cross-shell prompt for astronauts
 
 # {{ if $isServer -}}
