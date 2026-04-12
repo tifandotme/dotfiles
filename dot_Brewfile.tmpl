@@ -140,9 +140,11 @@ brew "swaks"   # SMTP command-line test tool
 # =============================================================================
 
 # Network utilities
-brew "bandwhich" # Terminal bandwidth utilization tool
-brew "gping"     # Ping, but with a graph
-brew "rustscan"  # Modern Day Portscanner
+brew "bandwhich"                     # Terminal bandwidth utilization tool
+brew "gping"                         # Ping, but with a graph
+tap "teamookla/speedtest"            # Official Ookla Speedtest CLI (speedtest.net)
+brew "teamookla/speedtest/speedtest" # Command-line internet bandwidth test
+brew "rustscan"                      # Modern Day Portscanner
 
 # {{ if $isDarwin -}}
 # Android tools
