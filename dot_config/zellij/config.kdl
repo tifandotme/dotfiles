@@ -86,32 +86,8 @@ keybinds clear-defaults=true {
         bind "Alt =" {
             Resize "Increase"
         }
-        bind "Shift Super [" {
-            MoveFocusOrTab "left"
-        }
-        bind "Shift Super ]" {
-            MoveFocusOrTab "right"
-        }
         bind "Ctrl g" {
             SwitchToMode "locked"
-        }
-        bind "Ctrl Alt h" {
-            MoveTab "left"
-        }
-        bind "Ctrl Alt l" {
-            MoveTab "right"
-        }
-        bind "Alt h" {
-            MoveFocusOrTab "left"
-        }
-        bind "Alt l" {
-            MoveFocusOrTab "right"
-        }
-        bind "Super w" {
-            CloseTab
-        }
-        bind "Super t" {
-            NewTab
         }
         bind "Ctrl q" {
             Quit
@@ -235,6 +211,22 @@ keybinds clear-defaults=true {
         }
         bind "|" {
             NewPane "right"
+            SwitchToMode "normal"
+        }
+        bind "h" {
+            MoveFocusOrTab "left"
+            SwitchToMode "normal"
+        }
+        bind "l" {
+            MoveFocusOrTab "right"
+            SwitchToMode "normal"
+        }
+        bind "<" {
+            MoveTab "left"
+            SwitchToMode "normal"
+        }
+        bind ">" {
+            MoveTab "right"
             SwitchToMode "normal"
         }
     }
