@@ -6,22 +6,22 @@
 if command -v bun &>/dev/null; then
   desired_bun_packages=(
     # {{ if eq .chezmoi.os "darwin" -}}
-    "@sourcegraph/amp"
-    "opencode-ai"
     "npm-check-updates"
-    "oxfmt"
     "pkg"
-    "vercel"
+    "windmill-cli"
+    # {{ end -}}
     "actions-up"
+    "vercel"
+    "opencode-ai"
+    "agent-browser"
+    "port-whisperer"
+    "oxfmt"
     "opencommit"
     "typescript"
-    "windmill-cli"
-    "agent-browser"
     "@googleworkspace/cli"
     "ctx7"
-    "port-whisperer"
+    "@sourcegraph/amp"
     "@openai/codex"
-    # {{ end -}}
     "@dotenvx/dotenvx"
   )
 
