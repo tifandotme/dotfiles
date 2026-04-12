@@ -18,6 +18,12 @@ personal/
 .zshrc
 .secrets
 .config/cmux
+.config/ghostty
+.config/sketchybar
+.config/borders
+.config/aerospace
+.config/raycast
+.config/keymaps
 
 # {{- end -}}
 
