@@ -1,6 +1,8 @@
 [ -z "$PS1" ] && return
 
 set -o vi
+# Vi mode drops the default emacs Ctrl+L; restore clear-screen.
+bind '"\C-l": clear-screen'
 
 # ALIASES-START
 
@@ -17,6 +19,7 @@ alias lzg="lazygit"
 alias lzd="lazydocker"
 alias d="docker"
 alias g="git"
+alias cm="chezmoi"
 alias t="tailscale"
 y() {
   local tmp
