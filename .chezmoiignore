@@ -23,6 +23,7 @@ personal/
 
 # {{ if ne .chezmoi.hostname "box" -}}
 
+.config/zellij
 .bashrc
 .bash_profile
 .config/user-dirs.dirs
