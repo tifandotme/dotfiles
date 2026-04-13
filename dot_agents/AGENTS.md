@@ -64,3 +64,5 @@ For ANY question about libraries, frameworks, SDKs, or CLI tools (API syntax, co
 3. NEVER rely on training data for API details—always use find-docs
 
 Applies to all stacks (for example React, Next.js, Prisma, Express, Django, Tailwind).
+
+@RTK.md

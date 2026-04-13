@@ -180,12 +180,12 @@ sketchybar --add item claude_usage right \
   update_freq=900 \
   script="$PLUGIN_DIR/claude_usage.sh"
 
-sketchybar --add item codex_usage right \
-  --set codex_usage \
-  icon="􀘾" \
-  icon.padding_right=4 \
-  update_freq=900 \
-  script="$PLUGIN_DIR/codex_usage.sh"
+# sketchybar --add item codex_usage right \
+#   --set codex_usage \
+#   icon="􀘾" \
+#   icon.padding_right=4 \
+#   update_freq=900 \
+#   script="$PLUGIN_DIR/codex_usage.sh"
 
 # Cursor usage: no published API rate limits; ~3min poll balances freshness vs load
 sketchybar --add item cursor_usage right \
@@ -195,12 +195,12 @@ sketchybar --add item cursor_usage right \
   update_freq=180 \
   script="$PLUGIN_DIR/cursor_usage.sh"
 
-sketchybar --add item network_speed right \
-  --set network_speed \
-  icon="􀴽" \
-  icon.padding_right=0 \
-  update_freq=1 \
-  script="$PLUGIN_DIR/network_speed.sh"
+# sketchybar --add item network_speed right \
+#   --set network_speed \
+#   icon="􀴽" \
+#   icon.padding_right=0 \
+#   update_freq=1 \
+#   script="$PLUGIN_DIR/network_speed.sh"
 
 # sketchybar --add item vpn right \
 #   --set vpn \

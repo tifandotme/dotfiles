@@ -176,6 +176,53 @@ fetch_rest_usage_fallback() {
     "https://cursor.com/api/usage?user=$(printf '%s' "$uid" | jq -sRr @uri)" 2>/dev/null || echo "000"
 }
 
+# Elapsed fraction of the current billing window (time, not usage). Matches openusage:
+# billingCycleStart / billingCycleEnd from GetCurrentPeriodUsage (ms since epoch).
+# Example: 5 days left in a 30-day cycle -> ~83% elapsed.
+cycle_elapsed_pct_str() {
+  local usage_file="$1"
+  [ -f "$usage_file" ] || return 1
+  python3 -c "
+import json, sys, time
+
+def num(x):
+    if x is None:
+        return None
+    if isinstance(x, (int, float)):
+        return float(x)
+    if isinstance(x, str):
+        try:
+            return float(x)
+        except ValueError:
+            return None
+    return None
+
+with open(sys.argv[1], encoding='utf-8') as f:
+    u = json.load(f)
+now_ms = time.time() * 1000.0
+start = num(u.get('billingCycleStart'))
+end = num(u.get('billingCycleEnd'))
+if start is None or end is None or end <= start:
+    sys.exit(1)
+pct = (now_ms - start) / (end - start) * 100.0
+pct = max(0.0, min(100.0, pct))
+s = f'{pct:.2f}'.rstrip('0').rstrip('.')
+print(s)
+" "$usage_file" 2>/dev/null
+}
+
+finalize_usage_label() {
+  local usage_file="$1"
+  local base="$2"
+  local cyc
+  cyc=$(cycle_elapsed_pct_str "$usage_file") || true
+  if [ -n "${cyc:-}" ]; then
+    printf '%s (%s)' "$base" "$cyc"
+  else
+    printf '%s' "$base"
+  fi
+}
+
 # Single label line (stdout), matching how claude_usage.sh builds LABEL.
 format_label_from_usage() {
   local usage_file="$1"
@@ -216,7 +263,7 @@ format_label_from_usage() {
       gmax=$(jq -r '.["gpt-4"].maxRequestUsage // empty' "$ru_file")
       gused=$(jq -r '.["gpt-4"].numRequests // 0' "$ru_file")
       if [ -n "$gmax" ] && [ "$gmax" != "null" ] && [ "${gmax:-0}" -gt 0 ] 2>/dev/null; then
-        echo "${gused}/${gmax} req"
+        finalize_usage_label "$usage_file" "${gused}/${gmax} req"
         rm -f "$ru_file"
         return
       fi
@@ -231,7 +278,7 @@ format_label_from_usage() {
     else
       used_c=$(jq -r '(.planUsage.limit - (.planUsage.remaining // 0))' "$usage_file")
     fi
-    printf '$%d/$%d' $((used_c / 100)) $((limit_c / 100))
+    finalize_usage_label "$usage_file" "$(printf '$%d/$%d' $((used_c / 100)) $((limit_c / 100)))"
     return
   fi
 
@@ -240,16 +287,16 @@ format_label_from_usage() {
     a=$(jq -r 'if (.planUsage.autoPercentUsed | type) == "number" then .planUsage.autoPercentUsed else empty end' "$usage_file")
     api=$(jq -r 'if (.planUsage.apiPercentUsed | type) == "number" then .planUsage.apiPercentUsed else empty end' "$usage_file")
     line=$(printf '%.0f' "$total_pct")
-    [ -n "$a" ] && line="$line auto:$(printf '%.0f' "$a")"
-    [ -n "$api" ] && line="$line api:$(printf '%.0f' "$api")"
-    echo "$line"
+    [ -n "$a" ] && line="$line c:$(printf '%.0f' "$a")"
+    [ -n "$api" ] && line="$line a:$(printf '%.0f' "$api")"
+    finalize_usage_label "$usage_file" "$line"
     return
   fi
 
   if [ "$has_limit" = "yes" ] && [ -n "$limit_c" ]; then
     local used_c2
     used_c2=$(jq -r '(.planUsage.totalSpend // (.planUsage.limit - (.planUsage.remaining // 0)))' "$usage_file")
-    printf '$%d/$%d' $((used_c2 / 100)) $((limit_c / 100))
+    finalize_usage_label "$usage_file" "$(printf '$%d/$%d' $((used_c2 / 100)) $((limit_c / 100)))"
     return
   fi
 

@@ -44,4 +44,9 @@
   ],
   "amp.skills.disableClaudeCodeSkills": true,
   "amp.agent.deepReasoningEffort": "high",
+  "amp.mcpServers": {
+    "notion": {
+      "url": "https://mcp.notion.com/mcp"
+    }
+  }
 }
