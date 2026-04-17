@@ -175,7 +175,11 @@ if.app-id = "dev.zed.Zed"
 run = "move-node-to-workspace 3_editor"
 
 [[on-window-detected]]
-if.app-id = "com.todesktop.230313mzl4w4u92" # Cursor
+if.app-id = "com.todesktop.230313mzl4w4u92"  # Cursor
+run = "move-node-to-workspace 3_editor"
+
+[[on-window-detected]]
+if.app-id = "com.anthropic.claudefordesktop"
 run = "move-node-to-workspace 3_editor"
 
 # Move to 4_terminal workspace
