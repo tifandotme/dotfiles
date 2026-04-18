@@ -11,8 +11,8 @@
 
 # Shells
 # {{ if $isDarwin -}}
-brew "fish"     # User-friendly command-line shell
-brew "nushell"  # Modern shell for the GitHub era
+brew "fish"    # User-friendly command-line shell
+brew "nushell" # Modern shell for the GitHub era
 # {{- end }}
 brew "starship" # Cross-shell prompt for astronauts
 
@@ -88,8 +88,11 @@ brew "lazygit"   # Simple terminal UI for git commands
 # {{ if $isDarwin -}}
 cask "claude" # Anthropic's official Claude desktop app
 # {{- end }}
-brew "models"      # TUI/CLI for browsing AI models, benchmarks, and coding agents
-brew "rtk"         # CLI proxy to minimize LLM token consumption
+brew "models" # TUI/CLI for browsing AI models, benchmarks, and coding agents
+brew "rtk"    # CLI proxy to minimize LLM token consumption
+# {{ if $isServer -}}
+brew "zeroclaw" # Rust-first autonomous agent runtime
+# {{- end }}
 
 # Shell scripting
 brew "actionlint" # Static checker for GitHub Actions workflow files
