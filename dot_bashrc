@@ -45,3 +45,9 @@ eval "$(starship init bash)"
 
 eval "$(zoxide init --cmd cd bash)"
 
+_zc="$(command -v zeroclaw 2>/dev/null)"
+if [[ -n "$_zc" && -x "$_zc" ]]; then
+  eval "$("$_zc" completions bash)"
+fi
+unset _zc
+
