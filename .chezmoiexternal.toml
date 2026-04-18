@@ -28,6 +28,6 @@ args = ["--rebase", "--autostash"]
 # only vps uses zellij
 [".config/zellij/zjstatus.wasm"]
 type = "file"
-url = "https://github.com/dj95/zjstatus/releases/download/v0.22.0/zjstatus.wasm"
+url = "https://github.com/dj95/zjstatus/releases/download/v0.23.0/zjstatus.wasm"
 
 # {{- end -}}
