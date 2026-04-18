@@ -29,6 +29,7 @@ personal/
 .config/spotify-player
 .config/nushell
 .config/fish
+.config/gws-hadl
 
 # {{- end -}}
 

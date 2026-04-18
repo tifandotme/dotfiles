@@ -7,6 +7,9 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
+# gws (https://github.com/googleworkspace/cli) — same path as Nushell env.nu
+export GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE="${XDG_CONFIG_HOME}/gws/creds.json"
+
 export EDITOR=vi
 
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
