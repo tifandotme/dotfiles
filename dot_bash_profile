@@ -9,12 +9,9 @@ export XDG_STATE_HOME="$HOME/.local/state"
 
 export EDITOR=vi
 
-export ZELLIJ_AUTO_ATTACH="false"
-export ZELLIJ_AUTO_EXIT="false"
-
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
 
-export PATH="$BUN_INSTALL/bin:$HOME/.cargo/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"
+export PATH="$HOME/.local/bin:$BUN_INSTALL/bin:$HOME/.cargo/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"
 
 # https://docs.brew.sh/Shell-Completion#configuring-completions-in-bash
 if type brew &>/dev/null; then
@@ -34,3 +31,4 @@ eval "$(mise activate bash)"
 if [ -f ~/.bashrc ]; then
   . "$HOME"/.bashrc
 fi
+
