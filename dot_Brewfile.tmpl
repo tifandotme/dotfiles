@@ -88,7 +88,6 @@ brew "lazygit"   # Simple terminal UI for git commands
 # {{ if $isDarwin -}}
 cask "claude" # Anthropic's official Claude desktop app
 # {{- end }}
-cask "claude-code" # Terminal-based AI coding assistant
 brew "models"      # TUI/CLI for browsing AI models, benchmarks, and coding agents
 brew "rtk"         # CLI proxy to minimize LLM token consumption
 
@@ -137,6 +136,9 @@ brew "redis"         # Persistent key-value database
 # SSL/Certs
 brew "certbot" # Tool to obtain certs from Let's Encrypt
 brew "swaks"   # SMTP command-line test tool
+
+# Google Workspace (installs `gws`; conflicts with the unrelated `gws` formula)
+brew "googleworkspace-cli"
 
 # =============================================================================
 # SECURITY & NETWORKING
