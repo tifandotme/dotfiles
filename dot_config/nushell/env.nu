@@ -51,7 +51,6 @@ $env.NU_LIB_DIRS = ($nu.default-config-dir | path join scripts)
 $env.ANDROID_HOME = ($env.HOME | path join Library Android sdk)
 $env.JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 
-
 # colorizes manpages using bat
 $env.MANPAGER = "sh -c 'col -bx | bat -l man -p'"
 $env.MANROFFOPT = "-c"
