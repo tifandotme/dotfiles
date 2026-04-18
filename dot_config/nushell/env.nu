@@ -48,6 +48,8 @@ $env.DENO_INSTALL = ($env.XDG_DATA_HOME | path join deno)
 # $env.PNPM_HOME = ($env.XDG_DATA_HOME | path join pnpm)
 $env.NU_LIB_DIRS = ($nu.default-config-dir | path join scripts)
 
+$env.GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE = ($env.XDG_CONFIG_HOME | path join gws creds.json)
+
 $env.ANDROID_HOME = ($env.HOME | path join Library Android sdk)
 $env.JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 
