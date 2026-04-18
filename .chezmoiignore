@@ -16,7 +16,6 @@ work/
 personal/
 .zprofile
 .zshrc
-.secrets
 .config/cmux
 .config/ghostty
 .config/sketchybar

@@ -1,5 +1,7 @@
 [ -z "$PS1" ] && return
 
+[ -f "$HOME/.secrets" ] && . "$HOME/.secrets"
+
 set -o vi
 # Vi mode drops the default emacs Ctrl+L; restore clear-screen.
 bind '"\C-l": clear-screen'
