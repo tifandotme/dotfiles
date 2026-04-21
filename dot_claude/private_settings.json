@@ -1,6 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
+    "IS_DEMO": "1",
+    "CLAUDE_CODE_NO_FLICKER": "1",
     "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet",
     "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
     "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
@@ -44,7 +46,7 @@
       "Bash(python3:*)",
       "Bash(chezmoi apply:*)"
     ],
-    "deny": [],
+    "deny": ["Edit(package.json)"],
     "defaultMode": "auto"
   },
   "model": "opusplan",
@@ -114,9 +116,7 @@
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
-    "verbs": [
-      "Working"
-    ]
+    "verbs": ["Working"]
   },
   "effortLevel": "high",
   "voiceEnabled": true,
