@@ -29,7 +29,7 @@ alias cm = chezmoi
 alias oc = opencode
 
 alias _claude = ^claude
-def claude [...args] { IS_DEMO=1 _claude --dangerously-skip-permissions --no-chrome ...$args }
+def claude [...args] { _claude --dangerously-skip-permissions --no-chrome ...$args }
 
 alias _cursor-gui = ^cursor
 def --wrapped cursor-gui [...args] { _cursor-gui --chat ...$args }
