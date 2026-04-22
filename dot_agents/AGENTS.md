@@ -14,7 +14,6 @@ alwaysApply: true
 
 - User shell commands: Nushell (tool calls use POSIX)
 - Git default branch: `master`
-- Always use `--no-pager` after `git` (for example `git --no-pager diff`)
 - Executable scripts: prefer `#!/usr/bin/env <interpreter>` (for example `#!/usr/bin/env bash`, `#!/usr/bin/env python3`) instead of hardcoded paths such as `#!/bin/bash`
 
 ## GitHub Interactions
