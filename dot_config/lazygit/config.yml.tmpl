@@ -6,7 +6,7 @@ git:
   overrideGpg: true
   # {{ if eq .chezmoi.os "darwin" -}}
   pagers:
-    - pager: delta --paging=never # other configs in gitconfig
+    - pager: delta --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
       colorArg: always
 # {{ end -}}
 
