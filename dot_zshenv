@@ -1,0 +1,4 @@
+# Non-interactive zsh (e.g. Cursor Agent CLI `zsh -c`) does not load shell integration,
+# but the agent wrapper still calls dump_zsh_state. Stub avoids "command not found".
+dump_zsh_state() { :; }
+
