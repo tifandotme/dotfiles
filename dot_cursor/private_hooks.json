@@ -3,7 +3,7 @@
   "hooks": {
     "preToolUse": [
       {
-        "command": "./hooks/rtk-rewrite.sh",
+        "command": "rtk hook cursor",
         "matcher": "Shell"
       }
     ]
