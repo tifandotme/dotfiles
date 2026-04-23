@@ -1,0 +1,19 @@
+{
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "cursor.general.glassShowWarningNotifications": true,
+  "cursor.composer.usageSummaryDisplay": "always",
+  "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.profiles.osx": {
+    "zsh": {
+      "path": "/bin/zsh",
+      "args": ["-l"]
+    }
+  },
+  "terminal.integrated.automationProfile.osx": {
+    "path": "/bin/zsh",
+    "args": ["-l"]
+  },
+  "cursor.general.emailPrivacyEnabled": true,
+  "cursor.general.fontSmoothingAntialiased": true
+}
