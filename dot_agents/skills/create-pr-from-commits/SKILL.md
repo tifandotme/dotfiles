@@ -35,7 +35,16 @@ Creates a well-formatted GitHub Pull Request from pending commits in the current
    - Fill in PR template placeholders with WHY-focused content
 
 5. **Create the PR**
-   - Use `gh-cli` skill to execute: `gh pr create --title "..." --body "..."`
+   - Write the body to a temp file, then use `--body-file` to avoid shell escaping mangling backticks:
+     ```bash
+     tmp=$(mktemp)
+     cat > "$tmp" << 'PREOF'
+     [body content]
+     PREOF
+     gh pr create --title "..." --body-file "$tmp" --base "$base"
+     rm "$tmp"
+     ```
+   - Never pass body via `--body "..."` — backticks will be escaped or interpreted
    - Output the PR URL
 
 ## Required Skills
@@ -99,6 +108,8 @@ If no template exists, use this structure:
 - Bullet lists of files changed
 - Summaries of code modifications
 - What's already visible in the diff/commits
+
+**Self-edit rule:** After drafting, re-read each sentence. If it describes *what the code does or what changed* (e.g., "adds a function", "updates the config", "removes the old handler"), delete it. Only keep sentences that explain *why* the change was needed or *what problem* it solves.
 
 ## Example Usage
 

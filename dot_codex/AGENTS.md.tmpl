@@ -1,0 +1,11 @@
+# Codex shell execution (RTK)
+
+Codex has **no** PreToolUse hook that can rewrite commands (unlike Claude Code or Cursor). RTK only works here if you **follow** the rules in the linked RTK doc.
+
+- **MUST** run shell through RTK: use `rtk <command>` (for example `rtk git status`, never bare `git status`).
+- **Exception**: the user explicitly asked for raw output, or set `RTK_DISABLED=1`.
+- Before any shell tool call, check the command string. If it does not start with `rtk ` (or `RTK_DISABLED=1`), fix it.
+
+{{ include "dot_agents/AGENTS.shared.md" }}
+
+@{{ .chezmoi.homeDir }}/.codex/RTK.md
