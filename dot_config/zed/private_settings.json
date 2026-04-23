@@ -1,7 +1,12 @@
 {
+  "agent": {
+    "dock": "left",
+    "favorite_models": [],
+    "model_parameters": [],
+  },
   "disable_ai": true,
   "edit_predictions": {
-    "provider": "mercury",
+    "provider": "zed",
   },
   "when_closing_with_no_tabs": "keep_window_open",
   "confirm_quit": true,
@@ -22,6 +27,7 @@
     "file_icons": false,
   },
   "collaboration_panel": {
+    "dock": "right",
     "button": true,
   },
   "project_panel": {
@@ -42,10 +48,11 @@
     "indent_guides": {
       "show": "never",
     },
-    "dock": "left",
+    "dock": "right",
     "auto_fold_dirs": true,
   },
   "git_panel": {
+    "dock": "right",
     "button": false,
   },
   "terminal": {

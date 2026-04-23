@@ -1,10 +1,64 @@
 {
+  "permissions": {
+    "allow": [
+      "Shell(**)",
+      "Read(**)",
+      "Write(**)"
+    ],
+    "deny": [
+      "Shell(rm)",
+      "Shell(/bin/rm)"
+    ]
+  },
   "version": 1,
   "editor": {
     "vimMode": true
   },
-  "permissions": {
-    "allow": ["Shell(**)", "Read(**)", "Write(**)"],
-    "deny": ["Shell(rm)", "Shell(/bin/rm)"]
+  "display": {
+    "showLineNumbers": false,
+    "showThinkingBlocks": true,
+    "showStatusIndicators": false
+  },
+  "channel": "prod",
+  "model": {
+    "modelId": "composer-2-fast",
+    "displayModelId": "composer-2-fast",
+    "displayName": "Composer 2 Fast",
+    "displayNameShort": "Composer 2 Fast",
+    "aliases": [
+      "composer"
+    ],
+    "maxMode": false
+  },
+  "hasChangedDefaultModel": false,
+  "maxMode": false,
+  "privacyCache": {
+    "ghostMode": true,
+    "privacyMode": 2,
+    "updatedAt": 1776951168524
+  },
+  "serverConfigCache": {
+    "backendUrl": "https://api2.cursor.sh",
+    "authCacheKey": "auth:github|user_01J9V4QG8WX455B0TX9QQ66V47",
+    "agentUrlConfig": {
+      "agentUrl": "https://agentn.global.api5.cursor.sh",
+      "agentnUrl": "https://agentn.global.api5.cursor.sh"
+    },
+    "cliSandboxDefaultEnabled": false,
+    "updatedAt": 1776951164671
+  },
+  "authInfo": {
+    "email": "tifan@proton.me",
+    "displayName": "Tifan Avianto",
+    "userId": 93772629,
+    "authId": "github|user_01J9V4QG8WX455B0TX9QQ66V47"
+  },
+  "network": {
+    "useHttp1ForAgent": false
+  },
+  "approvalMode": "allowlist",
+  "attribution": {
+    "attributeCommitsToAgent": false,
+    "attributePRsToAgent": false
   }
 }
