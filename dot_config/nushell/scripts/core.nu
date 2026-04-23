@@ -32,10 +32,20 @@ alias _claude = ^claude
 def claude [...args] { _claude --dangerously-skip-permissions --no-chrome ...$args }
 
 alias _cursor-gui = ^cursor
-def --wrapped cursor-gui [...args] { _cursor-gui --chat ...$args }
+def --wrapped cursor-gui [...args] {
+  let cursor_config_dir = $env.HOME | path join ".cursor"
+  with-env { CURSOR_CONFIG_DIR: $cursor_config_dir } {
+    _cursor-gui --chat ...$args
+  }
+}
 
 alias _cursor-agent = ^cursor-agent
-def --wrapped cursor [...args] { _cursor-agent --yolo ...$args }
+def --wrapped cursor [...args] {
+  let cursor_config_dir = $env.HOME | path join ".cursor"
+  with-env { CURSOR_CONFIG_DIR: $cursor_config_dir } {
+    _cursor-agent --yolo ...$args
+  }
+}
 
 alias _btm = btm
 
