@@ -3,6 +3,7 @@
 README.md
 key.txt.age
 
+.gitignore
 AGENTS.md
 CLAUDE.md
 .config/nushell/AGENTS.md
