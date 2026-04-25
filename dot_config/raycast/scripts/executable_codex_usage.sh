@@ -184,7 +184,7 @@ maybe_refresh_token() {
 
   last_refresh_value=$(printf '%s' "$AUTH_JSON" | jq -r '.last_refresh // empty' 2>/dev/null)
   if [ -n "$last_refresh_value" ]; then
-    last_refresh_epoch=$(date -j -u -f "%Y-%m-%dT%H:%M:%SZ" "$last_refresh_value" "+%s" 2>/dev/null || true)
+    last_refresh_epoch=$(usage_epoch_from_iso_utc "$last_refresh_value" || true)
   else
     last_refresh_epoch=""
   fi
@@ -200,33 +200,6 @@ maybe_refresh_token() {
 header_value() {
   local header_file="$1" key="$2"
   awk -F': ' -v k="$key" 'BEGIN{IGNORECASE=1} $1 == k {gsub(/\r/, "", $2); print $2; exit}' "$header_file"
-}
-
-format_relative_reset() {
-  local reset_epoch="$1" now_epoch delta mins hours rem
-
-  now_epoch=$(date "+%s")
-  delta=$((reset_epoch - now_epoch))
-
-  if [ "$delta" -le 0 ]; then
-    printf '0m'
-    return
-  fi
-
-  mins=$((delta / 60))
-  hours=$((mins / 60))
-  rem=$((mins % 60))
-
-  if [ "$hours" -gt 0 ]; then
-    printf '%sh%sm' "$hours" "$rem"
-  else
-    printf '%sm' "$rem"
-  fi
-}
-
-format_weekly_reset() {
-  local reset_epoch="$1"
-  date -r "$reset_epoch" "+%a %H:%M" 2>/dev/null
 }
 
 window_percent() {
@@ -329,32 +302,25 @@ build_label() {
       set_window_if_match "$secondary_window_json" "604800" weekly weekly_reset_at
     fi
 
-    session_epoch="$session_reset_at"
-    weekly_epoch="$weekly_reset_at"
-
-    if [ -n "$session_epoch" ] && ! printf '%s' "$session_epoch" | grep -Eq '^[0-9]+$'; then
-      session_epoch=$(date -j -u -f "%Y-%m-%dT%H:%M:%SZ" "${session_reset_at%%.*}" "+%s" 2>/dev/null)
-    fi
-    if [ -n "$weekly_epoch" ] && ! printf '%s' "$weekly_epoch" | grep -Eq '^[0-9]+$'; then
-      weekly_epoch=$(date -j -u -f "%Y-%m-%dT%H:%M:%SZ" "${weekly_reset_at%%.*}" "+%s" 2>/dev/null)
-    fi
+    session_epoch=$(usage_epoch_from_reset "$session_reset_at" || true)
+    weekly_epoch=$(usage_epoch_from_reset "$weekly_reset_at" || true)
 
     if [ -n "$session" ] && [ -n "$session_epoch" ] && [ -n "$weekly" ] && [ -n "$weekly_epoch" ]; then
-      LABEL="${session}($(format_relative_reset "$session_epoch")) ${weekly}($(format_weekly_reset "$weekly_epoch"))"
+      LABEL="${session}($(usage_format_relative_reset "$session_epoch")) ${weekly}($(usage_format_weekly_reset "$weekly_epoch"))"
       usage_cache_write "$CACHE_FILE" "$LABEL"
       rm -f "$response_file" "$header_file"
       return 0
     fi
 
     if [ -n "$weekly" ] && [ -n "$weekly_epoch" ]; then
-      LABEL="${weekly}($(format_weekly_reset "$weekly_epoch"))"
+      LABEL="${weekly}($(usage_format_weekly_reset "$weekly_epoch"))"
       usage_cache_write "$CACHE_FILE" "$LABEL"
       rm -f "$response_file" "$header_file"
       return 0
     fi
 
     if [ -n "$session" ] && [ -n "$session_epoch" ]; then
-      LABEL="${session}($(format_relative_reset "$session_epoch"))"
+      LABEL="${session}($(usage_format_relative_reset "$session_epoch"))"
       usage_cache_write "$CACHE_FILE" "$LABEL"
       rm -f "$response_file" "$header_file"
       return 0

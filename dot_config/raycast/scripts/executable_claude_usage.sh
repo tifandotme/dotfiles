@@ -44,22 +44,10 @@ else
   WEEKLY_RESETS_AT=$(jq -r '.seven_day.resets_at // empty' "$RESPONSE_FILE" 2>/dev/null)
 
   if [ "$HTTP_CODE" = "200" ] && [ -n "$SESSION" ]; then
-    # Session: countdown to reset
-    SESSION_EPOCH=$(date -j -u -f "%Y-%m-%dT%H:%M:%S" "${SESSION_RESETS_AT%%.*}" "+%s" 2>/dev/null)
-    NOW_EPOCH=$(date "+%s")
-    DELTA=$((SESSION_EPOCH - NOW_EPOCH))
-    if [ "$DELTA" -gt 0 ]; then
-      MINS=$((DELTA / 60))
-      H=$((MINS / 60))
-      M=$((MINS % 60))
-      [ "$H" -gt 0 ] && SESSION_RESET="${H}h${M}m" || SESSION_RESET="${M}m"
-    else
-      SESSION_RESET="0m"
-    fi
-
-    # Weekly: absolute day+time in local timezone
-    WEEKLY_EPOCH=$(date -j -u -f "%Y-%m-%dT%H:%M:%S" "${WEEKLY_RESETS_AT%%.*}" "+%s" 2>/dev/null)
-    WEEKLY_RESET=$(date -r "$WEEKLY_EPOCH" "+%a %H:%M" 2>/dev/null)
+    SESSION_EPOCH=$(usage_epoch_from_iso_utc "$SESSION_RESETS_AT")
+    WEEKLY_EPOCH=$(usage_epoch_from_iso_utc "$WEEKLY_RESETS_AT")
+    SESSION_RESET=$(usage_format_relative_reset "$SESSION_EPOCH" || printf '0m')
+    WEEKLY_RESET=$(usage_format_weekly_reset "$WEEKLY_EPOCH")
 
     LABEL="${SESSION}(${SESSION_RESET}) ${WEEKLY}(${WEEKLY_RESET})"
     usage_cache_write "$CACHE_FILE" "$LABEL"
