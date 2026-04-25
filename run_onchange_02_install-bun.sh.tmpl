@@ -23,6 +23,9 @@ if command -v bun &>/dev/null; then
     "@mariozechner/pi-coding-agent"
     "@openai/codex"
     "@dotenvx/dotenvx"
+    # {{ if eq .chezmoi.hostname "box" -}}
+    "openclaw"
+    # {{- end }}
   )
 
   # --json request to avoid the mess below: https://github.com/oven-sh/bun/issues/26222
