@@ -8,17 +8,13 @@
 # Optional parameters:
 # @raycast.icon ☕
 
-# Get current caffeinate process ID
-CAFFINATE_PID=$(pgrep -f "caffeinate -id" | head -1)
+_script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+_caffeinate_lib="$_script_dir/caffeinate_lib.sh"
+[ -f "$_caffeinate_lib" ] || _caffeinate_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/caffeinate_lib.sh"
+# shellcheck source=caffeinate_lib.sh
+. "$_caffeinate_lib"
 
-if [ -z "$CAFFINATE_PID" ]; then
-  # Start caffeinate in the background, properly detached
-  nohup caffeinate -id </dev/null >/dev/null 2>&1 &
-  disown
-else
-  # Kill the caffeinate process
-  kill "$CAFFINATE_PID" 2>/dev/null
-fi
+caffeinate_toggle
 
 # Trigger sketchybar to update the caffeinate item
 if command -v sketchybar >/dev/null 2>&1; then

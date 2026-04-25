@@ -3,6 +3,9 @@
 # Battery monitor script that detects battery changes and calls battery.sh
 # This avoids duplicating the display logic
 
+CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
+source "$CONFIG_DIR/colors.sh"
+
 # Function to trigger battery.sh update
 update_battery_display() {
   # Call the existing battery.sh script with proper environment
@@ -14,6 +17,13 @@ update_battery_display() {
 
 # Smart monitor that only updates when battery state changes
 smart_monitor() {
+  LOCKFILE="/tmp/sketchybar_battery_monitor.lock"
+  if [ -f "$LOCKFILE" ] && kill -0 "$(cat "$LOCKFILE")" 2>/dev/null; then
+    exit 0
+  fi
+  echo $$ >"$LOCKFILE"
+  trap 'rm -f "$LOCKFILE"' EXIT
+
   LAST_PERCENTAGE=""
   LAST_CHARGING=""
 

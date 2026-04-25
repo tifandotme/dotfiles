@@ -6,29 +6,33 @@
 CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
 source "$CONFIG_DIR/colors.sh"
 
+_caffeinate_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/caffeinate_lib.sh"
+[ -f "$_caffeinate_lib" ] || _caffeinate_lib="$CONFIG_DIR/../raycast/scripts/caffeinate_lib.sh"
+# shellcheck source=../../raycast/scripts/caffeinate_lib.sh
+. "$_caffeinate_lib"
+
 # Function to check if display is on (1) or off (0)
 is_display_on() {
   ioreg -n IODisplayWrangler -r | grep DevicePowerState | awk '{print $3}' | tr -d '\n'
 }
 
-# Function to get caffeinate PID
-get_caffeinate_pid() {
-  pgrep -f "caffeinate -id" | head -1
-}
-
 # Function to kill caffeinate and update Sketchybar
 kill_caffeinate_if_running() {
-  CAFFINATE_PID=$(get_caffeinate_pid)
-  if [ -n "$CAFFINATE_PID" ]; then
-    kill "$CAFFINATE_PID" 2>/dev/null
-    # Update Sketchybar icon (clear it to indicate off)
-    sketchybar --set caffeinate icon="" 2>/dev/null
+  if caffeinate_stop; then
+    sketchybar --trigger caffeinate_toggle 2>/dev/null
     echo "$(date): Caffeinate killed due to display off" >>/tmp/caffeinate_monitor.log
   fi
 }
 
 # Smart monitor that only acts when display state changes
 smart_monitor() {
+  LOCKFILE="/tmp/sketchybar_caffeinate_monitor.lock"
+  if [ -f "$LOCKFILE" ] && kill -0 "$(cat "$LOCKFILE")" 2>/dev/null; then
+    exit 0
+  fi
+  echo $$ >"$LOCKFILE"
+  trap 'rm -f "$LOCKFILE"' EXIT
+
   LAST_DISPLAY_STATE=""
 
   while true; do

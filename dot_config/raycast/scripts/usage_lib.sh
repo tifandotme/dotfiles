@@ -54,6 +54,53 @@ usage_label_on_error() {
   fi
 }
 
+usage_epoch_from_iso_utc() {
+  local value="${1:-}"
+  [ -n "$value" ] || return 1
+  value="${value%%.*}"
+  value="${value%Z}"
+  date -j -u -f "%Y-%m-%dT%H:%M:%S" "$value" "+%s" 2>/dev/null
+}
+
+usage_epoch_from_reset() {
+  local value="${1:-}"
+  [ -n "$value" ] || return 1
+  if printf '%s' "$value" | grep -Eq '^[0-9]+$'; then
+    printf '%s' "$value"
+  else
+    usage_epoch_from_iso_utc "$value"
+  fi
+}
+
+usage_format_relative_reset() {
+  local reset_epoch="${1:-}" now_epoch delta mins hours rem
+  [ -n "$reset_epoch" ] || return 1
+
+  now_epoch=$(date "+%s")
+  delta=$((reset_epoch - now_epoch))
+
+  if [ "$delta" -le 0 ]; then
+    printf '0m'
+    return
+  fi
+
+  mins=$((delta / 60))
+  hours=$((mins / 60))
+  rem=$((mins % 60))
+
+  if [ "$hours" -gt 0 ]; then
+    printf '%sh%sm' "$hours" "$rem"
+  else
+    printf '%sm' "$rem"
+  fi
+}
+
+usage_format_weekly_reset() {
+  local reset_epoch="${1:-}"
+  [ -n "$reset_epoch" ] || return 1
+  date -r "$reset_epoch" "+%a %H:%M" 2>/dev/null
+}
+
 # SketchyBar: set label; optional dynamic update_freq from pgrep.
 #   usage_sketchybar_emit "$label"
 #   usage_sketchybar_emit "$label" <active_freq> <idle_freq> <process> [xi|x]

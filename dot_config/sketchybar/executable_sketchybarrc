@@ -43,6 +43,16 @@ GHOST=(
   icon.shadow.distance=1
 )
 
+add_usage_item() {
+  local name="$1" icon="$2" freq="$3"
+  sketchybar --add item "$name" right \
+    --set "$name" \
+    icon="$icon" \
+    icon.padding_right=4 \
+    update_freq="$freq" \
+    script="$PLUGIN_DIR/${name}.sh"
+}
+
 # --------------- LEFT
 
 sketchybar --add event aerospace_workspace_change
@@ -159,41 +169,13 @@ sketchybar --add item wifi right \
   click_script="$PLUGIN_DIR/wifi.sh" \
   --subscribe wifi wifi_change
 
-sketchybar --add item amp_usage right \
-  --set amp_usage \
-  icon="􁎢" \
-  icon.padding_right=4 \
-  update_freq=300 \
-  script="$PLUGIN_DIR/amp_usage.sh"
-
-# sketchybar --add item copilot_usage right \
-#   --set copilot_usage \
-#   icon="􁎢" \
-#   icon.padding_right=4 \
-#   update_freq=300 \
-#   script="$PLUGIN_DIR/copilot_usage.sh"
-
-sketchybar --add item claude_usage right \
-  --set claude_usage \
-  icon="􀘾" \
-  icon.padding_right=4 \
-  update_freq=900 \
-  script="$PLUGIN_DIR/claude_usage.sh"
-
-# sketchybar --add item codex_usage right \
-#   --set codex_usage \
-#   icon="􀘾" \
-#   icon.padding_right=4 \
-#   update_freq=900 \
-#   script="$PLUGIN_DIR/codex_usage.sh"
+add_usage_item amp_usage "􁎢" 300
+# add_usage_item copilot_usage "􁎢" 300
+add_usage_item claude_usage "􀘾" 900
+# add_usage_item codex_usage "􀘾" 900
 
 # Cursor usage: no published API rate limits; ~3min poll balances freshness vs load
-sketchybar --add item cursor_usage right \
-  --set cursor_usage \
-  icon="􀘾" \
-  icon.padding_right=4 \
-  update_freq=180 \
-  script="$PLUGIN_DIR/cursor_usage.sh"
+add_usage_item cursor_usage "􀘾" 180
 
 # sketchybar --add item network_speed right \
 #   --set network_speed \
