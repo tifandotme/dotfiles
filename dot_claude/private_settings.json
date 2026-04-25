@@ -100,7 +100,8 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "chrome-devtools-plugins": {
@@ -117,7 +118,7 @@
     "verbs": ["Working"]
   },
   "effortLevel": "high",
-  "voiceEnabled": true,
+  "voiceEnabled": false,
   "skipDangerousModePermissionPrompt": true,
   "skipAutoPermissionPrompt": true,
   "ui.showBanner": false
