@@ -43,6 +43,6 @@ personal/
 .inputrc
 .config/user-dirs.dirs
 .config/user-dirs.locale
-.zeroclaw/
+.openclaw
 
 # {{- end -}}
