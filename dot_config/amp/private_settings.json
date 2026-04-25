@@ -22,7 +22,7 @@
       "action": "ask"
     }
   ],
-  "amp.terminal.theme": "dark",
+  "amp.terminal.theme": "terminal",
   "amp.git.commit.coauthor.enabled": false,
 
   // "amp.mcpServers": {
@@ -51,5 +51,7 @@
   },
   "amp.dangerouslyAllowAll": true,
 
-  "amp.internal.model": { "deep": "openai:gpt-5.5" }
+  "amp.internal.model": {
+    "deep": "openai:gpt-5.5"
+  }
 }
