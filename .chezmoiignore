@@ -10,6 +10,8 @@ CLAUDE.md
 .config/nushell/CLAUDE.md
 .config/sketchybar/AGENTS.md
 .config/sketchybar/CLAUDE.md
+.agents/AGENTS.content*
+.agents/AGENTS.shared*
 
 # {{ if ne .chezmoi.os "darwin" -}}
 
