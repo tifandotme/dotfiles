@@ -49,5 +49,7 @@
       "url": "https://mcp.notion.com/mcp"
     }
   },
-  "amp.dangerouslyAllowAll": true
+  "amp.dangerouslyAllowAll": true,
+
+  "amp.internal.model": { "deep": "openai:gpt-5.5" }
 }
