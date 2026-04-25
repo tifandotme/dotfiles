@@ -13,6 +13,12 @@
 # For Raycast: outputs "free_remaining/total actual_credits" (e.g., "0.41/10 91.81")
 # For sketchybar: calls sketchybar --set to update label
 
+_script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+_usage_lib="$_script_dir/usage_lib.sh"
+[ -f "$_usage_lib" ] || _usage_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/usage_lib.sh"
+# shellcheck source=usage_lib.sh
+. "$_usage_lib"
+
 # Raycast runs with minimal PATH - activate mise to get node
 # This uses shims so it works across Node version updates
 eval "$(/opt/homebrew/bin/mise activate bash --shims)"
@@ -35,11 +41,4 @@ else
   LABEL="N/A"
 fi
 
-# Detect if running under sketchybar (NAME env var is set)
-if [ -n "$NAME" ]; then
-  # Running as sketchybar plugin
-  sketchybar --set "$NAME" label="$LABEL"
-else
-  # Running standalone (Raycast or manual)
-  echo "$LABEL"
-fi
+usage_sketchybar_emit "$LABEL"

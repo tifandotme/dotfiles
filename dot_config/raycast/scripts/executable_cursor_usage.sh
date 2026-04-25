@@ -10,28 +10,24 @@
 # @raycast.packageName CursorUsage
 
 # Cursor plan usage via api2.cursor.sh (Connect RPC). Auth from Cursor state DB or keychain.
-# SketchyBar: same as claude_usage.sh — only label=…; icon from executable_sketchybarrc.
+# SketchyBar: only label; icon from executable_sketchybarrc.
 
 set -u
 
+_script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+_usage_lib="$_script_dir/usage_lib.sh"
+[ -f "$_usage_lib" ] || _usage_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/usage_lib.sh"
+# shellcheck source=usage_lib.sh
+. "$_usage_lib"
+
 STATE_DB="${CURSOR_STATE_DB:-$HOME/Library/Application Support/Cursor/User/globalStorage/state.vscdb}"
-CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}"
-CACHE_FILE="$CACHE_DIR/cursor-usage-label"
+CACHE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/cursor-usage-label"
 
 BASE_URL="https://api2.cursor.sh"
 USAGE_URL="$BASE_URL/aiserver.v1.DashboardService/GetCurrentPeriodUsage"
 PLAN_URL="$BASE_URL/aiserver.v1.DashboardService/GetPlanInfo"
 REFRESH_URL="$BASE_URL/oauth/token"
 CLIENT_ID="KbZUR41cY7W6zRSdpSUJ7I7mLYBKOCmB"
-
-read_cached_label() {
-  [ -f "$CACHE_FILE" ] && cat "$CACHE_FILE"
-}
-
-write_cached_label() {
-  mkdir -p "$CACHE_DIR"
-  printf '%s' "$1" >"$CACHE_FILE"
-}
 
 sql_escape() {
   printf '%s' "$1" | sed "s/'/''/g"
@@ -338,23 +334,17 @@ else
     connect_post "$PLAN_URL" "$ACCESS_TOKEN" "$PFILE" >/dev/null
     PLAN_NAME=$(jq -r '.planInfo.planName // empty' "$PFILE" 2>/dev/null)
     LABEL=$(format_label_from_usage "$UFILE" "$PLAN_NAME")
-    write_cached_label "$LABEL"
+    usage_cache_write "$CACHE_FILE" "$LABEL"
   else
-    CACHED_LABEL=$(read_cached_label)
+    CACHED_LABEL=$(usage_cache_read "$CACHE_FILE")
     if [ "$REFRESH_FAIL" = "1" ]; then
-      [ -n "$CACHED_LABEL" ] && LABEL="${CACHED_LABEL} [relogin]" || LABEL="relogin"
-    elif [ "$HTTP_CODE" = "000" ]; then
-      [ -n "$CACHED_LABEL" ] && LABEL="${CACHED_LABEL} [fetch]" || LABEL="fetch-failed"
+      LABEL=$(usage_label_on_error "" "$CACHED_LABEL" relogin)
     else
-      [ -n "$CACHED_LABEL" ] && LABEL="${CACHED_LABEL} [api:${HTTP_CODE}]" || LABEL="api:${HTTP_CODE}"
+      LABEL=$(usage_label_on_error "$HTTP_CODE" "$CACHED_LABEL")
     fi
   fi
 
   rm -f "$UFILE" "$PFILE"
 fi
 
-if [ -n "${NAME:-}" ]; then
-  sketchybar --set "$NAME" label="$LABEL"
-else
-  echo "$LABEL"
-fi
+usage_sketchybar_emit "$LABEL"

@@ -12,6 +12,12 @@
 # For Raycast: outputs "percent% (remaining)" (e.g., "45% (1234)")
 # For sketchybar: calls sketchybar --set to update label
 
+_script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+_usage_lib="$_script_dir/usage_lib.sh"
+[ -f "$_usage_lib" ] || _usage_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/usage_lib.sh"
+# shellcheck source=usage_lib.sh
+. "$_usage_lib"
+
 COPILOT_CMD="$HOME/.local/bin/copilot-usage"
 
 # Fetch Copilot usage JSON
@@ -32,11 +38,4 @@ else
   LABEL="Could not fetch Copilot usage"
 fi
 
-# Detect if running under sketchybar (NAME env var is set)
-if [ -n "$NAME" ]; then
-  # Running as sketchybar plugin
-  sketchybar --set "$NAME" label="$LABEL"
-else
-  # Running standalone (Raycast or manual)
-  echo "$LABEL"
-fi
+usage_sketchybar_emit "$LABEL"
