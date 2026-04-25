@@ -13,18 +13,14 @@
 # For Raycast: outputs "session weekly reset" (e.g., "18.0 19.0 1h55m")
 # For sketchybar: calls sketchybar --set to update label
 
+_script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+_usage_lib="$_script_dir/usage_lib.sh"
+[ -f "$_usage_lib" ] || _usage_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/usage_lib.sh"
+# shellcheck source=usage_lib.sh
+. "$_usage_lib"
+
 CREDENTIALS_FILE="$HOME/.claude/.credentials.json"
-CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}"
-CACHE_FILE="$CACHE_DIR/claude-usage-label"
-
-read_cached_label() {
-  [ -f "$CACHE_FILE" ] && cat "$CACHE_FILE"
-}
-
-write_cached_label() {
-  mkdir -p "$CACHE_DIR"
-  printf '%s' "$1" >"$CACHE_FILE"
-}
+CACHE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/claude-usage-label"
 
 if [ -f "$CREDENTIALS_FILE" ]; then
   ACCESS_TOKEN=$(jq -r '.claudeAiOauth.accessToken' "$CREDENTIALS_FILE" 2>/dev/null)
@@ -66,28 +62,13 @@ else
     WEEKLY_RESET=$(date -r "$WEEKLY_EPOCH" "+%a %H:%M" 2>/dev/null)
 
     LABEL="${SESSION}(${SESSION_RESET}) ${WEEKLY}(${WEEKLY_RESET})"
-    write_cached_label "$LABEL"
+    usage_cache_write "$CACHE_FILE" "$LABEL"
   else
-    CACHED_LABEL=$(read_cached_label)
-    if [ "$HTTP_CODE" = "429" ]; then
-      [ -n "$CACHED_LABEL" ] && LABEL="${CACHED_LABEL} [rl]" || LABEL="rate-limited"
-    elif [ "$HTTP_CODE" = "000" ]; then
-      [ -n "$CACHED_LABEL" ] && LABEL="${CACHED_LABEL} [fetch]" || LABEL="fetch-failed"
-    else
-      [ -n "$CACHED_LABEL" ] && LABEL="${CACHED_LABEL} [api:${HTTP_CODE}]" || LABEL="api:${HTTP_CODE}"
-    fi
+    CACHED_LABEL=$(usage_cache_read "$CACHE_FILE")
+    LABEL=$(usage_label_on_error "$HTTP_CODE" "$CACHED_LABEL")
   fi
 
   rm -f "$RESPONSE_FILE"
 fi
 
-if [ -n "$NAME" ]; then
-  sketchybar --set "$NAME" label="$LABEL"
-  if pgrep -xi "claude" &>/dev/null; then
-    sketchybar --set "$NAME" update_freq=180 # careful, might get rate-limited
-  else
-    sketchybar --set "$NAME" update_freq=900
-  fi
-else
-  echo "$LABEL"
-fi
+usage_sketchybar_emit "$LABEL" 180 900 claude xi

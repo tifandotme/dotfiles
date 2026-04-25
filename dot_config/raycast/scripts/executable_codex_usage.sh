@@ -15,21 +15,17 @@
 
 set -u
 
-CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}"
-CACHE_FILE="$CACHE_DIR/codex-usage-label"
+_script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+_usage_lib="$_script_dir/usage_lib.sh"
+[ -f "$_usage_lib" ] || _usage_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/usage_lib.sh"
+# shellcheck source=usage_lib.sh
+. "$_usage_lib"
+
+CACHE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/codex-usage-label"
 REFRESH_AGE_SECONDS=$((8 * 24 * 60 * 60))
 CLIENT_ID="app_EMoamEEZ73f0CkXaXp7hrann"
 REFRESH_URL="https://auth.openai.com/oauth/token"
 USAGE_URL="https://chatgpt.com/backend-api/wham/usage"
-
-read_cached_label() {
-  [ -f "$CACHE_FILE" ] && cat "$CACHE_FILE"
-}
-
-write_cached_label() {
-  mkdir -p "$CACHE_DIR"
-  printf '%s' "$1" >"$CACHE_FILE"
-}
 
 trim() {
   printf '%s' "$1" | awk '{$1=$1; print}'
@@ -345,34 +341,28 @@ build_label() {
 
     if [ -n "$session" ] && [ -n "$session_epoch" ] && [ -n "$weekly" ] && [ -n "$weekly_epoch" ]; then
       LABEL="${session}($(format_relative_reset "$session_epoch")) ${weekly}($(format_weekly_reset "$weekly_epoch"))"
-      write_cached_label "$LABEL"
+      usage_cache_write "$CACHE_FILE" "$LABEL"
       rm -f "$response_file" "$header_file"
       return 0
     fi
 
     if [ -n "$weekly" ] && [ -n "$weekly_epoch" ]; then
       LABEL="${weekly}($(format_weekly_reset "$weekly_epoch"))"
-      write_cached_label "$LABEL"
+      usage_cache_write "$CACHE_FILE" "$LABEL"
       rm -f "$response_file" "$header_file"
       return 0
     fi
 
     if [ -n "$session" ] && [ -n "$session_epoch" ]; then
       LABEL="${session}($(format_relative_reset "$session_epoch"))"
-      write_cached_label "$LABEL"
+      usage_cache_write "$CACHE_FILE" "$LABEL"
       rm -f "$response_file" "$header_file"
       return 0
     fi
   fi
 
-  CACHED_LABEL=$(read_cached_label)
-  if [ "$http_code" = "429" ]; then
-    [ -n "$CACHED_LABEL" ] && LABEL="${CACHED_LABEL} [rl]" || LABEL="rate-limited"
-  elif [ "$http_code" = "000" ]; then
-    [ -n "$CACHED_LABEL" ] && LABEL="${CACHED_LABEL} [fetch]" || LABEL="fetch-failed"
-  else
-    [ -n "$CACHED_LABEL" ] && LABEL="${CACHED_LABEL} [api:${http_code}]" || LABEL="api:${http_code}"
-  fi
+  CACHED_LABEL=$(usage_cache_read "$CACHE_FILE")
+  LABEL=$(usage_label_on_error "$http_code" "$CACHED_LABEL")
 
   rm -f "$response_file" "$header_file"
   return 0
@@ -381,19 +371,10 @@ build_label() {
 if ! load_auth; then
   LABEL="N/A"
 elif ! maybe_refresh_token; then
-  CACHED_LABEL=$(read_cached_label)
-  [ -n "$CACHED_LABEL" ] && LABEL="${CACHED_LABEL} [auth]" || LABEL="auth-failed"
+  CACHED_LABEL=$(usage_cache_read "$CACHE_FILE")
+  LABEL=$(usage_label_on_error "" "$CACHED_LABEL" auth)
 else
   build_label || LABEL="N/A"
 fi
 
-if [ -n "${NAME:-}" ]; then
-  sketchybar --set "$NAME" label="$LABEL"
-  if pgrep -x "codex" >/dev/null 2>&1; then
-    sketchybar --set "$NAME" update_freq=60
-  else
-    sketchybar --set "$NAME" update_freq=900
-  fi
-else
-  echo "$LABEL"
-fi
+usage_sketchybar_emit "$LABEL" 60 900 codex x
