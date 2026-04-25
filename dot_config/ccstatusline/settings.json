@@ -19,6 +19,12 @@
         "type": "model",
         "color": "ansi256:246",
         "rawValue": true
+      },
+      {
+        "id": "42757375-8367-456c-8b6c-11eefedf2b94",
+        "type": "thinking-effort",
+        "rawValue": true,
+        "color": "ansi256:246"
       }
     ],
     [
@@ -41,6 +47,7 @@
   "defaultSeparator": " · ",
   "inheritSeparatorColors": true,
   "globalBold": false,
+  "minimalistMode": true,
   "powerline": {
     "enabled": false,
     "separators": [
@@ -51,6 +58,7 @@
     ],
     "startCaps": [],
     "endCaps": [],
-    "autoAlign": false
+    "autoAlign": false,
+    "continueThemeAcrossLines": false
   }
 }
