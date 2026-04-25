@@ -1,0 +1,23 @@
+{
+  "gateway": {
+    "mode": "remote",
+    "remote": {
+      "url": "wss://openclaw.tifan.me:18789",
+      "token": {
+        "source": "env",
+        "provider": "default",
+        "id": "OPENCLAW_GATEWAY_TOKEN"
+      }
+    }
+  },
+  "wizard": {
+    "lastRunAt": "2026-04-25T08:46:26.766Z",
+    "lastRunVersion": "2026.4.23",
+    "lastRunCommand": "configure",
+    "lastRunMode": "remote"
+  },
+  "meta": {
+    "lastTouchedVersion": "2026.4.23",
+    "lastTouchedAt": "2026-04-25T08:46:26.833Z"
+  }
+}
