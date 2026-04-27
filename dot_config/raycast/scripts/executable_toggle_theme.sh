@@ -24,8 +24,11 @@ fi
 # Toggle macOS appearance
 osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to not dark mode'
 
+# Appearance after toggle (reuse for delta + Glow)
+DARK=$(osascript -e 'tell application "System Events" to tell appearance preferences to get dark mode')
+
 # Determine new value for delta light
-if osascript -e 'tell application "System Events" to tell appearance preferences to get dark mode' | grep -q "true"; then
+if echo "$DARK" | grep -q "true"; then
   NEW_VAL="false"
 else
   NEW_VAL="true"
@@ -47,4 +50,18 @@ if grep -q '^\[delta\]' "$CONFIG_FILE"; then
 else
   # If [delta] section missing, add it at the end
   printf "\n[delta]\n\tlight = %s\n" "$NEW_VAL" >>"$CONFIG_FILE"
+fi
+
+# Glow: Gruber JSON in dark mode, builtin light when system is light (paths must be absolute; glow does not expand ~)
+GLOW_CONFIG="$HOME/.config/glow/glow.yml"
+if [[ -f "$GLOW_CONFIG" ]]; then
+  if echo "$DARK" | grep -q "true"; then
+    GLOW_STYLE_LINE="style: \"${HOME}/.config/glow/gruber-darker.json\""
+  else
+    GLOW_STYLE_LINE="style: light"
+  fi
+  awk -v sl="$GLOW_STYLE_LINE" '
+    /^style:/ { print sl; next }
+    { print }
+  ' "$GLOW_CONFIG" >"$GLOW_CONFIG.tmp" && mv "$GLOW_CONFIG.tmp" "$GLOW_CONFIG"
 fi
