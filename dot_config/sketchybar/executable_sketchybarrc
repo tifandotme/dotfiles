@@ -175,7 +175,7 @@ add_usage_item claude_usage "􀘾" 900
 add_usage_item codex_usage "􀘾" 900
 
 # Cursor usage: no published API rate limits; ~3min poll balances freshness vs load
-add_usage_item cursor_usage "􀘾" 180
+# add_usage_item cursor_usage "􀘾" 180
 
 # sketchybar --add item network_speed right \
 #   --set network_speed \
