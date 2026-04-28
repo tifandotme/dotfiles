@@ -172,7 +172,7 @@ sketchybar --add item wifi right \
 add_usage_item amp_usage "􁎢" 300
 # add_usage_item copilot_usage "􁎢" 300
 add_usage_item claude_usage "􀘾" 900
-# add_usage_item codex_usage "􀘾" 900
+add_usage_item codex_usage "􀘾" 900
 
 # Cursor usage: no published API rate limits; ~3min poll balances freshness vs load
 add_usage_item cursor_usage "􀘾" 180
