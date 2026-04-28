@@ -31,6 +31,9 @@ alias oc = opencode
 alias _claude = ^claude
 def claude [...args] { _claude --dangerously-skip-permissions --no-chrome ...$args }
 
+alias _codex = ^codex
+def --wrapped codex [...args] { _codex --dangerously-bypass-approvals-and-sandbox ...$args }
+
 alias _cursor-gui = ^cursor
 def --wrapped cursor-gui [...args] {
   let cursor_config_dir = $env.HOME | path join ".cursor"
