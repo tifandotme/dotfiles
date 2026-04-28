@@ -30,6 +30,13 @@
       "Bash(PORT=:*)",
       "Bash(chezmoi apply:*)"
     ],
+    "deny": [
+      "Edit(package.json)",
+      "Bash(git push *)",
+      "Bash(git commit *)",
+      "Bash(git reset *)",
+      "Bash(git clean *)"
+    ],
     "ask": [
       "Bash(chmod:*)",
       "Bash(sed:*)",
@@ -37,17 +44,9 @@
       "Bash(sqlite3:*)",
       "Bash(psql:*)"
     ],
-    "deny": [
-      "Edit(package.json)",
-      "Bash(git push *)",
-      "Bash(git commit *)",
-      "Bash(gh pr create *)",
-      "Bash(git reset *)",
-      "Bash(git clean *)"
-    ],
     "defaultMode": "auto"
   },
-  "model": "opusplan",
+  "model": "opus",
   "hooks": {
     "Notification": [
       {
@@ -115,11 +114,18 @@
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
-    "verbs": ["Working"]
+    "verbs": [
+      "Working"
+    ]
   },
   "effortLevel": "high",
-  "voiceEnabled": false,
   "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
+  "editorMode": "vim",
+  "verbose": true,
+  "preferredNotifChannel": "ghostty",
+  "remoteControlAtStartup": false,
   "skipAutoPermissionPrompt": true,
+  "voiceEnabled": false,
   "ui.showBanner": false
 }
