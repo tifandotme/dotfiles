@@ -1,11 +1,13 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "medium"
 plan_mode_reasoning_effort = "high"
-approval_policy = "on-request"
-sandbox_mode = "workspace-write"
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
 web_search = "disabled"
+approvals_reviewer = "guardian_subagent"
+notify = ["bash", "~/.codex/cmux-notify.sh"]
 
 # [features]
 # codex_hooks = true
@@ -14,6 +16,21 @@ web_search = "disabled"
 trust_level = "trusted"
 
 [projects."/Users/tifan/personal/resume"]
+trust_level = "trusted"
+
+[projects."/Users/tifan/personal/notes"]
+trust_level = "trusted"
+
+[projects."/Users/tifan/work/hadl/aquasense-app"]
+trust_level = "trusted"
+
+[projects."/Users/tifan/work/hadl/aquasense-service"]
+trust_level = "trusted"
+
+[projects."/Users/tifan/work/hadl/backoffice-windmill"]
+trust_level = "trusted"
+
+[projects."/Users/tifan/work/hadl/gcp-terraform"]
 trust_level = "trusted"
 
 [tui]
