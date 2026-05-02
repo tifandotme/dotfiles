@@ -16,7 +16,7 @@
     "npm:pi-cursor-agent",
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
-    "npm:@siddr/pi-cmux-status"
+    "npm:pi-add-dir"
   ],
   "enableSkillCommands": false,
   "terminal": {
