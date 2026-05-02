@@ -7,11 +7,18 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
+export PI_CODING_AGENT_DIR="${XDG_CONFIG_HOME}/pi"
+export PILENS_DATA_DIR="${XDG_STATE_HOME}/pi-lens/projects"
+export CLAUDE_CONFIG_DIR="${XDG_CONFIG_HOME}/claude"
+export CODEX_HOME="${XDG_CONFIG_HOME}/codex"
+export CODEX_SQLITE_HOME="${XDG_STATE_HOME}/codex"
+
 # gws (https://github.com/googleworkspace/cli) — same path as Nushell env.nu
 export GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE="${XDG_CONFIG_HOME}/gws/creds.json"
 
 export EDITOR=vi
 
+export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/config"
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
 
 export PATH="$HOME/.local/bin:$BUN_INSTALL/bin:$HOME/.cargo/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"
