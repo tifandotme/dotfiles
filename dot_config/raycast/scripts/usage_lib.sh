@@ -21,30 +21,30 @@ usage_label_on_error() {
   local tag fallback
 
   case "$special" in
-    relogin)
-      tag="relogin"
-      fallback="relogin"
+  relogin)
+    tag="relogin"
+    fallback="relogin"
+    ;;
+  auth)
+    tag="auth"
+    fallback="auth-failed"
+    ;;
+  *)
+    case "$code" in
+    429)
+      tag="rl"
+      fallback="rate-limited"
       ;;
-    auth)
-      tag="auth"
-      fallback="auth-failed"
+    000)
+      tag="fetch"
+      fallback="fetch-failed"
       ;;
     *)
-      case "$code" in
-        429)
-          tag="rl"
-          fallback="rate-limited"
-          ;;
-        000)
-          tag="fetch"
-          fallback="fetch-failed"
-          ;;
-        *)
-          tag="api:${code}"
-          fallback="api:${code}"
-          ;;
-      esac
+      tag="api:${code}"
+      fallback="api:${code}"
       ;;
+    esac
+    ;;
   esac
 
   if [ -n "$cached" ]; then
@@ -104,6 +104,7 @@ usage_format_weekly_reset() {
 # SketchyBar: set label; optional dynamic update_freq from pgrep.
 #   usage_sketchybar_emit "$label"
 #   usage_sketchybar_emit "$label" <active_freq> <idle_freq> <process> [xi|x]
+#   fourth arg: comma-separated names (no spaces inside): fast freq if ANY match (or use name).
 #   fifth arg: "xi" -> pgrep -xi, default "x" -> pgrep -x
 usage_sketchybar_emit() {
   if [ -z "${NAME:-}" ]; then
@@ -112,16 +113,23 @@ usage_sketchybar_emit() {
   fi
   sketchybar --set "$NAME" label="${1:-}"
   if [ -n "${2:-}" ]; then
-    local fast="${2:-}" slow="${3:-}" proc="${4:-}" pmode="${5:-x}" freq
+    local fast="${2:-}" slow="${3:-}" proc="${4:-}" pmode="${5:-x}" freq needle proc_words
     freq="$slow"
+    proc_words="${proc//,/ }"
     if [ "$pmode" = "xi" ]; then
-      if pgrep -xi "$proc" &>/dev/null; then
-        freq="$fast"
-      fi
+      for needle in $proc_words; do
+        if pgrep -xi "$needle" &>/dev/null; then
+          freq="$fast"
+          break
+        fi
+      done
     else
-      if pgrep -x "$proc" &>/dev/null; then
-        freq="$fast"
-      fi
+      for needle in $proc_words; do
+        if pgrep -x "$needle" &>/dev/null; then
+          freq="$fast"
+          break
+        fi
+      done
     fi
     sketchybar --set "$NAME" update_freq="$freq"
   fi

@@ -37,9 +37,7 @@ auth_paths() {
     return
   fi
 
-  printf '%s\n' \
-    "$HOME/.config/codex/auth.json" \
-    "$HOME/.codex/auth.json"
+  printf '%s\n' "${XDG_CONFIG_HOME:-$HOME/.config}/codex/auth.json"
 }
 
 parse_auth_json() {
@@ -343,4 +341,4 @@ else
   build_label || LABEL="N/A"
 fi
 
-usage_sketchybar_emit "$LABEL" 60 900 codex x
+usage_sketchybar_emit "$LABEL" 60 900 codex,pi x

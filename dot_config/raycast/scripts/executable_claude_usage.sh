@@ -19,7 +19,8 @@ _usage_lib="$_script_dir/usage_lib.sh"
 # shellcheck source=usage_lib.sh
 . "$_usage_lib"
 
-CREDENTIALS_FILE="$HOME/.claude/.credentials.json"
+CLAUDE_CONFIG_HOME="${CLAUDE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/claude}"
+CREDENTIALS_FILE="$CLAUDE_CONFIG_HOME/.credentials.json"
 CACHE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/claude-usage-label"
 
 if [ -f "$CREDENTIALS_FILE" ]; then
