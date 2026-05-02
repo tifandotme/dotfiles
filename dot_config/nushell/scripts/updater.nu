@@ -55,6 +55,11 @@ export def start [] {
     skills update
   }
 
+  if (which pi | is-not-empty) {
+    print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)pi(ansi reset) and installed packages"
+    pi update
+  }
+
   if (which claude | is-not-empty) {
     print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)Claude Code(ansi reset)"
     claude update

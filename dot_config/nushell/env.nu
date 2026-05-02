@@ -44,7 +44,11 @@ $env.DOCKER_HOST = $"unix://($env.XDG_CONFIG_HOME | path join colima)/default/do
 
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
-$env.DENO_INSTALL = ($env.XDG_DATA_HOME | path join deno)
+$env.PI_CODING_AGENT_DIR = ($env.XDG_CONFIG_HOME | path join pi)
+$env.PILENS_DATA_DIR = ($env.XDG_STATE_HOME | path join pi-lens projects)
+$env.CLAUDE_CONFIG_DIR = ($env.XDG_CONFIG_HOME | path join claude)
+$env.CODEX_HOME = ($env.XDG_CONFIG_HOME | path join codex)
+$env.CODEX_SQLITE_HOME = ($env.XDG_STATE_HOME | path join codex)
 # $env.PNPM_HOME = ($env.XDG_DATA_HOME | path join pnpm)
 $env.NU_LIB_DIRS = ($nu.default-config-dir | path join scripts)
 
