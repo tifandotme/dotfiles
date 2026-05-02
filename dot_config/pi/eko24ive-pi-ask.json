@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "behaviour": {
+    "autoSubmitWhenAnsweredWithoutNotes": true,
+    "confirmDismissWhenDirty": true,
+    "doublePressReviewShortcuts": true,
+    "showFooterHints": true
+  },
+  "keymaps": {
+    "cancel": "esc",
+    "dismiss": "ctrl+c",
+    "toggle": "space",
+    "confirm": "enter",
+    "optionNote": "n",
+    "questionNote": "shift+n"
+  }
+}
