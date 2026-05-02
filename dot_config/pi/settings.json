@@ -1,0 +1,37 @@
+{
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
+  "defaultThinkingLevel": "off",
+  "hideThinkingBlock": false,
+  "lastChangelogVersion": "0.72.1",
+  "quietStartup": false,
+  "enableInstallTelemetry": false,
+  "theme": "dark",
+  "treeFilterMode": "default",
+  "packages": [
+    "npm:pi-fff",
+    "npm:pi-lens",
+    "npm:@tintinweb/pi-subagents",
+    "npm:@eko24ive/pi-ask",
+    "npm:pi-cursor-agent",
+    "npm:@tmustier/pi-usage-extension",
+    "npm:pi-code-previews"
+  ],
+  "enableSkillCommands": false,
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "enabledModels": [
+    "openai-codex/gpt-5.3-codex-spark",
+    "openai-codex/gpt-5.4-mini",
+    "openai-codex/gpt-5.5",
+    "cursor-agent/composer-2-fast",
+    "cursor-agent/composer-2",
+    "cursor-agent/gpt-5.5-high",
+    "cursor-agent/gpt-5.5-medium",
+    "cursor-agent/gemini-3.1-pro-preview",
+    "cursor-agent/claude-opus-4-7-thinking-medium",
+    "cursor-agent/claude-opus-4-7-thinking-high"
+  ],
+  "transport": "websocket-cached"
+}
