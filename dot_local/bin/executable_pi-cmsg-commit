@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test'
+
+fail() {
+  printf 'pi-cmsg-commit: %s\n' "$*" >&2
+  exit 1
+}
+
+command -v git >/dev/null 2>&1 || fail "git is not installed"
+command -v pi >/dev/null 2>&1 || fail "pi is not installed"
+
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail "not inside a git repository"
+
+if git diff --cached --quiet --exit-code; then
+  fail "no staged changes"
+fi
+
+if [[ -z "${PI_CODING_AGENT_DIR:-}" ]]; then
+  xdg_config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+  export PI_CODING_AGENT_DIR="$xdg_config_home/pi"
+fi
+
+if ! raw_output="$(
+  pi --no-session --model openai-codex/gpt-5.4-mini:medium -p '/cmsg' \
+    | sed -e 's/\x1b\[[0-9;]*m//g'
+)"; then
+  fail "pi failed to generate a commit message"
+fi
+
+message="$(printf '%s\n' "$raw_output" | sed -e '/^[[:space:]]*$/d')"
+message="${message//$'\r'/}"
+
+if [[ -z "$message" ]]; then
+  fail "pi returned an empty commit message"
+fi
+
+line_count="$(printf '%s\n' "$message" | awk 'END { print NR }')"
+if [[ "$line_count" != "1" ]]; then
+  printf '%s\n' "$message" >&2
+  fail "pi returned multiple lines"
+fi
+
+if [[ "$message" == '```'* || "$message" == *'```'* ]]; then
+  printf '%s\n' "$message" >&2
+  fail "pi returned markdown formatting"
+fi
+
+if ! [[ "$message" =~ ^($allowed_types)(\([A-Za-z0-9._/-]+\))?:\ .+ ]]; then
+  printf '%s\n' "$message" >&2
+  fail "message must match conventional commit format"
+fi
+
+subject="${message#*: }"
+
+if [[ ${#subject} -gt 72 ]]; then
+  printf '%s\n' "$message" >&2
+  fail "subject is longer than 72 characters"
+fi
+
+first_char="${subject:0:1}"
+if [[ "$first_char" =~ [A-Z] ]]; then
+  printf '%s\n' "$message" >&2
+  fail "subject must start with lowercase text"
+fi
+
+if [[ "$subject" == *. ]]; then
+  printf '%s\n' "$message" >&2
+  fail "subject must not end with a period"
+fi
+
+printf 'Generated commit message:\n%s\n' "$message"
+git commit -m "$message"
