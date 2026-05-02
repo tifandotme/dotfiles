@@ -7,7 +7,7 @@
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "theme": "dark",
-  "treeFilterMode": "default",
+  "treeFilterMode": "user-only",
   "packages": [
     "npm:pi-fff",
     "npm:pi-lens",
@@ -15,11 +15,12 @@
     "npm:@eko24ive/pi-ask",
     "npm:pi-cursor-agent",
     "npm:@tmustier/pi-usage-extension",
-    "npm:pi-code-previews"
+    "npm:pi-code-previews",
+    "npm:@siddr/pi-cmux-status"
   ],
   "enableSkillCommands": false,
   "terminal": {
-    "showTerminalProgress": true
+    "showTerminalProgress": false
   },
   "enabledModels": [
     "openai-codex/gpt-5.3-codex-spark",
