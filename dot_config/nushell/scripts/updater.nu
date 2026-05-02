@@ -50,14 +50,14 @@ export def start [] {
     pnpm update --global --latest
   }
 
-  if (which skills | is-not-empty) {
+  if (which bunx | is-not-empty) {
     print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)skills(ansi reset) packages"
-    skills update
+    bunx skills update -g
   }
 
   if (which pi | is-not-empty) {
     print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)pi(ansi reset) and installed packages"
-    pi update
+    pi update --extensions
   }
 
   if (which claude | is-not-empty) {
