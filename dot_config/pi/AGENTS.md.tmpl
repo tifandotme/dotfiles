@@ -12,9 +12,6 @@ Prefer Pi's structured tools over shell commands.
 - Use `grep` for text search. It is FFF-backed and respects `.gitignore`.
 - Use `fff_multi_grep` when searching for several literal names, aliases, or old and new symbols.
 - Use `read` after one or two targeted searches. Do not shotgun-read large parts of the repo.
-- Use `lsp_navigation` for definitions, references, hover types, implementations, diagnostics, and call hierarchy.
-- Use `ast_grep_search` for semantic code search instead of fragile text patterns.
-- Use `ast_grep_replace` for repeated code-pattern rewrites. Dry-run first.
 - Use `edit` for small exact replacements. Keep `oldText` minimal but unique.
 - Use one `edit` call with multiple entries for separate edits in the same file.
 - Use `write` only for new files or full rewrites.
@@ -22,7 +19,7 @@ Prefer Pi's structured tools over shell commands.
 
 When exploring:
 
-- Start with `find_files`, `grep`, `lsp_navigation`, or `ast_grep_search`.
+- Start with `find_files` or `grep`.
 - Launch `Explore` for broad read-only discovery across unfamiliar areas.
 - Check the key files yourself before editing. Do not blindly trust subagent summaries.
 
