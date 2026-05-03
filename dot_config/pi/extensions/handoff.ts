@@ -23,6 +23,12 @@ type PendingHandoff = {
   prompt: string
 }
 
+type HandoffAutosendState = {
+  interval: ReturnType<typeof setInterval>
+  timeout: ReturnType<typeof setTimeout>
+  unsubscribeInput: () => void
+}
+
 function getPendingHandoff(): PendingHandoff | null {
   return (
     ((globalThis as Record<PropertyKey, unknown>)[HANDOFF_GLOBAL_KEY] as
@@ -40,25 +46,101 @@ function setPendingHandoff(data: PendingHandoff | null): void {
   }
 }
 
-const CONTEXT_SUMMARY_SYSTEM_PROMPT = `You are a context transfer assistant. Given a coding conversation and the user's goal for a new thread, generate a focused prompt that:
+const CONTEXT_SUMMARY_SYSTEM_PROMPT = `You are a context transfer assistant. Given a coding conversation and the user's goal for a new session, generate only concise markdown bullets from the current assistant's perspective that summarize relevant context for continuing the work.
 
-1. Summarizes only the relevant technical context
-2. Lists relevant files discussed or modified
-3. States the next task clearly
-4. Is self-contained and ready to send to another coding agent session
+Include:
+- Concrete decisions made
+- Files discussed or modified
+- Commands, checks, errors, or blockers that matter
+- Important constraints or user preferences
 
-Use this format:
+Write in first person for work the assistant did.
+Use active phrasing such as "I edited", "I checked", and "I found".
+Avoid passive phrasing such as "was edited", "were checked", or "was found".
+Use "the user" for prior-session user-only instructions, preferences, or constraints.
+Use "we agreed" only for decisions jointly reached with the user.
+Prefer "- I edited \`file.ts\` to ..." over "- \`file.ts\` was edited to ...".
+Use 8-14 bullets unless the conversation is very short.
+Use a flat bullet list only.
+Do not use nested bullets.
+If listing multiple related items, keep them inline in one bullet.
+Mention commands or checks only when their result matters for continuing the work.
+Summarize command/check outcomes instead of listing every command.
+Do not include headings.
+Do not include a task section.
+Do not rewrite, quote, or summarize the user's goal.
+Do not include preamble or closing text.
+Every line must be a markdown bullet starting with "- ".`
 
-## Context
-- ...
+const HANDOFF_AUTOSEND_MS = 10_000
+const HANDOFF_STATUS_KEY = "handoff-autosend"
 
-## Files
-- path/to/file
+function buildHandoffPrompt(
+  goal: string,
+  summary: string,
+  parentSession: string | null,
+): string {
+  const intro = parentSession
+    ? `Continuing work from session ${parentSession}. If you need details not included here, use session_query.`
+    : "Continuing work in a new session. If you need details not included here, use session_query."
 
-## Task
-...
+  return `${intro}\n\n${summary.trim()}\n\n${goal}`
+}
 
-Be concise and specific. Output only the prompt body.`
+function clearHandoffAutosend(
+  ctx: ExtensionContext,
+  state: HandoffAutosendState,
+): void {
+  clearInterval(state.interval)
+  clearTimeout(state.timeout)
+  state.unsubscribeInput()
+  ctx.ui.setStatus(HANDOFF_STATUS_KEY, undefined)
+}
+
+function scheduleHandoffAutosend(
+  pi: ExtensionAPI,
+  ctx: ExtensionContext,
+  prompt: string,
+): void {
+  ctx.ui.setEditorText(prompt)
+
+  let state: HandoffAutosendState | null = null
+  let remainingSeconds = Math.ceil(HANDOFF_AUTOSEND_MS / 1000)
+  const setStatus = () => {
+    ctx.ui.setStatus(
+      HANDOFF_STATUS_KEY,
+      `handoff autosends in ${remainingSeconds}s; edit or move cursor to cancel`,
+    )
+  }
+  const cancel = () => {
+    if (!state) return
+    clearHandoffAutosend(ctx, state)
+    state = null
+  }
+
+  const unsubscribeInput = ctx.ui.onTerminalInput(() => {
+    cancel()
+    return undefined
+  })
+  const interval = setInterval(() => {
+    remainingSeconds -= 1
+    if (remainingSeconds > 0) {
+      setStatus()
+    }
+  }, 1000)
+  const timeout = setTimeout(() => {
+    if (!state) return
+    clearHandoffAutosend(ctx, state)
+    state = null
+
+    if (ctx.ui.getEditorText() !== prompt) return
+    ctx.ui.setEditorText("")
+    pi.sendUserMessage(prompt)
+  }, HANDOFF_AUTOSEND_MS)
+
+  state = { interval, timeout, unsubscribeInput }
+  setStatus()
+}
 
 async function generateContextSummary(
   ctx: ExtensionContext,
@@ -113,12 +195,12 @@ async function generateContextSummary(
 }
 
 export default function (pi: ExtensionAPI): void {
-  pi.on("session_start", async (event) => {
+  pi.on("session_start", async (event, ctx) => {
     if (event.reason !== "new") return
     const pending = getPendingHandoff()
     if (!pending) return
     setPendingHandoff(null)
-    pi.sendUserMessage(pending.prompt)
+    scheduleHandoffAutosend(pi, ctx, pending.prompt)
   })
 
   pi.registerCommand("handoff", {
@@ -198,10 +280,11 @@ export default function (pi: ExtensionAPI): void {
         return
       }
 
-      const parentBlock = currentSessionFile
-        ? `Parent session: ${currentSessionFile}\n\nYou can use the session_query tool to ask that parent session for more detail if needed.\n\n`
-        : ""
-      const finalPrompt = `${goal}\n\n${parentBlock}${summary}`
+      const finalPrompt = buildHandoffPrompt(
+        goal,
+        summary,
+        currentSessionFile ?? null,
+      )
 
       setPendingHandoff({ prompt: finalPrompt })
       const result = await (ctx as ExtensionCommandContext).newSession(
