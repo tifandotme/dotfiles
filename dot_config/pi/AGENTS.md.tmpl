@@ -57,13 +57,3 @@ Agent({
 ```
 
 For multiple independent searches, launch `Explore` agents in the background and collect results with `get_subagent_result`.
-
-### Grill-me with pi-ask
-
-When using the `grill-me` skill, prefer `ask_user` over plain text questions.
-
-- Use one question at a time when the user's answer affects the next branch of the decision tree.
-- Use one `ask_user` call with multiple questions only when the questions are independent and can be answered in parallel.
-- For each question, summarize the current decision context, include your recommended answer, and make the question focused.
-- After the user answers, restate the decision and continue to the next dependent branch.
-- If a question can be answered by exploring code or docs, explore first instead of asking.

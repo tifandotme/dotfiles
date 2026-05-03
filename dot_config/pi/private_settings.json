@@ -1,7 +1,7 @@
 {
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.5",
-  "defaultThinkingLevel": "off",
+  "defaultModel": "gpt-5.4",
+  "defaultThinkingLevel": "low",
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.72.1",
   "quietStartup": false,
@@ -10,12 +10,7 @@
   "treeFilterMode": "user-only",
   "packages": [
     "npm:pi-fff",
-    "npm:pi-lens",
     "npm:@tintinweb/pi-subagents",
-    {
-      "source": "npm:@eko24ive/pi-ask",
-      "skills": []
-    },
     "npm:pi-cursor-agent",
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
@@ -28,7 +23,8 @@
   },
   "enabledModels": [
     "openai-codex/gpt-5.5",
-    "cursor-agent/composer-2-fast"
+    "cursor-agent/composer-2-fast",
+    "openai-codex/gpt-5.4"
   ],
   "transport": "websocket-cached"
 }
