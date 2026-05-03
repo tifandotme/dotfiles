@@ -2,7 +2,7 @@
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "off",
-  "hideThinkingBlock": false,
+  "hideThinkingBlock": true,
   "lastChangelogVersion": "0.72.1",
   "quietStartup": false,
   "enableInstallTelemetry": false,
@@ -12,7 +12,10 @@
     "npm:pi-fff",
     "npm:pi-lens",
     "npm:@tintinweb/pi-subagents",
-    "npm:@eko24ive/pi-ask",
+    {
+      "source": "npm:@eko24ive/pi-ask",
+      "skills": []
+    },
     "npm:pi-cursor-agent",
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
