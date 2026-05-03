@@ -1,0 +1,69 @@
+# Pi Global Agent Configuration
+
+{{ include "dot_agents/AGENTS.shared.md" }}
+
+## Pi-specific Behavior
+
+### Tool usage
+
+Prefer Pi's structured tools over shell commands.
+
+- Use `find_files` to locate files by fuzzy name before guessing paths.
+- Use `grep` for text search. It is FFF-backed and respects `.gitignore`.
+- Use `fff_multi_grep` when searching for several literal names, aliases, or old and new symbols.
+- Use `read` after one or two targeted searches. Do not shotgun-read large parts of the repo.
+- Use `lsp_navigation` for definitions, references, hover types, implementations, diagnostics, and call hierarchy.
+- Use `ast_grep_search` for semantic code search instead of fragile text patterns.
+- Use `ast_grep_replace` for repeated code-pattern rewrites. Dry-run first.
+- Use `edit` for small exact replacements. Keep `oldText` minimal but unique.
+- Use one `edit` call with multiple entries for separate edits in the same file.
+- Use `write` only for new files or full rewrites.
+- Use `bash` for commands that tools cannot cover, such as tests, build commands, git status, or repo-specific scripts.
+
+When exploring:
+
+- Start with `find_files`, `grep`, `lsp_navigation`, or `ast_grep_search`.
+- Launch `Explore` for broad read-only discovery across unfamiliar areas.
+- Check the key files yourself before editing. Do not blindly trust subagent summaries.
+
+When editing:
+
+- Make surgical changes.
+- Run the smallest relevant validation command.
+- If validation is blocked by unrelated local state, report the blocker and what you did verify.
+
+### Subagents
+
+Use the `Explore` subagent for broad read-only codebase discovery before editing.
+
+Prefer `Explore` when:
+
+- Searching for relevant files across an unfamiliar repo
+- Mapping feature flow, architecture, or ownership
+- Looking for call sites, config, tests, or related docs
+- Running parallel investigation that does not need file edits
+
+Use direct tools for small, obvious lookups. Do not use `Explore` for edits.
+
+Example:
+
+```ts
+Agent({
+  subagent_type: "Explore",
+  prompt: "Find where authentication is implemented and summarize the key files.",
+  description: "Explore auth flow",
+  run_in_background: true,
+})
+```
+
+For multiple independent searches, launch `Explore` agents in the background and collect results with `get_subagent_result`.
+
+### Grill-me with pi-ask
+
+When using the `grill-me` skill, prefer `ask_user` over plain text questions.
+
+- Use one question at a time when the user's answer affects the next branch of the decision tree.
+- Use one `ask_user` call with multiple questions only when the questions are independent and can be answered in parallel.
+- For each question, summarize the current decision context, include your recommended answer, and make the question focused.
+- After the user answers, restate the decision and continue to the next dependent branch.
+- If a question can be answered by exploring code or docs, explore first instead of asking.
