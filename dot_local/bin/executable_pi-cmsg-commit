@@ -5,15 +5,52 @@ set -Eeuo pipefail
 allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test|revert'
 model='google/gemini-2.5-flash-lite'
 max_attempts=3
+script_name='pi-cmsg-commit'
+tmpdir=''
+prompt_file=''
+commit_msg_file=''
 
 fail() {
-  printf 'pi-cmsg-commit: %s\n' "$*" >&2
+  printf '%s: %s\n' "$script_name" "$*" >&2
   exit 1
 }
 
-command -v git >/dev/null 2>&1 || fail "git is not installed"
-command -v pi >/dev/null 2>&1 || fail "pi is not installed"
-command -v python3 >/dev/null 2>&1 || fail "python3 is not installed"
+log_error() {
+  printf '%s: %s\n' "$script_name" "$*" >&2
+}
+
+cleanup() {
+  if [[ -n "$tmpdir" && -d "$tmpdir" ]]; then
+    rm -rf -- "$tmpdir"
+  fi
+}
+
+on_err() {
+  local exit_code="$1"
+  local line_no="$2"
+  log_error "unexpected error on line $line_no (exit $exit_code)"
+  exit "$exit_code"
+}
+
+check_dependencies() {
+  local -a missing=()
+  local cmd=''
+
+  for cmd in git pi python3; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+      missing+=("$cmd")
+    fi
+  done
+
+  if ((${#missing[@]} > 0)); then
+    fail "missing required commands: ${missing[*]}"
+  fi
+}
+
+trap 'cleanup' EXIT
+trap 'on_err $? $LINENO' ERR
+
+check_dependencies
 
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail "not inside a git repository"
 
@@ -29,9 +66,9 @@ fi
 diff_output="$(git diff --cached --no-ext-diff --unified=3 -- .)"
 [[ -n "$diff_output" ]] || fail "staged diff is empty"
 
-prompt_file="$(mktemp)"
-commit_msg_file="$(mktemp)"
-trap 'rm -f "$prompt_file" "$commit_msg_file"' EXIT
+tmpdir="$(mktemp -d)"
+prompt_file="$tmpdir/prompt.txt"
+commit_msg_file="$tmpdir/commit-message.txt"
 
 build_prompt() {
   local attempt="$1"
@@ -95,13 +132,14 @@ generate_message() {
 normalize_and_validate() {
   local input="$1"
 
-  python3 - "$allowed_types" <<'PY' <<<"$input"
+  COMMIT_MESSAGE_INPUT="$input" python3 - "$allowed_types" <<'PY'
+import os
 import re
 import sys
 import textwrap
 
 allowed_types = sys.argv[1]
-raw = sys.stdin.read()
+raw = os.environ['COMMIT_MESSAGE_INPUT']
 
 raw = raw.replace('\r\n', '\n').replace('\r', '\n')
 lines = [line.rstrip() for line in raw.split('\n')]
@@ -184,16 +222,23 @@ attempt=1
 feedback=''
 previous_output=''
 message=''
+validation_output=''
 
 while ((attempt <= max_attempts)); do
   build_prompt "$attempt" "$feedback" "$previous_output"
   generate_message
 
-  if message="$(normalize_and_validate "$raw_output")"; then
+  set +e
+  validation_output="$(normalize_and_validate "$raw_output")"
+  validation_status=$?
+  set -e
+
+  if ((validation_status == 0)); then
+    message="$validation_output"
     break
   fi
 
-  feedback="$(printf '%s\n' "$message" | sed 's/^ERROR: //')"
+  feedback="$(printf '%s\n' "$validation_output" | sed 's/^ERROR: //')"
   previous_output="$raw_output"
 
   if ((attempt == max_attempts)); then
