@@ -19,23 +19,16 @@
     "npm:pi-cursor-agent",
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
-    "npm:pi-add-dir"
+    "npm:pi-add-dir",
+    "npm:pi-thinking-level"
   ],
   "enableSkillCommands": false,
   "terminal": {
     "showTerminalProgress": false
   },
   "enabledModels": [
-    "openai-codex/gpt-5.3-codex-spark",
-    "openai-codex/gpt-5.4-mini",
     "openai-codex/gpt-5.5",
-    "cursor-agent/composer-2-fast",
-    "cursor-agent/composer-2",
-    "cursor-agent/gpt-5.5-high",
-    "cursor-agent/gpt-5.5-medium",
-    "cursor-agent/gemini-3.1-pro-preview",
-    "cursor-agent/claude-opus-4-7-thinking-medium",
-    "cursor-agent/claude-opus-4-7-thinking-high"
+    "cursor-agent/composer-2-fast"
   ],
   "transport": "websocket-cached"
 }
