@@ -12,6 +12,8 @@
     "toggle": "space",
     "confirm": "enter",
     "optionNote": "n",
-    "questionNote": "shift+n"
+    "questionNote": "shift+n",
+    "previousOption": "ctrl+p",
+    "nextOption": "ctrl+n"
   }
 }

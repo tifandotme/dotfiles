@@ -1,0 +1,24 @@
+{
+  "shikiTheme": "github-dark-default",
+  "diffIntensity": "subtle",
+  "wordEmphasis": "smart",
+  "readCollapsedLines": 10,
+  "writeCollapsedLines": 10,
+  "editCollapsedLines": 160,
+  "grepCollapsedLines": 15,
+  "pathListCollapsedLines": 20,
+  "readLineNumbers": true,
+  "bashWarnings": true,
+  "syntaxHighlighting": true,
+  "secretWarnings": true,
+  "pathIcons": "unicode",
+  "tools": [
+    "bash",
+    "read",
+    "write",
+    "edit",
+    "grep",
+    "find",
+    "ls"
+  ]
+}
