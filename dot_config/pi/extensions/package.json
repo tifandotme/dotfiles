@@ -1,0 +1,18 @@
+{
+  "name": "pi-extensions-local-tooling",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "format": "bunx oxfmt --config .oxfmtrc.json *.ts",
+    "format:check": "bunx oxfmt --config .oxfmtrc.json --check *.ts",
+    "typecheck": "bunx tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@mariozechner/pi-ai": "0.72.1",
+    "@mariozechner/pi-coding-agent": "0.72.1",
+    "@tsconfig/node24": "24.0.4",
+    "@tsconfig/strictest": "2.0.8",
+    "typebox": "1.1.37",
+    "typescript": "6.0.3"
+  }
+}
