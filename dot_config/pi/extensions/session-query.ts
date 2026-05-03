@@ -6,6 +6,7 @@ import {
   serializeConversation,
   type SessionEntry,
 } from "@mariozechner/pi-coding-agent"
+import { Text } from "@mariozechner/pi-tui"
 import { Type } from "typebox"
 
 const QUERY_MODEL = {
@@ -36,6 +37,18 @@ export default function (pi: ExtensionAPI): void {
         description: "What you want to know about that session",
       }),
     }),
+    renderCall(args, theme, _context) {
+      const question =
+        typeof args.question === "string" && args.question.length > 0
+          ? args.question
+          : "(loading question...)"
+      const text = [
+        theme.fg("toolTitle", theme.bold("session_query")),
+        theme.fg("accent", question),
+      ].join("\n")
+
+      return new Text(text, 0, 0)
+    },
     async execute(_toolCallId, params, signal, _onUpdate, ctx) {
       const errorResult = (text: string) => ({
         content: [{ type: "text" as const, text }],
