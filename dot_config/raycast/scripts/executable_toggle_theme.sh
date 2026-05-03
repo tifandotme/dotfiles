@@ -65,3 +65,24 @@ if [[ -f "$GLOW_CONFIG" ]]; then
     { print }
   ' "$GLOW_CONFIG" >"$GLOW_CONFIG.tmp" && mv "$GLOW_CONFIG.tmp" "$GLOW_CONFIG"
 fi
+
+# Pi: match UI theme + code preview Shiki theme to system appearance
+if echo "$DARK" | grep -q "true"; then
+  PI_THEME="dark"
+  PI_SHIKI="github-dark-default"
+else
+  PI_THEME="light"
+  PI_SHIKI="github-light-default"
+fi
+
+PI_SETTINGS="$HOME/.config/pi/settings.json"
+if [[ -f "$PI_SETTINGS" ]]; then
+  tmp="$(mktemp)"
+  jq --arg t "$PI_THEME" '.theme = $t' "$PI_SETTINGS" >"$tmp" && mv "$tmp" "$PI_SETTINGS"
+fi
+
+PI_CODE_PREVIEWS="$HOME/.config/pi/code-previews.json"
+if [[ -f "$PI_CODE_PREVIEWS" ]]; then
+  tmp="$(mktemp)"
+  jq --arg t "$PI_SHIKI" '.shikiTheme = $t' "$PI_CODE_PREVIEWS" >"$tmp" && mv "$tmp" "$PI_CODE_PREVIEWS"
+fi
