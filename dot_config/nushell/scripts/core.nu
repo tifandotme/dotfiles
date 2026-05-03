@@ -26,7 +26,13 @@ alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME
 
 alias cm = chezmoi
 
-alias oc = opencode
+alias _pi = ^pi
+def --wrapped pi [...args] {
+  # pi-code-previews: avoid read/grep tool conflicts with pi-fff.
+  # with-env {CODE_PREVIEW_TOOLS: "bash,write,edit,find,ls"} {
+  _pi ...$args
+  # }
+}
 
 alias _claude = ^claude
 def claude [...args] { _claude --dangerously-skip-permissions --no-chrome ...$args }
@@ -37,7 +43,7 @@ def --wrapped codex [...args] { _codex --dangerously-bypass-approvals-and-sandbo
 alias _cursor-gui = ^cursor
 def --wrapped cursor-gui [...args] {
   let cursor_config_dir = $env.HOME | path join ".cursor"
-  with-env { CURSOR_CONFIG_DIR: $cursor_config_dir } {
+  with-env {CURSOR_CONFIG_DIR: $cursor_config_dir} {
     _cursor-gui --chat ...$args
   }
 }
@@ -45,7 +51,7 @@ def --wrapped cursor-gui [...args] {
 alias _cursor-agent = ^cursor-agent
 def --wrapped cursor [...args] {
   let cursor_config_dir = $env.HOME | path join ".cursor"
-  with-env { CURSOR_CONFIG_DIR: $cursor_config_dir } {
+  with-env {CURSOR_CONFIG_DIR: $cursor_config_dir} {
     _cursor-agent --yolo ...$args
   }
 }

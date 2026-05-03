@@ -1,7 +1,7 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
 model = "gpt-5.5"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "low"
 plan_mode_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
@@ -56,3 +56,6 @@ status_line = [
 notifications = true
 notification_method = "auto"
 show_tooltips = false
+
+[notice]
+hide_rate_limit_model_nudge = true
