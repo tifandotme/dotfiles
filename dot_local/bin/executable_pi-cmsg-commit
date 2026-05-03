@@ -2,8 +2,9 @@
 
 set -Eeuo pipefail
 
-allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test'
+allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test|revert'
 model='google/gemini-2.5-flash-lite'
+max_attempts=3
 
 fail() {
   printf 'pi-cmsg-commit: %s\n' "$*" >&2
@@ -12,6 +13,7 @@ fail() {
 
 command -v git >/dev/null 2>&1 || fail "git is not installed"
 command -v pi >/dev/null 2>&1 || fail "pi is not installed"
+command -v python3 >/dev/null 2>&1 || fail "python3 is not installed"
 
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail "not inside a git repository"
 
@@ -28,83 +30,182 @@ diff_output="$(git diff --cached --no-ext-diff --unified=3 -- .)"
 [[ -n "$diff_output" ]] || fail "staged diff is empty"
 
 prompt_file="$(mktemp)"
-trap 'rm -f "$prompt_file"' EXIT
+commit_msg_file="$(mktemp)"
+trap 'rm -f "$prompt_file" "$commit_msg_file"' EXIT
 
-cat >"$prompt_file" <<EOF
-Write exactly one conventional commit message for the staged git diff below.
+build_prompt() {
+  local attempt="$1"
+  local feedback="${2:-}"
+  local previous_output="${3:-}"
 
-Rules:
-- Output the commit message only.
-- Use exactly one type: fix, feat, build, chore, ci, docs, style, refactor, perf, or test.
-- Use format: type: subject or type(scope): subject.
-- Include a scope only when it is obvious from the diff.
-- Keep the whole line under 72 characters.
-- Use imperative mood.
-- Start the subject with a lowercase letter or number.
-- Do not end with a period.
-- Do not use markdown, quotes, backticks, commentary, or multiple lines.
-- Base the message only on this staged diff.
+  cat >"$prompt_file" <<EOF
+Write a Conventional Commit message for the staged git diff below.
+
+Requirements:
+- Output only the commit message
+- Use one of these types: fix, feat, build, chore, ci, docs, style, refactor, perf, test, revert
+- Use header format: type: subject or type(scope): subject
+- You may use ! for a breaking change
+- Keep the header at or under 72 characters
+- Start the subject with a lowercase letter or number
+- Do not end the subject with a period
+- Prefer a scope when it helps disambiguate the change
+- Write a specific, concrete subject that names the changed area or behavior
+- Avoid vague or generic subjects like: update, improve, enhance, optimize, streamline, clean up, misc fixes, refactor code
+- Add a body only if the header alone misses important context
+- If you add a body, keep it factual and concise
+- Base the message only on this staged diff
+- Do not use markdown fences, quotes, or commentary
+EOF
+
+  if [[ "$attempt" -gt 1 ]]; then
+    cat >>"$prompt_file" <<EOF
+
+Previous output was invalid.
+Validation failure: $feedback
+Previous output:
+$previous_output
+EOF
+  fi
+
+  cat >>"$prompt_file" <<EOF
 
 Staged diff:
 $diff_output
 EOF
+}
 
-if ! raw_output="$(
-  pi \
-    --print \
-    --no-session \
-    --no-tools \
-    --no-context-files \
-    --no-skills \
-    --no-prompt-templates \
-    --model "$model" \
-    --thinking off \
-    @"$prompt_file" |
-    sed -e 's/\x1b\[[0-9;]*m//g'
-)"; then
-  fail "pi failed to generate a commit message"
-fi
+generate_message() {
+  if ! raw_output="$({
+    pi \
+      --print \
+      --no-session \
+      --no-tools \
+      --no-context-files \
+      --no-skills \
+      --no-prompt-templates \
+      --model "$model" \
+      --thinking off \
+      @"$prompt_file"
+  } | sed -e 's/\x1b\[[0-9;]*m//g')"; then
+    fail "pi failed to generate a commit message"
+  fi
+}
 
-message="$(printf '%s\n' "$raw_output" | sed -e '/^[[:space:]]*$/d')"
-message="${message//$'\r'/}"
+normalize_and_validate() {
+  local input="$1"
 
-if [[ -z "$message" ]]; then
-  fail "pi returned an empty commit message"
-fi
+  python3 - "$allowed_types" <<'PY' <<<"$input"
+import re
+import sys
+import textwrap
 
-line_count="$(printf '%s\n' "$message" | awk 'END { print NR }')"
-if [[ "$line_count" != "1" ]]; then
-  printf '%s\n' "$message" >&2
-  fail "pi returned multiple lines"
-fi
+allowed_types = sys.argv[1]
+raw = sys.stdin.read()
 
-if [[ "$message" == '```'* || "$message" == *'```'* ]]; then
-  printf '%s\n' "$message" >&2
-  fail "pi returned markdown formatting"
-fi
+raw = raw.replace('\r\n', '\n').replace('\r', '\n')
+lines = [line.rstrip() for line in raw.split('\n')]
 
-if ! [[ "$message" =~ ^($allowed_types)(\([A-Za-z0-9._/-]+\))?:\ .+ ]]; then
-  printf '%s\n' "$message" >&2
-  fail "message must match conventional commit format"
-fi
+while lines and not lines[0].strip():
+    lines.pop(0)
+while lines and not lines[-1].strip():
+    lines.pop()
 
-subject="${message#*: }"
+if not lines:
+    print('ERROR: pi returned an empty commit message')
+    sys.exit(1)
 
-if [[ ${#message} -gt 72 ]]; then
-  printf '%s\n' "$message" >&2
-  fail "message is longer than 72 characters"
-fi
+header = lines[0]
+rest = lines[1:]
 
-first_char="${subject:0:1}"
-if [[ "$first_char" =~ [A-Z] ]]; then
-  printf '%s\n' "$message" >&2
-  fail "subject must start with lowercase text"
-fi
+if '```' in header or header.startswith('"') or header.endswith('"') or header.startswith("'") or header.endswith("'"):
+    print('ERROR: header must not use markdown fences or quotes')
+    sys.exit(1)
 
-if [[ "$subject" == *. ]]; then
-  printf '%s\n' "$message" >&2
-  fail "subject must not end with a period"
-fi
+pattern = re.compile(rf'^(?:{allowed_types})(\([A-Za-z0-9._/-]+\))?(!)?: .+')
+if not pattern.match(header):
+    print('ERROR: header must match conventional commit format')
+    sys.exit(1)
 
+if len(header) > 72:
+    print('ERROR: header is longer than 72 characters')
+    sys.exit(1)
+
+subject = header.split(': ', 1)[1]
+if not subject:
+    print('ERROR: subject is empty')
+    sys.exit(1)
+
+first_char = subject[0]
+if not (first_char.islower() or first_char.isdigit()):
+    print('ERROR: subject must start with a lowercase letter or number')
+    sys.exit(1)
+
+if subject.endswith('.'):
+    print('ERROR: subject must not end with a period')
+    sys.exit(1)
+
+while rest and not rest[0].strip():
+    rest.pop(0)
+
+normalized = [header]
+if rest:
+    collapsed = []
+    previous_blank = False
+    for line in rest:
+        blank = not line.strip()
+        if blank:
+            if not previous_blank:
+                collapsed.append('')
+            previous_blank = True
+            continue
+        collapsed.append(line)
+        previous_blank = False
+
+    while collapsed and not collapsed[-1].strip():
+        collapsed.pop()
+
+    wrapped = []
+    for line in collapsed:
+        if not line:
+            wrapped.append('')
+            continue
+        line = re.sub(r'\s+', ' ', line).strip()
+        wrapped.extend(textwrap.wrap(line, width=72, break_long_words=False, break_on_hyphens=False) or [''])
+
+    normalized.append('')
+    normalized.extend(wrapped)
+
+print('\n'.join(normalized))
+PY
+}
+
+attempt=1
+feedback=''
+previous_output=''
+message=''
+
+while ((attempt <= max_attempts)); do
+  build_prompt "$attempt" "$feedback" "$previous_output"
+  generate_message
+
+  if message="$(normalize_and_validate "$raw_output")"; then
+    break
+  fi
+
+  feedback="$(printf '%s\n' "$message" | sed 's/^ERROR: //')"
+  previous_output="$raw_output"
+
+  if ((attempt == max_attempts)); then
+    printf 'Model: %s\n' "$model" >&2
+    printf 'Last output:\n%s\n' "$raw_output" >&2
+    fail "$feedback"
+  fi
+
+  attempt=$((attempt + 1))
+done
+
+printf '%s\n' "$message" >"$commit_msg_file"
+printf 'Model: %s\n' "$model"
 printf 'Generated commit message:\n%s\n' "$message"
-git commit -m "$message"
+git commit -F "$commit_msg_file"

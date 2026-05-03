@@ -28,9 +28,9 @@ function notify(title: string, subtitle: string, body: string): void {
 
   const script = [
     "if command -v cmux >/dev/null 2>&1; then",
-    `cmux notify --title ${shellQuote(title)} --subtitle ${shellQuote(subtitle)} --body ${shellQuote(body)}`,
+    `cmux notify --title ${shellQuote(title)} --subtitle ${shellQuote(subtitle)} --body ${shellQuote(body)};`,
     "else",
-    `osascript -e ${shellQuote(`display notification ${JSON.stringify(body)} with title ${JSON.stringify(title)}`)}`,
+    `osascript -e ${shellQuote(`display notification ${JSON.stringify(body)} with title ${JSON.stringify(title)}`)};`,
     "fi",
   ].join(" ")
 
