@@ -30,7 +30,7 @@ diff_output="$(git diff --cached --no-ext-diff --unified=3 -- .)"
 prompt_file="$(mktemp)"
 trap 'rm -f "$prompt_file"' EXIT
 
-cat > "$prompt_file" <<EOF
+cat >"$prompt_file" <<EOF
 Write exactly one conventional commit message for the staged git diff below.
 
 Rules:
@@ -55,13 +55,12 @@ if ! raw_output="$(
     --no-session \
     --no-tools \
     --no-context-files \
-    --no-extensions \
     --no-skills \
     --no-prompt-templates \
     --model "$model" \
     --thinking off \
-    @"$prompt_file" \
-    | sed -e 's/\x1b\[[0-9;]*m//g'
+    @"$prompt_file" |
+    sed -e 's/\x1b\[[0-9;]*m//g'
 )"; then
   fail "pi failed to generate a commit message"
 fi

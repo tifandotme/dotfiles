@@ -22,9 +22,9 @@
     "showTerminalProgress": false
   },
   "enabledModels": [
+    "openai-codex/gpt-5.4",
     "openai-codex/gpt-5.5",
-    "cursor-agent/composer-2-fast",
-    "openai-codex/gpt-5.4"
+    "cursor-agent/composer-2-fast"
   ],
-  "transport": "websocket-cached"
+  "transport": "auto"
 }
