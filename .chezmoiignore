@@ -4,6 +4,11 @@ README.md
 key.txt.age
 
 **/node_modules
+.config/pi/extensions/AGENTS.md
+.config/pi/extensions/bun.lock
+.config/pi/extensions/package.json
+.config/pi/extensions/tsconfig.json
+.config/pi/extensions/.oxfmtrc.json
 .gitignore
 AGENTS.md
 CLAUDE.md
