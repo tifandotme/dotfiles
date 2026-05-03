@@ -26,5 +26,8 @@
     "openai-codex/gpt-5.5",
     "cursor-agent/composer-2-fast"
   ],
-  "transport": "auto"
+  "transport": "auto",
+  "compaction": {
+    "enabled": false
+  }
 }
