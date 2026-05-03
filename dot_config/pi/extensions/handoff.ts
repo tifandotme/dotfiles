@@ -74,6 +74,11 @@ Every line must be a markdown bullet starting with "- ".`
 
 const HANDOFF_AUTOSEND_MS = 10_000
 const HANDOFF_STATUS_KEY = "handoff-autosend"
+const HANDOFF_SESSION_TAG = "[handoff]"
+
+function buildHandoffSessionName(goal: string): string {
+  return `${HANDOFF_SESSION_TAG} ${goal.replace(/\s+/g, " ").trim()}`
+}
 
 function buildHandoffPrompt(
   goal: string,
@@ -287,9 +292,12 @@ export default function (pi: ExtensionAPI): void {
       )
 
       setPendingHandoff({ prompt: finalPrompt })
-      const result = await (ctx as ExtensionCommandContext).newSession(
-        currentSessionFile ? { parentSession: currentSessionFile } : undefined,
-      )
+      const result = await (ctx as ExtensionCommandContext).newSession({
+        ...(currentSessionFile ? { parentSession: currentSessionFile } : {}),
+        setup: async (sessionManager) => {
+          sessionManager.appendSessionInfo(buildHandoffSessionName(goal))
+        },
+      })
       if (result.cancelled) {
         setPendingHandoff(null)
       }
