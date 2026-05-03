@@ -36,7 +36,7 @@ check_dependencies() {
   local -a missing=()
   local cmd=''
 
-  for cmd in git pi python3; do
+  for cmd in git pi fold; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
       missing+=("$cmd")
     fi
@@ -138,97 +138,127 @@ generate_message() {
 
 normalize_and_validate() {
   local input="$1"
+  local normalized
+  local -a lines=()
+  local -a body_lines=()
+  local -a wrapped_lines=()
+  local line=''
+  local header=''
+  local subject=''
+  local wrapped=''
+  local nonempty_count=0
+  local idx=0
+  local saw_nonblank=0
+  local prev_blank=0
 
-  COMMIT_MESSAGE_INPUT="$input" python3 - "$allowed_types" <<'PY'
-import os
-import re
-import sys
-import textwrap
+  input="${input//$'\r'/}"
 
-allowed_types = sys.argv[1]
-raw = os.environ['COMMIT_MESSAGE_INPUT']
+  while IFS= read -r line; do
+    lines+=("${line%$'\r'}")
+  done <<<"$input"
 
-raw = raw.replace('\r\n', '\n').replace('\r', '\n')
-lines = [line.rstrip() for line in raw.split('\n')]
+  while ((${#lines[@]} > 0)) && [[ -z "${lines[0]//[[:space:]]/}" ]]; do
+    lines=("${lines[@]:1}")
+  done
 
-while lines and not lines[0].strip():
-    lines.pop(0)
-while lines and not lines[-1].strip():
-    lines.pop()
+  while ((${#lines[@]} > 0)) && [[ -z "${lines[${#lines[@]} - 1]//[[:space:]]/}" ]]; do
+    unset 'lines[${#lines[@]}-1]'
+  done
 
-if not lines:
-    print('ERROR: pi returned an empty commit message')
-    sys.exit(1)
+  if ((${#lines[@]} == 0)); then
+    printf 'ERROR: pi returned an empty commit message\n'
+    return 1
+  fi
 
-header = lines[0]
-rest = lines[1:]
+  header="${lines[0]%$'\r'}"
 
-if '```' in header or header.startswith('"') or header.endswith('"') or header.startswith("'") or header.endswith("'"):
-    print('ERROR: header must not use markdown fences or quotes')
-    sys.exit(1)
+  if [[ "$header" == *'```'* || "$header" == '"'* || "$header" == *'"' || "$header" == "'"* || "$header" == *"'" ]]; then
+    printf 'ERROR: header must not use markdown fences or quotes\n'
+    return 1
+  fi
 
-pattern = re.compile(rf'^(?:{allowed_types})(\([A-Za-z0-9._/-]+\))?(!)?: .+')
-if not pattern.match(header):
-    print('ERROR: header must match conventional commit format')
-    sys.exit(1)
+  if [[ ! "$header" =~ ^(${allowed_types})(\([A-Za-z0-9._/-]+\))?(!)?:\ .+ ]]; then
+    printf 'ERROR: header must match conventional commit format\n'
+    return 1
+  fi
 
-if len(header) > 72:
-    print('ERROR: header is longer than 72 characters')
-    sys.exit(1)
+  if ((${#header} > 72)); then
+    printf 'ERROR: header is longer than 72 characters\n'
+    return 1
+  fi
 
-subject = header.split(': ', 1)[1]
-if not subject:
-    print('ERROR: subject is empty')
-    sys.exit(1)
+  subject="${header#*: }"
+  if [[ -z "$subject" ]]; then
+    printf 'ERROR: subject is empty\n'
+    return 1
+  fi
 
-first_char = subject[0]
-if not (first_char.islower() or first_char.isdigit()):
-    print('ERROR: subject must start with a lowercase letter or number')
-    sys.exit(1)
+  if [[ ! "$subject" =~ ^[a-z0-9] ]]; then
+    printf 'ERROR: subject must start with a lowercase letter or number\n'
+    return 1
+  fi
 
-if subject.endswith('.'):
-    print('ERROR: subject must not end with a period')
-    sys.exit(1)
+  if [[ "$subject" == *. ]]; then
+    printf 'ERROR: subject must not end with a period\n'
+    return 1
+  fi
 
-while rest and not rest[0].strip():
-    rest.pop(0)
+  for ((idx = 1; idx < ${#lines[@]}; idx++)); do
+    line="${lines[idx]}"
 
-normalized = [header]
-if rest:
-    collapsed = []
-    previous_blank = False
-    for line in rest:
-        blank = not line.strip()
-        if blank:
-            if not previous_blank:
-                collapsed.append('')
-            previous_blank = True
-            continue
-        collapsed.append(line)
-        previous_blank = False
+    if [[ -z "${line//[[:space:]]/}" ]]; then
+      if ((saw_nonblank == 1 && prev_blank == 0)); then
+        body_lines+=("")
+      fi
+      prev_blank=1
+      continue
+    fi
 
-    while collapsed and not collapsed[-1].strip():
-        collapsed.pop()
+    saw_nonblank=1
+    prev_blank=0
+    line="$(printf '%s\n' "$line" | tr -s '[:space:]' ' ' | sed 's/^ //; s/ $//')"
+    body_lines+=("$line")
+  done
 
-    wrapped = []
+  while ((${#body_lines[@]} > 0)) && [[ -z "${body_lines[${#body_lines[@]} - 1]//[[:space:]]/}" ]]; do
+    unset 'body_lines[${#body_lines[@]}-1]'
+  done
 
-    for line in collapsed:
-        if not line:
-            wrapped.append('')
-            continue
+  normalized="$header"
 
-        line = re.sub(r'\s+', ' ', line).strip()
-        wrapped.extend(textwrap.wrap(line, width=72, break_long_words=False, break_on_hyphens=False) or [''])
+  if ((${#body_lines[@]} > 0)); then
+    for line in "${body_lines[@]}"; do
+      if [[ -z "$line" ]]; then
+        wrapped_lines+=("")
+        continue
+      fi
 
-    if len([line for line in wrapped if line != '']) > 4:
-        print('ERROR: body must be 4 wrapped lines or fewer')
-        sys.exit(1)
+      while IFS= read -r wrapped; do
+        wrapped_lines+=("$wrapped")
+      done < <(printf '%s\n' "$line" | fold -s -w 72)
+    done
 
-    normalized.append('')
-    normalized.extend(wrapped)
+    for line in "${wrapped_lines[@]}"; do
+      if [[ -n "$line" ]]; then
+        nonempty_count=$((nonempty_count + 1))
+      fi
+    done
 
-print('\n'.join(normalized))
-PY
+    if ((nonempty_count > 4)); then
+      printf 'ERROR: body must be 4 wrapped lines or fewer\n'
+      return 1
+    fi
+
+    normalized+=$'\n\n'
+    for ((idx = 0; idx < ${#wrapped_lines[@]}; idx++)); do
+      normalized+="${wrapped_lines[idx]}"
+      if ((idx < ${#wrapped_lines[@]} - 1)); then
+        normalized+=$'\n'
+      fi
+    done
+  fi
+
+  printf '%s\n' "$normalized"
 }
 
 attempt=1
@@ -255,6 +285,10 @@ while ((attempt <= max_attempts)); do
 
   feedback="$(printf '%s\n' "$validation_output" | sed 's/^ERROR: //')"
   previous_output="$raw_output"
+
+  if ((attempt < max_attempts)); then
+    printf '%s: retrying after validation failure: %s\n' "$script_name" "$feedback" >&2
+  fi
 
   if ((attempt == max_attempts)); then
     printf 'Model: %s\n' "$model" >&2
