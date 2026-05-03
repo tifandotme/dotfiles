@@ -29,5 +29,7 @@
   "transport": "auto",
   "compaction": {
     "enabled": false
-  }
+  },
+  "collapseChangelog": true,
+  "showHardwareCursor": false
 }
