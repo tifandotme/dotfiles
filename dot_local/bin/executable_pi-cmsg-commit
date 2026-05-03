@@ -3,6 +3,7 @@
 set -Eeuo pipefail
 
 allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test'
+model='google/gemini-2.5-flash-lite'
 
 fail() {
   printf 'pi-cmsg-commit: %s\n' "$*" >&2
@@ -23,8 +24,43 @@ if [[ -z "${PI_CODING_AGENT_DIR:-}" ]]; then
   export PI_CODING_AGENT_DIR="$xdg_config_home/pi"
 fi
 
+diff_output="$(git diff --cached --no-ext-diff --unified=3 -- .)"
+[[ -n "$diff_output" ]] || fail "staged diff is empty"
+
+prompt_file="$(mktemp)"
+trap 'rm -f "$prompt_file"' EXIT
+
+cat > "$prompt_file" <<EOF
+Write exactly one conventional commit message for the staged git diff below.
+
+Rules:
+- Output the commit message only.
+- Use exactly one type: fix, feat, build, chore, ci, docs, style, refactor, perf, or test.
+- Use format: type: subject or type(scope): subject.
+- Include a scope only when it is obvious from the diff.
+- Keep the whole line under 72 characters.
+- Use imperative mood.
+- Start the subject with a lowercase letter or number.
+- Do not end with a period.
+- Do not use markdown, quotes, backticks, commentary, or multiple lines.
+- Base the message only on this staged diff.
+
+Staged diff:
+$diff_output
+EOF
+
 if ! raw_output="$(
-  pi --no-session --model openai-codex/gpt-5.4-mini:medium -p '/cmsg' \
+  pi \
+    --print \
+    --no-session \
+    --no-tools \
+    --no-context-files \
+    --no-extensions \
+    --no-skills \
+    --no-prompt-templates \
+    --model "$model" \
+    --thinking off \
+    @"$prompt_file" \
     | sed -e 's/\x1b\[[0-9;]*m//g'
 )"; then
   fail "pi failed to generate a commit message"
@@ -55,9 +91,9 @@ fi
 
 subject="${message#*: }"
 
-if [[ ${#subject} -gt 72 ]]; then
+if [[ ${#message} -gt 72 ]]; then
   printf '%s\n' "$message" >&2
-  fail "subject is longer than 72 characters"
+  fail "message is longer than 72 characters"
 fi
 
 first_char="${subject:0:1}"
