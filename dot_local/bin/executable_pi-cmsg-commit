@@ -86,11 +86,18 @@ Requirements:
 - Keep the header at or under 72 characters
 - Start the subject with a lowercase letter or number
 - Do not end the subject with a period
-- Prefer a scope when it helps disambiguate the change
-- Write a specific, concrete subject that names the changed area or behavior
+- Omit scope unless it clearly helps disambiguate the change
+- Choose the type by audience impact first: feat for user-visible capability, fix for corrected behavior, build for packaging/build/release/versioning, ci for automation, chore for internal maintenance
+- For broad changes, prefer the user-facing outcome or repo-level intent over low-level mechanisms
+- Write a specific, concrete subject with a strong verb and plain nouns
+- Prefer slightly intent-bearing subjects like "adopt changesets for release management" over flat diff narration like "add changesets"
 - Avoid vague or generic subjects like: update, improve, enhance, optimize, streamline, clean up, misc fixes, refactor code
-- Add a body only if the header alone misses important context
-- If you add a body, keep it factual and concise
+- Avoid weak nouns like: functionality, capabilities, improvements, enhancements, optimization
+- Prefer a header-only commit message unless the diff needs non-obvious rationale
+- Add a body only when it explains why, impact, or a constraint that is not obvious from the diff
+- If you add a body, keep it to one short paragraph, max 4 wrapped lines
+- Do not narrate the diff, list files, list dependencies, or summarize changes file-by-file
+- Do not start the body with "This commit"
 - Base the message only on this staged diff
 - Do not use markdown fences, quotes, or commentary
 EOF
@@ -204,12 +211,18 @@ if rest:
         collapsed.pop()
 
     wrapped = []
+
     for line in collapsed:
         if not line:
             wrapped.append('')
             continue
+
         line = re.sub(r'\s+', ' ', line).strip()
         wrapped.extend(textwrap.wrap(line, width=72, break_long_words=False, break_on_hyphens=False) or [''])
+
+    if len([line for line in wrapped if line != '']) > 4:
+        print('ERROR: body must be 4 wrapped lines or fewer')
+        sys.exit(1)
 
     normalized.append('')
     normalized.extend(wrapped)
@@ -228,10 +241,12 @@ while ((attempt <= max_attempts)); do
   build_prompt "$attempt" "$feedback" "$previous_output"
   generate_message
 
+  trap - ERR
   set +e
   validation_output="$(normalize_and_validate "$raw_output")"
   validation_status=$?
   set -e
+  trap 'on_err $? $LINENO' ERR
 
   if ((validation_status == 0)); then
     message="$validation_output"
