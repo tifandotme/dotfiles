@@ -3,6 +3,7 @@
 README.md
 key.txt.age
 
+**/node_modules
 .gitignore
 AGENTS.md
 CLAUDE.md
