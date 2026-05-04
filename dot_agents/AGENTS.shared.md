@@ -42,6 +42,14 @@ For ANY CLI tool shipped as an npm package:
 
 1. MUST use `bunx` instead of `npx` unless the project explicitly requires `npx`
 
+## Shell scripts
+
+After modifying any shell script:
+
+1. MUST run `shellcheck <path-to-script>`
+2. MUST fix reported issues before finishing, unless the user asked you not to
+3. SHOULD run `bash -n <path-to-script>` when the script targets Bash
+
 ## Writing Prose
 
 For ANY new file meant for humans to read (does not apply to chat responses):
