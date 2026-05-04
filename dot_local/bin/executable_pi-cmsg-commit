@@ -36,7 +36,7 @@ check_dependencies() {
   local -a missing=()
   local cmd=''
 
-  for cmd in git pi fold; do
+  for cmd in git pi; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
       missing+=("$cmd")
     fi
@@ -138,23 +138,16 @@ generate_message() {
 
 normalize_and_validate() {
   local input="$1"
-  local normalized
   local -a lines=()
-  local -a body_lines=()
-  local -a wrapped_lines=()
   local line=''
   local header=''
-  local subject=''
-  local wrapped=''
-  local nonempty_count=0
+  local body_line_count=0
   local idx=0
-  local saw_nonblank=0
-  local prev_blank=0
 
   input="${input//$'\r'/}"
 
   while IFS= read -r line; do
-    lines+=("${line%$'\r'}")
+    lines+=("$line")
   done <<<"$input"
 
   while ((${#lines[@]} > 0)) && [[ -z "${lines[0]//[[:space:]]/}" ]]; do
@@ -170,7 +163,7 @@ normalize_and_validate() {
     return 1
   fi
 
-  header="${lines[0]%$'\r'}"
+  header="${lines[0]}"
 
   if [[ "$header" == *'```'* || "$header" == '"'* || "$header" == *'"' || "$header" == "'"* || "$header" == *"'" ]]; then
     printf 'ERROR: header must not use markdown fences or quotes\n'
@@ -187,78 +180,18 @@ normalize_and_validate() {
     return 1
   fi
 
-  subject="${header#*: }"
-  if [[ -z "$subject" ]]; then
-    printf 'ERROR: subject is empty\n'
-    return 1
-  fi
-
-  if [[ ! "$subject" =~ ^[a-z0-9] ]]; then
-    printf 'ERROR: subject must start with a lowercase letter or number\n'
-    return 1
-  fi
-
-  if [[ "$subject" == *. ]]; then
-    printf 'ERROR: subject must not end with a period\n'
-    return 1
-  fi
-
   for ((idx = 1; idx < ${#lines[@]}; idx++)); do
-    line="${lines[idx]}"
-
-    if [[ -z "${line//[[:space:]]/}" ]]; then
-      if ((saw_nonblank == 1 && prev_blank == 0)); then
-        body_lines+=("")
-      fi
-      prev_blank=1
-      continue
+    if [[ -n "${lines[idx]//[[:space:]]/}" ]]; then
+      body_line_count=$((body_line_count + 1))
     fi
-
-    saw_nonblank=1
-    prev_blank=0
-    line="$(printf '%s\n' "$line" | tr -s '[:space:]' ' ' | sed 's/^ //; s/ $//')"
-    body_lines+=("$line")
   done
 
-  while ((${#body_lines[@]} > 0)) && [[ -z "${body_lines[${#body_lines[@]} - 1]//[[:space:]]/}" ]]; do
-    unset 'body_lines[${#body_lines[@]}-1]'
-  done
-
-  normalized="$header"
-
-  if ((${#body_lines[@]} > 0)); then
-    for line in "${body_lines[@]}"; do
-      if [[ -z "$line" ]]; then
-        wrapped_lines+=("")
-        continue
-      fi
-
-      while IFS= read -r wrapped; do
-        wrapped_lines+=("$wrapped")
-      done < <(printf '%s\n' "$line" | fold -s -w 72)
-    done
-
-    for line in "${wrapped_lines[@]}"; do
-      if [[ -n "$line" ]]; then
-        nonempty_count=$((nonempty_count + 1))
-      fi
-    done
-
-    if ((nonempty_count > 4)); then
-      printf 'ERROR: body must be 4 wrapped lines or fewer\n'
-      return 1
-    fi
-
-    normalized+=$'\n\n'
-    for ((idx = 0; idx < ${#wrapped_lines[@]}; idx++)); do
-      normalized+="${wrapped_lines[idx]}"
-      if ((idx < ${#wrapped_lines[@]} - 1)); then
-        normalized+=$'\n'
-      fi
-    done
+  if ((body_line_count > 4)); then
+    printf 'ERROR: body must be 4 lines or fewer\n'
+    return 1
   fi
 
-  printf '%s\n' "$normalized"
+  printf '%s\n' "$input"
 }
 
 attempt=1
