@@ -15,7 +15,8 @@
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
     "npm:pi-add-dir",
-    "npm:pi-thinking-level"
+    "npm:pi-thinking-level",
+    "npm:@juicesharp/rpiv-btw"
   ],
   "enableSkillCommands": false,
   "terminal": {
