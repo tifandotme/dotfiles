@@ -32,7 +32,6 @@
       "Bash(chezmoi apply:*)"
     ],
     "deny": [
-      "Edit(package.json)",
       "Bash(git push *)",
       "Bash(git commit *)",
       "Bash(git reset *)",
@@ -103,14 +102,6 @@
     "typescript-lsp@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true
   },
-  "extraKnownMarketplaces": {
-    "chrome-devtools-plugins": {
-      "source": {
-        "source": "github",
-        "repo": "ChromeDevTools/chrome-devtools-mcp"
-      }
-    }
-  },
   "feedbackSurveyRate": 0,
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
@@ -121,7 +112,7 @@
   },
   "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,
-  "theme": "dark",
+  "theme": "auto",
   "editorMode": "vim",
   "verbose": true,
   "preferredNotifChannel": "ghostty",
