@@ -1,22 +1,23 @@
 {
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.4",
+  "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "low",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.72.1",
+  "lastChangelogVersion": "0.73.0",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "theme": "dark",
   "treeFilterMode": "user-only",
   "packages": [
     "npm:pi-fff",
-    "npm:@tintinweb/pi-subagents",
     "npm:pi-cursor-agent",
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
     "npm:pi-add-dir",
     "npm:pi-thinking-level",
-    "npm:@juicesharp/rpiv-btw"
+    "npm:@juicesharp/rpiv-btw",
+    "npm:@fitchmultz/pi-stash",
+    "npm:pi-subagents"
   ],
   "enableSkillCommands": false,
   "terminal": {
@@ -27,10 +28,38 @@
     "openai-codex/gpt-5.5",
     "cursor-agent/composer-2-fast"
   ],
-  "transport": "auto",
+  "transport": "sse",
   "compaction": {
     "enabled": false
   },
   "collapseChangelog": true,
-  "showHardwareCursor": false
+  "showHardwareCursor": false,
+  "subagents": {
+    "agentOverrides": {
+      "scout": {
+        "model": "openai-codex/gpt-5.4"
+      },
+      "reviewer": {
+        "model": "openai-codex/gpt-5.5"
+      },
+      "planner": {
+        "disabled": true
+      },
+      "worker": {
+        "disabled": true
+      },
+      "oracle": {
+        "disabled": true
+      },
+      "researcher": {
+        "disabled": true
+      },
+      "context-builder": {
+        "disabled": true
+      },
+      "delegate": {
+        "disabled": true
+      }
+    }
+  }
 }

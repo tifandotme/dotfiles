@@ -20,8 +20,9 @@ Prefer Pi's structured tools over shell commands.
 When exploring:
 
 - Start with `find_files` or `grep`.
-- Launch `Explore` for broad read-only discovery across unfamiliar areas.
+- Before answering questions about an unfamiliar code area or proposing changes in a non-trivial part of the codebase, use the `scout` subagent first to gather context.
 - Check the key files yourself before editing. Do not blindly trust subagent summaries.
+- Do not use `reviewer` unless the user explicitly asks for it.
 
 When editing:
 
@@ -29,28 +30,3 @@ When editing:
 - Run the smallest relevant validation command.
 - If validation is blocked by unrelated local state, report the blocker and what you did verify.
 
-### Subagents
-
-Use the `Explore` subagent for broad read-only codebase discovery before editing.
-
-Prefer `Explore` when:
-
-- Searching for relevant files across an unfamiliar repo
-- Mapping feature flow, architecture, or ownership
-- Looking for call sites, config, tests, or related docs
-- Running parallel investigation that does not need file edits
-
-Use direct tools for small, obvious lookups. Do not use `Explore` for edits.
-
-Example:
-
-```ts
-Agent({
-  subagent_type: "Explore",
-  prompt: "Find where authentication is implemented and summarize the key files.",
-  description: "Explore auth flow",
-  run_in_background: true,
-})
-```
-
-For multiple independent searches, launch `Explore` agents in the background and collect results with `get_subagent_result`.
