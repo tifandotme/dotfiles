@@ -98,10 +98,7 @@
     "command": "bunx -y ccstatusline@latest --config \"${XDG_CONFIG_HOME:-$HOME/.config}/ccstatusline/settings.json\"",
     "padding": 0
   },
-  "enabledPlugins": {
-    "typescript-lsp@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true
-  },
+  "enabledPlugins": {},
   "feedbackSurveyRate": 0,
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {

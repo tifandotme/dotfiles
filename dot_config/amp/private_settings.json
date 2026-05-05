@@ -33,4 +33,5 @@
     }
   },
   "amp.dangerouslyAllowAll": true,
+  "amp.openai.speed": "standard",
 }

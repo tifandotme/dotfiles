@@ -115,21 +115,19 @@ function getSkills(pi: ExtensionAPI): SkillInfo[] {
 function buildSkillBlock(skill: SkillInfo): string {
   const content = readFileSync(skill.filePath, "utf-8")
   const body = stripFrontmatter(content).trim()
-  return `<skill name="${skill.name}" location="${skill.filePath}">\nReferences are relative to ${skill.baseDir}.\n\n${body}\n</skill>`
+  return `Loaded skill; don't reread SKILL.md unless opening referenced resources.\n\n<skill name="${skill.name}" location="${skill.filePath}">\nReferences are relative to ${skill.baseDir}.\n\n${body}\n</skill>`
 }
 
 function buildMultiSkillBlock(skills: SkillInfo[]): string {
-  const names = skills.map((skill) => skill.name).join(", ")
-  const locations = skills.map((skill) => skill.filePath).join(", ")
   const sections = skills
     .map((skill) => {
       const content = readFileSync(skill.filePath, "utf-8")
       const body = stripFrontmatter(content).trim()
-      return `## ${skill.name}\nLocation: ${skill.filePath}\nReferences are relative to ${skill.baseDir}.\n\n${body}`
+      return `<skill name="${skill.name}" location="${skill.filePath}">\nReferences are relative to ${skill.baseDir}.\n\n${body}\n</skill>`
     })
-    .join("\n\n---\n\n")
+    .join("\n\n")
 
-  return `<skill name="${names}" location="${locations}">\n${sections}\n</skill>`
+  return `Loaded skills; don't reread SKILL.md unless opening referenced resources.\n\n<skills>\n${sections}\n</skills>`
 }
 
 function expandInlineSkills(
@@ -160,7 +158,7 @@ function expandInlineSkills(
     selected.length === 1
       ? buildSkillBlock(selected[0]!)
       : buildMultiSkillBlock(selected)
-  return rewritten ? `${blocks}\n\nUser: ${rewritten}` : blocks
+  return rewritten ? `${blocks}\n\n${rewritten}` : blocks
 }
 
 function extractDollarSkillPrefix(
