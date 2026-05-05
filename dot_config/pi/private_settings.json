@@ -10,7 +10,6 @@
   "treeFilterMode": "user-only",
   "packages": [
     "npm:pi-fff",
-    "npm:pi-cursor-agent",
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
     "npm:pi-add-dir",
@@ -26,7 +25,6 @@
   "enabledModels": [
     "openai-codex/gpt-5.4",
     "openai-codex/gpt-5.5",
-    "cursor-agent/composer-2-fast"
   ],
   "transport": "sse",
   "compaction": {
