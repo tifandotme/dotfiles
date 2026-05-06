@@ -1,11 +1,11 @@
 # default: https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/README.md
 
-"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+#:schema https://yazi-rs.github.io/schemas/yazi.json
 
 [plugin]
 append_fetchers = [
-  { id = "chezmoi", url = "*/", run = "chezmoi", prio = "low" },
-  { id = "chezmoi", url = "local://*", run = "chezmoi", prio = "low" },
+  { id = "chezmoi", url = "*/", run = "chezmoi", prio = "low", group = "chezmoi" },
+  { id = "chezmoi", url = "local://*", run = "chezmoi", prio = "low", group = "chezmoi" },
 ]
 prepend_previewers = [
   { url = "*.csv", run = 'piper -- tv -a -f "$1"' },
@@ -33,7 +33,9 @@ prepend_rules = [
 
 [opener]
 play = [{ run = 'open "$@" -a IINA', orphan = true, for = "unix" }]
-view_csv = [{ run = 'tv -a -f -e "$1" | bat --plain --paging=always --wrap=never', block = true, for = "unix" }]
+view_csv = [
+  { run = 'tv -a -f -e "$1" | bat --plain --paging=always --wrap=never', block = true, for = "unix" }
+]
 # setting TERM because we overrides TERM inside Yazi which is invalid according to vi
 edit = [{ run = 'TERM=ansi $EDITOR "$@"', block = true, for = "unix" }]
 
