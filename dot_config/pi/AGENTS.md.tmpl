@@ -20,9 +20,9 @@ Prefer Pi's structured tools over shell commands.
 When exploring:
 
 - Start with `find_files` or `grep`.
-- Before answering questions about an unfamiliar code area or proposing changes in a non-trivial part of the codebase, use the `scout` subagent first to gather context.
+- Before answering questions about an unfamiliar code area or proposing changes in a non-trivial part of the codebase, call the `subagent` tool with `agent: "scout"` to gather context.
 - Check the key files yourself before editing. Do not blindly trust subagent summaries.
-- Do not use `reviewer` unless the user explicitly asks for it.
+- Do not call the `subagent` tool with `agent: "reviewer"` unless the user explicitly asks for review.
 
 When editing:
 
