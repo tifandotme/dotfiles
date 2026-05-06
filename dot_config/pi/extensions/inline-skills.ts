@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs"
 import { CustomEditor, type ExtensionAPI } from "@mariozechner/pi-coding-agent"
 
 type AutocompleteItem = {
@@ -45,25 +44,11 @@ type SkillCommand = {
 type SkillInfo = {
   name: string
   description?: string
-  filePath: string
-  baseDir: string
 }
 
 const MAX_SUGGESTIONS = 30
 const SKILL_TOKEN_RE = /(^|[\s([{,])\$([a-z0-9][a-z0-9-]{0,63})/gi
 const DOLLAR_SKILL_CONTEXT_RE = /(?:^|[\s([{,])\$[a-z0-9-]*$/i
-
-function stripFrontmatter(content: string): string {
-  if (!content.startsWith("---")) return content
-  const end = content.indexOf("\n---", 3)
-  if (end === -1) return content
-  const after = content.indexOf("\n", end + 4)
-  return after === -1 ? "" : content.slice(after + 1)
-}
-
-function skillDirFromFilePath(filePath: string): string {
-  return filePath.replace(/\/SKILL\.md$/i, "").replace(/\/[^/]+\.md$/i, "")
-}
 
 function fuzzyScore(value: string, query: string): number {
   const target = value.toLowerCase()
@@ -101,47 +86,31 @@ function getSkills(pi: ExtensionAPI): SkillInfo[] {
       (command) =>
         command.source === "skill" && command.name.startsWith("skill:"),
     )
-    .map((command) => {
-      const filePath = command.sourceInfo.path
-      return {
-        name: command.name.slice("skill:".length),
-        ...(command.description ? { description: command.description } : {}),
-        filePath,
-        baseDir: skillDirFromFilePath(filePath),
-      }
-    })
+    .map((command) => ({
+      name: command.name.slice("skill:".length),
+      ...(command.description ? { description: command.description } : {}),
+    }))
 }
 
-function buildSkillBlock(skill: SkillInfo): string {
-  const content = readFileSync(skill.filePath, "utf-8")
-  const body = stripFrontmatter(content).trim()
-  return `Loaded skill; don't reread SKILL.md unless opening referenced resources.\n\n<skill name="${skill.name}" location="${skill.filePath}">\nReferences are relative to ${skill.baseDir}.\n\n${body}\n</skill>`
-}
-
-function buildMultiSkillBlock(skills: SkillInfo[]): string {
-  const sections = skills
-    .map((skill) => {
-      const content = readFileSync(skill.filePath, "utf-8")
-      const body = stripFrontmatter(content).trim()
-      return `<skill name="${skill.name}" location="${skill.filePath}">\nReferences are relative to ${skill.baseDir}.\n\n${body}\n</skill>`
-    })
-    .join("\n\n")
-
-  return `Loaded skills; don't reread SKILL.md unless opening referenced resources.\n\n<skills>\n${sections}\n</skills>`
+function buildSkillLoadInstruction(skills: SkillInfo[]): string {
+  const names = skills.map((skill) => skill.name).join(", ")
+  return `Load ${names} ${skills.length === 1 ? "skill" : "skills"}.`
 }
 
 function expandInlineSkills(
   text: string,
   skills: SkillInfo[],
 ): string | undefined {
-  const byName = new Map(skills.map((skill) => [skill.name, skill]))
+  const byName = new Map(
+    skills.map((skill) => [skill.name.toLowerCase(), skill]),
+  )
   const selected: SkillInfo[] = []
   const seen = new Set<string>()
 
   let rewritten = text.replace(
     SKILL_TOKEN_RE,
     (match, boundary: string, skillName: string) => {
-      const skill = byName.get(skillName)
+      const skill = byName.get(skillName.toLowerCase())
       if (!skill) return match
       if (!seen.has(skill.name)) {
         seen.add(skill.name)
@@ -154,11 +123,8 @@ function expandInlineSkills(
   if (selected.length === 0) return undefined
 
   rewritten = rewritten.replace(/[ \t]{2,}/g, " ").trim()
-  const blocks =
-    selected.length === 1
-      ? buildSkillBlock(selected[0]!)
-      : buildMultiSkillBlock(selected)
-  return rewritten ? `${blocks}\n\n${rewritten}` : blocks
+  const instruction = buildSkillLoadInstruction(selected)
+  return rewritten ? `${rewritten}\n\n${instruction}` : instruction
 }
 
 function extractDollarSkillPrefix(

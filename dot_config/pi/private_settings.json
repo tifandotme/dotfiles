@@ -4,8 +4,8 @@
   "defaultThinkingLevel": "low",
   "preferredThinking": {
     "openai-codex/gpt-5.5": "low",
-    "openai-codex/gpt-5.4": "xhigh",
-    "openai-codex/gpt-5.4-mini": "xhigh"
+    "openai-codex/gpt-5.4": "high",
+    "openai-codex/gpt-5.4-mini": "high"
   },
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.73.0",
@@ -19,8 +19,7 @@
     "npm:pi-code-previews",
     "npm:pi-add-dir",
     "npm:@juicesharp/rpiv-btw",
-    "npm:@fitchmultz/pi-stash",
-    "npm:pi-subagents"
+    "npm:@fitchmultz/pi-stash"
   ],
   "enableSkillCommands": false,
   "terminal": {
@@ -36,35 +35,5 @@
     "enabled": false
   },
   "collapseChangelog": true,
-  "showHardwareCursor": false,
-  "subagents": {
-    "agentOverrides": {
-      "scout": {
-        "model": "openai-codex/gpt-5.4",
-        "thinking": "xhigh"
-      },
-      "reviewer": {
-        "model": "openai-codex/gpt-5.5",
-        "thinking": "low"
-      },
-      "planner": {
-        "disabled": true
-      },
-      "worker": {
-        "disabled": true
-      },
-      "oracle": {
-        "disabled": true
-      },
-      "researcher": {
-        "disabled": true
-      },
-      "context-builder": {
-        "disabled": true
-      },
-      "delegate": {
-        "disabled": true
-      }
-    }
-  }
+  "showHardwareCursor": false
 }

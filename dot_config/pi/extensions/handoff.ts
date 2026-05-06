@@ -75,6 +75,11 @@ Every line must be a markdown bullet starting with "- ".`
 const HANDOFF_AUTOSEND_MS = 10_000
 const HANDOFF_STATUS_KEY = "handoff-autosend"
 const HANDOFF_SESSION_TAG = "[handoff]"
+const LOADED_SKILL_ENTRY_TYPE = "loaded-skill"
+
+type LoadedSkillEntryData = {
+  name?: string
+}
 
 function buildHandoffSessionName(goal: string): string {
   return `${HANDOFF_SESSION_TAG} ${goal.replace(/\s+/g, " ").trim()}`
@@ -84,12 +89,36 @@ function buildHandoffPrompt(
   goal: string,
   summary: string,
   parentSession: string | null,
+  loadedSkills: string[],
 ): string {
   const intro = parentSession
     ? `Continuing work from session ${parentSession}. If you need details not included here, use session_query.`
     : "Continuing work in a new session. If you need details not included here, use session_query."
 
-  return `${intro}\n\n${summary.trim()}\n\n${goal}`
+  const skillInstruction =
+    loadedSkills.length > 0
+      ? `Load these skills again before continuing: ${loadedSkills.join(", ")}.`
+      : ""
+
+  return [intro, summary.trim(), skillInstruction, goal]
+    .filter((part) => part.length > 0)
+    .join("\n\n")
+}
+
+function getLoadedSkills(entries: SessionEntry[]): string[] {
+  const skills = new Set<string>()
+
+  for (const entry of entries) {
+    if (entry.type !== "custom") continue
+    if (entry.customType !== LOADED_SKILL_ENTRY_TYPE) continue
+
+    const data = entry.data as LoadedSkillEntryData | undefined
+    if (typeof data?.name === "string" && data.name.trim()) {
+      skills.add(data.name)
+    }
+  }
+
+  return [...skills]
 }
 
 function clearHandoffAutosend(
@@ -289,6 +318,7 @@ export default function (pi: ExtensionAPI): void {
         goal,
         summary,
         currentSessionFile ?? null,
+        getLoadedSkills(branch),
       )
 
       setPendingHandoff({ prompt: finalPrompt })
