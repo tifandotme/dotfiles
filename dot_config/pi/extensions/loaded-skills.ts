@@ -64,7 +64,7 @@ function updateStatus(ctx: ExtensionContext, loadedSkills: Set<string>): void {
 function restoreLoadedSkills(ctx: ExtensionContext): Set<string> {
   const loadedSkills = new Set<string>()
 
-  for (const entry of ctx.sessionManager.getEntries()) {
+  for (const entry of ctx.sessionManager.getBranch()) {
     if (entry.type !== "custom") continue
     if (entry.customType !== LOADED_SKILL_ENTRY_TYPE) continue
 
@@ -80,9 +80,17 @@ function restoreLoadedSkills(ctx: ExtensionContext): Set<string> {
 export default function (pi: ExtensionAPI): void {
   let loadedSkills = new Set<string>()
 
-  pi.on("session_start", async (_event, ctx) => {
+  function refreshLoadedSkills(ctx: ExtensionContext): void {
     loadedSkills = restoreLoadedSkills(ctx)
     updateStatus(ctx, loadedSkills)
+  }
+
+  pi.on("session_start", async (_event, ctx) => {
+    refreshLoadedSkills(ctx)
+  })
+
+  pi.on("session_tree", async (_event, ctx) => {
+    refreshLoadedSkills(ctx)
   })
 
   pi.on("tool_result", async (event, ctx) => {
