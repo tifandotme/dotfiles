@@ -61,12 +61,18 @@ type TaskInput = {
   cwd?: string
 }
 
+type Activity = {
+  timestamp: number
+  text: string
+}
+
 type SingleResult = {
   agent: string
   task: string
   cwd: string
   exitCode: number
   messages: Message[]
+  activities: Activity[]
   stderr: string
   output: string
   errorMessage?: string
@@ -236,6 +242,80 @@ function finalAssistantOutput(messages: Message[]): string {
   return ""
 }
 
+function messageText(message: Message): string {
+  if (typeof message.content === "string") return message.content
+  const parts: string[] = []
+  for (const part of message.content) {
+    if (part.type === "text") parts.push(part.text)
+  }
+  return parts.join("\n")
+}
+
+function addActivity(result: SingleResult, text: string): void {
+  const lines = text
+    .split("\n")
+    .map((line) => preview(line))
+    .filter((line) => line !== "(no output yet)")
+  result.activities.push({
+    timestamp: Date.now(),
+    text: lines.length > 0 ? lines.join("\n") : "(no output yet)",
+  })
+}
+
+function toolCallSummary(name: string, args: Record<string, unknown>): string {
+  const pick = (...keys: string[]): string | undefined => {
+    for (const key of keys) {
+      const value = args[key]
+      if (typeof value === "string" && value.trim()) return value.trim()
+    }
+    return undefined
+  }
+
+  if (name === "grep") {
+    const pattern = pick("pattern")
+    const path = pick("path", "constraints", "glob")
+    return preview([pattern, path && `in ${path}`].filter(Boolean).join(" "))
+  }
+  if (name === "fff_multi_grep") {
+    const patterns = Array.isArray(args.patterns)
+      ? args.patterns.filter((item) => typeof item === "string").join(", ")
+      : undefined
+    return preview(patterns ? `patterns: ${patterns}` : JSON.stringify(args))
+  }
+  if (name === "find_files") return preview(pick("query") ?? JSON.stringify(args))
+  if (name === "read") return preview(pick("path") ?? JSON.stringify(args))
+  if (name === "bash") return preview(pick("command") ?? JSON.stringify(args))
+  if (name === "edit" || name === "write")
+    return preview(pick("path") ?? JSON.stringify(args))
+
+  return preview(JSON.stringify(args))
+}
+
+function activityForMessage(message: Message): string | undefined {
+  if (message.role === "toolResult") return undefined
+  if (message.role === "assistant") {
+    const toolCalls = message.content.filter((part) => part.type === "toolCall")
+    if (toolCalls.length === 1) {
+      const call = toolCalls[0]
+      return `${call.name}: ${toolCallSummary(call.name, call.arguments)}`
+    }
+    if (toolCalls.length > 1) {
+      return [
+        "tools:",
+        ...toolCalls.map(
+          (call) => `  ◦ ${call.name}: ${toolCallSummary(call.name, call.arguments)}`,
+        ),
+      ].join("\n")
+    }
+
+    const text = preview(messageText(message))
+    if (text && text !== "(no output yet)") return `wrote ${text}`
+    if (message.errorMessage) return message.errorMessage
+    return undefined
+  }
+  return undefined
+}
+
 async function writePromptFile(
   agentName: string,
   systemPrompt: string,
@@ -277,11 +357,18 @@ async function runSingleAgent(
     agent: agent.name,
     task,
     cwd: runCwd,
-    exitCode: 0,
+    exitCode: -1,
     messages: [],
+    activities: [],
     stderr: "",
     output: "",
   }
+  addActivity(result, `started in ${runCwd}`)
+  onUpdate?.({
+    ...result,
+    messages: [...result.messages],
+    activities: [...result.activities],
+  })
 
   try {
     const temp = await writePromptFile(agent.name, agent.systemPrompt)
@@ -314,8 +401,14 @@ async function runSingleAgent(
           typedEvent.message
         ) {
           result.messages.push(typedEvent.message)
+          const activity = activityForMessage(typedEvent.message)
+          if (activity) addActivity(result, activity)
           result.output = finalAssistantOutput(result.messages)
-          onUpdate?.({ ...result, messages: [...result.messages] })
+          onUpdate?.({
+            ...result,
+            messages: [...result.messages],
+            activities: [...result.activities],
+          })
         }
       }
 
@@ -326,7 +419,16 @@ async function runSingleAgent(
         for (const line of lines) processLine(line)
       })
       proc.stderr.on("data", (data: Buffer) => {
-        result.stderr += data.toString()
+        const chunk = data.toString()
+        result.stderr += chunk
+        if (chunk.trim()) {
+          addActivity(result, chunk.trim())
+          onUpdate?.({
+            ...result,
+            messages: [...result.messages],
+            activities: [...result.activities],
+          })
+        }
       })
       proc.on("close", (code) => {
         if (buffer.trim()) processLine(buffer)
@@ -351,6 +453,15 @@ async function runSingleAgent(
     result.exitCode = exitCode
     if (wasAborted) result.errorMessage = "Subagent was aborted"
     if (!result.output) result.output = finalAssistantOutput(result.messages)
+    addActivity(
+      result,
+      result.errorMessage ? result.errorMessage : `finished exit ${exitCode}`,
+    )
+    onUpdate?.({
+      ...result,
+      messages: [...result.messages],
+      activities: [...result.activities],
+    })
     return result
   } finally {
     if (tempDir) rmSync(tempDir, { recursive: true, force: true })
@@ -377,43 +488,140 @@ async function mapWithConcurrency<T, R>(
   return results
 }
 
-function preview(text: string): string {
+function preview(text: string, maxLength = 160): string {
   const cleaned = text.trim().replace(/\s+/g, " ")
   if (!cleaned) return "(no output yet)"
-  return cleaned.length > 160 ? `${cleaned.slice(0, 160)}...` : cleaned
+  return cleaned.length > maxLength ? `${cleaned.slice(0, maxLength)}...` : cleaned
+}
+
+const SPINNER_FRAMES = [
+  "⠋",
+  "⠙",
+  "⠹",
+  "⠸",
+  "⠼",
+  "⠴",
+  "⠦",
+  "⠧",
+  "⠇",
+  "⠏",
+]
+
+type SpinnerState = {
+  frame: number
+  timer?: ReturnType<typeof setInterval>
+}
+
+function spinnerFrame(
+  context: { state: Record<string, unknown>; invalidate: () => void },
+  running: boolean,
+): string {
+  const key = "subagentSpinner"
+  let state = context.state[key] as SpinnerState | undefined
+  if (!state) {
+    state = { frame: 0 }
+    context.state[key] = state
+  }
+
+  if (running && !state.timer) {
+    state.timer = setInterval(() => {
+      state.frame = (state.frame + 1) % SPINNER_FRAMES.length
+      context.invalidate()
+    }, 120)
+  }
+  if (!running && state.timer) {
+    clearInterval(state.timer)
+    state.timer = undefined
+  }
+  return SPINNER_FRAMES[state.frame]
+}
+
+function statusIcon(
+  result: SingleResult,
+  spinner: string,
+  theme: ThemeLike,
+): string {
+  if (result.exitCode === -1) return theme.fg("warning", spinner)
+  if (result.exitCode !== 0 || result.errorMessage) return theme.fg("error", "✗")
+  return theme.fg("success", "✓")
+}
+
+function statusText(result: SingleResult): string {
+  if (result.exitCode === -1) return "running"
+  if (result.exitCode !== 0 || result.errorMessage) return "failed"
+  return "completed"
+}
+
+function activityLines(
+  result: SingleResult,
+  theme: ThemeLike,
+  limit?: number,
+): string[] {
+  const activities = limit ? result.activities.slice(-limit) : result.activities
+  return activities.map((activity) => `  • ${theme.fg("dim", activity.text)}`)
+}
+
+function singleCollapsedLines(
+  result: SingleResult,
+  theme: ThemeLike,
+  spinner: string,
+): string[] {
+  const failed =
+    (result.exitCode !== 0 && result.exitCode !== -1) ||
+    Boolean(result.errorMessage)
+  const icon = statusIcon(result, spinner, theme)
+  const header = `${icon} ${theme.fg("toolTitle", theme.bold(result.agent))} ${theme.fg(
+    failed ? "error" : "muted",
+    statusText(result),
+  )}`
+  const lines = [header, ...activityLines(result, theme, 2)]
+  if (result.exitCode !== -1) {
+    const output = preview(
+      result.errorMessage ?? result.output ?? result.stderr,
+      120,
+    )
+    if (output !== "(no output yet)")
+      lines.push(theme.fg(failed ? "error" : "toolOutput", output))
+  }
+  return lines
 }
 
 function renderSingle(
   result: SingleResult,
   expanded: boolean,
   theme: ThemeLike,
+  spinner: string,
 ): Text | Container {
-  const failed = result.exitCode !== 0 || Boolean(result.errorMessage)
-  const icon = failed ? theme.fg("error", "✗") : theme.fg("success", "✓")
-  if (!expanded) {
-    return new Text(
-      `${icon} ${theme.fg("toolTitle", theme.bold(result.agent))}\n${theme.fg(failed ? "error" : "toolOutput", preview(result.errorMessage ?? result.output ?? result.stderr))}`,
-      0,
-      0,
-    )
-  }
+  const failed =
+    (result.exitCode !== 0 && result.exitCode !== -1) ||
+    Boolean(result.errorMessage)
+  const icon = statusIcon(result, spinner, theme)
+  const header = `${icon} ${theme.fg("toolTitle", theme.bold(result.agent))} ${theme.fg(
+    failed ? "error" : "muted",
+    statusText(result),
+  )}`
+  if (!expanded)
+    return new Text(singleCollapsedLines(result, theme, spinner).join("\n"), 0, 0)
 
   const container = new Container()
+  container.addChild(new Text(header, 0, 0))
+  container.addChild(new Spacer(1))
+  container.addChild(new Text(theme.fg("muted", "Task:"), 0, 0))
+  container.addChild(new Text(theme.fg("dim", result.task), 0, 0))
+  container.addChild(new Spacer(1))
+  container.addChild(new Text(theme.fg("muted", "Activity:"), 0, 0))
   container.addChild(
     new Text(
-      `${icon} ${theme.fg("toolTitle", theme.bold(result.agent))}`,
+      activityLines(result, theme).join("\n") || theme.fg("dim", "  (none yet)"),
       0,
       0,
     ),
   )
   container.addChild(new Spacer(1))
-  container.addChild(new Text(theme.fg("muted", "Task:"), 0, 0))
-  container.addChild(new Text(theme.fg("dim", result.task), 0, 0))
-  container.addChild(new Spacer(1))
   container.addChild(new Text(theme.fg("muted", "Output:"), 0, 0))
   container.addChild(
     new Markdown(
-      (result.output || result.errorMessage || "(no output)").trim(),
+      (result.output || result.errorMessage || "(no output yet)").trim(),
       0,
       0,
       getMarkdownTheme(),
@@ -438,16 +646,20 @@ const TaskSchema = Type.Object({
 })
 
 const SubagentParams = Type.Object({
-  action: Type.Optional(StringEnum(["list"] as const)),
-  agent: Type.Optional(
-    Type.String({ description: "Subagent name for single mode" }),
+  action: Type.Optional(
+    StringEnum(["list"] as const, {
+      description: 'Only use action for listing subagents. Do not set action for single-agent or parallel delegation.',
+    }),
   ),
-  task: Type.Optional(Type.String({ description: "Task for single mode" })),
+  agent: Type.Optional(
+    Type.String({ description: "Subagent name. For single-agent delegation, provide agent and task without action." }),
+  ),
+  task: Type.Optional(Type.String({ description: "Task to delegate. For single-agent delegation, provide agent and task without action." })),
   cwd: Type.Optional(
-    Type.String({ description: "Working directory for single mode" }),
+    Type.String({ description: "Working directory for single-agent delegation" }),
   ),
   tasks: Type.Optional(
-    Type.Array(TaskSchema, { description: "Parallel subagent tasks" }),
+    Type.Array(TaskSchema, { description: "Parallel subagent tasks. Provide tasks without action." }),
   ),
   concurrency: Type.Optional(
     Type.Number({
@@ -473,7 +685,7 @@ export default function (pi: ExtensionAPI): void {
     name: "subagent",
     label: "Subagent",
     description:
-      "Delegate to local subagents loaded only from the Pi config subagents directory. Supports action=list, single mode, and parallel tasks.",
+      'Delegate to local subagents loaded only from the Pi config subagents directory. Use action="list" only to list agents. To run one agent, omit action and provide agent + task. To run parallel work, omit action and provide tasks.',
     promptSnippet:
       "Delegate focused work to local subagents from ~/.config/pi/subagents.",
     promptGuidelines: [
@@ -576,6 +788,9 @@ export default function (pi: ExtensionAPI): void {
         cwd: task.cwd ?? ctx.cwd,
         exitCode: -1,
         messages: [],
+        activities: [
+          { timestamp: Date.now(), text: `queued in ${task.cwd ?? ctx.cwd}` },
+        ],
         stderr: "",
         output: "",
       }))
@@ -602,6 +817,8 @@ export default function (pi: ExtensionAPI): void {
         })
       }
 
+      emitParallelUpdate()
+
       const results = await mapWithConcurrency(
         tasks,
         concurrency,
@@ -614,6 +831,16 @@ export default function (pi: ExtensionAPI): void {
               cwd: task.cwd ?? ctx.cwd,
               exitCode: 1,
               messages: [],
+              activities: [
+                {
+                  timestamp: Date.now(),
+                  text: `queued in ${task.cwd ?? ctx.cwd}`,
+                },
+                {
+                  timestamp: Date.now(),
+                  text: `Unknown subagent: ${task.agent}`,
+                },
+              ],
               stderr: "",
               output: "",
               errorMessage: `Unknown subagent: ${task.agent}`,
@@ -680,40 +907,41 @@ export default function (pi: ExtensionAPI): void {
       )
     },
 
-    renderResult(result, { expanded }, theme) {
+    renderResult(result, { expanded }, theme, context) {
       const details = result.details as SubagentDetails | undefined
+      const running = Boolean(
+        details?.results.some((item) => item.exitCode === -1),
+      )
+      const spinner = spinnerFrame(context, running)
       if (!details || details.mode === "list") {
         const text = result.content[0]
         return new Text(text?.type === "text" ? text.text : "", 0, 0)
       }
       if (details.mode === "single" && details.results[0]) {
-        return renderSingle(details.results[0], expanded, theme)
+        return renderSingle(details.results[0], expanded, theme, spinner)
       }
 
       const succeeded = details.results.filter(
         (item) => item.exitCode === 0 && !item.errorMessage,
       ).length
-      const icon =
-        succeeded === details.results.length
-          ? theme.fg("success", "✓")
-          : theme.fg("warning", "◐")
+      const failed = details.results.filter(
+        (item) =>
+          item.exitCode !== -1 && (item.exitCode !== 0 || item.errorMessage),
+      ).length
+      const icon = running
+        ? theme.fg("warning", spinner)
+        : failed > 0
+          ? theme.fg("error", "✗")
+          : theme.fg("success", "✓")
       if (!expanded) {
         const lines = [
           `${icon} ${theme.fg("toolTitle", theme.bold("parallel"))} ${theme.fg("accent", `${succeeded}/${details.results.length}`)}`,
         ]
         for (const item of details.results) {
-          const itemIcon =
-            item.exitCode === -1
-              ? theme.fg("warning", "…")
-              : item.exitCode === 0 && !item.errorMessage
-                ? theme.fg("success", "✓")
-                : theme.fg("error", "✗")
-          lines.push(
-            `${itemIcon} ${theme.fg("accent", item.agent)}: ${theme.fg("toolOutput", preview(item.errorMessage ?? item.output ?? item.stderr))}`,
-          )
+          lines.push(...singleCollapsedLines(item, theme, spinner))
         }
-        lines.push(theme.fg("muted", "(expand for full output)"))
-        return new Text(lines.join("\n"), 0, 0)
+        lines.push(theme.fg("muted", "(expand for full activity)"))
+        return new Text(lines.filter(Boolean).join("\n"), 0, 0)
       }
 
       const container = new Container()
@@ -726,7 +954,7 @@ export default function (pi: ExtensionAPI): void {
       )
       for (const item of details.results) {
         container.addChild(new Spacer(1))
-        container.addChild(renderSingle(item, true, theme))
+        container.addChild(renderSingle(item, true, theme, spinner))
       }
       return container
     },
