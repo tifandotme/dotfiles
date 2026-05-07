@@ -35,7 +35,7 @@ def --wrapped pi [...args] {
 }
 
 alias _claude = ^claude
-def claude [...args] { _claude --dangerously-skip-permissions --no-chrome ...$args }
+def --wrapped claude [...args] { _claude --dangerously-skip-permissions --no-chrome ...$args }
 
 alias _codex = ^codex
 def --wrapped codex [...args] { _codex --dangerously-bypass-approvals-and-sandbox ...$args }
