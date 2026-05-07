@@ -9,15 +9,15 @@ import {
 import { mkdtemp } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
-import { StringEnum, type Message } from "@mariozechner/pi-ai"
+import { StringEnum, type Message } from "@earendil-works/pi-ai"
 import {
   getAgentDir,
   getMarkdownTheme,
   parseFrontmatter,
   type ExtensionAPI,
   type Theme,
-} from "@mariozechner/pi-coding-agent"
-import { Container, Markdown, Spacer, Text } from "@mariozechner/pi-tui"
+} from "@earendil-works/pi-coding-agent"
+import { Container, Markdown, Spacer, Text } from "@earendil-works/pi-tui"
 import { Type } from "typebox"
 
 const MAX_PARALLEL_TASKS = 6

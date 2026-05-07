@@ -8,11 +8,11 @@
     "typecheck": "bunx tsc --noEmit -p tsconfig.json"
   },
   "devDependencies": {
-    "@mariozechner/pi-ai": "0.72.1",
-    "@mariozechner/pi-coding-agent": "0.72.1",
+    "@earendil-works/pi-ai": "^0.74.0",
+    "@earendil-works/pi-coding-agent": "^0.74.0",
     "@tsconfig/node24": "24.0.4",
     "@tsconfig/strictest": "2.0.8",
-    "typebox": "1.1.37",
+    "typebox": "1.1.38",
     "typescript": "6.0.3"
   }
 }

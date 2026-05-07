@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs"
 import path from "node:path"
-import { getAgentDir, type ExtensionAPI } from "@mariozechner/pi-coding-agent"
+import { getAgentDir, type ExtensionAPI } from "@earendil-works/pi-coding-agent"
 
 type ThinkingLevel = Parameters<ExtensionAPI["setThinkingLevel"]>[0]
 
