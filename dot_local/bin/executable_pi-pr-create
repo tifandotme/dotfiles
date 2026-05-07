@@ -1,0 +1,410 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+script_name='pi-pr-create'
+model='openai-codex/gpt-5.4-mini'
+max_attempts=3
+allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test|revert'
+dry_run=0
+tmpdir=''
+prompt_file=''
+response_file=''
+body_file=''
+
+title=''
+body=''
+
+fail() {
+  printf '%s: %s\n' "$script_name" "$*" >&2
+  exit 1
+}
+
+log() {
+  printf '%s: %s\n' "$script_name" "$*" >&2
+}
+
+cleanup() {
+  if [[ -n "$tmpdir" && -d "$tmpdir" ]]; then
+    rm -rf -- "$tmpdir"
+  fi
+}
+
+on_err() {
+  local exit_code="$1"
+  local line_no="$2"
+  log "unexpected error on line $line_no (exit $exit_code)"
+  exit "$exit_code"
+}
+
+usage() {
+  cat <<'EOF'
+Usage: pi-pr-create [--dry-run]
+
+Create a GitHub pull request from commits on the current branch ahead of the remote default branch.
+EOF
+}
+
+parse_args() {
+  while (($# > 0)); do
+    case "$1" in
+    --dry-run)
+      dry_run=1
+      ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    *)
+      fail "unknown argument: $1"
+      ;;
+    esac
+    shift
+  done
+}
+
+check_dependencies() {
+  local -a missing=()
+  local cmd=''
+
+  for cmd in git gh pi sed awk; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+      missing+=("$cmd")
+    fi
+  done
+
+  if ((${#missing[@]} > 0)); then
+    fail "missing required commands: ${missing[*]}"
+  fi
+}
+
+remote_default_branch() {
+  local remote='origin'
+  local ref=''
+
+  ref="$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null || true)"
+  if [[ -z "$ref" ]]; then
+    git remote set-head "$remote" --auto >/dev/null 2>&1 || true
+    ref="$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null || true)"
+  fi
+
+  if [[ -n "$ref" ]]; then
+    printf '%s\n' "${ref#origin/}"
+    return 0
+  fi
+
+  if git show-ref --verify --quiet refs/remotes/origin/main; then
+    printf 'main\n'
+    return 0
+  fi
+
+  if git show-ref --verify --quiet refs/remotes/origin/master; then
+    printf 'master\n'
+    return 0
+  fi
+
+  fail "could not detect origin default branch"
+}
+
+find_pr_template() {
+  local template=''
+
+  for template in \
+    .github/pull_request_template.md \
+    .github/PULL_REQUEST_TEMPLATE.md \
+    docs/pull_request_template.md; do
+    if [[ -f "$template" ]]; then
+      printf '%s\n' "$template"
+      return 0
+    fi
+  done
+
+  if [[ -d .github/PULL_REQUEST_TEMPLATE ]]; then
+    template="$(find .github/PULL_REQUEST_TEMPLATE -maxdepth 1 -type f -name '*.md' | sort | head -n 1)"
+    if [[ -n "$template" ]]; then
+      printf '%s\n' "$template"
+      return 0
+    fi
+  fi
+
+  return 1
+}
+
+truncate_file() {
+  local file="$1"
+  local max_bytes="$2"
+
+  if [[ ! -s "$file" ]]; then
+    return 0
+  fi
+
+  if (($(wc -c <"$file") > max_bytes)); then
+    head -c "$max_bytes" "$file"
+    printf '\n[truncated]\n'
+  else
+    cat "$file"
+  fi
+}
+
+build_prompt() {
+  local attempt="$1"
+  local feedback="${2:-}"
+  local previous_output="${3:-}"
+  local base_branch="$4"
+  local branch="$5"
+  local template_path="$6"
+  local commits_file="$7"
+  local diffstat_file="$8"
+  local diff_file="$9"
+  local template_file="${10}"
+
+  cat >"$prompt_file" <<EOF
+Create a GitHub pull request title and body for this branch.
+
+Output format:
+- First line: TITLE: <conventional commit style title>
+- Then a line containing exactly: BODY:
+- Then the Markdown body
+
+Title requirements:
+- Use one of these types: fix, feat, build, chore, ci, docs, style, refactor, perf, test, revert
+- Use format: type: subject or type(scope): subject
+- Keep it at or under 72 characters
+- Start the subject with a lowercase letter or number
+- Do not end the subject with a period
+
+Body requirements:
+- Focus on why the change was needed, the problem solved, context, trade-offs, and verification
+- Do not list changed files
+- Do not narrate the diff
+- Do not use markdown fences around the whole response
+- Do not use em dashes
+- If a repository PR template is present, preserve its headings and fill it naturally
+
+Repository context:
+- Base branch: $base_branch
+- Current branch: $branch
+EOF
+
+  if [[ -n "$template_path" ]]; then
+    cat >>"$prompt_file" <<EOF
+- PR template: $template_path
+
+PR template:
+$(cat "$template_file")
+EOF
+  else
+    cat >>"$prompt_file" <<'EOF'
+
+No PR template found. Use this body structure:
+## Why
+[Motivation and problem solved]
+
+## Context
+[Important background or trade-offs]
+
+## Testing
+[How to verify, or "Not run" with a short reason]
+EOF
+  fi
+
+  cat >>"$prompt_file" <<EOF
+
+Commits ahead of base:
+$(cat "$commits_file")
+
+Diff stat:
+$(cat "$diffstat_file")
+
+Diff excerpt:
+$(truncate_file "$diff_file" 50000)
+EOF
+
+  if [[ "$attempt" -gt 1 ]]; then
+    cat >>"$prompt_file" <<EOF
+
+Previous output was invalid.
+Validation failure: $feedback
+Previous output:
+$previous_output
+EOF
+  fi
+}
+
+generate_response() {
+  if ! raw_output="$({
+    pi \
+      --print \
+      --no-session \
+      --no-tools \
+      --no-context-files \
+      --no-skills \
+      --no-prompt-templates \
+      --model "$model" \
+      --thinking off \
+      @"$prompt_file"
+  } | sed -e 's/\x1b\[[0-9;]*m//g')"; then
+    fail "pi failed to generate PR content"
+  fi
+}
+
+validate_response() {
+  local input="$1"
+  local parsed_title=''
+  local parsed_body=''
+  local subject=''
+
+  input="${input//$'\r'/}"
+  parsed_title="$(printf '%s\n' "$input" | sed -n '1s/^TITLE:[[:space:]]*//p')"
+  parsed_body="$(printf '%s\n' "$input" | awk 'found { print } /^BODY:[[:space:]]*$/ { found=1 }')"
+
+  if [[ -z "$parsed_title" ]]; then
+    printf 'ERROR: first line must be TITLE: <title>\n'
+    return 1
+  fi
+
+  if [[ -z "${parsed_body//[[:space:]]/}" ]]; then
+    printf 'ERROR: body is empty or missing BODY marker\n'
+    return 1
+  fi
+
+  if [[ ! "$parsed_title" =~ ^(${allowed_types})(\([A-Za-z0-9._/-]+\))?(!)?:\ .+ ]]; then
+    printf 'ERROR: title must match conventional commit format\n'
+    return 1
+  fi
+
+  if ((${#parsed_title} > 72)); then
+    printf 'ERROR: title is longer than 72 characters\n'
+    return 1
+  fi
+
+  subject="${parsed_title#*: }"
+  if [[ "$subject" =~ ^[A-Z] ]]; then
+    printf 'ERROR: title subject must start lowercase\n'
+    return 1
+  fi
+
+  if [[ "$subject" == *. ]]; then
+    printf 'ERROR: title subject must not end with a period\n'
+    return 1
+  fi
+
+  if [[ "$parsed_body" == *'```'* ]]; then
+    printf 'ERROR: body must not include markdown fences\n'
+    return 1
+  fi
+
+  if [[ "$parsed_body" == *'—'* ]]; then
+    printf 'ERROR: body must not use em dashes\n'
+    return 1
+  fi
+
+  title="$parsed_title"
+  body="$parsed_body"
+}
+
+trap 'cleanup' EXIT
+trap 'on_err $? $LINENO' ERR
+
+parse_args "$@"
+check_dependencies
+
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail "not inside a git repository"
+gh auth status >/dev/null 2>&1 || fail "gh CLI is not authenticated; run: gh auth login"
+
+if [[ -z "${PI_CODING_AGENT_DIR:-}" ]]; then
+  xdg_config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+  export PI_CODING_AGENT_DIR="$xdg_config_home/pi"
+fi
+
+branch="$(git branch --show-current)"
+[[ -n "$branch" ]] || fail "detached HEAD is not supported"
+
+base_branch="$(remote_default_branch)"
+if [[ "$branch" == "$base_branch" || "$branch" == main || "$branch" == master ]]; then
+  fail "current branch '$branch' is not a feature branch"
+fi
+
+base_ref="origin/$base_branch"
+git fetch origin "$base_branch" >/dev/null 2>&1 || fail "could not fetch $base_ref"
+
+ahead_count="$(git rev-list --count "$base_ref..HEAD")"
+if [[ "$ahead_count" == 0 ]]; then
+  fail "no pending commits ahead of $base_ref"
+fi
+
+if gh pr view --head "$branch" --json url --jq .url >/dev/null 2>&1; then
+  fail "a pull request already exists for branch '$branch'"
+fi
+
+tmpdir="$(mktemp -d)"
+prompt_file="$tmpdir/prompt.txt"
+response_file="$tmpdir/response.txt"
+body_file="$tmpdir/pr-body.md"
+commits_file="$tmpdir/commits.txt"
+diffstat_file="$tmpdir/diffstat.txt"
+diff_file="$tmpdir/diff.patch"
+template_file="$tmpdir/template.md"
+
+git log --no-merges --reverse --format='%h %s' "$base_ref..HEAD" >"$commits_file"
+git diff --stat "$base_ref..HEAD" >"$diffstat_file"
+git diff --no-ext-diff --unified=3 "$base_ref..HEAD" -- . >"$diff_file"
+
+template_path=''
+if template_path="$(find_pr_template)"; then
+  cat "$template_path" >"$template_file"
+else
+  : >"$template_file"
+fi
+
+attempt=1
+feedback=''
+previous_output=''
+raw_output=''
+
+while ((attempt <= max_attempts)); do
+  build_prompt "$attempt" "$feedback" "$previous_output" "$base_branch" "$branch" "$template_path" "$commits_file" "$diffstat_file" "$diff_file" "$template_file"
+  generate_response
+
+  trap - ERR
+  set +e
+  validate_response "$raw_output" >"$tmpdir/validation.txt"
+  validation_status=$?
+  set -e
+  trap 'on_err $? $LINENO' ERR
+  validation_output="$(cat "$tmpdir/validation.txt")"
+
+  if ((validation_status == 0)); then
+    break
+  fi
+
+  feedback="$(printf '%s\n' "$validation_output" | sed 's/^ERROR: //')"
+  previous_output="$raw_output"
+
+  if ((attempt < max_attempts)); then
+    log "retrying after validation failure: $feedback"
+  fi
+
+  if ((attempt == max_attempts)); then
+    printf 'Model: %s\n' "$model" >&2
+    printf 'Last output:\n%s\n' "$raw_output" >&2
+    fail "$feedback"
+  fi
+
+  attempt=$((attempt + 1))
+done
+
+printf '%s\n' "$raw_output" >"$response_file"
+printf '%s\n' "$body" >"$body_file"
+
+printf 'Model: %s\n' "$model"
+printf 'Title: %s\n' "$title"
+printf 'Body file: %s\n' "$body_file"
+printf '\n%s\n' "$body"
+
+if ((dry_run)); then
+  printf '\nDry run. Not creating PR.\n'
+  exit 0
+fi
+
+gh pr create --title "$title" --body-file "$body_file" --base "$base_branch"

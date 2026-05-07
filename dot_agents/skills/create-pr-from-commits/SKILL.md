@@ -1,132 +1,142 @@
 ---
 name: create-pr-from-commits
-description: "Creates a GitHub PR from pending commits in a feature branch. Loads gh-cli, writing-clearly-and-concisely, and humanizer skills to generate PR descriptions following repo templates. Triggers on: /create-pr, /pr, 'create PR', 'submit PR', 'open pull request' in feature branches with pending commits."
+description: "Creates a GitHub PR from pending commits in a feature branch. Use when the user asks for /create-pr, /pr, create PR, submit PR, or open pull request from committed branch work. Prefer the pi-pr-create executable when available; it handles repo checks, template discovery, context collection, PR body files, and gh pr create."
 ---
 
 # Create PR from Commits
 
-Creates a well-formatted GitHub Pull Request from pending commits in the current feature branch.
+Create a GitHub pull request from commits on the current feature branch.
 
-## Workflow
+## Preferred path
 
-1. **Load Required Skills**
-   - `gh-cli` - GitHub CLI operations
-   - `writing-clearly-and-concisely` - Clear PR descriptions
-   - `humanizer` - Natural, non-AI-sounding language
+Run the deterministic wrapper:
 
-2. **Verify Prerequisites**
-   - Check we're in a git repo
-   - Confirm current branch is not `main`/`master`
-   - Verify there are pending commits (commits ahead of base branch)
-   - Confirm `gh` CLI is authenticated
+```bash
+pi-pr-create
+```
 
-3. **Gather Context**
-   - Read the PR template (`.github/pull_request_template.md` or similar)
-   - Get commit history: `git log main..HEAD --oneline` (or `master..HEAD`)
-   - Get detailed diffs: `git diff main..HEAD`
-   - Detect base branch (main/master)
+Use a dry run when the user wants to preview first:
 
-4. **Generate PR Content**
-   - Analyze commits to understand the **intent** and **motivation**
-   - **Focus on WHY**: Why were these changes made? What problem does this solve?
-   - Use `writing-clearly-and-concisely` skill to draft a concise "Why" section
-   - Use `humanizer` skill to make description sound natural
-   - Do NOT summarize what changed — reviewers will read commits/diff for that
-   - Fill in PR template placeholders with WHY-focused content
+```bash
+pi-pr-create --dry-run
+```
 
-5. **Create the PR**
-   - Write the body to a temp file, then use `--body-file` to avoid shell escaping mangling backticks:
-     ```bash
-     tmp=$(mktemp)
-     cat > "$tmp" << 'PREOF'
-     [body content]
-     PREOF
-     gh pr create --title "..." --body-file "$tmp" --base "$base"
-     rm "$tmp"
-     ```
-   - Never pass body via `--body "..."` — backticks will be escaped or interpreted
-   - Output the PR URL
+The script handles:
 
-## Required Skills
+- Git repository and feature-branch checks
+- Remote default-branch detection
+- Commit-ahead checks
+- Existing PR checks
+- `gh` authentication checks
+- PR template discovery
+- Commit log, diff stat, and diff excerpt collection
+- Model prompting for only the title and body
+- Title/body validation
+- `gh pr create --body-file` to preserve Markdown safely
 
-Load these skills at the start of execution:
-- `gh-cli` - For `gh pr create` and related operations
-- `writing-clearly-and-concisely` - For clear PR prose
-- `humanizer` - To remove AI-sounding language
+## Required skills when running manually
 
-## PR Template Detection
+Load these skills only if `pi-pr-create` is unavailable or you must create the PR by hand:
 
-Check for templates in this order:
-1. `.github/pull_request_template.md`
-2. `.github/PULL_REQUEST_TEMPLATE.md`
-3. `docs/pull_request_template.md`
-4. `.github/PULL_REQUEST_TEMPLATE/*.md` (any file in the directory)
+- `gh-cli` for GitHub CLI operations
+- `writing-clearly-and-concisely` for PR prose
+- `humanizer` to remove AI-sounding language
 
-## PR Title Format
+## Manual fallback
 
-Follow conventional commit style:
-- `feat: description` - New features
-- `fix: description` - Bug fixes
-- `refactor: description` - Code refactoring
-- `docs: description` - Documentation changes
-- `test: description` - Test additions/changes
-- `chore: description` - Maintenance tasks
+Use this path only when the wrapper is missing or fails for a reason you can fix manually.
 
-Derive from commit messages if only one commit, or summarize if multiple.
+1. Verify prerequisites:
+   ```bash
+   git rev-parse --is-inside-work-tree
+   git branch --show-current
+   gh auth status
+   ```
+2. Detect the base branch from `origin/HEAD`, with `main` or `master` as fallback.
+3. Confirm the branch is not the base branch, `main`, or `master`.
+4. Confirm there are commits ahead of base:
+   ```bash
+   git rev-list --count origin/<base>..HEAD
+   ```
+5. Check whether a PR already exists:
+   ```bash
+   gh pr view --head "$(git branch --show-current)" --json url --jq .url
+   ```
+6. Find a PR template, in order:
+   - `.github/pull_request_template.md`
+   - `.github/PULL_REQUEST_TEMPLATE.md`
+   - `docs/pull_request_template.md`
+   - first Markdown file in `.github/PULL_REQUEST_TEMPLATE/`
+7. Gather context:
+   ```bash
+   git log --no-merges --reverse --format='%h %s' origin/<base>..HEAD
+   git diff --stat origin/<base>..HEAD
+   git diff --no-ext-diff --unified=3 origin/<base>..HEAD -- .
+   ```
+8. Draft a conventional-commit-style title and a concise PR body.
+9. Write the body to a temp file, then create the PR:
+   ```bash
+   tmp=$(mktemp)
+   cat > "$tmp" <<'PREOF'
+   [body content]
+   PREOF
+   gh pr create --title "[title]" --body-file "$tmp" --base "<base>"
+   rm "$tmp"
+   ```
 
-## PR Description Structure
+Never pass Markdown body text through `--body`; backticks and shell expansion can corrupt it.
 
-**Focus: WHY, not WHAT.**
+## Title rules
 
-**Language Guidelines:**
-- Use clear, concise language
-- Avoid AI-sounding phrases
-- **Never use em-dashes (—)**, use commas or separate sentences instead
+Use conventional commit style:
 
-The PR description should explain the **motivation, context, and reasoning** behind the changes. Reviewers can see **what changed** by reading the commit history and diff.
+- `feat: description`
+- `fix: description`
+- `refactor: description`
+- `docs: description`
+- `test: description`
+- `chore: description`
 
-If a template exists, use it but adapt content to focus on:
-- Why this change was needed
-- The problem being solved
-- Any important context or trade-offs
-- How to test/verify (if applicable)
+Keep the title at or under 72 characters. Start the subject with a lowercase letter or number. Do not end it with a period.
 
-If no template exists, use this structure:
+## Body rules
+
+Focus on why, not what.
+
+Explain:
+
+- Why the change was needed
+- What problem it solves
+- Important context or trade-offs
+- How to verify the change, if not obvious
+
+Do not include:
+
+- File-by-file summaries
+- Diff narration
+- Change lists already visible in commits or code review
+- Em dashes
+
+If no template exists, use:
 
 ```markdown
 ## Why
-[The motivation for this change. What problem does it solve? Why was this approach taken?]
+[Motivation and problem solved]
 
 ## Context
-[Any important background, trade-offs, or decisions worth noting]
+[Important background or trade-offs]
 
 ## Testing
-[How to verify these changes work — if non-obvious]
+[How to verify, or "Not run" with a short reason]
 ```
 
-**Do NOT include:**
-- Bullet lists of files changed
-- Summaries of code modifications
-- What's already visible in the diff/commits
+Before creating the PR, reread each sentence. Delete sentences that only describe what changed. Keep sentences that explain why the change exists or what problem it solves.
 
-**Self-edit rule:** After drafting, re-read each sentence. If it describes *what the code does or what changed* (e.g., "adds a function", "updates the config", "removes the old handler"), delete it. Only keep sentences that explain *why* the change was needed or *what problem* it solves.
+## Error handling
 
-## Example Usage
-
-User: `/create-pr` or "create PR for my feature branch"
-
-Agent:
-1. Load gh-cli, writing-clearly-and-concisely, humanizer skills
-2. Run `git log main..HEAD --oneline` → 3 commits found
-3. Read `.github/pull_request_template.md`
-4. Draft description using commits + template
-5. Run `gh pr create --title "feat: add user authentication" --body "..."`
-6. Output: `https://github.com/user/repo/pull/42`
-
-## Error Handling
-
-- Not in a git repo → Error with instruction to cd into a repo
-- On main/master branch → Error, tell user to checkout a feature branch
-- No pending commits → Error, tell user to commit changes first
-- gh CLI not authenticated → Prompt to run `gh auth login`
-- No PR template found → Use default structure above
+- Not in a git repo: ask the user to `cd` into a repository.
+- On base, `main`, or `master`: ask the user to check out a feature branch.
+- No pending commits: ask the user to commit changes first.
+- Existing PR found: return the existing PR URL if available.
+- `gh` is not authenticated: ask the user to run `gh auth login`.
+- No PR template found: use the default body structure.
