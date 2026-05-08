@@ -62,7 +62,14 @@ function summarizeToolInput(input: unknown): string {
 }
 
 export default function (pi: ExtensionAPI): void {
+  let hadToolError = false
+
+  pi.on("agent_start", async () => {
+    hadToolError = false
+  })
+
   pi.on("agent_end", async () => {
+    if (hadToolError) return
     notify(TITLE, "Done", `Ready for input · ${sessionLabel(pi)}`)
   })
 
@@ -79,11 +86,7 @@ export default function (pi: ExtensionAPI): void {
 
   pi.on("tool_execution_end", async (event) => {
     if (event.isError) {
-      notify(
-        TITLE,
-        "Tool error",
-        `${event.toolName} failed · ${sessionLabel(pi)}`,
-      )
+      hadToolError = true
       return
     }
 
