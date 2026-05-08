@@ -1,4 +1,7 @@
-import { CustomEditor, type ExtensionAPI } from "@earendil-works/pi-coding-agent"
+import {
+  CustomEditor,
+  type ExtensionAPI,
+} from "@earendil-works/pi-coding-agent"
 
 type AutocompleteItem = {
   value: string

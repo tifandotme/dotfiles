@@ -282,7 +282,8 @@ function toolCallSummary(name: string, args: Record<string, unknown>): string {
       : undefined
     return preview(patterns ? `patterns: ${patterns}` : JSON.stringify(args))
   }
-  if (name === "find_files") return preview(pick("query") ?? JSON.stringify(args))
+  if (name === "find_files")
+    return preview(pick("query") ?? JSON.stringify(args))
   if (name === "read") return preview(pick("path") ?? JSON.stringify(args))
   if (name === "bash") return preview(pick("command") ?? JSON.stringify(args))
   if (name === "edit" || name === "write")
@@ -303,7 +304,8 @@ function activityForMessage(message: Message): string | undefined {
       return [
         "tools:",
         ...toolCalls.map(
-          (call) => `  ◦ ${call.name}: ${toolCallSummary(call.name, call.arguments)}`,
+          (call) =>
+            `  ◦ ${call.name}: ${toolCallSummary(call.name, call.arguments)}`,
         ),
       ].join("\n")
     }
@@ -491,21 +493,12 @@ async function mapWithConcurrency<T, R>(
 function preview(text: string, maxLength = 160): string {
   const cleaned = text.trim().replace(/\s+/g, " ")
   if (!cleaned) return "(no output yet)"
-  return cleaned.length > maxLength ? `${cleaned.slice(0, maxLength)}...` : cleaned
+  return cleaned.length > maxLength
+    ? `${cleaned.slice(0, maxLength)}...`
+    : cleaned
 }
 
-const SPINNER_FRAMES = [
-  "⠋",
-  "⠙",
-  "⠹",
-  "⠸",
-  "⠼",
-  "⠴",
-  "⠦",
-  "⠧",
-  "⠇",
-  "⠏",
-]
+const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
 
 type SpinnerState = {
   frame: number
@@ -542,7 +535,8 @@ function statusIcon(
   theme: ThemeLike,
 ): string {
   if (result.exitCode === -1) return theme.fg("warning", spinner)
-  if (result.exitCode !== 0 || result.errorMessage) return theme.fg("error", "✗")
+  if (result.exitCode !== 0 || result.errorMessage)
+    return theme.fg("error", "✗")
   return theme.fg("success", "✓")
 }
 
@@ -601,7 +595,11 @@ function renderSingle(
     statusText(result),
   )}`
   if (!expanded)
-    return new Text(singleCollapsedLines(result, theme, spinner).join("\n"), 0, 0)
+    return new Text(
+      singleCollapsedLines(result, theme, spinner).join("\n"),
+      0,
+      0,
+    )
 
   const container = new Container()
   container.addChild(new Text(header, 0, 0))
@@ -612,7 +610,8 @@ function renderSingle(
   container.addChild(new Text(theme.fg("muted", "Activity:"), 0, 0))
   container.addChild(
     new Text(
-      activityLines(result, theme).join("\n") || theme.fg("dim", "  (none yet)"),
+      activityLines(result, theme).join("\n") ||
+        theme.fg("dim", "  (none yet)"),
       0,
       0,
     ),
@@ -648,18 +647,31 @@ const TaskSchema = Type.Object({
 const SubagentParams = Type.Object({
   action: Type.Optional(
     StringEnum(["list"] as const, {
-      description: 'Only use action for listing subagents. Do not set action for single-agent or parallel delegation.',
+      description:
+        "Only use action for listing subagents. Do not set action for single-agent or parallel delegation.",
     }),
   ),
   agent: Type.Optional(
-    Type.String({ description: "Subagent name. For single-agent delegation, provide agent and task without action." }),
+    Type.String({
+      description:
+        "Subagent name. For single-agent delegation, provide agent and task without action.",
+    }),
   ),
-  task: Type.Optional(Type.String({ description: "Task to delegate. For single-agent delegation, provide agent and task without action." })),
+  task: Type.Optional(
+    Type.String({
+      description:
+        "Task to delegate. For single-agent delegation, provide agent and task without action.",
+    }),
+  ),
   cwd: Type.Optional(
-    Type.String({ description: "Working directory for single-agent delegation" }),
+    Type.String({
+      description: "Working directory for single-agent delegation",
+    }),
   ),
   tasks: Type.Optional(
-    Type.Array(TaskSchema, { description: "Parallel subagent tasks. Provide tasks without action." }),
+    Type.Array(TaskSchema, {
+      description: "Parallel subagent tasks. Provide tasks without action.",
+    }),
   ),
   concurrency: Type.Optional(
     Type.Number({

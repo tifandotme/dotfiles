@@ -17,33 +17,17 @@ const HANDOFF_MODEL = {
   modelId: "gpt-5.4-mini",
 } as const
 
-const HANDOFF_GLOBAL_KEY = Symbol.for("local-handoff-pending")
-
-type PendingHandoff = {
-  prompt: string
-}
+type NewSessionOptions = NonNullable<
+  Parameters<ExtensionCommandContext["newSession"]>[0]
+>
+type HandoffSessionContext = Parameters<
+  NonNullable<NewSessionOptions["withSession"]>
+>[0]
 
 type HandoffAutosendState = {
   interval: ReturnType<typeof setInterval>
   timeout: ReturnType<typeof setTimeout>
   unsubscribeInput: () => void
-}
-
-function getPendingHandoff(): PendingHandoff | null {
-  return (
-    ((globalThis as Record<PropertyKey, unknown>)[HANDOFF_GLOBAL_KEY] as
-      | PendingHandoff
-      | null
-      | undefined) ?? null
-  )
-}
-
-function setPendingHandoff(data: PendingHandoff | null): void {
-  if (data) {
-    ;(globalThis as Record<PropertyKey, unknown>)[HANDOFF_GLOBAL_KEY] = data
-  } else {
-    delete (globalThis as Record<PropertyKey, unknown>)[HANDOFF_GLOBAL_KEY]
-  }
 }
 
 const CONTEXT_SUMMARY_SYSTEM_PROMPT = `You are a context transfer assistant. Given a coding conversation and the user's goal for a new session, generate only concise markdown bullets from the current assistant's perspective that summarize relevant context for continuing the work.
@@ -132,8 +116,7 @@ function clearHandoffAutosend(
 }
 
 function scheduleHandoffAutosend(
-  pi: ExtensionAPI,
-  ctx: ExtensionContext,
+  ctx: HandoffSessionContext,
   prompt: string,
 ): void {
   ctx.ui.setEditorText(prompt)
@@ -169,7 +152,7 @@ function scheduleHandoffAutosend(
 
     if (ctx.ui.getEditorText() !== prompt) return
     ctx.ui.setEditorText("")
-    pi.sendUserMessage(prompt)
+    void ctx.sendUserMessage(prompt)
   }, HANDOFF_AUTOSEND_MS)
 
   state = { interval, timeout, unsubscribeInput }
@@ -229,14 +212,6 @@ async function generateContextSummary(
 }
 
 export default function (pi: ExtensionAPI): void {
-  pi.on("session_start", async (event, ctx) => {
-    if (event.reason !== "new") return
-    const pending = getPendingHandoff()
-    if (!pending) return
-    setPendingHandoff(null)
-    scheduleHandoffAutosend(pi, ctx, pending.prompt)
-  })
-
   pi.registerCommand("handoff", {
     description: "Create a new session with an AI-generated handoff summary",
     handler: async (args, ctx) => {
@@ -245,9 +220,10 @@ export default function (pi: ExtensionAPI): void {
         return
       }
 
-      const goal = args.trim()
+      const goal =
+        args.trim() || (await ctx.ui.editor("Goal for new session"))?.trim()
       if (!goal) {
-        ctx.ui.notify("Usage: /handoff <goal>", "error")
+        ctx.ui.notify("Handoff cancelled.", "warning")
         return
       }
 
@@ -321,16 +297,15 @@ export default function (pi: ExtensionAPI): void {
         getLoadedSkills(branch),
       )
 
-      setPendingHandoff({ prompt: finalPrompt })
-      const result = await (ctx as ExtensionCommandContext).newSession({
+      await (ctx as ExtensionCommandContext).newSession({
         ...(currentSessionFile ? { parentSession: currentSessionFile } : {}),
         setup: async (sessionManager) => {
           sessionManager.appendSessionInfo(buildHandoffSessionName(goal))
         },
+        withSession: async (newCtx) => {
+          scheduleHandoffAutosend(newCtx, finalPrompt)
+        },
       })
-      if (result.cancelled) {
-        setPendingHandoff(null)
-      }
     },
   })
 }
