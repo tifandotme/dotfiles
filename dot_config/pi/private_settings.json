@@ -32,7 +32,7 @@
     "openai-codex/gpt-5.5",
     "openai-codex/gpt-5.4-mini"
   ],
-  "transport": "websocket-cached",
+  "transport": "auto",
   "compaction": {
     "enabled": false
   },
