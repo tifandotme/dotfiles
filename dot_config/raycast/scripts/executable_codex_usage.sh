@@ -10,7 +10,7 @@
 # @raycast.packageName CodexUsage
 
 # Fetches Codex rate limit utilization from Codex auth + undocumented usage API.
-# For Raycast: outputs "session weekly" (e.g., "18(1h55m) 19(Mon 14:30)")
+# For Raycast: outputs "session weekly progress" (e.g., "18(1h55m) 68:79.6(Tue 14:30)")
 # For sketchybar: calls sketchybar --set to update label
 
 set -u
@@ -18,7 +18,7 @@ set -u
 _script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 _usage_lib="$_script_dir/usage_lib.sh"
 [ -f "$_usage_lib" ] || _usage_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/usage_lib.sh"
-# shellcheck source=usage_lib.sh
+# shellcheck source=/Users/tifan/.local/share/chezmoi/dot_config/raycast/scripts/usage_lib.sh
 . "$_usage_lib"
 
 CACHE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/codex-usage-label"
@@ -229,11 +229,32 @@ set_window_if_match() {
   fi
 }
 
+usage_format_window_progress() {
+  local reset_epoch="${1:-}" window_seconds="${2:-604800}" now_epoch window_start elapsed
+  [ -n "$reset_epoch" ] || return 1
+
+  now_epoch=$(date "+%s")
+  window_start=$((reset_epoch - window_seconds))
+  elapsed=$((now_epoch - window_start))
+
+  if [ "$elapsed" -le 0 ]; then
+    printf '0.0'
+    return 0
+  fi
+
+  if [ "$elapsed" -ge "$window_seconds" ]; then
+    printf '100.0'
+    return 0
+  fi
+
+  awk -v elapsed="$elapsed" -v total="$window_seconds" 'BEGIN { printf "%.1f", (elapsed * 100.0) / total }'
+}
+
 build_label() {
   local response_file header_file http_code access_token account_id
   local session weekly session_reset_at weekly_reset_at
   local session_header weekly_header session_reset_header weekly_reset_header
-  local session_epoch weekly_epoch
+  local session_epoch weekly_epoch weekly_progress
   local primary_window_json secondary_window_json
 
   access_token=$(printf '%s' "$AUTH_JSON" | jq -r '.tokens.access_token // empty' 2>/dev/null)
@@ -302,16 +323,25 @@ build_label() {
 
     session_epoch=$(usage_epoch_from_reset "$session_reset_at" || true)
     weekly_epoch=$(usage_epoch_from_reset "$weekly_reset_at" || true)
+    weekly_progress=$(usage_format_window_progress "$weekly_epoch" 604800 || true)
 
     if [ -n "$session" ] && [ -n "$session_epoch" ] && [ -n "$weekly" ] && [ -n "$weekly_epoch" ]; then
-      LABEL="${session}($(usage_format_relative_reset "$session_epoch")) ${weekly}($(usage_format_weekly_reset "$weekly_epoch"))"
+      if [ -n "$weekly_progress" ]; then
+        LABEL="${session}($(usage_format_relative_reset "$session_epoch")) ${weekly}:${weekly_progress}($(usage_format_weekly_reset "$weekly_epoch"))"
+      else
+        LABEL="${session}($(usage_format_relative_reset "$session_epoch")) ${weekly}($(usage_format_weekly_reset "$weekly_epoch"))"
+      fi
       usage_cache_write "$CACHE_FILE" "$LABEL"
       rm -f "$response_file" "$header_file"
       return 0
     fi
 
     if [ -n "$weekly" ] && [ -n "$weekly_epoch" ]; then
-      LABEL="${weekly}($(usage_format_weekly_reset "$weekly_epoch"))"
+      if [ -n "$weekly_progress" ]; then
+        LABEL="${weekly}:${weekly_progress}($(usage_format_weekly_reset "$weekly_epoch"))"
+      else
+        LABEL="${weekly}($(usage_format_weekly_reset "$weekly_epoch"))"
+      fi
       usage_cache_write "$CACHE_FILE" "$LABEL"
       rm -f "$response_file" "$header_file"
       return 0
@@ -341,4 +371,4 @@ else
   build_label || LABEL="N/A"
 fi
 
-usage_sketchybar_emit "$LABEL" 60 900 codex,pi x
+usage_sketchybar_emit "$LABEL" 15 900 codex,pi x
