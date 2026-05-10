@@ -8,7 +8,7 @@
     "openai-codex/gpt-5.4-mini": "high"
   },
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.73.0",
+  "lastChangelogVersion": "0.74.0",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "theme": "dark",
@@ -19,7 +19,8 @@
     "npm:pi-code-previews",
     "npm:pi-add-dir",
     "npm:@juicesharp/rpiv-btw",
-    "npm:@fitchmultz/pi-stash"
+    "npm:@fitchmultz/pi-stash",
+    "npm:pi-mermaid"
   ],
   "enableSkillCommands": false,
   "terminal": {
@@ -30,7 +31,7 @@
     "openai-codex/gpt-5.5",
     "openai-codex/gpt-5.4-mini"
   ],
-  "transport": "sse",
+  "transport": "websocket-cached",
   "compaction": {
     "enabled": false
   },

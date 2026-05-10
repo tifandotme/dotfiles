@@ -277,8 +277,9 @@ function toolCallSummary(name: string, args: Record<string, unknown>): string {
     return preview([pattern, path && `in ${path}`].filter(Boolean).join(" "))
   }
   if (name === "fff_multi_grep") {
-    const patterns = Array.isArray(args.patterns)
-      ? args.patterns.filter((item) => typeof item === "string").join(", ")
+    const rawPatterns = args["patterns"]
+    const patterns = Array.isArray(rawPatterns)
+      ? rawPatterns.filter((item) => typeof item === "string").join(", ")
       : undefined
     return preview(patterns ? `patterns: ${patterns}` : JSON.stringify(args))
   }
@@ -298,6 +299,7 @@ function activityForMessage(message: Message): string | undefined {
     const toolCalls = message.content.filter((part) => part.type === "toolCall")
     if (toolCalls.length === 1) {
       const call = toolCalls[0]
+      if (!call) return undefined
       return `${call.name}: ${toolCallSummary(call.name, call.arguments)}`
     }
     if (toolCalls.length > 1) {
@@ -305,7 +307,7 @@ function activityForMessage(message: Message): string | undefined {
         "tools:",
         ...toolCalls.map(
           (call) =>
-            `  ◦ ${call.name}: ${toolCallSummary(call.name, call.arguments)}`,
+            `  ${call.name}: ${toolCallSummary(call.name, call.arguments)}`,
         ),
       ].join("\n")
     }
@@ -345,12 +347,14 @@ async function runSingleAgent(
   agent: AgentConfig,
   task: string,
   cwd: string | undefined,
+  parentModel: string | undefined,
   signal: AbortSignal | undefined,
   onUpdate: ((result: SingleResult) => void) | undefined,
 ): Promise<SingleResult> {
   const runCwd = cwd ?? defaultCwd
   const args = ["--mode", "json", "-p", "--no-session"]
-  if (agent.model) args.push("--model", agent.model)
+  const model = agent.model ?? parentModel
+  if (model) args.push("--model", model)
   if (agent.thinking) args.push("--thinking", agent.thinking)
   if (agent.tools?.length) args.push("--tools", agent.tools.join(","))
 
@@ -366,6 +370,7 @@ async function runSingleAgent(
     output: "",
   }
   addActivity(result, `started in ${runCwd}`)
+  addActivity(result, `effective model: ${model ?? "(default)"}`)
   onUpdate?.({
     ...result,
     messages: [...result.messages],
@@ -502,7 +507,7 @@ const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", 
 
 type SpinnerState = {
   frame: number
-  timer?: ReturnType<typeof setInterval>
+  timer: ReturnType<typeof setInterval> | undefined
 }
 
 function spinnerFrame(
@@ -512,7 +517,7 @@ function spinnerFrame(
   const key = "subagentSpinner"
   let state = context.state[key] as SpinnerState | undefined
   if (!state) {
-    state = { frame: 0 }
+    state = { frame: 0, timer: undefined }
     context.state[key] = state
   }
 
@@ -526,7 +531,7 @@ function spinnerFrame(
     clearInterval(state.timer)
     state.timer = undefined
   }
-  return SPINNER_FRAMES[state.frame]
+  return SPINNER_FRAMES[state.frame] ?? SPINNER_FRAMES[0] ?? ""
 }
 
 function statusIcon(
@@ -552,7 +557,7 @@ function activityLines(
   limit?: number,
 ): string[] {
   const activities = limit ? result.activities.slice(-limit) : result.activities
-  return activities.map((activity) => `  • ${theme.fg("dim", activity.text)}`)
+  return activities.map((activity) => theme.fg("dim", `  ${activity.text}`))
 }
 
 function singleCollapsedLines(
@@ -701,7 +706,7 @@ export default function (pi: ExtensionAPI): void {
     promptSnippet:
       "Delegate focused work to local subagents from ~/.config/pi/subagents.",
     promptGuidelines: [
-      'Use subagent with agent: "scout" before non-trivial work in unfamiliar code areas when project instructions request it.',
+      "Use subagent only when the user or project instructions explicitly request subagents, parallel agents, scouting, or review delegation.",
       'Use subagent with agent: "reviewer" only when the user explicitly asks for review.',
     ],
     parameters: SubagentParams,
@@ -755,6 +760,7 @@ export default function (pi: ExtensionAPI): void {
           agent,
           params.task,
           params.cwd,
+          ctx.model ? `${ctx.model.provider}/${ctx.model.id}` : undefined,
           signal,
           (partial) => {
             onUpdate?.({
@@ -866,6 +872,7 @@ export default function (pi: ExtensionAPI): void {
             agent,
             task.task,
             task.cwd,
+            ctx.model ? `${ctx.model.provider}/${ctx.model.id}` : undefined,
             signal,
             (partial) => {
               placeholders[index] = partial
@@ -912,11 +919,7 @@ export default function (pi: ExtensionAPI): void {
           0,
         )
       }
-      return new Text(
-        `${theme.fg("toolTitle", theme.bold("subagent"))} ${theme.fg("accent", args.agent ?? "...")}`,
-        0,
-        0,
-      )
+      return new Text(theme.fg("toolTitle", theme.bold("subagent")), 0, 0)
     },
 
     renderResult(result, { expanded }, theme, context) {
