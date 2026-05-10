@@ -52,7 +52,7 @@ After modifying any shell script:
 
 ## Writing Prose
 
-For ANY new file meant for humans to read (does not apply to chat responses):
+For ANY new file meant for humans (not agents) to read (does not apply to chat responses):
 
 1. MUST load `writing-clearly-and-concisely` first (structure, active voice, concision)
 2. MUST load `humanizer` last (strip AI patterns, add voice)
