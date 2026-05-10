@@ -110,17 +110,17 @@ sketchybar --add item front_app left \
 #   --subscribe spotify spotify_update
 
 # SPOTIFY-PLAYER TUI
-# sketchybar --add item spotify center \
-#   --set spotify \
-#   label.max_chars=40 \
-#   label.scroll_duration=300 \
-#   label.shadow.scroll_duration=300 \
-#   scroll_texts=on \
-#   "${GHOST[@]}" \
-#   icon="􀑪" \
-#   drawing=off \
-#   update_freq=5 \
-#   script="$PLUGIN_DIR/spotify.sh"
+sketchybar --add item spotify center \
+  --set spotify \
+  label.max_chars=40 \
+  label.scroll_duration=300 \
+  label.shadow.scroll_duration=300 \
+  scroll_texts=on \
+  "${GHOST[@]}" \
+  icon="􀑪" \
+  drawing=off \
+  update_freq=5 \
+  script="$PLUGIN_DIR/spotify.sh"
 
 # --------------- RIGHT
 
@@ -170,12 +170,12 @@ sketchybar --add item wifi right \
   click_script="$PLUGIN_DIR/wifi.sh" \
   --subscribe wifi wifi_change
 
-add_usage_item amp_usage "􁎢" 300
+# add_usage_item amp_usage "􁎢" 300
 # add_usage_item copilot_usage "􁎢" 300
-add_usage_item claude_usage "􀘾" 900
+# add_usage_item claude_usage "􀘾" 900
 
 # Codex label shows session usage plus weekly usage progress, e.g. 18(1h55m) 68/80(Tue 14:17)
-add_usage_item codex_usage "􀘾" 900
+# add_usage_item codex_usage "􀘾" 900
 
 # Cursor usage: no published API rate limits; ~3min poll balances freshness vs load
 # add_usage_item cursor_usage "􀘾" 180
