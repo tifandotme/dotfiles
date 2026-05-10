@@ -1,5 +1,3 @@
-# Pi Global Agent Configuration
-
 {{ include "dot_agents/AGENTS.shared.md" }}
 
 ## Pi-specific Behavior
@@ -17,16 +15,12 @@ Prefer Pi's structured tools over shell commands.
 - Use `write` only for new files or full rewrites.
 - Use `bash` for commands that tools cannot cover, such as tests, build commands, git status, or repo-specific scripts.
 
-When exploring:
+### Subagents
 
-- Start with `find_files` or `grep`.
-- Before answering questions about an unfamiliar code area or proposing changes in a non-trivial part of the codebase, call the `subagent` tool with `agent: "scout"` to gather context.
-- Check the key files yourself before editing. Do not blindly trust subagent summaries.
-- Do not call the `subagent` tool with `agent: "reviewer"` unless the user explicitly asks for review.
+Use the `Agent` tool when parallel exploration, isolated planning, or focused read-only codebase search would reduce risk or save time.
 
-When editing:
-
-- Make surgical changes.
-- Run the smallest relevant validation command.
-- If validation is blocked by unrelated local state, report the blocker and what you did verify.
-
+- Use `subagent_type: "Explore"` for read-only codebase discovery.
+- Run independent exploration tasks in the background when useful.
+- Retrieve background results with `get_subagent_result`.
+- Use `steer_subagent` to redirect a running background agent.
+- Do not spawn subagents for small, local edits where direct work is faster.

@@ -1,7 +1,7 @@
 {
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.5",
-  "defaultThinkingLevel": "low",
+  "defaultModel": "gpt-5.4-mini",
+  "defaultThinkingLevel": "high",
   "preferredThinking": {
     "openai-codex/gpt-5.5": "low",
     "openai-codex/gpt-5.4": "high",
@@ -20,7 +20,8 @@
     "npm:pi-add-dir",
     "npm:@juicesharp/rpiv-btw",
     "npm:@fitchmultz/pi-stash",
-    "npm:pi-mermaid"
+    "npm:pi-mermaid",
+    "npm:@tintinweb/pi-subagents"
   ],
   "enableSkillCommands": false,
   "terminal": {
