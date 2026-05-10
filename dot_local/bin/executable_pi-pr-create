@@ -239,6 +239,7 @@ generate_response() {
       --no-tools \
       --no-context-files \
       --no-skills \
+      --no-extensions \
       --no-prompt-templates \
       --model "$model" \
       --thinking off \
