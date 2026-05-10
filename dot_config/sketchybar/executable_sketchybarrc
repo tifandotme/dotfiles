@@ -2,6 +2,7 @@
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
+# shellcheck source=/Users/tifan/.local/share/chezmoi/dot_config/sketchybar/colors.sh
 source "$CONFIG_DIR/colors.sh"
 
 bar=(
@@ -172,6 +173,8 @@ sketchybar --add item wifi right \
 add_usage_item amp_usage "􁎢" 300
 # add_usage_item copilot_usage "􁎢" 300
 add_usage_item claude_usage "􀘾" 900
+
+# Codex label shows session usage plus weekly usage progress, e.g. 18(1h55m) 68/80(Tue 14:17)
 add_usage_item codex_usage "􀘾" 900
 
 # Cursor usage: no published API rate limits; ~3min poll balances freshness vs load
