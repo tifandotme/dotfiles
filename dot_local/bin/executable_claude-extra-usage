@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+readonly API_URL='https://api.anthropic.com/api/oauth/usage'
+readonly BETA_HEADER='oauth-2025-04-20'
+readonly USER_AGENT='claude-code/2.1.0'
+readonly KEYCHAIN_SERVICE='Claude Code-credentials'
+
+die() {
+  printf 'error: %s\n' "$*" >&2
+  exit 1
+}
+
+require_cmd() {
+  command -v "$1" >/dev/null 2>&1 || die "missing dependency: $1"
+}
+
+read_keychain_payload() {
+  local -a args=(find-generic-password -s "$KEYCHAIN_SERVICE" -w)
+  local account="${CODEXBAR_CLAUDE_KEYCHAIN_ACCOUNT:-}"
+
+  if [[ -n "$account" ]]; then
+    args+=(-a "$account")
+  fi
+
+  security "${args[@]}" 2>/dev/null || die "could not read Claude OAuth item from Keychain (service: $KEYCHAIN_SERVICE)"
+}
+
+extract_access_token() {
+  python3 -c '
+import json
+import sys
+
+payload = sys.stdin.read().strip()
+if not payload:
+    raise SystemExit(1)
+
+try:
+    obj = json.loads(payload)
+except json.JSONDecodeError:
+    print(payload)
+    raise SystemExit(0)
+
+stack = [obj]
+while stack:
+    current = stack.pop()
+    if isinstance(current, dict):
+        for key in ("accessToken", "access_token"):
+            value = current.get(key)
+            if isinstance(value, str) and value.strip():
+                print(value.strip())
+                raise SystemExit(0)
+        nested = current.get("claudeAiOauth")
+        if nested is not None:
+            stack.append(nested)
+        for value in current.values():
+            if isinstance(value, (dict, list)):
+                stack.append(value)
+    elif isinstance(current, list):
+        for value in current:
+            if isinstance(value, (dict, list)):
+                stack.append(value)
+
+raise SystemExit(1)
+'
+}
+
+response_body=''
+
+cleanup() {
+  if [[ -n "${response_body:-}" ]]; then
+    rm -f -- "$response_body"
+  fi
+}
+
+main() {
+  require_cmd curl
+  require_cmd python3
+  require_cmd security
+
+  local payload
+  local token
+  local http_code
+
+  trap cleanup EXIT
+
+  payload="$(read_keychain_payload)"
+  token="$(printf '%s' "$payload" | extract_access_token)" || die "could not extract access token from Claude Keychain item"
+
+  response_body="$(mktemp)"
+
+  http_code="$(curl -sS \
+    -o "$response_body" \
+    -w '%{http_code}' \
+    -H "Authorization: Bearer ${token}" \
+    -H 'Accept: application/json' \
+    -H "anthropic-beta: ${BETA_HEADER}" \
+    -H "User-Agent: ${USER_AGENT}" \
+    "$API_URL")"
+
+  if [[ "$http_code" != '200' ]]; then
+    if [[ "$http_code" == '401' ]]; then
+      die 'Claude OAuth token rejected by Anthropic. The Keychain item may be stale, wrong, or missing the needed scope.'
+    fi
+    die "Claude OAuth request failed: HTTP $http_code"
+  fi
+
+  python3 -c '
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as fh:
+    data = json.load(fh)
+
+extra = data.get("extra_usage")
+if not extra:
+    print("extra_usage: unavailable")
+    raise SystemExit(0)
+
+def cents_to_dollars(value):
+    if value is None:
+        return "0.00"
+    return f"{float(value) / 100:.2f}"
+
+currency = extra.get("currency") or "USD"
+enabled = str(bool(extra.get("is_enabled"))).lower()
+used = cents_to_dollars(extra.get("used_credits"))
+limit = cents_to_dollars(extra.get("monthly_limit"))
+print(f"extra_usage used={used} limit={limit} currency={currency} enabled={enabled}")
+' "$response_body"
+}
+
+main "$@"
