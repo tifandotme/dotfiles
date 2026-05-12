@@ -2,7 +2,6 @@
 description: Fast codebase exploration agent (read-only)
 display_name: Explore
 tools: read, bash, grep, find_files, fff_multi_grep, find, ls
-model: anthropic/claude-haiku-4-5-20251001
 prompt_mode: replace
 ---
 
