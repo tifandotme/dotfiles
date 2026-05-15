@@ -1,7 +1,7 @@
 {
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.4-mini",
-  "defaultThinkingLevel": "high",
+  "defaultModel": "gpt-5.5",
+  "defaultThinkingLevel": "low",
   "tldr": {
     "model": "openai-codex/gpt-5.4-mini"
   },
@@ -45,7 +45,7 @@
     "openai-codex/gpt-5.5",
     "openai-codex/gpt-5.4-mini"
   ],
-  "transport": "auto",
+  "transport": "sse",
   "compaction": {
     "enabled": false
   },
