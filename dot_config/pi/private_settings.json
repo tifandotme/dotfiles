@@ -2,6 +2,9 @@
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.4-mini",
   "defaultThinkingLevel": "high",
+  "tldr": {
+    "model": "openai-codex/gpt-5.4-mini"
+  },
   "preferredThinking": {
     "openai-codex/gpt-5.5": "low",
     "openai-codex/gpt-5.4": "high",
@@ -11,6 +14,13 @@
   "lastChangelogVersion": "0.74.0",
   "quietStartup": false,
   "enableInstallTelemetry": false,
+  "npmCommand": [
+    "mise",
+    "exec",
+    "node@lts",
+    "--",
+    "npm"
+  ],
   "theme": "dark",
   "treeFilterMode": "user-only",
   "packages": [
@@ -21,7 +31,10 @@
     "npm:@juicesharp/rpiv-btw",
     "npm:@fitchmultz/pi-stash",
     "npm:pi-mermaid",
-    "npm:@tintinweb/pi-subagents"
+    "npm:@tintinweb/pi-subagents",
+    "npm:pi-codex-goal",
+    "npm:pi-rtk-optimizer",
+    "npm:pi-tldr"
   ],
   "enableSkillCommands": false,
   "terminal": {

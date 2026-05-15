@@ -8,5 +8,6 @@
   "app.session.togglePath": ["alt+p"],
   "app.session.toggleNamedFilter": ["alt+n"],
   "app.models.toggleProvider": ["alt+p"],
-  "app.tools.expand": ["ctrl+o"]
+  "app.tools.expand": ["ctrl+o"],
+  "app.message.followUp": ["alt+shift+enter"]
 }
