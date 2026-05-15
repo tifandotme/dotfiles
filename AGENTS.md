@@ -28,12 +28,7 @@ brew "raycast"
 
 # Applies only to the Ubuntu VPS named box:
 # {{ if eq .chezmoi.hostname "box" -}}
-brew "zellij"
-# {{- end }}
-
-# Applies to Linux machines, currently only box:
-# {{ if eq .chezmoi.os "linux" -}}
-export SERVER_ENV=1
+brew "fail2ban"
 # {{- end }}
 ```
 

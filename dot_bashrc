@@ -35,9 +35,6 @@ y() {
   rm -f "$tmp"
 }
 
-alias z="zellij"
-alias zka="zellij delete-all-sessions --force --yes && zellij kill-all-sessions --yes"
-
 alias yal="yadm list -a"
 alias yag="yadm enter lazygit --work-tree ~"
 
@@ -52,4 +49,3 @@ if [[ -n "$_zc" && -x "$_zc" ]]; then
   eval "$("$_zc" completions bash)"
 fi
 unset _zc
-
