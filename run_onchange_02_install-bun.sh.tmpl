@@ -4,6 +4,18 @@
 # Bun packages hash: # {{ list "@commitlint/cli" "@dotenvx/dotenvx" "@sourcegraph/amp" "actions-up" "fast-cli" "npm-check-updates" "opencode-ai" "opencommit" "oxfmt" "pkg" "skills" "vercel" | join "\n" | sha256sum }}
 
 if command -v bun &>/dev/null; then
+  normalize_bun_pkg() {
+    local pkg="$1"
+
+    if [[ "$pkg" =~ ^(@[^/]+/[^@]+)@.+$ ]]; then
+      printf '%s\n' "${BASH_REMATCH[1]}"
+    elif [[ "$pkg" =~ ^([^@]+)@.+$ ]]; then
+      printf '%s\n' "${BASH_REMATCH[1]}"
+    else
+      printf '%s\n' "$pkg"
+    fi
+  }
+
   desired_bun_packages=(
     # {{ if eq .chezmoi.os "darwin" -}}
     "npm-check-updates"
@@ -17,7 +29,6 @@ if command -v bun &>/dev/null; then
     "typescript"
     "skills"
     "ctx7"
-    "@sourcegraph/amp"
     "@earendil-works/pi-coding-agent"
     "@openai/codex"
     "@dotenvx/dotenvx"
@@ -27,20 +38,38 @@ if command -v bun &>/dev/null; then
     # {{- end }}
   )
 
+  is_versioned_bun_pkg() {
+    local pkg="$1"
+
+    [[ "$pkg" =~ ^(@[^/]+/[^@]+)@.+$ ]] || [[ "$pkg" =~ ^([^@]+)@.+$ ]]
+  }
+
+  desired_bun_package_names=()
+  for pkg in "${desired_bun_packages[@]}"; do
+    desired_bun_package_names+=("$(normalize_bun_pkg "$pkg")")
+  done
+
   # --json request to avoid the mess below: https://github.com/oven-sh/bun/issues/26222
-  installed_packages=$(bun pm ls -g 2>/dev/null | grep -E '^├──|^└──' | sed -E 's/^[├└]── //;s/@([0-9]+|git).*//' | sort)
+  installed_packages=$(bun pm ls -g 2>/dev/null | grep -E '^├──|^└──' | sed -E 's/^[├└]── //' | while read -r pkg; do normalize_bun_pkg "$pkg"; done | sort)
 
   for pkg in "${desired_bun_packages[@]}"; do
-    if ! echo "$installed_packages" | grep -qx "$pkg"; then
+    if is_versioned_bun_pkg "$pkg"; then
+      echo "Installing bun global package: $pkg"
+      bun add -g "$pkg"
+      continue
+    fi
+
+    normalized_pkg=$(normalize_bun_pkg "$pkg")
+    if ! printf '%s\n' "$installed_packages" | grep -qxF "$normalized_pkg"; then
       echo "Installing bun global package: $pkg"
       bun add -g "$pkg"
     fi
   done
 
-  echo "$installed_packages" | while read -r pkg; do
-    if [[ -n "$pkg" ]] && ! [[ " ${desired_bun_packages[*]} " =~ $pkg ]]; then
+  while IFS= read -r pkg; do
+    if [[ -n "$pkg" ]] && ! printf '%s\n' "${desired_bun_package_names[@]}" | grep -qxF "$pkg"; then
       echo "Removing unwanted bun global package: $pkg"
       bun remove -g "$pkg"
     fi
-  done
+  done <<<"$installed_packages"
 fi
