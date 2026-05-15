@@ -208,6 +208,7 @@ use system.nu *
 use project.nu *
 use dev.nu *
 use utils.nu *
+use gibo.nu *
 
 use updater.nu
 use cert.nu
