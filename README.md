@@ -59,20 +59,26 @@ sudo apt install -y curl git
 2. Install `chezmoi` with the official installer.
 
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply $GITHUB_USERNAME
+sh -c "$(curl -fsLS https://get.chezmoi.io)" -- -b "$HOME/.local/bin"
 ```
 
-3. Make sure GitHub SSH access works.
+3. Initialize and apply the repo.
 
-The main repo can be cloned over HTTPS, but [`.chezmoiexternal.toml`](./.chezmoiexternal.toml) still uses SSH URLs for external repos.
+```bash
+~/.local/bin/chezmoi init --apply git@github.com:tifandotme/dotfiles.git
+```
 
-4. Initialize and apply the repo.
+If `chezmoi` is already on your path, this also works:
 
 ```bash
 chezmoi init --apply git@github.com:tifandotme/dotfiles.git
 ```
 
-If `chezmoi` is not on your path yet, run it from `~/.local/bin/chezmoi`.
+Use the HTTPS URL instead if you do not want to set up GitHub SSH for the main repo:
+
+```bash
+~/.local/bin/chezmoi init --apply https://github.com/tifandotme/dotfiles.git
+```
 
 On Ubuntu, `chezmoi` will skip the macOS-only files. Host-specific files for `box` still apply.
 
