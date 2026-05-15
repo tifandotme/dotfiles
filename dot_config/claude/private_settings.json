@@ -39,7 +39,6 @@
     ],
     "ask": [
       "Bash(chmod:*)",
-      "Bash(sed:*)",
       "Bash(pkill:*)",
       "Bash(sqlite3:*)",
       "Bash(psql:*)"

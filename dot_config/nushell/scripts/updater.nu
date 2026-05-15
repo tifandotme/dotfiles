@@ -55,10 +55,10 @@ export def start [] {
     }
   }
 
-  if (which pnpm | is-not-empty) {
-    print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)pnpm(ansi reset) global packages"
-    pnpm update --global --latest
-  }
+  # if (which pnpm | is-not-empty) {
+  #   print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)pnpm(ansi reset) global packages"
+  #   pnpm update --global --latest
+  # }
 
   if (which bunx | is-not-empty) {
     print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)skills(ansi reset) packages"

@@ -24,14 +24,10 @@
   ],
   "amp.terminal.theme": "terminal",
   "amp.git.commit.coauthor.enabled": false,
+  "amp.git.commit.ampThread.enabled": false,
 
   "amp.skills.disableClaudeCodeSkills": true,
-  "amp.agent.deepReasoningEffort": "high",
-  "amp.mcpServers": {
-    "notion": {
-      "url": "https://mcp.notion.com/mcp"
-    }
-  },
+  "amp.mcpServers": {},
   "amp.dangerouslyAllowAll": true,
-  "amp.openai.speed": "standard",
+  "amp.openai.speed": "standard"
 }
