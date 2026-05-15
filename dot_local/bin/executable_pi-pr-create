@@ -7,6 +7,9 @@ model='openai-codex/gpt-5.4-mini'
 max_attempts=3
 allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test|revert'
 dry_run=0
+context_file=''
+output_file=''
+from_file=''
 tmpdir=''
 prompt_file=''
 response_file=''
@@ -39,9 +42,16 @@ on_err() {
 
 usage() {
   cat <<'EOF'
-Usage: pi-pr-create [--dry-run]
+Usage:
+  pi-pr-create [--dry-run] [--context-file PATH] [--output PATH]
+  pi-pr-create [--dry-run] --from-file PATH
 
 Create a GitHub pull request from commits on the current branch ahead of the remote default branch.
+
+Options:
+  --context-file PATH  Include additional author context in the PR generation prompt.
+  --output PATH        Write the generated TITLE/BODY response to PATH.
+  --from-file PATH     Validate and create the PR from a saved TITLE/BODY response without regenerating.
 EOF
 }
 
@@ -50,6 +60,21 @@ parse_args() {
     case "$1" in
     --dry-run)
       dry_run=1
+      ;;
+    --context-file)
+      shift
+      [[ $# -gt 0 ]] || fail "--context-file requires a path"
+      context_file="$1"
+      ;;
+    --output)
+      shift
+      [[ $# -gt 0 ]] || fail "--output requires a path"
+      output_file="$1"
+      ;;
+    --from-file)
+      shift
+      [[ $# -gt 0 ]] || fail "--from-file requires a path"
+      from_file="$1"
       ;;
     -h | --help)
       usage
@@ -64,10 +89,15 @@ parse_args() {
 }
 
 check_dependencies() {
+  local -a required=(git gh sed awk)
   local -a missing=()
   local cmd=''
 
-  for cmd in git gh pi sed awk; do
+  if [[ -z "$from_file" ]]; then
+    required+=(pi)
+  fi
+
+  for cmd in "${required[@]}"; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
       missing+=("$cmd")
     fi
@@ -107,20 +137,23 @@ remote_default_branch() {
 }
 
 find_pr_template() {
+  local repo_root=''
   local template=''
 
+  repo_root="$(git rev-parse --show-toplevel)"
+
   for template in \
-    .github/pull_request_template.md \
-    .github/PULL_REQUEST_TEMPLATE.md \
-    docs/pull_request_template.md; do
+    "$repo_root/.github/pull_request_template.md" \
+    "$repo_root/.github/PULL_REQUEST_TEMPLATE.md" \
+    "$repo_root/docs/pull_request_template.md"; do
     if [[ -f "$template" ]]; then
       printf '%s\n' "$template"
       return 0
     fi
   done
 
-  if [[ -d .github/PULL_REQUEST_TEMPLATE ]]; then
-    template="$(find .github/PULL_REQUEST_TEMPLATE -maxdepth 1 -type f -name '*.md' | sort | head -n 1)"
+  if [[ -d "$repo_root/.github/PULL_REQUEST_TEMPLATE" ]]; then
+    template="$(find "$repo_root/.github/PULL_REQUEST_TEMPLATE" -maxdepth 1 -type f -name '*.md' | sort | head -n 1)"
     if [[ -n "$template" ]]; then
       printf '%s\n' "$template"
       return 0
@@ -157,6 +190,7 @@ build_prompt() {
   local diffstat_file="$8"
   local diff_file="$9"
   local template_file="${10}"
+  local extra_context_file="${11}"
 
   cat >"$prompt_file" <<EOF
 Create a GitHub pull request title and body for this branch.
@@ -185,6 +219,16 @@ Repository context:
 - Base branch: $base_branch
 - Current branch: $branch
 EOF
+
+  if [[ -n "$extra_context_file" ]]; then
+    cat >>"$prompt_file" <<EOF
+
+Additional author context:
+$(cat "$extra_context_file")
+
+Use this context to explain why the PR exists, what root cause was found, and why this fix was chosen. Treat the git diff as the source of truth for what changed.
+EOF
+  fi
 
   if [[ -n "$template_path" ]]; then
     cat >>"$prompt_file" <<EOF
@@ -244,7 +288,7 @@ generate_response() {
       --model "$model" \
       --thinking off \
       @"$prompt_file"
-  } | sed -e 's/\x1b\[[0-9;]*m//g')"; then
+  } | sed -e $'s/\x1b\\[[0-9;]*m//g')"; then
     fail "pi failed to generate PR content"
   fi
 }
@@ -308,6 +352,15 @@ trap 'cleanup' EXIT
 trap 'on_err $? $LINENO' ERR
 
 parse_args "$@"
+
+if [[ -n "$from_file" ]]; then
+  [[ -f "$from_file" ]] || fail "--from-file path does not exist: $from_file"
+  [[ -z "$context_file" ]] || fail "--context-file cannot be used with --from-file"
+  [[ -z "$output_file" ]] || fail "--output cannot be used with --from-file"
+elif [[ -n "$context_file" ]]; then
+  [[ -f "$context_file" ]] || fail "--context-file path does not exist: $context_file"
+fi
+
 check_dependencies
 
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail "not inside a git repository"
@@ -349,7 +402,7 @@ template_file="$tmpdir/template.md"
 
 git log --no-merges --reverse --format='%h %s' "$base_ref..HEAD" >"$commits_file"
 git diff --stat "$base_ref..HEAD" >"$diffstat_file"
-git diff --no-ext-diff --unified=3 "$base_ref..HEAD" -- . >"$diff_file"
+git diff --no-ext-diff --unified=3 "$base_ref..HEAD" >"$diff_file"
 
 template_path=''
 if template_path="$(find_pr_template)"; then
@@ -363,44 +416,56 @@ feedback=''
 previous_output=''
 raw_output=''
 
-while ((attempt <= max_attempts)); do
-  build_prompt "$attempt" "$feedback" "$previous_output" "$base_branch" "$branch" "$template_path" "$commits_file" "$diffstat_file" "$diff_file" "$template_file"
-  generate_response
-
-  trap - ERR
-  set +e
-  validate_response "$raw_output" >"$tmpdir/validation.txt"
-  validation_status=$?
-  set -e
-  trap 'on_err $? $LINENO' ERR
-  validation_output="$(cat "$tmpdir/validation.txt")"
-
-  if ((validation_status == 0)); then
-    break
+if [[ -n "$from_file" ]]; then
+  raw_output="$(cat "$from_file")"
+  validation_status=0
+  validate_response "$raw_output" >"$tmpdir/validation.txt" || validation_status=$?
+  if ((validation_status != 0)); then
+    fail "$(sed 's/^ERROR: //' "$tmpdir/validation.txt")"
   fi
+else
+  while ((attempt <= max_attempts)); do
+    build_prompt "$attempt" "$feedback" "$previous_output" "$base_branch" "$branch" "$template_path" "$commits_file" "$diffstat_file" "$diff_file" "$template_file" "$context_file"
+    generate_response
 
-  feedback="$(printf '%s\n' "$validation_output" | sed 's/^ERROR: //')"
-  previous_output="$raw_output"
+    validation_status=0
+    validate_response "$raw_output" >"$tmpdir/validation.txt" || validation_status=$?
+    validation_output="$(cat "$tmpdir/validation.txt")"
 
-  if ((attempt < max_attempts)); then
-    log "retrying after validation failure: $feedback"
-  fi
+    if ((validation_status == 0)); then
+      break
+    fi
 
-  if ((attempt == max_attempts)); then
-    printf 'Model: %s\n' "$model" >&2
-    printf 'Last output:\n%s\n' "$raw_output" >&2
-    fail "$feedback"
-  fi
+    feedback="$(printf '%s\n' "$validation_output" | sed 's/^ERROR: //')"
+    previous_output="$raw_output"
 
-  attempt=$((attempt + 1))
-done
+    if ((attempt < max_attempts)); then
+      log "retrying after validation failure: $feedback"
+    fi
+
+    if ((attempt == max_attempts)); then
+      printf 'Model: %s\n' "$model" >&2
+      printf 'Last output:\n%s\n' "$raw_output" >&2
+      fail "$feedback"
+    fi
+
+    attempt=$((attempt + 1))
+  done
+fi
 
 printf '%s\n' "$raw_output" >"$response_file"
+if [[ -n "$output_file" ]]; then
+  mkdir -p -- "$(dirname -- "$output_file")"
+  printf '%s\n' "$raw_output" >"$output_file"
+fi
 printf '%s\n' "$body" >"$body_file"
 
 printf 'Model: %s\n' "$model"
 printf 'Title: %s\n' "$title"
 printf 'Body file: %s\n' "$body_file"
+if [[ -n "$output_file" ]]; then
+  printf 'Output file: %s\n' "$output_file"
+fi
 printf '\n%s\n' "$body"
 
 if ((dry_run)); then
