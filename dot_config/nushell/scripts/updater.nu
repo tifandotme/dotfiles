@@ -6,8 +6,18 @@ export def start [] {
   }
 
   if (which mise | is-not-empty) {
+    let ruby_before = ((mise where ruby | complete).stdout | str trim)
+
     print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)mise(ansi reset) packages"
     mise upgrade --yes
+
+    let ruby_after = ((mise where ruby | complete).stdout | str trim)
+    let has_gem_tools = (mise list | lines | any {|line| $line | str trim | str starts-with "gem:" })
+
+    if $has_gem_tools and ($ruby_before != "") and ($ruby_after != "") and ($ruby_before != $ruby_after) {
+      print $"\n(ansi green_bold)==>(ansi reset) Reinstalling (ansi green)mise gem tools(ansi reset) after Ruby changed"
+      mise install -f "gem:*"
+    }
   }
 
   if (which gh | is-not-empty) {
