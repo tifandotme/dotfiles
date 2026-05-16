@@ -64,6 +64,26 @@ export def --wrapped brew [...args: string] {
   ^brew ...$args
 }
 
+# Make `chezmoi cd` change the current Nushell cwd instead of spawning a child shell.
+export def --env --wrapped main [...args: string] {
+  if (($args | length) > 0) and ($args.0 == "cd") {
+    let path_args = ($args | skip 1)
+    if ($path_args | is-empty) {
+      cd (^chezmoi source-path)
+    } else {
+      let target = (^chezmoi source-path ...$path_args)
+      if (($target | path type) == "file") {
+        cd ($target | path dirname)
+      } else {
+        cd $target
+      }
+    }
+    return
+  }
+
+  ^chezmoi ...$args
+}
+
 # Open lazygit in chezmoi source directory
 export def "lzg" [] {
   lazygit -p (chezmoi source-path)
