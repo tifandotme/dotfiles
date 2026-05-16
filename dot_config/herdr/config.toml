@@ -23,6 +23,11 @@ focus_pane_down = "alt+j"
 focus_pane_up = "alt+k"
 focus_pane_right = "alt+l"
 
+[[keys.command]]
+key = "c"
+type = "shell"
+command = "herdr tab create --focus"
+
 [ui]
 sidebar_width = 28
 mouse_capture = true
