@@ -7,8 +7,8 @@ import type {
 const FRAMES = ["⡿", "⣟", "⣯", "⣷", "⣾", "⣽", "⣻", "⢿"]
 const INTERVAL_MS = 70
 
-function baseTitle(pi: ExtensionAPI): string {
-  const cwd = path.basename(process.cwd())
+function baseTitle(pi: ExtensionAPI, cwdPath: string): string {
+  const cwd = path.basename(cwdPath)
   const session = pi.getSessionName()
   return session ? `π - ${session} - ${cwd}` : `π - ${cwd}`
 }
@@ -23,14 +23,14 @@ export default function (pi: ExtensionAPI): void {
       timer = undefined
     }
     frameIndex = 0
-    ctx.ui.setTitle(baseTitle(pi))
+    ctx.ui.setTitle(baseTitle(pi, ctx.cwd))
   }
 
   function start(ctx: ExtensionContext): void {
     stop(ctx)
     timer = setInterval(() => {
       const frame = FRAMES[frameIndex % FRAMES.length]
-      ctx.ui.setTitle(`${frame} ${baseTitle(pi)}`)
+      ctx.ui.setTitle(`${frame} ${baseTitle(pi, ctx.cwd)}`)
       frameIndex++
     }, INTERVAL_MS)
   }
