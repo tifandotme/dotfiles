@@ -5,7 +5,7 @@ macOS-first dotfiles, chezmoi + age encryption. Shell: Nushell. Two machines:
 - main macOS: primary, full desktop/dev env.
 - Ubuntu VPS `box`: secondary, headless/server.
 
-30+ tools: terminal emulators, editors, window mgmt, status bars, dev tooling. Sub-AGENTS.md for high-complexity areas.
+30+ tools: terminal emulators, editors, window mgmt, status bars, dev tooling. Scoped `AGENTS.md` files provide nearest-area instructions.
 
 ### Machine Targeting
 
@@ -67,10 +67,13 @@ macos-only-value
 
 - Edit managed configuration through chezmoi source files under this repo, then run `chezmoi apply` or `chezmoi apply --dry-run` as appropriate.
 - Do not create runtime symlinks to source files. Let chezmoi manage target files.
-- Check for scoped `AGENTS.md` files before editing nested areas:
-  - `dot_config/nushell/AGENTS.md`
-  - `dot_config/pi/extensions/AGENTS.md`
-  - `dot_config/sketchybar/AGENTS.md`
+- Before editing a nested area, read the nearest scoped `AGENTS.md`; it overrides or extends this root guidance.
+
+### Scoped AGENTS.md Index
+
+- Nushell config: `dot_config/nushell/AGENTS.md`
+- Pi extensions: `dot_config/pi/extensions/AGENTS.md`
+- SketchyBar config: `dot_config/sketchybar/AGENTS.md`
 
 ### Pi Configuration
 
