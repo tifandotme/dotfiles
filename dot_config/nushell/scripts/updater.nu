@@ -74,6 +74,16 @@ export def start [] {
     print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)Claude Code(ansi reset)"
     claude update
   }
+
+  if (which herdr | is-not-empty) {
+    print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)herdr(ansi reset)"
+
+    if (($env | get -o HERDR_ENV | default "") == "1") {
+      print $"(ansi yellow)↷(ansi reset) Skipping herdr update inside herdr; run it after detaching from the session"
+    } else {
+      herdr update
+    }
+  }
 }
 
 # Clean caches and uninstall unused packages (do this rarely)
