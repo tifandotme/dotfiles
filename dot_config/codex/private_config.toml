@@ -7,14 +7,10 @@ approval_policy = "never"
 sandbox_mode = "danger-full-access"
 web_search = "disabled"
 approvals_reviewer = "guardian_subagent"
-notify = [
-  "bash",
-  "-lc",
-  'exec "${CODEX_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/codex}/cmux-notify.sh"',
-]
 
-# [features]
-# codex_hooks = true
+[features]
+hooks = true
+
 
 [projects."/Users/tifan/.local/share/chezmoi"]
 trust_level = "trusted"

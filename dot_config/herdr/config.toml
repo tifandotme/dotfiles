@@ -1,0 +1,50 @@
+onboarding = false
+
+[keys]
+prefix = "ctrl+e"
+new_workspace = "n"
+rename_workspace = "N"
+close_workspace = "X"
+new_tab = "c"
+rename_tab = "C"
+split_vertical = "|"
+split_horizontal = "-"
+close_pane = "x"
+fullscreen = "f"
+resize_mode = "r"
+toggle_sidebar = "b"
+reload_config = "R"
+previous_workspace = "alt+shift+["
+next_workspace = "alt+shift+]"
+previous_tab = "alt+["
+next_tab = "alt+]"
+focus_pane_left = "alt+h"
+focus_pane_down = "alt+j"
+focus_pane_up = "alt+k"
+focus_pane_right = "alt+l"
+
+[ui]
+sidebar_width = 28
+mouse_capture = true
+confirm_close = true
+show_agent_labels_on_pane_borders = true
+agent_panel_scope = "all"
+
+[ui.toast]
+delivery = "system"
+
+[ui.sound]
+enabled = true
+
+[ui.sound.agents]
+claude = "default"
+pi = "default"
+
+[theme]
+name = "gruvbox"
+
+[experimental]
+kitty_graphics = true
+
+[advanced]
+scrollback_limit_bytes = 10000000
