@@ -30,11 +30,12 @@
     "npm:pi-add-dir",
     "npm:@juicesharp/rpiv-btw",
     "npm:@fitchmultz/pi-stash",
-    "npm:pi-mermaid",
     "npm:@tintinweb/pi-subagents",
     "npm:pi-codex-goal",
     "npm:pi-rtk-optimizer",
-    "npm:pi-tldr"
+    "npm:pi-tldr",
+    "npm:pi-mcp-adapter",
+    "npm:pi-context"
   ],
   "enableSkillCommands": false,
   "terminal": {
