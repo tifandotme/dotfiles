@@ -29,5 +29,6 @@
   "amp.skills.disableClaudeCodeSkills": true,
   "amp.mcpServers": {},
   "amp.dangerouslyAllowAll": true,
-  "amp.openai.speed": "standard"
+  "amp.openai.speed": "standard",
+  "amp.gauge": "cost"
 }
