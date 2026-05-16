@@ -63,6 +63,15 @@ macos-only-value
 - `run_onchange_03_install-uv-tools.sh.tmpl` — uv-managed Python tools
 - `dot_config/mise/config.toml` — runtime versions
 
+### Chezmoi Workflow
+
+- Edit managed configuration through chezmoi source files under this repo, then run `chezmoi apply` or `chezmoi apply --dry-run` as appropriate.
+- Do not create runtime symlinks to source files. Let chezmoi manage target files.
+- Check for scoped `AGENTS.md` files before editing nested areas:
+  - `dot_config/nushell/AGENTS.md`
+  - `dot_config/pi/extensions/AGENTS.md`
+  - `dot_config/sketchybar/AGENTS.md`
+
 ### Pi Configuration
 
 - Nushell sets `PI_CODING_AGENT_DIR` in `dot_config/nushell/env.nu` to `$XDG_CONFIG_HOME/pi`.
