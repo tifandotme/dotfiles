@@ -103,7 +103,7 @@ function buildSkillLoadInstruction(skills: SkillInfo[]): string {
 function expandInlineSkills(
   text: string,
   skills: SkillInfo[],
-): string | undefined {
+): { text: string; instruction: string } | undefined {
   const byName = new Map(
     skills.map((skill) => [skill.name.toLowerCase(), skill]),
   )
@@ -127,7 +127,7 @@ function expandInlineSkills(
 
   rewritten = rewritten.replace(/[ \t]{2,}/g, " ").trim()
   const instruction = buildSkillLoadInstruction(selected)
-  return rewritten ? `${rewritten}\n\n${instruction}` : instruction
+  return { text: rewritten || text, instruction }
 }
 
 function extractDollarSkillPrefix(
@@ -252,6 +252,8 @@ function createDollarSkillAutocompleteProvider(
 }
 
 export default function (pi: ExtensionAPI): void {
+  let pendingSkillLoadInstruction: string | undefined
+
   installDollarAutocompleteTrigger()
 
   pi.on("session_start", async (_event, ctx) => {
@@ -261,6 +263,7 @@ export default function (pi: ExtensionAPI): void {
   })
 
   pi.on("input", async (event, ctx) => {
+    pendingSkillLoadInstruction = undefined
     if (event.source === "extension" || !event.text.includes("$")) {
       return { action: "continue" }
     }
@@ -268,9 +271,10 @@ export default function (pi: ExtensionAPI): void {
     try {
       const expanded = expandInlineSkills(event.text, getSkills(pi))
       if (!expanded) return { action: "continue" }
+      pendingSkillLoadInstruction = expanded.instruction
       return {
         action: "transform",
-        text: expanded,
+        text: expanded.text,
         ...(event.images ? { images: event.images } : {}),
       }
     } catch (error) {
@@ -279,6 +283,15 @@ export default function (pi: ExtensionAPI): void {
         "error",
       )
       return { action: "continue" }
+    }
+  })
+
+  pi.on("before_agent_start", async (event) => {
+    if (!pendingSkillLoadInstruction) return
+    const instruction = pendingSkillLoadInstruction
+    pendingSkillLoadInstruction = undefined
+    return {
+      systemPrompt: `${event.systemPrompt}\n\n${instruction}`,
     }
   })
 }
