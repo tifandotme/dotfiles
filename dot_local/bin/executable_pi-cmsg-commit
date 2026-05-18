@@ -94,8 +94,9 @@ Requirements:
 - Avoid vague or generic subjects like: update, improve, enhance, optimize, streamline, clean up, misc fixes, refactor code
 - Avoid weak nouns like: functionality, capabilities, improvements, enhancements, optimization
 - Prefer a header-only commit message unless the diff needs non-obvious rationale
+- Avoid adding a body for simple or self-explanatory diffs
 - Add a body only when it explains why, impact, or a constraint that is not obvious from the diff
-- If you add a body, keep it to one short paragraph, max 4 wrapped lines
+- If you add a body, keep it concise and focused on why/impact, not a full diff summary
 - Do not narrate the diff, list files, list dependencies, or summarize changes file-by-file
 - Do not start the body with "This commit"
 - Base the message only on this staged diff
@@ -142,7 +143,6 @@ normalize_and_validate() {
   local -a lines=()
   local line=''
   local header=''
-  local body_line_count=0
   local idx=0
 
   input="${input//$'\r'/}"
@@ -182,15 +182,11 @@ normalize_and_validate() {
   fi
 
   for ((idx = 1; idx < ${#lines[@]}; idx++)); do
-    if [[ -n "${lines[idx]//[[:space:]]/}" ]]; then
-      body_line_count=$((body_line_count + 1))
+    if [[ "${lines[idx]}" == *'```'* ]]; then
+      printf 'ERROR: body must not use markdown fences\n'
+      return 1
     fi
   done
-
-  if ((body_line_count > 4)); then
-    printf 'ERROR: body must be 4 lines or fewer\n'
-    return 1
-  fi
 
   printf '%s\n' "$input"
 }
