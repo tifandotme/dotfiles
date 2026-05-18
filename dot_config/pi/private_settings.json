@@ -2,7 +2,7 @@
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "low",
-  "tldr": {
+  "recap": {
     "model": "openai-codex/gpt-5.4-mini"
   },
   "preferredThinking": {
@@ -11,7 +11,7 @@
     "openai-codex/gpt-5.4-mini": "high"
   },
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.74.0",
+  "lastChangelogVersion": "0.75.3",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
@@ -24,6 +24,14 @@
   "theme": "dark",
   "treeFilterMode": "user-only",
   "packages": [
+    "../../personal/pi-extensions/packages/pi-copy-all",
+    "../../personal/pi-extensions/packages/pi-friction",
+    "../../personal/pi-extensions/packages/pi-handoff",
+    "../../personal/pi-extensions/packages/pi-inline-skills",
+    "../../personal/pi-extensions/packages/pi-mermaid-open",
+    "../../personal/pi-extensions/packages/pi-preferred-thinking",
+    "../../personal/pi-extensions/packages/pi-recap",
+    "../../personal/pi-extensions/packages/pi-titlebar-spinner",
     "npm:pi-fff",
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
@@ -33,9 +41,10 @@
     "npm:@tintinweb/pi-subagents",
     "npm:pi-codex-goal",
     "npm:pi-rtk-optimizer",
-    "npm:pi-tldr",
     "npm:pi-mcp-adapter",
-    "npm:pi-context"
+    "npm:pi-context",
+    "npm:pi-subdir-context",
+    "npm:@ogulcancelik/pi-herdr"
   ],
   "enableSkillCommands": false,
   "terminal": {

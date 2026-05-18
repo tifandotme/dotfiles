@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "format": "bunx oxfmt --config .oxfmtrc.json *.ts",
-    "format:check": "bunx oxfmt --config .oxfmtrc.json --check *.ts",
+    "format": "bunx oxfmt --config .oxfmtrc.json '**/*.ts'",
+    "format:check": "bunx oxfmt --config .oxfmtrc.json --check '**/*.ts'",
     "typecheck": "bunx tsc --noEmit -p tsconfig.json"
   },
   "devDependencies": {
