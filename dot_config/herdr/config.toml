@@ -22,14 +22,11 @@ focus_pane_left = "alt+h"
 focus_pane_down = "alt+j"
 focus_pane_up = "alt+k"
 focus_pane_right = "alt+l"
-
-[[keys.command]]
-key = "c"
-type = "shell"
-command = "herdr tab create --focus"
+edit_scrollback = "e"
 
 [ui]
-sidebar_width = 28
+prompt_new_tab_name = false
+sidebar_width = 20
 mouse_capture = true
 confirm_close = true
 show_agent_labels_on_pane_borders = true
