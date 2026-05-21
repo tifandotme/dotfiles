@@ -1,23 +1,12 @@
 {
   "hooks": {
-    "SessionStart": [
+    "PermissionRequest": [
       {
         "hooks": [
           {
-            "type": "command",
-            "command": "bash -lc 'exec \"$HOME/.config/codex/herdr-agent-state.sh\" idle'",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -lc 'exec \"$HOME/.config/codex/herdr-agent-state.sh\" working'",
-            "timeout": 10
+            "command": "bash '/Users/tifan/.config/codex/herdr-agent-state.sh' blocked",
+            "timeout": 10,
+            "type": "command"
           }
         ]
       }
@@ -26,9 +15,38 @@
       {
         "hooks": [
           {
-            "type": "command",
             "command": "bash -lc 'exec \"$HOME/.config/codex/herdr-agent-state.sh\" working'",
-            "timeout": 10
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/tifan/.config/codex/herdr-agent-state.sh' working",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "bash -lc 'exec \"$HOME/.config/codex/herdr-agent-state.sh\" idle'",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/tifan/.config/codex/herdr-agent-state.sh' idle",
+            "timeout": 10,
+            "type": "command"
           }
         ]
       }
@@ -37,9 +55,38 @@
       {
         "hooks": [
           {
-            "type": "command",
             "command": "bash -lc 'exec \"$HOME/.config/codex/herdr-agent-state.sh\" idle'",
-            "timeout": 10
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/tifan/.config/codex/herdr-agent-state.sh' idle",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "bash -lc 'exec \"$HOME/.config/codex/herdr-agent-state.sh\" working'",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/tifan/.config/codex/herdr-agent-state.sh' working",
+            "timeout": 10,
+            "type": "command"
           }
         ]
       }

@@ -17,6 +17,13 @@
     {
       "tool": "Bash",
       "matches": {
+        "cmd": "*git reset*"
+      },
+      "action": "ask"
+    },
+    {
+      "tool": "Bash",
+      "matches": {
         "cmd": "*rm -rf*"
       },
       "action": "ask"

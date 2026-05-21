@@ -1,156 +1,210 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "env": {
-    "IS_DEMO": "1",
-    "CLAUDE_CODE_ATTRIBUTION_HEADER": "0",
-    "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
-    "CLAUDE_CODE_NO_FLICKER": "1",
-    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
-    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
-    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
-    "DISABLE_FEEDBACK_COMMAND": "1"
-  },
   "attribution": {
     "commit": "",
     "pr": ""
   },
+  "autoCompactEnabled": false,
+  "awaySummaryEnabled": true,
+  "editorMode": "vim",
+  "effortLevel": "high",
+  "enabledPlugins": {},
+  "env": {
+    "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
+    "CLAUDE_CODE_ATTRIBUTION_HEADER": "0",
+    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_CODE_NO_FLICKER": "1",
+    "DISABLE_FEEDBACK_COMMAND": "1",
+    "IS_DEMO": "1"
+  },
+  "feedbackSurveyRate": 0,
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh blocked",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' blocked",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh working",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh working",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "rtk hook claude",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh working",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' working",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh release",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' release",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh idle",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' idle",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh idle",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh working",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh working",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' working",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ]
+  },
+  "model": "opus[1m]",
   "permissions": {
-    "deny": [],
     "ask": [
       "Bash(git push *)",
       "Bash(git commit *)",
       "Bash(git reset *)",
       "Bash(rm -rf *)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "deny": []
   },
-  "model": "opus[1m]",
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rtk hook claude"
-          }
-        ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh working",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh working",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh blocked",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh working",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PostToolUseFailure": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh working",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh working",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh idle",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "StopFailure": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh idle",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.config/claude/hooks/herdr-agent-state.sh release",
-            "timeout": 10
-          }
-        ]
-      }
-    ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "bunx -y ccstatusline@latest --config \"${XDG_CONFIG_HOME:-$HOME/.config}/ccstatusline/settings.json\"",
-    "padding": 0
-  },
-  "enabledPlugins": {},
-  "feedbackSurveyRate": 0,
+  "preferredNotifChannel": "ghostty",
+  "remoteControlAtStartup": false,
+  "showClearContextOnPlanAccept": true,
+  "skipAutoPermissionPrompt": true,
+  "skipDangerousModePermissionPrompt": true,
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
@@ -158,17 +212,13 @@
       "Working"
     ]
   },
-  "effortLevel": "high",
-  "awaySummaryEnabled": true,
-  "showClearContextOnPlanAccept": true,
-  "skipDangerousModePermissionPrompt": true,
+  "statusLine": {
+    "command": "bunx -y ccstatusline@latest --config \"${XDG_CONFIG_HOME:-$HOME/.config}/ccstatusline/settings.json\"",
+    "padding": 0,
+    "type": "command"
+  },
   "theme": "auto",
-  "editorMode": "vim",
+  "ui.showBanner": false,
   "verbose": true,
-  "preferredNotifChannel": "ghostty",
-  "autoCompactEnabled": false,
-  "remoteControlAtStartup": false,
-  "skipAutoPermissionPrompt": true,
-  "voiceEnabled": false,
-  "ui.showBanner": false
+  "voiceEnabled": false
 }
