@@ -6,20 +6,16 @@
     "model": "openai-codex/gpt-5.4-mini"
   },
   "preferredThinking": {
-    "openai-codex/gpt-5.5": "low",
+    "openai-codex/gpt-5.5": "medium",
     "openai-codex/gpt-5.4": "high",
     "openai-codex/gpt-5.4-mini": "high"
   },
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.75.3",
+  "lastChangelogVersion": "0.75.5",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
-    "mise",
-    "exec",
-    "node@lts",
-    "--",
-    "npm"
+    "bun"
   ],
   "theme": "dark",
   "treeFilterMode": "user-only",
@@ -36,7 +32,6 @@
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
     "npm:pi-add-dir",
-    "npm:@juicesharp/rpiv-btw",
     "npm:@fitchmultz/pi-stash",
     "npm:@tintinweb/pi-subagents",
     "npm:pi-codex-goal",
@@ -44,7 +39,8 @@
     "npm:pi-mcp-adapter",
     "npm:pi-context",
     "npm:pi-subdir-context",
-    "npm:@ogulcancelik/pi-herdr"
+    "npm:@ogulcancelik/pi-herdr",
+    "npm:@howaboua/pi-smart-btw"
   ],
   "enableSkillCommands": false,
   "terminal": {
@@ -55,10 +51,13 @@
     "openai-codex/gpt-5.5",
     "openai-codex/gpt-5.4-mini"
   ],
-  "transport": "sse",
+  "transport": "auto",
   "compaction": {
-    "enabled": false
+    "enabled": true
   },
   "collapseChangelog": true,
-  "showHardwareCursor": false
+  "showHardwareCursor": false,
+  "retry": {
+    "enabled": true
+  }
 }

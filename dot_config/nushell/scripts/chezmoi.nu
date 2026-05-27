@@ -69,9 +69,9 @@ export def --env --wrapped main [...args: string] {
   if (($args | length) > 0) and ($args.0 == "cd") {
     let path_args = ($args | skip 1)
     if ($path_args | is-empty) {
-      cd (^chezmoi source-path)
+      cd (with-env {TERM: "dumb"} { ^chezmoi source-path })
     } else {
-      let target = (^chezmoi source-path ...$path_args)
+      let target = (with-env {TERM: "dumb"} { ^chezmoi source-path ...$path_args })
       if (($target | path type) == "file") {
         cd ($target | path dirname)
       } else {
@@ -81,7 +81,7 @@ export def --env --wrapped main [...args: string] {
     return
   }
 
-  ^chezmoi ...$args
+  with-env {TERM: "dumb"} { ^chezmoi ...$args }
 }
 
 # Open lazygit in chezmoi source directory
