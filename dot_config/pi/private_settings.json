@@ -35,10 +35,8 @@
     "npm:pi-codex-goal",
     "npm:pi-rtk-optimizer",
     "npm:pi-mcp-adapter",
-    "npm:pi-context",
     "npm:pi-subdir-context",
-    "npm:@ogulcancelik/pi-herdr",
-    "npm:@howaboua/pi-smart-btw"
+    "npm:@ogulcancelik/pi-herdr"
   ],
   "enableSkillCommands": false,
   "terminal": {
@@ -49,7 +47,7 @@
     "openai-codex/gpt-5.5",
     "openai-codex/gpt-5.4-mini"
   ],
-  "transport": "auto",
+  "transport": "websocket-cached",
   "compaction": {
     "enabled": true
   },
