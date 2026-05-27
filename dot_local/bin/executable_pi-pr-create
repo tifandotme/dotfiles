@@ -348,6 +348,20 @@ validate_response() {
   body="$parsed_body"
 }
 
+push_branch() {
+  local remote_branch="$branch"
+  local upstream=''
+
+  upstream="$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null || true)"
+  if [[ "$upstream" == origin/* ]]; then
+    remote_branch="${upstream#origin/}"
+  fi
+
+  log "pushing branch to origin/$remote_branch"
+  git push --set-upstream origin "HEAD:$remote_branch" >&2
+  printf '%s\n' "$remote_branch"
+}
+
 trap 'cleanup' EXIT
 trap 'on_err $? $LINENO' ERR
 
@@ -473,4 +487,5 @@ if ((dry_run)); then
   exit 0
 fi
 
-gh pr create --title "$title" --body-file "$body_file" --base "$base_branch"
+head_branch="$(push_branch)"
+gh pr create --title "$title" --body-file "$body_file" --base "$base_branch" --head "$head_branch"
