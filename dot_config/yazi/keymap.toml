@@ -3,7 +3,6 @@
 [mgr]
 prepend_keymap = [
   # https://yazi-rs.github.io/docs/tips/#dropping-to-shell
-  # Opens a new cmux workspace if available, otherwise shell in place
   { on = "!", run = "shell --interactive", desc = "Open shell here" },
   # https://yazi-rs.github.io/docs/tips/#cd-to-git-root
   { on = ["g", "r"], run = 'shell -- ya emit cd "$(git rev-parse --show-toplevel)"', desc = "Change directory to git root" },
