@@ -47,4 +47,34 @@ keybind = super+alt+shift+w=unbind
 keybind = super+d=unbind
 keybind = super+shift+d=unbind
 
+# Herdr owns tabs.
+keybind = super+t=unbind
+keybind = super+shift+[=unbind
+keybind = super+shift+]=unbind
+keybind = ctrl+tab=unbind
+keybind = ctrl+shift+tab=unbind
+keybind = super+1=unbind
+keybind = super+2=unbind
+keybind = super+3=unbind
+keybind = super+4=unbind
+keybind = super+5=unbind
+keybind = super+6=unbind
+keybind = super+7=unbind
+keybind = super+8=unbind
+keybind = super+9=unbind
+
+# Herdr owns panes/splits.
+keybind = super+[=unbind
+keybind = super+]=unbind
+keybind = super+alt+arrow_up=unbind
+keybind = super+alt+arrow_down=unbind
+keybind = super+alt+arrow_left=unbind
+keybind = super+alt+arrow_right=unbind
+keybind = super+ctrl+arrow_up=unbind
+keybind = super+ctrl+arrow_down=unbind
+keybind = super+ctrl+arrow_left=unbind
+keybind = super+ctrl+arrow_right=unbind
+keybind = super+ctrl+==unbind
+keybind = super+shift+enter=unbind
+
 keybind = super+s=write_scrollback_file:open
