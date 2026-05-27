@@ -38,12 +38,12 @@ personal/
 .config/nushell
 .config/fish
 .config/gws-hadl
+.config/herdr
 
 # {{- end -}}
 
 # {{ if ne .chezmoi.hostname "box" -}}
 
-.config/zellij
 .bashrc
 .bash_profile
 .inputrc
