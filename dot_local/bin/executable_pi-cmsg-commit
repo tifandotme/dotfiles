@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test|revert'
-model='google/gemini-2.5-flash-lite'
+model='openai-codex/gpt-5.4-mini'
 max_attempts=3
 script_name='pi-cmsg-commit'
 tmpdir=''
@@ -134,7 +134,7 @@ generate_message() {
       --thinking off \
       @"$prompt_file"
   } | sed -e 's/\x1b\[[0-9;]*m//g')"; then
-    fail "pi failed to generate a commit message"
+    return 1
   fi
 }
 
@@ -199,7 +199,7 @@ validation_output=''
 
 while ((attempt <= max_attempts)); do
   build_prompt "$attempt" "$feedback" "$previous_output"
-  generate_message
+  generate_message || fail "pi failed to generate a commit message with $model"
 
   trap - ERR
   set +e

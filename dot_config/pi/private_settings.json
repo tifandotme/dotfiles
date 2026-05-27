@@ -1,7 +1,7 @@
 {
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
-  "defaultThinkingLevel": "low",
+  "defaultThinkingLevel": "medium",
   "recap": {
     "model": "openai-codex/gpt-5.4-mini"
   },
@@ -21,13 +21,11 @@
   "treeFilterMode": "user-only",
   "packages": [
     "../../personal/pi-extensions/packages/pi-copy-all",
-    "../../personal/pi-extensions/packages/pi-friction",
     "../../personal/pi-extensions/packages/pi-handoff",
     "../../personal/pi-extensions/packages/pi-inline-skills",
     "../../personal/pi-extensions/packages/pi-mermaid-open",
     "../../personal/pi-extensions/packages/pi-preferred-thinking",
     "../../personal/pi-extensions/packages/pi-recap",
-    "../../personal/pi-extensions/packages/pi-titlebar-spinner",
     "npm:pi-fff",
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
