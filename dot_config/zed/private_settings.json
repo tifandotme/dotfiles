@@ -104,6 +104,24 @@
         "classAttributes": ["class", "className", "ngClass", "styles"],
       },
     },
+    "oxlint": {
+      "initialization_options": {
+        "settings": {
+          "disableNestedConfig": false,
+          "fixKind": "safe_fix",
+          "run": "onType",
+          "unusedDisableDirectives": "deny",
+        },
+      },
+    },
+    "oxfmt": {
+      "initialization_options": {
+        "settings": {
+          "fmt.configPath": null,
+          "run": "onSave",
+        },
+      },
+    },
   },
   "languages": {
     "Python": {
@@ -167,6 +185,61 @@
         },
       },
       "format_on_save": "on",
+    },
+    "JavaScript": {
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt",
+          },
+        },
+        {
+          "code_action": "source.fixAll.oxc",
+        },
+      ],
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false,
+      },
+    },
+    "TypeScript": {
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt",
+          },
+        },
+      ],
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false,
+      },
+    },
+    "TSX": {
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt",
+          },
+        },
+      ],
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false,
+      },
+    },
+    "JSX": {
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt",
+          },
+        },
+      ],
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false,
+      },
     },
     "CSS": {
       "tab_size": 2,

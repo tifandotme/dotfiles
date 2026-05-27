@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
-# Bun packages hash: # {{ list "@commitlint/cli" "@dotenvx/dotenvx" "@sourcegraph/amp" "actions-up" "fast-cli" "npm-check-updates" "opencode-ai" "opencommit" "oxfmt" "pkg" "skills" "vercel" | join "\n" | sha256sum }}
+# Bun packages hash: # {{ list "@commitlint/cli" "@dotenvx/dotenvx" "@sourcegraph/amp" "actions-up" "fast-cli" "npm-check-updates" "opencode-ai" "opencommit" "oxfmt" "oxlint" "pkg" "skills" "vercel" | join "\n" | sha256sum }}
 
 if command -v bun &>/dev/null; then
   normalize_bun_pkg() {
@@ -26,6 +26,7 @@ if command -v bun &>/dev/null; then
     "vercel"
     "port-whisperer"
     "oxfmt"
+    "oxlint"
     "typescript"
     "skills"
     "ctx7"
