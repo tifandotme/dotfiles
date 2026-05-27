@@ -47,6 +47,7 @@ keybind = super+alt+shift+w=unbind
 keybind = super+d=unbind
 keybind = super+shift+d=unbind
 keybind = super+n=unbind
+keybind = super+x=unbind
 
 # Herdr owns tabs.
 keybind = super+t=unbind
