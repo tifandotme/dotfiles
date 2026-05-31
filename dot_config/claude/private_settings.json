@@ -14,7 +14,7 @@
     "commit": "",
     "pr": ""
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "hooks": {
     "PermissionRequest": [
       {
