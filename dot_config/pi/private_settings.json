@@ -2,16 +2,8 @@
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "medium",
-  "recap": {
-    "model": "openai-codex/gpt-5.4-mini"
-  },
-  "preferredThinking": {
-    "openai-codex/gpt-5.5": "medium",
-    "openai-codex/gpt-5.4": "high",
-    "openai-codex/gpt-5.4-mini": "high"
-  },
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.75.5",
+  "lastChangelogVersion": "0.78.0",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
@@ -20,36 +12,34 @@
   "theme": "dark",
   "treeFilterMode": "user-only",
   "packages": [
-    "../../personal/pi-extensions/packages/pi-copy-all",
+    "../../personal/pi-extensions/packages/pi-copy-response",
     "../../personal/pi-extensions/packages/pi-handoff",
     "../../personal/pi-extensions/packages/pi-inline-skills",
     "../../personal/pi-extensions/packages/pi-mermaid-open",
     "../../personal/pi-extensions/packages/pi-preferred-thinking",
     "../../personal/pi-extensions/packages/pi-recap",
     "npm:pi-fff",
-    "npm:@tmustier/pi-usage-extension",
     "npm:pi-code-previews",
     "npm:pi-add-dir",
     "npm:@fitchmultz/pi-stash",
-    "npm:@tintinweb/pi-subagents",
     "npm:pi-codex-goal",
     "npm:pi-rtk-optimizer",
     "npm:pi-mcp-adapter",
     "npm:pi-subdir-context",
-    "npm:@ogulcancelik/pi-herdr"
+    "npm:@ogulcancelik/pi-herdr",
+    "npm:pi-dynamic-workflows"
   ],
   "enableSkillCommands": false,
   "terminal": {
     "showTerminalProgress": false
   },
   "enabledModels": [
-    "openai-codex/gpt-5.4",
     "openai-codex/gpt-5.5",
     "openai-codex/gpt-5.4-mini"
   ],
   "transport": "websocket-cached",
   "compaction": {
-    "enabled": true
+    "enabled": false
   },
   "collapseChangelog": true,
   "showHardwareCursor": false,

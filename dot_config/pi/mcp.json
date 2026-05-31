@@ -1,8 +1,0 @@
-{
-   "mcpServers": {
-     "whimsical-desktop": {
-       "url": "http://localhost:21190/mcp",
-       "auth": false
-     }
-   }
- }
