@@ -55,3 +55,32 @@ show_tooltips = false
 
 [notice]
 hide_rate_limit_model_nudge = true
+
+[hooks.state]
+
+[hooks.state."/Users/tifan/.config/codex/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:dbebbffd37a62e0e54cc2f788bd02ee40dfc02a6a6bc13d24514472f4940e985"
+
+[hooks.state."/Users/tifan/.config/codex/hooks.json:pre_tool_use:1:0"]
+trusted_hash = "sha256:dde3026265ede0147633194d5aaffe5598867a794abc07d5650292aec70fb7d2"
+
+[hooks.state."/Users/tifan/.config/codex/hooks.json:permission_request:0:0"]
+trusted_hash = "sha256:46e26997bf824839d906bd34a67e097821bfc3b89e853b0bd0576a01f18e7517"
+
+[hooks.state."/Users/tifan/.config/codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:1b6314b231c4707e21ed66c58764b82dc6cdec4a6a946c4b38ebb62d5408ce3d"
+
+[hooks.state."/Users/tifan/.config/codex/hooks.json:session_start:1:0"]
+trusted_hash = "sha256:869356ac9626d421180374a2447eab02fc8036ac8e974719375397c56f3d99a7"
+
+[hooks.state."/Users/tifan/.config/codex/hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:8a0387db42e8d560ed703de4276a0e9ac4e850e26f5a22de8ef0ae62a2ca2ad5"
+
+[hooks.state."/Users/tifan/.config/codex/hooks.json:user_prompt_submit:1:0"]
+trusted_hash = "sha256:898980c800a7b47bd3c26bc05a658308c760e5e4cf60f0e3d5c4c4b1e9bed634"
+
+[hooks.state."/Users/tifan/.config/codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:ed191bf0351dc5cdeef2e3a7f568314f2730ed01e0b0cbbd990973229aeb79c3"
+
+[hooks.state."/Users/tifan/.config/codex/hooks.json:stop:1:0"]
+trusted_hash = "sha256:f001451ba9dfdc1880da5a120a4c780e948c4b4ded9a633c9228d09f0125961c"
