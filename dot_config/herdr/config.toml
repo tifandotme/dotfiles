@@ -19,6 +19,8 @@ previous_workspace = "super+shift+["
 next_workspace = "super+shift+]"
 previous_tab = "super+["
 next_tab = "super+]"
+previous_agent = "alt+["
+next_agent = "alt+]"
 switch_workspace = "alt+shift+1..9"
 switch_tab = "alt+1..9"
 focus_pane_left = "alt+h"
@@ -48,8 +50,12 @@ pi = "default"
 [theme]
 name = "gruvbox"
 
+[session]
+resume_agents_on_restore = true
+
 [experimental]
 kitty_graphics = true
+pane_history = true
 
 [advanced]
 scrollback_limit_bytes = 10000000
