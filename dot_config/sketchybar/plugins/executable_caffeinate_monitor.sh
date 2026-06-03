@@ -4,11 +4,13 @@
 # This prevents caffeinate from keeping the system awake when screen is locked/off due to inactivity
 
 CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
-source "$CONFIG_DIR/colors.sh"
+# shellcheck disable=SC1091
+source "$HOME/.config/theme/palette.sh"
 
 _caffeinate_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/caffeinate_lib.sh"
 [ -f "$_caffeinate_lib" ] || _caffeinate_lib="$CONFIG_DIR/../raycast/scripts/caffeinate_lib.sh"
 # shellcheck source=../../raycast/scripts/caffeinate_lib.sh
+# shellcheck disable=SC1091
 . "$_caffeinate_lib"
 
 # Function to check if display is on (1) or off (0)

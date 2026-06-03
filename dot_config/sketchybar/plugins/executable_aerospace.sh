@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source "$CONFIG_DIR/colors.sh"
+# shellcheck disable=SC1091
+source "$HOME/.config/theme/palette.sh"
 
 # Get apps for this workspace and create icon strip
 apps=$(aerospace list-windows --workspace "$1" | awk -F '|' '{gsub(/^ *| *$/, "", $2); if (!seen[$2]++) print $2}' | sort)

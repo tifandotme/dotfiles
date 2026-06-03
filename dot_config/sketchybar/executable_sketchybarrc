@@ -2,9 +2,9 @@
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
+# shellcheck source=/Users/tifan/.local/share/chezmoi/dot_config/theme/palette.sh
 # shellcheck disable=SC1091
-# shellcheck source=/Users/tifan/.local/share/chezmoi/dot_config/sketchybar/colors.sh
-source "$CONFIG_DIR/colors.sh"
+source "$HOME/.config/theme/palette.sh"
 
 bar=(
   height=22

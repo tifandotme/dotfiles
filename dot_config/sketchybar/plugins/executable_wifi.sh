@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source "$CONFIG_DIR/colors.sh"
+# shellcheck disable=SC1091
+source "$HOME/.config/theme/palette.sh"
 
 SSID=$(system_profiler SPAirPortDataType | awk '/Current Network Information:/ { getline; print substr($0, 13, (length($0) - 13)); exit }')
 

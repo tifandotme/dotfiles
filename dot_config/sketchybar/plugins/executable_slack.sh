@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source "$CONFIG_DIR/colors.sh"
+# shellcheck disable=SC1091
+source "$HOME/.config/theme/palette.sh"
 
 # Check if Slack is running
 if ! pgrep -f "Slack" >/dev/null; then
@@ -14,12 +15,6 @@ BADGE_LABEL=$(lsappinfo info -only StatusLabel Slack | sed -n 's/.*"label"="\(.*
 # Extract just the number
 BADGE_NUMBER=${BADGE_LABEL//[^0-9]/}
 [ -z "$BADGE_NUMBER" ] && BADGE_NUMBER=0
-
-# Check if badge contains "Later" (case insensitive)
-HAS_LATER=0
-if echo "$BADGE_LABEL" | grep -qi "later"; then
-  HAS_LATER=1
-fi
 
 # Slack includes "Later" items in the badge count - there's no clean API to separate them
 # Options:

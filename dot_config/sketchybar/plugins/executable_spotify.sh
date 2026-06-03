@@ -6,8 +6,9 @@
 set -euo pipefail
 
 # shellcheck disable=SC1091
-# shellcheck source=/Users/tifan/.local/share/chezmoi/dot_config/sketchybar/colors.sh
-source "$CONFIG_DIR/colors.sh"
+# shellcheck source=/Users/tifan/.local/share/chezmoi/dot_config/theme/palette.sh
+# shellcheck disable=SC1091
+source "$HOME/.config/theme/palette.sh"
 
 PATH="$HOME/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 TOKEN_FILE="$HOME/.cache/sketchybar/spotify_token.json"

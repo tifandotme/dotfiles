@@ -5,13 +5,7 @@ NAME="${NAME:-network_speed}"
 STATE_FILE="${TMPDIR:-/tmp}/sketchybar_network_speed_${NAME}"
 
 # shellcheck disable=SC1091
-if [[ -n "${CONFIG_DIR:-}" && -r "$CONFIG_DIR/colors.sh" ]]; then
-  source "$CONFIG_DIR/colors.sh"
-else
-  ACCENT="${ACCENT:-0xffa6da95}"
-  FOREGROUND="${FOREGROUND:-0xffcad3f5}"
-  WARNING="${WARNING:-0xffeed49f}"
-fi
+source "$HOME/.config/theme/palette.sh"
 
 is_uint() {
   [[ "$1" =~ ^[0-9]+$ ]]

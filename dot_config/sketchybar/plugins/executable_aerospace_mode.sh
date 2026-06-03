@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source "$CONFIG_DIR/colors.sh"
+# shellcheck disable=SC1091
+source "$HOME/.config/theme/palette.sh"
 
 if [ "$SENDER" = "send_message" ]; then
   if [ -n "$MESSAGE" ] && [ -n "$HOLD" ]; then

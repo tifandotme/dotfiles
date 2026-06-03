@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source "$CONFIG_DIR/colors.sh"
+# shellcheck disable=SC1091
+source "$HOME/.config/theme/palette.sh"
 
 STATUS=$(/usr/local/bin/mullvad status --json)
 STATE=$(echo "$STATUS" | jq -r '.state')

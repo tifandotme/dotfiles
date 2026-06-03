@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # shellcheck disable=SC1091
-source "$CONFIG_DIR/colors.sh"
+source "$HOME/.config/theme/palette.sh"
 
 # Prevent multiple instances
 LOCKFILE="/tmp/sketchybar_system.lock"

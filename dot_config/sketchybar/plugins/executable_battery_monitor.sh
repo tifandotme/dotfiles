@@ -4,12 +4,13 @@
 # This avoids duplicating the display logic
 
 CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
-source "$CONFIG_DIR/colors.sh"
+# shellcheck disable=SC1091
+source "$HOME/.config/theme/palette.sh"
 
 # Function to trigger battery.sh update
 update_battery_display() {
   # Call the existing battery.sh script with proper environment
-  CONFIG_DIR="$CONFIG_DIR" NAME="battery" "$CONFIG_DIR/plugins/battery.sh"
+  NAME="battery" "$CONFIG_DIR/plugins/battery.sh"
 
   # Debug logging (optional - uncomment to debug)
   # echo "$(date): Battery updated - $(pmset -g batt | grep -Eo '\d+%')" >> /tmp/battery_monitor.log
