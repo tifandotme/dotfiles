@@ -15,7 +15,7 @@ const foreground = "#e4e4ef";
 const danger = "#ff7b7b";
 const warning = "#eed49f";
 const accentTemplate = "hsl(0, 18%, 68%)";
-const backgroundTemplate = "hsl(0, 20.3%, 24.1%)";
+const backgroundTemplate = "hsl(0, 12%, 24.1%)";
 
 function run(command: string, args: string[], options: { quiet?: boolean } = {}) {
   try {
