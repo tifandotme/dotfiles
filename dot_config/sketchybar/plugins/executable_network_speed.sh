@@ -1,66 +1,144 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-source "$CONFIG_DIR/colors.sh"
+NAME="${NAME:-network_speed}"
+STATE_FILE="${TMPDIR:-/tmp}/sketchybar_network_speed_${NAME}"
 
-# Network traffic calculation
-STATS_FILE="/tmp/sketchybar_network_stats_$NAME"
-INTERFACE=$(route get default 2>/dev/null | grep interface | awk '{print $2}')
-CURRENT_RX=$(netstat -ib 2>/dev/null | grep "^$INTERFACE" | head -1 | awk '{print $7}')
-CURRENT_TX=$(netstat -ib 2>/dev/null | grep "^$INTERFACE" | head -1 | awk '{print $10}')
-
-if [ -f "$STATS_FILE" ]; then
-  PREV_RX=$(head -1 "$STATS_FILE")
-  PREV_TX=$(tail -1 "$STATS_FILE")
-  PREV_TIME=$(stat -f %m "$STATS_FILE" 2>/dev/null || date -r "$STATS_FILE" +%s)
+# shellcheck disable=SC1091
+if [[ -n "${CONFIG_DIR:-}" && -r "$CONFIG_DIR/colors.sh" ]]; then
+  source "$CONFIG_DIR/colors.sh"
 else
-  PREV_RX=$CURRENT_RX
-  PREV_TX=$CURRENT_TX
-  PREV_TIME=$(date +%s)
+  ACCENT="${ACCENT:-0xffa6da95}"
+  FOREGROUND="${FOREGROUND:-0xffcad3f5}"
+  WARNING="${WARNING:-0xffeed49f}"
 fi
 
-CURRENT_TIME=$(date +%s)
-TIME_DIFF=$((CURRENT_TIME - PREV_TIME))
-if [ $TIME_DIFF -le 0 ]; then
-  TIME_DIFF=1
-fi
-
-RX_RATE=$(((CURRENT_RX - PREV_RX) / TIME_DIFF * 8))
-TX_RATE=$(((CURRENT_TX - PREV_TX) / TIME_DIFF * 8))
-if [ $RX_RATE -lt 0 ]; then RX_RATE=0; fi
-if [ $TX_RATE -lt 0 ]; then TX_RATE=0; fi
-
-format_speed() {
-  local speed=$1
-  if [ $speed -ge 1000000 ]; then
-    echo "$((speed / 1000000))M"
-  elif [ $speed -ge 1000 ]; then
-    echo "$((speed / 1000))K"
-  else
-    echo "0K"
-  fi
+is_uint() {
+  [[ "$1" =~ ^[0-9]+$ ]]
 }
 
-DOWNLOAD=$(format_speed $RX_RATE)
-UPLOAD=$(format_speed $TX_RATE)
-echo "$CURRENT_RX" >"$STATS_FILE"
-echo "$CURRENT_TX" >>"$STATS_FILE"
+set_offline() {
+  rm -f "$STATE_FILE"
+  sketchybar --set "$NAME" \
+    label="offline" \
+    label.color="${WARNING}" \
+    icon.drawing=off \
+    label.padding_left=12
+}
 
-# Check if we have network connectivity
-if [ -z "$INTERFACE" ] || [ -z "$CURRENT_RX" ] || [ -z "$CURRENT_TX" ] || ! ifconfig "$INTERFACE" 2>/dev/null | grep -q "inet "; then
-  sketchybar --set "$NAME" label="No connection"
-else
-  # Set label color based on traffic
-  if [ "$DOWNLOAD" = "0K" ] && [ "$UPLOAD" = "0K" ]; then
-    sketchybar --set "$NAME" \
-      label="↓${DOWNLOAD} ↑${UPLOAD}" \
-      label.color="${ACCENT}" \
-      icon.drawing=off \
-      label.padding_left=12
-  else
-    sketchybar --set "$NAME" \
-      label="↓${DOWNLOAD} ↑${UPLOAD}" \
-      label.color="${FOREGROUND}" \
-      icon.drawing=off \
-      label.padding_left=12
-  fi
+get_default_interface() {
+  route get default 2>/dev/null | awk '/interface:/{print $2; exit}'
+}
+
+interface_is_connected() {
+  local interface="$1"
+
+  ifconfig "$interface" 2>/dev/null | awk '
+    $1 == "inet" { has_inet = 1 }
+    $1 == "status:" && $2 == "active" { is_active = 1 }
+    END { exit !(has_inet && is_active) }
+  '
+}
+
+get_interface_counters() {
+  local interface="$1"
+
+  netstat -ibn 2>/dev/null | awk -v interface="$interface" '
+    $1 == interface && $3 ~ /^<Link#/ && $7 ~ /^[0-9]+$/ && $10 ~ /^[0-9]+$/ {
+      print $7, $10
+      exit
+    }
+  '
+}
+
+read_previous_state() {
+  local expected_interface="$1"
+
+  PREV_INTERFACE=""
+  PREV_RX=""
+  PREV_TX=""
+  PREV_TIME=""
+
+  [[ -r "$STATE_FILE" ]] || return 1
+  read -r PREV_INTERFACE PREV_RX PREV_TX PREV_TIME <"$STATE_FILE" || return 1
+
+  [[ "$PREV_INTERFACE" == "$expected_interface" ]] || return 1
+  is_uint "$PREV_RX" && is_uint "$PREV_TX" && is_uint "$PREV_TIME"
+}
+
+write_state() {
+  local interface="$1" rx_bytes="$2" tx_bytes="$3" timestamp="$4"
+  local tmp_file
+
+  tmp_file="$(mktemp "${STATE_FILE}.XXXXXX")"
+  printf '%s %s %s %s\n' "$interface" "$rx_bytes" "$tx_bytes" "$timestamp" >"$tmp_file"
+  mv "$tmp_file" "$STATE_FILE"
+}
+
+format_bytes_per_second() {
+  local bytes_per_second="$1"
+
+  awk -v bps="$bytes_per_second" 'BEGIN {
+    if (bps >= 1048576) {
+      printf "%.1fMB/s", bps / 1048576
+    } else if (bps >= 1024) {
+      printf "%.0fKB/s", bps / 1024
+    } else {
+      printf "0KB/s"
+    }
+  }'
+}
+
+interface="$(get_default_interface)"
+if [[ -z "$interface" ]] || ! interface_is_connected "$interface"; then
+  set_offline
+  exit 0
 fi
+
+read -r current_rx current_tx <<<"$(get_interface_counters "$interface")"
+if ! is_uint "${current_rx:-}" || ! is_uint "${current_tx:-}"; then
+  set_offline
+  exit 0
+fi
+
+current_time="$(date +%s)"
+if ! read_previous_state "$interface"; then
+  write_state "$interface" "$current_rx" "$current_tx" "$current_time"
+  sketchybar --set "$NAME" \
+    label="↓ 0KB/s ↑ 0KB/s" \
+    label.color="${ACCENT}" \
+    icon.drawing=off \
+    label.padding_left=12
+  exit 0
+fi
+
+time_diff=$((current_time - PREV_TIME))
+if ((time_diff <= 0)); then
+  time_diff=1
+fi
+
+rx_delta=$((current_rx - PREV_RX))
+tx_delta=$((current_tx - PREV_TX))
+if ((rx_delta < 0 || tx_delta < 0)); then
+  rx_delta=0
+  tx_delta=0
+fi
+
+rx_rate=$((rx_delta / time_diff))
+tx_rate=$((tx_delta / time_diff))
+
+download="$(format_bytes_per_second "$rx_rate")"
+upload="$(format_bytes_per_second "$tx_rate")"
+write_state "$interface" "$current_rx" "$current_tx" "$current_time"
+
+if ((rx_rate == 0 && tx_rate == 0)); then
+  label_color="${ACCENT}"
+else
+  label_color="${FOREGROUND}"
+fi
+
+sketchybar --set "$NAME" \
+  label="↓ ${download} ↑ ${upload}" \
+  label.color="$label_color" \
+  icon.drawing=off \
+  label.padding_left=12
