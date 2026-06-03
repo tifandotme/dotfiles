@@ -2,6 +2,7 @@
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
+# shellcheck disable=SC1091
 # shellcheck source=/Users/tifan/.local/share/chezmoi/dot_config/sketchybar/colors.sh
 source "$CONFIG_DIR/colors.sh"
 
@@ -104,9 +105,9 @@ sketchybar --add item spotify center \
   --set spotify \
   label.max_chars=40 \
   label.scroll_duration=300 \
-  label.shadow.scroll_duration=300 \
   scroll_texts=on \
   "${GHOST[@]}" \
+  label.shadow.drawing=off \
   icon="􀑪" \
   drawing=off \
   update_freq=5 \
