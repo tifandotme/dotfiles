@@ -2,12 +2,12 @@
 
 export TRANSPARENT=0x00000000
 
-export ACCENT=0xffb6bc9f
-export BACKGROUND=0xd4454a31
+export ACCENT=0xffbcbc9f
+export BACKGROUND=0xd4454536
 
 export FOREGROUND=0xffe4e4ef
 export DANGER=0xffff7b7b
 export WARNING=0xffeed49f
 
-export BORDER_ACTIVE=0xffb6bc9f
-export BORDER_INACTIVE=0xff454a31
+export BORDER_ACTIVE=0xffbcbc9f
+export BORDER_INACTIVE=0xff454536

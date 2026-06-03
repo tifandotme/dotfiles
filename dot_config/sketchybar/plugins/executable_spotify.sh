@@ -1,7 +1,6 @@
 #!/bin/bash
 # Reads Spotify OAuth token from ~/.cache/sketchybar/spotify_token.json.
 # Token is chezmoi-managed at dot_cache/sketchybar/encrypted_private_spotify_token.json.age.
-# After Spotify rotates the refresh token, run: chezmoi add --encrypt ~/.cache/sketchybar/spotify_token.json
 
 set -euo pipefail
 
@@ -13,6 +12,12 @@ source "$HOME/.config/theme/palette.sh"
 PATH="$HOME/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 TOKEN_FILE="$HOME/.cache/sketchybar/spotify_token.json"
 CLIENT_ID="d420a117a32841c2b3474932e49fb54b"
+
+sync_token_to_chezmoi() {
+  if command -v chezmoi >/dev/null; then
+    chezmoi add --encrypt "$TOKEN_FILE" >/dev/null 2>&1 || true
+  fi
+}
 
 if [[ ! -f "$TOKEN_FILE" ]]; then
   sketchybar --set "$NAME" drawing=off
@@ -65,6 +70,7 @@ if [[ "$expires_at_epoch" -le "$(date -u +%s)" ]]; then
     '.access_token = $access_token | .refresh_token = $refresh_token | .expires_at = $expires_at' \
     "$TOKEN_FILE" >"$tmp_token_file"
   mv "$tmp_token_file" "$TOKEN_FILE"
+  sync_token_to_chezmoi
 fi
 
 status_file="$(mktemp)"

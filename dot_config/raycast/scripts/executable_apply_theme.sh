@@ -2,7 +2,7 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title Apply Wallpaper Theme
+# @raycast.title Apply Theme
 # @raycast.mode silent
 
 # Optional parameters:
