@@ -9,18 +9,6 @@
         "rawValue": true
       },
       {
-        "id": "a0d29700-cae8-463c-a93b-576e606c4384",
-        "type": "custom-text",
-        "color": "ansi256:246",
-        "customText": " / "
-      },
-      {
-        "id": "ad7602c1-8868-497b-bfa6-17f6ffee9232",
-        "type": "context-length",
-        "color": "ansi256:246",
-        "rawValue": true
-      },
-      {
         "id": "df976a16-0818-4615-a883-e08dfb325488",
         "type": "custom-text",
         "color": "ansi256:246",

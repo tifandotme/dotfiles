@@ -45,6 +45,7 @@ $env.DOCKER_HOST = $"unix://($env.XDG_CONFIG_HOME | path join colima)/default/do
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
 $env.PI_CODING_AGENT_DIR = ($env.XDG_CONFIG_HOME | path join pi)
+$env.PI_AGENT_DIR = ($env.PI_CODING_AGENT_DIR | path join sessions) # ccusage reads this, pi reads PI_CODING_AGENT_DIR
 $env.PILENS_DATA_DIR = ($env.XDG_STATE_HOME | path join pi-lens projects)
 $env.CLAUDE_CONFIG_DIR = ($env.XDG_CONFIG_HOME | path join claude)
 $env.CODEX_HOME = ($env.XDG_CONFIG_HOME | path join codex)

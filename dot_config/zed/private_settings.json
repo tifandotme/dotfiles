@@ -249,6 +249,13 @@
     },
     "Markdown": {
       "show_edit_predictions": true,
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"],
+        },
+      },
+      "format_on_save": "on",
     },
   },
   "file_scan_exclusions": [

@@ -18,6 +18,7 @@
     "../../personal/pi-extensions/packages/pi-mermaid-open",
     "../../personal/pi-extensions/packages/pi-preferred-thinking",
     "../../personal/pi-extensions/packages/pi-recap",
+    "../../personal/pi-extensions/packages/pi-fixed-editor",
     "npm:pi-fff",
     "npm:pi-code-previews",
     "npm:pi-add-dir",
@@ -27,11 +28,13 @@
     "npm:pi-mcp-adapter",
     "npm:pi-subdir-context",
     "npm:@ogulcancelik/pi-herdr",
-    "npm:pi-dynamic-workflows"
+    "npm:@gotgenes/pi-subagents",
+    "npm:@juicesharp/rpiv-ask-user-question"
   ],
   "enableSkillCommands": false,
   "terminal": {
-    "showTerminalProgress": false
+    "showTerminalProgress": false,
+    "clearOnShrink": false
   },
   "enabledModels": [
     "openai-codex/gpt-5.5",

@@ -10,6 +10,7 @@ prepend_keymap = [
   { on = "l", run = "plugin smart-enter", desc = "Enter the child directory, or open the file" },
   # https://github.com/yazi-rs/plugins/tree/main/jump-to-char.yazi
   { on = "f", run = "plugin jump-to-char", desc = "Jump to char" },
+  { on = ["Y"], run = "plugin clippy", desc = "Copy with Clippy" },
   # https://github.com/AnirudhG07/custom-shell.yazi
   { on = ["'", ";"], run = "plugin custom-shell -- auto --interactive", desc = "custom-shell as default, interactive" },
   { on = ["'", ":"], run = "plugin custom-shell -- auto --interactive --block", desc = "custom-shell as default, interactive, block" },
