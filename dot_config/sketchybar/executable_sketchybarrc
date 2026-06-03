@@ -44,16 +44,6 @@ GHOST=(
   icon.shadow.distance=1
 )
 
-add_usage_item() {
-  local name="$1" icon="$2" freq="$3"
-  sketchybar --add item "$name" right \
-    --set "$name" \
-    icon="$icon" \
-    icon.padding_right=4 \
-    update_freq="$freq" \
-    script="$PLUGIN_DIR/${name}.sh"
-}
-
 # --------------- LEFT
 
 sketchybar --add event aerospace_workspace_change
@@ -169,16 +159,6 @@ sketchybar --add item wifi right \
   script="$PLUGIN_DIR/wifi.sh" \
   click_script="$PLUGIN_DIR/wifi.sh" \
   --subscribe wifi wifi_change
-
-# add_usage_item amp_usage "􁎢" 300
-# add_usage_item copilot_usage "􁎢" 300
-# add_usage_item claude_usage "􀘾" 900
-
-# Codex label shows session usage plus weekly usage progress, e.g. 18(1h55m) 68/80(Tue 14:17)
-# add_usage_item codex_usage "􀘾" 900
-
-# Cursor usage: no published API rate limits; ~3min poll balances freshness vs load
-# add_usage_item cursor_usage "􀘾" 180
 
 # sketchybar --add item network_speed right \
 #   --set network_speed \
