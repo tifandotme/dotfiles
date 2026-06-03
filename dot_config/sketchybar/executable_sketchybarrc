@@ -125,19 +125,12 @@ sketchybar --add item battery right \
   script="$PLUGIN_DIR/battery.sh" \
   --subscribe battery system_woke power_source_change
 
-sketchybar --add item cpu right \
-  --set cpu \
+sketchybar --add item system right \
+  --set system \
   icon="􀴽" \
   icon.padding_right=0 \
   update_freq=1 \
-  script="$PLUGIN_DIR/cpu.sh"
-
-sketchybar --add item ram right \
-  --set ram \
-  icon="􀴽" \
-  icon.padding_right=0 \
-  update_freq=1 \
-  script="$PLUGIN_DIR/ram.sh"
+  script="$PLUGIN_DIR/system.sh"
 
 # Start smart battery monitor in background
 exec "$PLUGIN_DIR/battery_monitor.sh" smart-monitor &
@@ -160,12 +153,12 @@ sketchybar --add item wifi right \
   click_script="$PLUGIN_DIR/wifi.sh" \
   --subscribe wifi wifi_change
 
-# sketchybar --add item network_speed right \
-#   --set network_speed \
-#   icon="􀴽" \
-#   icon.padding_right=0 \
-#   update_freq=1 \
-#   script="$PLUGIN_DIR/network_speed.sh"
+sketchybar --add item network_speed right \
+  --set network_speed \
+  icon="􀴽" \
+  icon.padding_right=0 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/network_speed.sh"
 
 # sketchybar --add item vpn right \
 #   --set vpn \

@@ -59,7 +59,7 @@ plugins/symlink_toggle_theme.sh → ../../raycast/scripts/toggle_theme.sh
 - Color palette: `colors.sh` (all color vars used across plugins)
 - Icon mapping: `executable_icon_map.sh` (app name → SF symbol)
 - Example badge plugin: `plugins/executable_slack.sh`
-- Example system plugin: `plugins/executable_cpu.sh`, `plugins/executable_battery.sh`
+- Example system plugin: `plugins/executable_system.sh`, `plugins/executable_battery.sh`
 
 ## JIT Index Hints
 
