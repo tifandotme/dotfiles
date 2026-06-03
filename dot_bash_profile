@@ -1,44 +1,67 @@
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# shellcheck shell=bash
+
+# Homebrew
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
 export HOMEBREW_NO_ENV_HINTS=true
 export HOMEBREW_NO_ANALYTICS=true
 
+# XDG base directories
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-export PI_CODING_AGENT_DIR="${XDG_CONFIG_HOME}/pi"
-export PILENS_DATA_DIR="${XDG_STATE_HOME}/pi-lens/projects"
-export CLAUDE_CONFIG_DIR="${XDG_CONFIG_HOME}/claude"
-export CODEX_HOME="${XDG_CONFIG_HOME}/codex"
-export CODEX_SQLITE_HOME="${XDG_STATE_HOME}/codex"
+# Tool config/state locations
+export PI_CODING_AGENT_DIR="$XDG_CONFIG_HOME/pi"
+export PILENS_DATA_DIR="$XDG_STATE_HOME/pi-lens/projects"
+export CLAUDE_CONFIG_DIR="$XDG_CONFIG_HOME/claude"
+export CODEX_HOME="$XDG_CONFIG_HOME/codex"
+export CODEX_SQLITE_HOME="$XDG_STATE_HOME/codex"
 
 # gws (https://github.com/googleworkspace/cli) — same path as Nushell env.nu
-export GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE="${XDG_CONFIG_HOME}/gws/creds.json"
+export GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE="$XDG_CONFIG_HOME/gws/creds.json"
 
 export EDITOR=vi
-
-export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/config"
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/config"
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
 
-export PATH="$HOME/.local/bin:$BUN_INSTALL/bin:$HOME/.cargo/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"
+path_prepend() {
+  case ":$PATH:" in
+  *":$1:"*) ;;
+  *) PATH="$1:$PATH" ;;
+  esac
+}
+
+path_prepend "$HOME/.local/bin"
+path_prepend "$BUN_INSTALL/bin"
+path_prepend "$HOME/.cargo/bin"
+export PATH
+unset -f path_prepend
 
 # https://docs.brew.sh/Shell-Completion#configuring-completions-in-bash
-if type brew &>/dev/null; then
+if command -v brew >/dev/null 2>&1; then
   HOMEBREW_PREFIX="$(brew --prefix)"
-  if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
-    source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+  if [ -r "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ]; then
+    # shellcheck source=/dev/null
+    . "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
   else
-    for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*; do
-      [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+    for completion in "$HOMEBREW_PREFIX/etc/bash_completion.d/"*; do
+      # shellcheck source=/dev/null
+      [ -r "$completion" ] && . "$completion"
     done
   fi
+  unset completion HOMEBREW_PREFIX
 fi
 
-eval "$(mise activate bash)"
-
-# must be last
-if [ -f ~/.bashrc ]; then
-  . "$HOME"/.bashrc
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate bash)"
 fi
 
+# Must be last.
+if [ -f "$HOME/.bashrc" ]; then
+  # shellcheck source=/dev/null
+  . "$HOME/.bashrc"
+fi

@@ -35,9 +35,6 @@ y() {
   rm -f "$tmp"
 }
 
-alias yal="yadm list -a"
-alias yag="yadm enter lazygit --work-tree ~"
-
 # ALIASES_END
 
 eval "$(starship init bash)"

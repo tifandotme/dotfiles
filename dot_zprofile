@@ -1,4 +1,10 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# shellcheck shell=sh
+
+# Homebrew
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 export HOMEBREW_NO_ENV_HINTS=true
 export HOMEBREW_NO_ANALYTICS=true
 
@@ -6,14 +12,16 @@ export HOMEBREW_NO_ANALYTICS=true
 # if enabled: https://github.com/anthropics/claude-code/issues/31852
 # export DISABLE_TELEMETRY=1
 
-# Fix `yadm encrypt` error in MacOS
+# Fix `yadm encrypt` error on macOS.
 # https://yadm.io/docs/faq#encryption
-export GPG_TTY=$(tty)
+GPG_TTY="$(tty)"
+export GPG_TTY
 
+# XDG base directories
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-# Prevent "Unknown locale, assuming C"
+# Prevent "Unknown locale, assuming C".
 export LANG="en_US.UTF-8"
