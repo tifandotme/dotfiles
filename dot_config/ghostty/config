@@ -7,7 +7,7 @@ copy-on-select = true
 
 macos-option-as-alt = true
 
-theme = light:Gruvbox Material Light,dark:ir-black
+theme = light:Gruvbox Light Hard,dark:IR Black
 
 maximize = true
 
