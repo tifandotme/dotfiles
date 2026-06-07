@@ -3,7 +3,7 @@
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.78.0",
+  "lastChangelogVersion": "0.78.1",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
@@ -19,6 +19,7 @@
     "../../personal/pi-extensions/packages/pi-preferred-thinking",
     "../../personal/pi-extensions/packages/pi-recap",
     "../../personal/pi-extensions/packages/pi-fixed-editor",
+    "../../personal/pi-extensions/packages/pi-rename",
     "npm:pi-fff",
     "npm:pi-code-previews",
     "npm:pi-add-dir",

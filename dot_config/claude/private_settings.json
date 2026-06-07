@@ -14,75 +14,15 @@
     "commit": "",
     "pr": ""
   },
-  "model": "opus[1m]",
+  "model": "opus",
   "hooks": {
-    "PermissionRequest": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' blocked",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' working",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' release",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "SessionStart": [
       {
         "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' idle",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' idle",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' working",
+            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' session",
             "timeout": 10
           }
         ]
@@ -106,7 +46,7 @@
   "effortLevel": "high",
   "awaySummaryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "theme": "auto",
+  "theme": "dark",
   "editorMode": "normal",
   "verbose": true,
   "preferredNotifChannel": "ghostty",

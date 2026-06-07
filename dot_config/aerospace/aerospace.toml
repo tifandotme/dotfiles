@@ -196,6 +196,10 @@ run = "move-node-to-workspace 4_terminal"
 if.app-id = "md.obsidian"
 run = "move-node-to-workspace 5_notes"
 
+[[on-window-detected]]
+if.app-id = "club.refactoring.tolaria"
+run = "move-node-to-workspace 5_notes"
+
 # Move to 0_misc workspace
 # Messaging
 [[on-window-detected]]

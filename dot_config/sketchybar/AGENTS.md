@@ -50,7 +50,7 @@ sketchybar --set "$NAME" \
 **Symlinked toggles/theme scripts** exist in plugins — don't duplicate logic, symlinks point to Raycast scripts:
 
 ```
-plugins/symlink_toggle_theme.sh → ../../raycast/scripts/toggle_theme.sh
+plugins/symlink_toggle_appearance.sh → ../../raycast/scripts/toggle_appearance.sh
 ```
 
 ## Key Files

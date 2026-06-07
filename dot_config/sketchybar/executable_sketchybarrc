@@ -179,7 +179,7 @@ sketchybar --add item slack right \
 #   --set theme_toggle \
 #   icon="􀡊" \
 #   icon.padding_right=0 \
-#   click_script="$PLUGIN_DIR/toggle_theme.sh"
+#   click_script="$PLUGIN_DIR/toggle_appearance.sh"
 
 sketchybar --add event caffeinate_toggle
 sketchybar --add item caffeinate right \

@@ -49,7 +49,7 @@ fi
 
 sketchybar --set "$NAME" \
   icon="􀫥" \
-  label="C:${USAGE}% R:${MEMORY_PERCENTAGE}%" \
+  label="C ${USAGE}% R ${MEMORY_PERCENTAGE}%" \
   label.color="$LABEL_COLOR" \
   icon.color="$ICON_COLOR" \
   icon.padding_right=6
