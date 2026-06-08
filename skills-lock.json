@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "nushell": {
+      "source": "nushell/nu_scripts",
+      "sourceType": "github",
+      "skillPath": "skills/nushell/SKILL.md",
+      "computedHash": "5d5eee4c08ebb5442fcf72a8f29abeabbe3fa326d0b6667271e375ce8141cc27"
+    }
+  }
+}
