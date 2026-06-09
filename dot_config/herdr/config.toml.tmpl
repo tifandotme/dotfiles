@@ -1,3 +1,5 @@
+{{ $palette := fromJson (include "dot_config/theme/palette.json") }}
+
 onboarding = false
 
 [keys]
@@ -31,24 +33,21 @@ edit_scrollback = "prefix+e"
 
 [ui]
 prompt_new_tab_name = false
-sidebar_width = 20
 mouse_capture = true
 confirm_close = true
-show_agent_labels_on_pane_borders = true
 agent_panel_scope = "all"
 
 [ui.toast]
-delivery = "herdr"
+delivery = "terminal"
 
 [ui.sound]
 enabled = true
 
-[ui.sound.agents]
-claude = "default"
-pi = "default"
-
 [theme]
 name = "terminal"
+
+[theme.custom]
+accent = "{{ $palette.accent }}"
 
 [session]
 resume_agents_on_restore = true
