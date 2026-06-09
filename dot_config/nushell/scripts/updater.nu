@@ -2,7 +2,9 @@
 export def start [] {
   if (which brew | is-not-empty) {
     print $"(ansi green_bold)==>(ansi reset) Upgrading (ansi green)brew(ansi reset) packages"
-    brew upgrade
+    with-env { HOMEBREW_NO_ASK: "1" } {
+      brew upgrade
+    }
   }
 
   if (which mise | is-not-empty) {
