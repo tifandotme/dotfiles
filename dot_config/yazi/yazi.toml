@@ -26,6 +26,8 @@ show_hidden = true
 
 [open]
 prepend_rules = [
+  { url = "*.{html,htm,webarchive,url,svg,xml,xhtml}", use = ["open", "edit"] },
+  { url = "*.{pdf,doc,docx,pages,numbers,key,xls,xlsx,ppt,pptx}", use = "open" },
   { url = "*.csv", use = "view_csv" },
   { mime = "text/*", use = "edit" },
   { mime = "video/*", use = "play" },
