@@ -14,7 +14,7 @@
     "commit": "",
     "pr": ""
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -55,5 +55,6 @@
   "remoteControlAtStartup": false,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": false,
-  "ui.showBanner": false
+  "ui.showBanner": false,
+  "agentPushNotifEnabled": true
 }
