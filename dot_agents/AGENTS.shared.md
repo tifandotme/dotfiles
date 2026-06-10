@@ -3,6 +3,7 @@
 - Defaults: user shell commands use Nushell; git default branch is `master`; prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
 - Git commits: use Conventional Commits only (`fix`, `feat`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`, `revert`). Keep headers under 72 chars, lowercase subject, no period, prefer header-only.
 - GitHub: for any interaction with github.com (issues, PRs, READMEs, repos, releases, etc.), use `gh`; never use web search or built-in fetch tools for GitHub content.
+- GitHub workflows: when touching GitHub Actions workflows, run `actions-up -y` first to update `uses:` action version references non-interactively, then continue with any needed authoring, validation, or debugging.
 - Browser: for browser automation, load `agent-browser` first, then use its commands.
 - Web: for URL search, extraction, or crawling, load relevant Tavily skills first, then use Tavily commands; never use built-in web tools unless Tavily fails.
 - JS tooling: for any CLI tool shipped as an npm package, use `bunx` instead of `npx`.
