@@ -90,16 +90,20 @@ write_state() {
   mv "$tmp_file" "$STATE_FILE"
 }
 
-format_bytes_per_second() {
+format_bits_per_second() {
   local bytes_per_second="$1"
 
   awk -v bps="$bytes_per_second" 'BEGIN {
-    if (bps >= 1048576) {
-      printf "%.1fMB/s", bps / 1048576
-    } else if (bps >= 1024) {
-      printf "%.0fKB/s", bps / 1024
+    bits_per_second = bps * 8
+
+    if (bits_per_second >= 1000000000) {
+      printf "%.1fGbps", bits_per_second / 1000000000
+    } else if (bits_per_second >= 1000000) {
+      printf "%.0fMbps", bits_per_second / 1000000
+    } else if (bits_per_second >= 1000) {
+      printf "%.0fKbps", bits_per_second / 1000
     } else {
-      printf "0KB/s"
+      printf "0Kbps"
     }
   }'
 }
@@ -120,7 +124,7 @@ current_time="$(date +%s)"
 if ! read_previous_state "$interface"; then
   write_state "$interface" "$current_rx" "$current_tx" "$current_time"
   sketchybar --set "$NAME" \
-    label="↓ 0KB/s ↑ 0KB/s" \
+    label="↓ 0Kbps ↑ 0Kbps" \
     label.color="${ACCENT}" \
     icon.drawing=off \
     label.padding_left=12
@@ -142,8 +146,8 @@ fi
 rx_rate=$((rx_delta / time_diff))
 tx_rate=$((tx_delta / time_diff))
 
-download="$(format_bytes_per_second "$rx_rate")"
-upload="$(format_bytes_per_second "$tx_rate")"
+download="$(format_bits_per_second "$rx_rate")"
+upload="$(format_bits_per_second "$tx_rate")"
 write_state "$interface" "$current_rx" "$current_tx" "$current_time"
 
 if ((rx_rate == 0 && tx_rate == 0)); then
