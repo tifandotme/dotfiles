@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+readonly SOURCE_APP="${HELIUM_APP_PATH:-/Applications/Helium.app}"
+readonly DEBUG_APP="${HELIUM_DEBUG_APP_PATH:-$HOME/Applications/Helium Debug.app}"
+readonly DEBUG_BUNDLE_ID="net.imput.helium.debug"
+readonly DEBUG_NAME="Helium Debug"
+readonly PLIST="$DEBUG_APP/Contents/Info.plist"
+readonly AGENT_BROWSER_PORT="9222"
+readonly AGENT_BROWSER_USER_DATA_DIR="$HOME/Library/Application Support/net.imput.helium-agent-browser"
+
+set_plist_value() {
+  local key="$1"
+  local value="$2"
+
+  if /usr/libexec/PlistBuddy -c "Set :$key $value" "$PLIST" >/dev/null 2>&1; then
+    return
+  fi
+
+  /usr/libexec/PlistBuddy -c "Add :$key string $value" "$PLIST"
+}
+
+if [[ ! -d "$SOURCE_APP" ]]; then
+  printf 'Helium app not found: %s\n' "$SOURCE_APP" >&2
+  exit 1
+fi
+
+mkdir -p "$(dirname "$DEBUG_APP")"
+rm -rf "$DEBUG_APP"
+cp -R "$SOURCE_APP" "$DEBUG_APP"
+
+set_plist_value "CFBundleIdentifier" "$DEBUG_BUNDLE_ID"
+set_plist_value "CFBundleName" "$DEBUG_NAME"
+set_plist_value "CFBundleDisplayName" "$DEBUG_NAME"
+
+bundle_executable="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$PLIST")"
+readonly bundle_executable
+readonly executable_dir="$DEBUG_APP/Contents/MacOS"
+readonly original_executable="$executable_dir/$bundle_executable"
+readonly wrapped_executable="$executable_dir/$bundle_executable.bin"
+
+mv "$original_executable" "$wrapped_executable"
+cat >"$original_executable" <<LAUNCHER
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+readonly AGENT_BROWSER_PORT="\${AGENT_BROWSER_PORT:-$AGENT_BROWSER_PORT}"
+readonly AGENT_BROWSER_USER_DATA_DIR="\${AGENT_BROWSER_USER_DATA_DIR:-$AGENT_BROWSER_USER_DATA_DIR}"
+
+mkdir -p "\$AGENT_BROWSER_USER_DATA_DIR"
+exec "\$(dirname "\$0")/$bundle_executable.bin" \\
+  --remote-debugging-address=127.0.0.1 \\
+  --remote-debugging-port="\$AGENT_BROWSER_PORT" \\
+  --user-data-dir="\$AGENT_BROWSER_USER_DATA_DIR" \\
+  --no-first-run \\
+  "\$@"
+LAUNCHER
+chmod +x "$original_executable"
+
+codesign --force --deep --sign - "$DEBUG_APP" >/dev/null
+printf 'Created %s from %s\n' "$DEBUG_APP" "$SOURCE_APP"
