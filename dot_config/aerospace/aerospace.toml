@@ -145,6 +145,10 @@ if.app-id = "net.imput.helium"
 run = "move-node-to-workspace 1_personal"
 
 [[on-window-detected]]
+if.app-id = "net.imput.helium.debug"
+run = "move-node-to-workspace 1_personal"
+
+[[on-window-detected]]
 if.app-id = "com.apple.Safari"
 run = "move-node-to-workspace 1_personal"
 

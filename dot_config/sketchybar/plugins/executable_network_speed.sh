@@ -24,13 +24,34 @@ get_default_interface() {
   route get default 2>/dev/null | awk '/interface:/{print $2; exit}'
 }
 
+get_metered_interface() {
+  local default_interface="$1"
+
+  if [[ "$default_interface" != utun* ]]; then
+    printf '%s\n' "$default_interface"
+    return
+  fi
+
+  scutil --nwi 2>/dev/null | awk '
+    /^Network interfaces:/ {
+      for (i = 3; i <= NF; i++) {
+        if ($i !~ /^(utun|lo|awdl|llw)/) {
+          print $i
+          exit
+        }
+      }
+    }
+  '
+}
+
 interface_is_connected() {
   local interface="$1"
 
   ifconfig "$interface" 2>/dev/null | awk '
+    $0 ~ /flags=.*<[^>]*RUNNING[^>]*>/ { is_running = 1 }
     $1 == "inet" { has_inet = 1 }
     $1 == "status:" && $2 == "active" { is_active = 1 }
-    END { exit !(has_inet && is_active) }
+    END { exit !(has_inet && (is_active || is_running)) }
   '
 }
 
@@ -83,7 +104,7 @@ format_bytes_per_second() {
   }'
 }
 
-interface="$(get_default_interface)"
+interface="$(get_metered_interface "$(get_default_interface)")"
 if [[ -z "$interface" ]] || ! interface_is_connected "$interface"; then
   set_offline
   exit 0

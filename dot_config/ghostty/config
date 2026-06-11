@@ -16,7 +16,7 @@ maximize = true
 quit-after-last-window-closed = true
 
 font-family = "CommitMono Nerd Font"
-font-size = 13
+font-size = 14
 font-thicken = true
 
 window-save-state = never
