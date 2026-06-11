@@ -5,5 +5,5 @@
 
 if command -v brew &>/dev/null; then
   # Rendered Brewfile (hostname/OS conditionals); not the raw .tmpl in source.
-  brew bundle --cleanup --force-cleanup --file="# {{ .chezmoi.destDir }}/.Brewfile"
+  brew bundle --force-cleanup --file="# {{ .chezmoi.destDir }}/.Brewfile"
 fi
