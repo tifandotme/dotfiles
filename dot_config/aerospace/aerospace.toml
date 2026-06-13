@@ -142,11 +142,11 @@ enter = ["mode main", "exec-and-forget sketchybar --trigger hide_message"]
 # Move to 1_personal workspace
 [[on-window-detected]]
 if.app-id = "net.imput.helium"
-run = "move-node-to-workspace 1_personal"
+run = ["move-node-to-workspace 1_personal", "layout tiling"]
 
 [[on-window-detected]]
 if.app-id = "net.imput.helium.debug"
-run = "move-node-to-workspace 1_personal"
+run = ["move-node-to-workspace 1_personal", "layout tiling"]
 
 [[on-window-detected]]
 if.app-id = "com.apple.Safari"
