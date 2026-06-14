@@ -54,6 +54,7 @@ $env.CODEX_SQLITE_HOME = ($env.XDG_STATE_HOME | path join codex)
 $env.NU_LIB_DIRS = ($nu.default-config-dir | path join scripts)
 
 $env.GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE = ($env.XDG_CONFIG_HOME | path join gws creds.json)
+$env.TODO_DIR = ($env.HOME | path join Documents todo)
 
 $env.ANDROID_HOME = ($env.HOME | path join Library Android sdk)
 $env.JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
