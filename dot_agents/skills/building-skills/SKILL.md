@@ -195,3 +195,12 @@ Skills are discovered from:
 
 - `.agents/skills/` in the workspace (project-specific)
 - `~/.config/agents/skills/` globally (user-wide)
+
+## Local Skills
+
+Some global skills are managed by chezmoi, not installed using `skills` CLI:
+
+- Source files live under `dot_agents/skills/`
+- Applied files live under `~/.agents/skills/`
+- Edit the chezmoi source, then run `chezmoi apply` or `chezmoi apply --dry-run`
+- Do not edit generated files under `~/.agents/skills/` directly unless intentionally making a temporary live-only change
