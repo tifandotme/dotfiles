@@ -3,7 +3,7 @@
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.79.1",
+  "lastChangelogVersion": "0.79.3",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
@@ -41,7 +41,7 @@
     "openai-codex/gpt-5.5",
     "openai-codex/gpt-5.4-mini"
   ],
-  "transport": "websocket-cached",
+  "transport": "auto",
   "compaction": {
     "enabled": false
   },
