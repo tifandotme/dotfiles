@@ -1,9 +1,26 @@
 ---
 name: react-best-practices
-description: React development guidelines for component architecture, state management, and hooks patterns. Use when writing, reviewing, or refactoring React code to ensure consistent patterns and optimal performance.
+description: Guides writing, reviewing, and refactoring React component architecture, props, state, hooks, effects, and React Query usage. Use when working on React components, hooks, JSX, TSX, or async UI code.
 ---
 
 # React Best Practices
+
+Applies React conventions that keep components derived, readable, and easy to test.
+
+Project conventions override these defaults when they are already established. When editing TSX, also apply TypeScript best practices.
+
+## Review Workflow
+
+1. Check whether state can be derived from props, query data, or existing state.
+2. Move avoidable effect logic into derived values or event handlers.
+3. Simplify JSX by extracting components or using early returns.
+4. Check prop interfaces, destructuring, callback names, and prop spreading.
+5. Prefer React Query for async server state and repeated fetching.
+
+## Do Not Use For
+
+- Non-React frontend work unless React code is involved.
+- CSS-only or visual-design-only changes unless component structure is part of the task.
 
 ## Core Philosophy
 
@@ -29,7 +46,7 @@ Prefer derived values over storing computed state:
 
 ## State Management
 
-- For complex state, prefer a single state object with reducers (like Zustand) over multiple `useState` calls
+- For complex state, prefer a reducer or external store such as Zustand over many loosely coupled `useState` calls
 - `useState` should only be used for state that is truly reactive and cannot be derived
 
 ## Component Architecture
@@ -74,6 +91,7 @@ function MyComponent({ foo, bar }: MyComponentProps) {
 ## Hooks and Side Effects
 
 - Avoid putting dependent logic in `useEffect`. Prefer derived state and event handlers
+- Avoid effects that only react to user actions; put that logic in the event handler instead
 - When `useEffect` is necessary, be explicit about its dependencies and include cleanup functions
 
 ## React Query Integration
