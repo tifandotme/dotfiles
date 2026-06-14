@@ -42,6 +42,7 @@ Name it `Progress`. Align items with the Definition of Done where it makes sense
 ## Writing
 
 Before drafting or editing a description, load:
+
 - `writing-clearly-and-concisely` — tight, active prose
 - `humanizer` — strip AI patterns
 
