@@ -42,15 +42,7 @@ Prefer derived values over storing computed state:
 
 ```tsx
 // Bad
-return (
-  <div>
-    {user ?
-      user.isAdmin ?
-        <AdminPanel />
-      : <BasicDashboard />
-    : <LoginForm />}
-  </div>
-);
+return <div>{user ? user.isAdmin ? <AdminPanel /> : <BasicDashboard /> : <LoginForm />}</div>;
 
 // Good
 function UserDashboard({ user }) {

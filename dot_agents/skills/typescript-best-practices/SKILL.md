@@ -23,17 +23,17 @@ Avoid using `enum` due to runtime cost and potential type safety issues. Prefer 
 ```typescript
 // Bad
 enum Status {
-  Active = 'active',
-  Inactive = 'inactive'
+  Active = "active",
+  Inactive = "inactive",
 }
 
 // Good
 const Status = {
-  Active: 'active',
-  Inactive: 'inactive'
+  Active: "active",
+  Inactive: "inactive",
 } as const;
 
-type Status = typeof Status[keyof typeof Status];
+type Status = (typeof Status)[keyof typeof Status];
 ```
 
 ## Type Declaration
