@@ -13,6 +13,7 @@ CLAUDE.md
 .config/sketchybar/CLAUDE.md
 .agents/AGENTS.content*
 .agents/AGENTS.shared*
+skills-lock.json
 
 # {{ if ne .chezmoi.os "darwin" -}}
 
