@@ -10,5 +10,6 @@
 - Shell scripts: after modifying any shell script, run `shellcheck <path-to-script>` and fix reported issues before finishing; run `bash -n <path-to-script>` when the script targets Bash.
 - Code cleanup: after a fix changes direction, audit for speculative or now-dead code from earlier attempts. Remove unused helpers/imports/types before final checks, then rerun the relevant typecheck/lint/format commands.
 - Docs: when editing markdown for agents or contributors, keep runnable shell commands and concrete repo paths first; omit redundant meta commentary.
+- Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.
 - Human-facing prose: for new files meant for humans to read, load `writing-clearly-and-concisely` first and `humanizer` last; do not use em dashes.
 - Libraries: for any question about libraries, frameworks, SDKs, or CLI tools, load `find-docs` first and use `ctx7`; never rely on training data for API details.
