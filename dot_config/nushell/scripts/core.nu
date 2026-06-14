@@ -96,7 +96,7 @@ alias lzd = lazydocker
 
 alias d = docker
 
-alias t = terraform
+alias t = tuxedo
 
 alias g = git
 
