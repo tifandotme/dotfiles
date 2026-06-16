@@ -8,6 +8,11 @@ alias lsa = eza --group-directories-first --classify=auto --sort=extension --one
 alias _cat = cat
 alias cat = bat --plain --theme=base16
 
+alias _tv = tv
+def --wrapped tv [...args] {
+  _tv --color-always --extend-width-and-length ...$args | bat --style plain
+}
+
 def __herdr_current_pane_label [] {
   if ($env.HERDR_PANE_ID? | is-empty) {
     return null

@@ -132,11 +132,20 @@ export def clean [] {
     go clean -modcache
   }
   if (which docker | is-not-empty) {
-    docker container prune -f
-    docker network prune -f
-    docker image prune -a -f
-    docker volume prune -f
-    docker builder prune -f
-    docker buildx prune -f
+    let docker_info = (docker info | complete)
+
+    if $docker_info.exit_code == 0 {
+      docker container prune -f
+      docker network prune -f
+      docker image prune -a -f
+      docker volume prune -f
+      docker builder prune -f
+      docker buildx prune -f
+    } else {
+      print $"(ansi yellow)↷(ansi reset) Skipping docker cleanup; Docker/Colima is not running"
+    }
+  }
+  if (which mo | is-not-empty) {
+    mo clean
   }
 }
