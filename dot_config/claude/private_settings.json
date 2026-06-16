@@ -53,8 +53,8 @@
   "autoCompactEnabled": false,
   "terminalProgressBarEnabled": false,
   "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": false,
-  "ui.showBanner": false,
-  "agentPushNotifEnabled": true
+  "ui.showBanner": false
 }
