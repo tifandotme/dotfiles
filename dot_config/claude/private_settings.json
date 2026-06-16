@@ -1,5 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "agentPushNotifEnabled": true,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "autoCompactEnabled": false,
+  "awaySummaryEnabled": true,
+  "editorMode": "normal",
+  "effortLevel": "high",
+  "enabledPlugins": {},
   "env": {
     "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
     "CLAUDE_CODE_ATTRIBUTION_HEADER": "0",
@@ -10,32 +20,26 @@
     "DISABLE_FEEDBACK_COMMAND": "1",
     "IS_DEMO": "1"
   },
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  },
-  "model": "opus[1m]",
+  "feedbackSurveyRate": 0,
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "*",
         "hooks": [
           {
-            "type": "command",
             "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' session",
-            "timeout": 10
+            "timeout": 10,
+            "type": "command"
           }
-        ]
+        ],
+        "matcher": "*"
       }
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bunx -y ccstatusline@latest --config \"${XDG_CONFIG_HOME:-$HOME/.config}/ccstatusline/settings.json\"",
-    "padding": 0
-  },
-  "enabledPlugins": {},
-  "feedbackSurveyRate": 0,
+  "model": "opus[1m]",
+  "preferredNotifChannel": "ghostty",
+  "remoteControlAtStartup": false,
+  "skipAutoPermissionPrompt": true,
+  "skipDangerousModePermissionPrompt": true,
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
@@ -43,18 +47,14 @@
       "Working"
     ]
   },
-  "effortLevel": "high",
-  "awaySummaryEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
-  "theme": "dark",
-  "editorMode": "normal",
-  "verbose": true,
-  "preferredNotifChannel": "ghostty",
-  "autoCompactEnabled": false,
+  "statusLine": {
+    "command": "bunx -y ccstatusline@latest --config \"${XDG_CONFIG_HOME:-$HOME/.config}/ccstatusline/settings.json\"",
+    "padding": 0,
+    "type": "command"
+  },
   "terminalProgressBarEnabled": false,
-  "remoteControlAtStartup": false,
-  "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "voiceEnabled": false,
-  "ui.showBanner": false
+  "theme": "dark",
+  "ui.showBanner": false,
+  "verbose": true,
+  "voiceEnabled": false
 }
