@@ -101,7 +101,37 @@ alias lzd = lazydocker
 
 alias d = docker
 
-alias t = tuxedo
+def --wrapped backlog [...args] {
+  let tab_state = (__herdr_current_tab_state)
+
+  if ($tab_state | is-not-empty) {
+    __herdr_rename_tab $tab_state.tab_id "backlog"
+  }
+
+  try {
+    ^backlog ...$args
+  } finally {
+    if ($tab_state | is-not-empty) {
+      __herdr_restore_tab_label $tab_state.tab_id $tab_state.label
+    }
+  }
+}
+
+def --wrapped t [...args] {
+  let tab_state = (__herdr_current_tab_state)
+
+  if ($tab_state | is-not-empty) {
+    __herdr_rename_tab $tab_state.tab_id "tuxedo"
+  }
+
+  try {
+    ^tuxedo ...$args
+  } finally {
+    if ($tab_state | is-not-empty) {
+      __herdr_restore_tab_label $tab_state.tab_id $tab_state.label
+    }
+  }
+}
 
 alias g = git
 
