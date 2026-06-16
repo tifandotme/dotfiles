@@ -13,6 +13,6 @@ auto_commit: false
 filesystem_only: false
 zero_padded_ids: 3
 bypass_git_hooks: true
-check_active_branches: true
+check_active_branches: false
 active_branch_days: 30
 task_prefix: "task"
