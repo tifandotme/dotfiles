@@ -22,15 +22,16 @@ Creates compact, path-backed `AGENTS.md` files for coding agents.
 
 ## Content rules
 
-- Use `# Agent Instructions` as the H1.
-- Start with a one-sentence project description when it helps orient the agent.
+- Do not require a heading. If a heading exists, prefer a high-signal project or subtree name over a generic title.
+- Start with a one-sentence project or subtree description when it helps orient the agent.
 - Include package manager guidance only when it is non-standard or important.
 - Add validation rules only when the repo has reliable commands.
 - After code changes, tell agents to run relevant lint and typecheck/static-analysis commands.
 - After fixing lint or type errors, tell agents to run the formatter when the repo has one.
 - For validation commands, list the smallest reliable scope first: file-level, package-level, then full-repo.
-- Keep `AGENTS.md` as small as possible. If it grows past roughly 60 lines, split domain-specific guidance into exact linked docs, nested `AGENTS.md` files, or skills.
+- Keep `AGENTS.md` as small as possible. When guidance is not relevant to nearly every task, split it into exact linked docs, nested `AGENTS.md` files, or skills.
 - Avoid duplicating durable project knowledge. Use `AGENTS.md` for agent behavior and exact pointers to canonical docs.
+- Prefer consistency when it improves scanability or prevents mistakes. Avoid cosmetic normalization that does not change agent behavior.
 - Create agent-specific linked docs only when the guidance is truly agent-only or has no existing home.
 - Preserve existing compatibility symlinks to `AGENTS.md`. Do not create provider-specific instruction files unless the user asks.
 
@@ -39,8 +40,6 @@ Creates compact, path-backed `AGENTS.md` files for coding agents.
 Use this shape when it fits. Include only sections with repo-specific, actionable guidance.
 
 ```markdown
-# Agent Instructions
-
 This repository is a <one-sentence project description>.
 
 ## Package manager
