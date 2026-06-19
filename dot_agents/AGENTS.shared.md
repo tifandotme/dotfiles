@@ -13,3 +13,4 @@
 - Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.
 - Human-facing prose: for new files meant for humans to read, load `writing-clearly-and-concisely` first and `humanizer` last; do not use em dashes.
 - Libraries: for any question about libraries, frameworks, SDKs, or CLI tools, load `find-docs` first and use `ctx7`; never rely on training data for API details.
+- Code comments: never leave tombstone comments (e.g. `# foo removed — reason`). Let the commit message carry removal rationale; deleted code needs no in-file trace.
