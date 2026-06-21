@@ -26,10 +26,10 @@
 	insteadOf = https://github.com/
 
 {{ if eq .chezmoi.os "darwin" -}}
-[includeIf "gitdir:~/work/"]
-	path = ~/work/.gitconfig
-[includeIf "gitdir:~/personal/"]
-	path = ~/personal/.gitconfig
+[includeIf "gitdir:~/projects/work/"]
+	path = ~/projects/work/.gitconfig
+[includeIf "gitdir:~/projects/personal/"]
+	path = ~/projects/personal/.gitconfig
 
 [core]
 	whitespace = error

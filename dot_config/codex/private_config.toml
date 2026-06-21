@@ -15,28 +15,28 @@ hooks = true
 [projects."/Users/tifan/.local/share/chezmoi"]
 trust_level = "trusted"
 
-[projects."/Users/tifan/personal/resume"]
+[projects."/Users/tifan/projects/personal/resume"]
 trust_level = "trusted"
 
-[projects."/Users/tifan/personal/notes"]
+[projects."/Users/tifan/projects/personal/notes"]
 trust_level = "trusted"
 
-[projects."/Users/tifan/work/hadl/aquasense-app"]
+[projects."/Users/tifan/projects/work/aquasense-app"]
 trust_level = "trusted"
 
-[projects."/Users/tifan/work/hadl/aquasense-service"]
+[projects."/Users/tifan/projects/work/aquasense-service"]
 trust_level = "trusted"
 
-[projects."/Users/tifan/work/hadl/backoffice-windmill"]
+[projects."/Users/tifan/projects/work/backoffice-windmill"]
 trust_level = "trusted"
 
-[projects."/Users/tifan/work/hadl/gcp-terraform"]
+[projects."/Users/tifan/projects/work/gcp-terraform"]
 trust_level = "trusted"
 
-[projects."/Users/tifan/work/hadl"]
+[projects."/Users/tifan/projects/work"]
 trust_level = "trusted"
 
-[projects."/Users/tifan/personal/hevy"]
+[projects."/Users/tifan/projects/personal/hevy"]
 trust_level = "trusted"
 
 [tui]

@@ -25,8 +25,8 @@ prepend_keymap = [
   { on = ["C", "r"], run = "plugin chezmoi-cmd -- re-add", desc = "chezmoi: re-add current state" },
   # Extra gotos
   { on = ["g", "C"], run = "cd ~/.local/share/chezmoi", desc = "Go ~/.local/share/chezmoi" },
-  { on = ["g", "w"], run = "cd ~/work/hadl", desc = "Go ~/work/hadl" },
-  { on = ["g", "p"], run = "cd ~/personal", desc = "Go ~/personal" },
+  { on = ["g", "w"], run = "cd ~/projects/work", desc = "Go ~/projects/work" },
+  { on = ["g", "p"], run = "cd ~/projects/personal", desc = "Go ~/projects/personal" },
   { on = ["g", "P"], run = "cd ~/Pictures", desc = "Go ~/Pictures" },
   { on = ["g", "s"], run = "cd ~/Screenshots", desc = "Go ~/Screenshots" },
   { on = ["g", "m"], run = "cd ~/Movies", desc = "Go ~/Movies" },
