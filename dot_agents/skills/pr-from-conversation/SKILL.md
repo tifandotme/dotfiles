@@ -1,6 +1,7 @@
 ---
 name: pr-from-conversation
 description: Create a GitHub pull request from the current conversation context. Use when the user wants to turn an agent chat into PR context, run pi-pr-create with conversation-derived why/root-cause/decision/testing details, review the generated PR body, revise it, then create the PR from the reviewed output.
+disable-model-invocation: true
 ---
 
 # PR From Conversation

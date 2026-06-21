@@ -1,6 +1,7 @@
 ---
 name: hadl-board
 description: Use when creating or updating cards on the Hadl Product Engineering Trello board. Covers card creation, description updates, checklists, labels, and member assignment. Trigger on "create a card", "add to Trello", "make a ticket", "update this card", "add a checklist", "log this as a task", or any request to track work on the board.
+disable-model-invocation: true
 ---
 
 # Hadl Board

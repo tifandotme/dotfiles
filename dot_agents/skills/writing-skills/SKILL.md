@@ -1,9 +1,10 @@
 ---
-name: building-skills
+name: writing-skills
 description: Creates well-structured Agent Skills following best practices. Use when creating, reviewing, migrating, or fixing an agent skill, SKILL.md file, skill frontmatter, skill resources, scripts, or bundled MCP servers.
+disable-model-invocation: true
 ---
 
-# Building Skills
+# Writing Skills
 
 Creates well-structured Agent Skills following best practices.
 

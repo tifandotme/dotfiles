@@ -56,18 +56,20 @@ Good acceptance criteria are outcome-oriented, testable, clear, and user-visible
 
 1. Read the task with `backlog task <id> --plain`.
 2. Review references and documentation listed in the task.
-3. Move the task to `In Progress` and assign it:
+3. Add an implementation plan with `--plan`.
+4. Share the plan with the user and wait for approval unless the user told you to skip review.
+5. When implementation begins, move the task to `In Progress` and assign it:
    - If the task already has an assignee, keep it unless told otherwise.
    - If existing backlog tasks consistently use a handle that matches the current actor, use it.
    - If `git config user.name` is the only clue, derive `@<lowercase-first-name>` only when that matches existing assignee conventions.
    - If uncertain, ask the user. Do not assume the OS username is the Backlog.md handle.
-4. Add an implementation plan with `--plan`.
-5. Share the plan with the user and wait for approval unless the user told you to skip review.
 6. Implement only the acceptance criteria. Add new criteria or create follow-up tasks for extra scope.
 7. Append implementation notes as progress, decisions, or blockers appear.
 8. Check acceptance criteria and Definition of Done items as you satisfy them.
 9. Add a reviewer-ready final summary.
 10. Set the task to `Done` only after checks pass and all criteria are checked.
+
+If the user asks only to plan, triage, or inspect a task, leave the status unchanged. Move it to `In Progress` only when active implementation starts.
 
 ## Multiline content
 

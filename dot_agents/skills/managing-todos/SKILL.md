@@ -1,6 +1,7 @@
 ---
 name: managing-todos
 description: "Manages Tifan's personal Tuxedo todo list using todo.txt conventions. Use when asked to add, migrate, edit, prioritize, tag, review, or explain personal todos, Tuxedo, TODO_DIR, todo.txt, +projects, or @contexts."
+disable-model-invocation: true
 ---
 
 # Managing todos

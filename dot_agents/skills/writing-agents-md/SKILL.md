@@ -1,6 +1,7 @@
 ---
-name: agents-md
+name: writing-agents-md
 description: Creates and maintains compact AGENTS.md files. Use when asked to create, update, trim, refactor, or audit repository agent instructions.
+disable-model-invocation: true
 ---
 
 # Agent Instructions
