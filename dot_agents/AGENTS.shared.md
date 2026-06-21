@@ -4,7 +4,7 @@
 - Git commits: use Conventional Commits only (`fix`, `feat`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`, `revert`). Keep headers under 72 chars, lowercase subject, no period, prefer header-only.
 - GitHub: use `gh` for github.com operations such as issues, PRs, actions, secrets, releases, and repo metadata; never use web search or built-in fetch tools for GitHub content.
 - GitHub workflows: when touching GitHub Actions workflows, run `actions-up -y` first to update `uses:` action version references non-interactively, then continue with any needed authoring, validation, or debugging.
-- Browser use: load `agent-browser` first, then connect to existing browser with `agent-browser connect 9222`.
+- Browser use: load `agent-browser` first, then run `agent-browser-helium` before browser commands. It launches `~/Applications/Helium Debug.app` and waits for the CDP port from `~/.agent-browser/config.json`. If Helium Debug.app is missing, ask the user to run `setup-helium-debug`.
 - Web: for URL search, extraction, or crawling, load relevant Tavily skills first, then use Tavily commands; never use built-in web tools unless Tavily fails.
 - JS tooling: for any CLI tool shipped as an npm package, use `bunx` instead of `npx`.
 - Shell scripts: after modifying any shell script, run `shellcheck <path-to-script>` and fix reported issues before finishing; run `bash -n <path-to-script>` when the script targets Bash.

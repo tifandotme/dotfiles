@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+readonly DEBUG_APP="${HELIUM_DEBUG_APP_PATH:-$HOME/Applications/Helium Debug.app}"
+readonly AGENT_BROWSER_CONFIG="$HOME/.agent-browser/config.json"
+readonly CONNECT_TIMEOUT_SECONDS=20
+
+if [[ ! -d "$DEBUG_APP" ]]; then
+  cat >&2 <<EOF
+Helium Debug.app is missing: $DEBUG_APP
+
+Ask the user to run:
+  setup-helium-debug
+EOF
+  exit 1
+fi
+
+if [[ ! -f "$AGENT_BROWSER_CONFIG" ]]; then
+  printf 'agent-browser config missing: %s\n' "$AGENT_BROWSER_CONFIG" >&2
+  exit 1
+fi
+
+AGENT_BROWSER_PORT="$(jq -er '.cdp' "$AGENT_BROWSER_CONFIG")"
+readonly AGENT_BROWSER_PORT
+readonly CDP_URL="http://127.0.0.1:${AGENT_BROWSER_PORT}/json/version"
+
+cdp_ready() {
+  curl --silent --fail --max-time 1 "$CDP_URL" >/dev/null
+}
+
+if ! cdp_ready; then
+  open -a "$DEBUG_APP"
+fi
+
+deadline=$((SECONDS + CONNECT_TIMEOUT_SECONDS))
+while ! cdp_ready; do
+  if ((SECONDS >= deadline)); then
+    cat >&2 <<EOF
+Helium Debug.app did not expose Chrome DevTools Protocol on port $AGENT_BROWSER_PORT.
+
+Check:
+  $AGENT_BROWSER_CONFIG
+
+Or ask the user to rerun:
+  setup-helium-debug
+EOF
+    exit 1
+  fi
+
+  sleep 0.5
+done
