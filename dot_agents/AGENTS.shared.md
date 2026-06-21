@@ -2,7 +2,7 @@
 - Output: be concise in responses; show file paths clearly when working with files.
 - Defaults: user shell commands use Nushell; git default branch is `master`; prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
 - Git commits: use Conventional Commits only (`fix`, `feat`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`, `revert`). Keep headers under 72 chars, lowercase subject, no period, prefer header-only.
-- GitHub: for any interaction with github.com (issues, PRs, READMEs, repos, releases, etc.), use `gh`; never use web search or built-in fetch tools for GitHub content.
+- GitHub: use `gh` for github.com operations such as issues, PRs, actions, secrets, releases, and repo metadata; never use web search or built-in fetch tools for GitHub content.
 - GitHub workflows: when touching GitHub Actions workflows, run `actions-up -y` first to update `uses:` action version references non-interactively, then continue with any needed authoring, validation, or debugging.
 - Browser use: load `agent-browser` first, then connect to existing browser with `agent-browser connect 9222`.
 - Web: for URL search, extraction, or crawling, load relevant Tavily skills first, then use Tavily commands; never use built-in web tools unless Tavily fails.
@@ -12,5 +12,4 @@
 - Docs: when editing markdown for agents or contributors, keep runnable shell commands and concrete repo paths first; omit redundant meta commentary.
 - Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.
 - Human-facing prose: for new files meant for humans to read, load `writing-clearly-and-concisely` first and `humanizer` last; do not use em dashes.
-- Libraries: for any question about libraries, frameworks, SDKs, or CLI tools, load `find-docs` first and use `ctx7`; never rely on training data for API details.
 - Code comments: never leave tombstone comments (e.g. `# foo removed — reason`). Let the commit message carry removal rationale; deleted code needs no in-file trace.
