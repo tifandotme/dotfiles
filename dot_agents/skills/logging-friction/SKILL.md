@@ -1,12 +1,12 @@
 ---
-name: log-friction
-description: Log repeated or systemic workflow friction to FRICTION.md in the current working directory. Use only when explicitly invoked to capture avoidable backtracking, repeated manual workarounds, tool failures, or documentation gaps that should become automation, docs, or workflow fixes.
+name: logging-friction
+description: Log repeated or systemic workflow friction to FRICTION.md at the workspace root. Use only when explicitly invoked to capture avoidable backtracking, repeated manual workarounds, tool failures, or documentation gaps that should become automation, docs, or workflow fixes.
 disable-model-invocation: true
 ---
 
 # Log friction
 
-Append useful friction notes to `FRICTION.md` in the current working directory.
+Append useful friction notes to `FRICTION.md` at the workspace or repository root unless the user explicitly names another path.
 
 ## When invoked
 
@@ -27,7 +27,7 @@ Log repeated or systemic workflow friction:
 - Project instructions, docs, or tooling caused avoidable backtracking.
 - The friction should become automation, documentation, or a workflow fix.
 
-Do not log one-off lint errors, ordinary coding mistakes, or venting without a preventable cause.
+Do not log one-off lint errors, ordinary coding mistakes, venting without a preventable cause, secrets, tokens, private keys, credentials, or full sensitive command output.
 
 ## File format
 
@@ -39,20 +39,14 @@ Create `FRICTION.md` lazily if it does not exist:
 Repeated or systemic workflow friction that should become automation, docs, or workflow fixes.
 ```
 
-Append entries in this format:
+Preserve existing content and append new entries at the end. Omit the trigger suffix if no concise trigger is obvious.
 
 ```md
-## YY-MM-DD HH:mm - short trigger
+## YYYY-MM-DD HH:mm - short trigger
 
-What happened, what workaround repeated, and what would prevent it next time.
-```
-
-Omit the trigger suffix if no concise trigger is obvious:
-
-```md
-## YY-MM-DD HH:mm
-
-What happened, what workaround repeated, and what would prevent it next time.
+- Trigger: What repeatedly caused friction.
+- Workaround: What had to be done manually.
+- Prevention: What automation, docs, or workflow change would prevent it.
 ```
 
 Use the current local time. Keep entries factual and specific.
