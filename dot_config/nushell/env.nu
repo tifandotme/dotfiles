@@ -33,6 +33,22 @@ $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = { create_character normal }
 
 # =============================== ENVS ========================================
 
+let user_dirs_file = ($env.XDG_CONFIG_HOME | path join user-dirs.dirs)
+if ($user_dirs_file | path exists) {
+  let user_dirs_env = (
+    open $user_dirs_file
+    | lines
+    | where {|line| $line =~ '^XDG_[A-Z]+_DIR=' }
+    | reduce --fold {} {|line, acc|
+      let parts = ($line | split row --number 2 '=')
+      let name = ($parts | get 0)
+      let value = ($parts | get 1 | str trim --char '"' | str replace '$HOME' $env.HOME)
+      $acc | insert $name $value
+    }
+  )
+  load-env $user_dirs_env
+}
+
 $env.EDITOR = "vi"
 $env.TERMINFO = "/Applications/Ghostty.app/Contents/Resources/terminfo"
 $env.TERM = "xterm-ghostty" # sometimes it's not set automatically
@@ -45,6 +61,9 @@ $env.DOCKER_HOST = $"unix://($env.XDG_CONFIG_HOME | path join colima)/default/do
 $env.NPM_CONFIG_USERCONFIG = ($env.XDG_CONFIG_HOME | path join npm config)
 $env.BUN_INSTALL = ($env.XDG_DATA_HOME | path join bun)
 $env.PI_CODING_AGENT_DIR = ($env.XDG_CONFIG_HOME | path join pi)
+$env.PI_FFF_MODE = "override"
+$env.FFF_FRECENCY_DB = ($env.XDG_STATE_HOME | path join pi fff frecency.lmdb)
+$env.FFF_HISTORY_DB = ($env.XDG_STATE_HOME | path join pi fff history.lmdb)
 $env.PI_AGENT_DIR = ($env.PI_CODING_AGENT_DIR | path join sessions) # ccusage reads this, pi reads PI_CODING_AGENT_DIR
 $env.PILENS_DATA_DIR = ($env.XDG_STATE_HOME | path join pi-lens projects)
 $env.CLAUDE_CONFIG_DIR = ($env.XDG_CONFIG_HOME | path join claude)

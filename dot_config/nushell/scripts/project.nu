@@ -1,7 +1,8 @@
 export def --env open-project [default_project: string = ""] {
   try {
     mut project_dirs = []
-    for base in [($env.HOME | path join 'personal') ($env.HOME | path join 'work')] {
+    let projects_dir = ($env.XDG_PROJECTS_DIR? | default ($env.HOME | path join 'projects'))
+    for base in [($projects_dir | path join 'personal') ($projects_dir | path join 'work')] {
       let base_dirs = _ls $base | where type == dir | get name
       for dir in $base_dirs {
         if (($dir | path basename) | str starts-with '@') {

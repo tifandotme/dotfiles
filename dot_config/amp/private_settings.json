@@ -1,34 +1,4 @@
 {
-  "amp.permissions": [
-    {
-      "tool": "Bash",
-      "matches": {
-        "cmd": "*git commit*"
-      },
-      "action": "ask"
-    },
-    {
-      "tool": "Bash",
-      "matches": {
-        "cmd": "*git push*"
-      },
-      "action": "ask"
-    },
-    {
-      "tool": "Bash",
-      "matches": {
-        "cmd": "*git reset*"
-      },
-      "action": "ask"
-    },
-    {
-      "tool": "Bash",
-      "matches": {
-        "cmd": "*rm -rf*"
-      },
-      "action": "ask"
-    }
-  ],
   "amp.terminal.theme": "terminal",
   "amp.git.commit.coauthor.enabled": false,
   "amp.git.commit.ampThread.enabled": false,
