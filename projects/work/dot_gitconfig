@@ -1,3 +1,5 @@
+[init]
+    defaultBranch = main
 [maintenance]
     repo = /Users/tifan/projects/work/aquasense-app
     repo = /Users/tifan/projects/work/aquasense-service
