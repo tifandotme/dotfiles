@@ -65,6 +65,11 @@ export def start [] {
   if (which bunx | is-not-empty) {
     print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)skills(ansi reset) packages"
     bunx skills update -g
+
+    if (which chezmoi | is-not-empty) {
+      print $"\n(ansi green_bold)==>(ansi reset) Syncing (ansi green)skills lockfile(ansi reset) to chezmoi"
+      chezmoi add ~/.local/state/skills/.skill-lock.json
+    }
   }
 
   if (which pi | is-not-empty) {
