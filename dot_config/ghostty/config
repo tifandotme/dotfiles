@@ -77,6 +77,7 @@ keybind = super+ctrl+arrow_down=unbind
 keybind = super+ctrl+arrow_left=unbind
 keybind = super+ctrl+arrow_right=unbind
 keybind = super+ctrl+==unbind
+keybind = super+enter=unbind
 keybind = super+shift+enter=unbind
 
 keybind = super+s=write_scrollback_file:open
