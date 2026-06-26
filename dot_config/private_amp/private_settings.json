@@ -1,0 +1,44 @@
+{
+  "amp.terminal.theme": "terminal",
+  "amp.git.commit.coauthor.enabled": false,
+  "amp.git.commit.ampThread.enabled": false,
+
+  "amp.skills.disableClaudeCodeSkills": true,
+  "amp.mcpServers": {},
+  "amp.dangerouslyAllowAll": true,
+  "amp.openai.speed": "standard",
+  "amp.gauge": "cost",
+
+  "amp.keymap": {
+    "leader": "ctrl+x", // Leader key for <leader> shortcuts
+    "amp.quit": "ctrl+c ctrl+c", // Exit application
+    "mode.toggle": "ctrl+l", // Switch to the next available mode
+    "mode.toggleReasoningEffort": "shift+tab", // Cycle reasoning effort for the active model
+    "news.open": null, // Open Amp Chronicle in browser
+    "prompt.clear": null, // Clear input
+    "prompt.copySelection": null, // Copy selection
+    "prompt.dequeue": null, // Dequeue prompts
+    "prompt.history": "ctrl+r", // Restore a previous prompt
+    "prompt.openInEditor": "ctrl+g", // Edit prompt in $EDITOR
+    "prompt.pasteImageFromClipboard": "ctrl+v", // Paste image from clipboard
+    "prompt.steerQueuedMessage": null, // Steer with the next queued prompt
+    "settings.openInEditor": null, // Open CLI settings in $EDITOR
+    "skills.list": null, // List available skills for this thread
+    "speed.toggleFast": "alt+r", // Toggle fast speed for this thread
+    "thread.analyzeContext": null, // Show token usage by prompt section for this thread
+    "thread.archive": "ctrl+c ctrl+n", // Archive, then new thread
+    "thread.archiveAndQuit": "ctrl+c ctrl+e", // Archive thread and quit
+    "thread.copyID": null, // Copy thread ID
+    "thread.copyMarkdown": null, // Copy thread as Markdown
+    "thread.copyURL": null, // Copy thread URL
+    "thread.mention": null, // Mention a thread
+    "thread.new": null, // Start new thread
+    "thread.newRemote": "<leader>r", // Toggle remote sandbox mode for the next thread
+    "thread.switchToNextInSidebar": null, // Switch to next thread in sidebar
+    "thread.switchToPrevious": null, // Switch to previous thread
+    "thread.switchToPreviousInSidebar": "ctrl+alt+up", // Switch to previous thread in sidebar
+    "thread.toggleDetails": "ctrl+o", // Expand or collapse tool and activity details
+    "thread.toggleOutline": null, // Toggle the outline for the visible assistant response
+    "thread.toggleSidebar": null // Show, focus, or hide the thread sidebar
+  }
+}
