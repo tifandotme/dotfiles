@@ -3,7 +3,7 @@
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.79.8",
+  "lastChangelogVersion": "0.79.10",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
@@ -20,7 +20,7 @@
     "../../projects/personal/pi-extensions/packages/pi-fixed-editor",
     "../../projects/personal/pi-extensions/packages/pi-rename",
     "../../projects/personal/pi-extensions/packages/pi-inline-skills",
-    "npm:@r3b1s/pi-vim-stash",
+    "../../projects/personal/pi-extensions/packages/pi-review",
     "npm:pi-code-previews",
     "npm:pi-add-dir",
     "npm:pi-codex-goal",
@@ -31,7 +31,8 @@
     "npm:@gotgenes/pi-subagents",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@ff-labs/pi-fff",
-    "npm:@upstash/context7-pi"
+    "git:github.com/DietrichGebert/ponytail",
+    "npm:@vanillagreen/pi-prompt-stash"
   ],
   "enableSkillCommands": false,
   "terminal": {
@@ -41,10 +42,9 @@
   "enabledModels": [
     "openai-codex/gpt-5.5",
     "openai-codex/gpt-5.4-mini",
-    "anthropic/claude-opus-4-8",
     "anthropic/claude-sonnet-4-6"
   ],
-  "transport": "auto",
+  "transport": "websocket-cached",
   "compaction": {
     "enabled": false
   },
