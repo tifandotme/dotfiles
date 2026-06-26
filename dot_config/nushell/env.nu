@@ -50,6 +50,7 @@ if ($user_dirs_file | path exists) {
 }
 
 $env.EDITOR = "vi"
+$env.LESS = "-I"
 $env.TERMINFO = "/Applications/Ghostty.app/Contents/Resources/terminfo"
 $env.TERM = "xterm-ghostty" # sometimes it's not set automatically
 $env.GNUPGHOME = ($env.XDG_DATA_HOME | path join gnupg)
