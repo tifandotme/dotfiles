@@ -14,6 +14,13 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
+if [ -r "$XDG_CONFIG_HOME/user-dirs.dirs" ]; then
+  set -a
+  # shellcheck source=/dev/null
+  . "$XDG_CONFIG_HOME/user-dirs.dirs"
+  set +a
+fi
+
 # Tool config/state locations
 export PI_CODING_AGENT_DIR="$XDG_CONFIG_HOME/pi"
 export PILENS_DATA_DIR="$XDG_STATE_HOME/pi-lens/projects"
