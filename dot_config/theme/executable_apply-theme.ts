@@ -173,9 +173,11 @@ function applyTheme() {
     join(home, ".config", "theme"),
     join(home, ".config", "sketchybar"),
     join(home, ".config", "borders"),
+    join(home, ".config", "herdr"),
   ]);
   optionalRun("sketchybar", ["--reload"]);
   optionalRun(join(home, ".config", "borders", "bordersrc"), []);
+  optionalRun("herdr", ["server", "reload-config"]);
 }
 
 function main() {

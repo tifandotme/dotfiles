@@ -9,6 +9,9 @@ macos-option-as-alt = true
 
 theme = light:Gruvbox Light Hard,dark:IR Black
 
+custom-shader = shaders/cursors/cursor_warp.glsl
+custom-shader-animation = always
+
 maximize = true
 
 # default mac behaviour is false, linux is true

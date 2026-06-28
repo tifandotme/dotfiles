@@ -25,6 +25,14 @@ function optionalRun(command: string, args: string[]) {
   }
 }
 
+function optionalRunOutput(command: string, args: string[]) {
+  try {
+    return execFileSync(command, args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  } catch {
+    return "";
+  }
+}
+
 function homeBin(command: string) {
   const home = process.env.HOME;
 
@@ -51,13 +59,16 @@ function writeJson(path: string, value: JsonObject) {
 
 function replaceRequired(path: string, pattern: RegExp, replacement: string) {
   const current = readFileSync(path, "utf8");
-  const next = current.replace(pattern, replacement);
 
-  if (next === current) {
+  if (!pattern.test(current)) {
     throw new Error(`No matching content to update in ${path}`);
   }
 
-  writeFileSync(path, next);
+  const next = current.replace(pattern, replacement);
+
+  if (next !== current) {
+    writeFileSync(path, next);
+  }
 }
 
 function getMacAppearance() {
@@ -84,7 +95,7 @@ function updateSourceFiles(isDark: boolean) {
   const piSettings = join(root, "dot_config", "pi", "private_settings.json");
   const piCodePreviews = join(root, "dot_config", "pi", "private_code-previews.json");
   const claudeSettings = join(root, "dot_config", "claude", "private_settings.json");
-  const herdrConfig = join(root, "dot_config", "herdr", "config.toml");
+  const herdrConfig = join(root, "dot_config", "herdr", "config.toml.tmpl");
 
   replaceRequired(gitConfig, /(\[delta\]\n\s*light = )(true|false)/, `$1${isDark ? "false" : "true"}`);
   replaceRequired(
@@ -105,7 +116,11 @@ function updateSourceFiles(isDark: boolean) {
   claude.theme = isDark ? "dark" : "light";
   writeJson(claudeSettings, claude);
 
-  replaceRequired(herdrConfig, /(\[theme\]\nname = ")(gruvbox|terminal)(")/, `$1${isDark ? "gruvbox" : "terminal"}$3`);
+  replaceRequired(
+    herdrConfig,
+    /(\[theme\]\nname = ")(gruvbox|gruvbox-light|terminal)(")/,
+    `$1${isDark ? "terminal" : "gruvbox-light"}$3`,
+  );
 }
 
 function applyAppearance() {
@@ -127,6 +142,54 @@ function applyAppearance() {
   ]);
 }
 
+function reloadIdlePiAgents() {
+  const list = optionalRunOutput(homeBin("herdr"), ["agent", "list"]);
+
+  if (!list) {
+    return 0;
+  }
+
+  let parsed: unknown;
+
+  try {
+    parsed = JSON.parse(list);
+  } catch {
+    return 0;
+  }
+
+  const agents =
+    parsed && typeof parsed === "object" && "result" in parsed
+      ? (parsed as { result?: { agents?: unknown[] } }).result?.agents
+      : undefined;
+
+  if (!Array.isArray(agents)) {
+    return 0;
+  }
+
+  let reloaded = 0;
+
+  for (const agent of agents) {
+    if (!agent || typeof agent !== "object") {
+      continue;
+    }
+
+    const piAgent = agent as { agent?: unknown; agent_status?: unknown; pane_id?: unknown };
+
+    if (piAgent.agent !== "pi" || piAgent.agent_status !== "idle" || typeof piAgent.pane_id !== "string") {
+      continue;
+    }
+
+    optionalRun(homeBin("herdr"), ["pane", "run", piAgent.pane_id, "/reload"]);
+    reloaded += 1;
+  }
+
+  return reloaded;
+}
+
+function reloadedAgentMessage(count: number) {
+  return count ? `; reloaded ${count} agent` : "";
+}
+
 function main() {
   const isDark = !getMacAppearance();
 
@@ -134,8 +197,9 @@ function main() {
   applyAppearance();
   setMacAppearance(isDark);
   optionalRun(homeBin("herdr"), ["server", "reload-config"]);
+  const reloadedPiAgents = reloadIdlePiAgents();
 
-  console.log(`Appearance set to ${isDark ? "dark" : "light"}`);
+  console.log(`Appearance set to ${isDark ? "dark" : "light"}${reloadedAgentMessage(reloadedPiAgents)}`);
 }
 
 main();
