@@ -21,6 +21,13 @@ refreshPeriod = "168h"
 [".config/nushell/scripts/external/bash-env-nushell"."pull"]
 args = ["--rebase", "--autostash"]
 
+[".config/ghostty/shaders/cursors"]
+type = "git-repo"
+url = "https://github.com/sahaj-b/ghostty-cursor-shaders.git"
+refreshPeriod = "168h"
+[".config/ghostty/shaders/cursors"."pull"]
+args = ["--rebase", "--autostash"]
+
 # {{- end -}}
 
 # {{ if eq .chezmoi.hostname "box" -}}

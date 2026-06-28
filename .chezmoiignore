@@ -2,6 +2,8 @@
 
 README.md
 key.txt.age
+.mise.toml
+scripts/
 
 **/node_modules
 .gitignore
@@ -43,8 +45,6 @@ personal/
 .bashrc
 .bash_profile
 .inputrc
-.config/user-dirs.dirs
-.config/user-dirs.locale
 .openclaw
 
 # {{- end -}}
