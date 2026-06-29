@@ -1,0 +1,10 @@
+[tasks.fmt]
+run = "stylua ."
+
+[tasks.check]
+run = [
+  "stylua --check .",
+  "luac -p init.lua lua/gruber-darker.lua",
+  "lua-language-server --check . --checklevel Warning",
+  "nvim --headless '+lua print(\"nvim-ok\")' +qa",
+]
