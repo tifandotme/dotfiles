@@ -49,7 +49,7 @@ if ($user_dirs_file | path exists) {
   load-env $user_dirs_env
 }
 
-$env.EDITOR = "vi"
+$env.EDITOR = "nvim"
 $env.LESS = "-I"
 $env.TERMINFO = "/Applications/Ghostty.app/Contents/Resources/terminfo"
 $env.TERM = "xterm-ghostty" # sometimes it's not set automatically

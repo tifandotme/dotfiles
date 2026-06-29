@@ -56,5 +56,5 @@ export def prep-excalidraw [
 }
 
 export def --wrapped amp [...args] {
-  EDITOR=vi _amp ...$args
+  EDITOR=nvim _amp ...$args
 }

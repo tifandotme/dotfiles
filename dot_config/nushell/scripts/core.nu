@@ -8,6 +8,8 @@ alias lsa = eza --group-directories-first --classify=auto --sort=extension --one
 alias _cat = cat
 alias cat = bat --plain --theme=base16
 
+alias vim = nvim
+
 alias _tv = tv
 def --wrapped tv [...args] {
   _tv --color-always --extend-width-and-length ...$args | bat --style plain

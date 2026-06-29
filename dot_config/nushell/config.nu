@@ -203,7 +203,6 @@ source core.nu
 use git.nu
 use docker.nu *
 use media.nu *
-use cloud.nu *
 use system.nu *
 use project.nu *
 use dev.nu *
