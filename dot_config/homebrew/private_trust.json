@@ -1,6 +1,8 @@
 {
   "trustedtaps": [
+    "acsandmann/tap",
     "ampcode/tap",
+    "dmtrkovalenko/fff",
     "felixkratz/formulae",
     "gromgit/brewtils",
     "hougesen/tap",
