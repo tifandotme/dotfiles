@@ -102,6 +102,12 @@ workspace_names = [
 ]
 workspace_rules = []
 app_rules = [
+  { app_id = "net.whatsapp.WhatsApp", workspace = "0_misc" },
+  { app_id = "ru.keepcoder.Telegram", workspace = "0_misc" },
+  { app_id = "com.hnc.Discord", workspace = "0_misc" },
+  { app_id = "com.colliderli.iina", workspace = "0_misc" },
+  { app_id = "com.tinyspeck.slackmacgap", workspace = "0_misc" },
+  { app_id = "com.spotify.client", workspace = "0_misc" },
   { app_id = "net.imput.helium", workspace = "1_personal" },
   { app_id = "net.imput.helium.debug", workspace = "1_personal" },
   { app_id = "com.apple.Safari", workspace = "1_personal" },
@@ -118,12 +124,6 @@ app_rules = [
   { app_id = "com.apple.Terminal", workspace = "4_terminal" },
   { app_id = "md.obsidian", workspace = "5_notes" },
   { app_id = "club.refactoring.tolaria", workspace = "5_notes" },
-  { app_id = "net.whatsapp.WhatsApp", workspace = "0_misc" },
-  { app_id = "ru.keepcoder.Telegram", workspace = "0_misc" },
-  { app_id = "com.hnc.Discord", workspace = "0_misc" },
-  { app_id = "com.apple.Safari.WebApp.2ADBBBBB-FD36-42E8-8053-EC3A72FBAC90", workspace = "0_misc" },
-  { app_id = "com.colliderli.iina", workspace = "0_misc" },
-  { app_id = "com.tinyspeck.slackmacgap", workspace = "0_misc" },
 ]
 
 [modifier_combinations]
@@ -131,10 +131,8 @@ cmd_shift = "Meta + Shift"
 alt_shift = "Alt + Shift"
 
 [keys]
-"Alt + Z" = "toggle_space_activated"
-
 "Alt + Enter" = "toggle_window_floating"
-"Alt + Period" = { set_workspace_layout = { mode = "traditional" } }
+"Alt + Period" = "toggle_orientation"
 "Alt + Comma" = "toggle_stack"
 
 "Alt + Shift + H" = { move_focus = "left" }

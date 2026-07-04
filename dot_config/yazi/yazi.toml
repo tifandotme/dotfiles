@@ -38,8 +38,8 @@ play = [{ run = 'open "$@" -a IINA', orphan = true, for = "unix" }]
 view_csv = [
   { run = 'tv -a -f -e "$1" | bat --plain --paging=always --wrap=never', block = true, for = "unix" }
 ]
-# setting TERM because we overrides TERM inside Yazi which is invalid according to vi
-edit = [{ run = 'TERM=ansi $EDITOR "$@"', block = true, for = "unix" }]
+# Yazi sets TERM to a value Neovim does not recognize, but ansi lacks cursor shape controls.
+edit = [{ run = 'TERM=xterm-ghostty $EDITOR "$@"', block = true, for = "unix" }]
 
 [preview]
 max_width = 1200

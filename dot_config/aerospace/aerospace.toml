@@ -1,5 +1,5 @@
 # don't add AeroSpace in Login Items manually or there will be duplicates!
-start-at-login = true
+start-at-login = false
 after-startup-command = [
   # don't use homebrew services to start/restart these, especially sketchybar,
   # homebrew services will run sketchybar before aerospace which is not what we want
@@ -220,10 +220,6 @@ run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
 if.app-id = "com.hnc.Discord"
-run = "move-node-to-workspace 0_misc"
-
-[[on-window-detected]]
-if.app-id = "app.legcord.Legcord"
 run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
