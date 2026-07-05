@@ -30,7 +30,23 @@ vim.opt.undofile = true
 vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "80,100"
 
-require("gruber-darker").setup()
+local function is_macos_dark()
+  if vim.fn.has("macunix") ~= 1 then
+    return false
+  end
+
+  return vim
+    .system({ "defaults", "read", "-g", "AppleInterfaceStyle" }, { text = true })
+    :wait().stdout
+    :match("Dark") ~= nil
+end
+
+if is_macos_dark() then
+  require("gruber-darker").setup()
+else
+  vim.opt.background = "light"
+  vim.cmd.colorscheme("retrobox")
+end
 
 local function install_fff_binary()
   local ok, download = pcall(require, "fff.download")
@@ -40,7 +56,6 @@ local function install_fff_binary()
 end
 
 vim.g.fff = { lazy_sync = true }
-vim.g.loaded_netrwPlugin = 1
 
 vim.api.nvim_create_autocmd("PackChanged", {
   callback = function(ev)
@@ -59,7 +74,6 @@ vim.pack.add({
   "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/dmtrKovalenko/fff.nvim",
   "https://github.com/lewis6991/gitsigns.nvim",
-  "https://github.com/mikavilpas/yazi.nvim",
 })
 install_fff_binary()
 
@@ -87,10 +101,103 @@ require("gitsigns").setup({
   end,
 })
 
-require("yazi").setup({
-  open_for_directories = true,
-  keymaps = { show_help = "<f1>" },
-})
+local function current_dir()
+  local path = vim.api.nvim_buf_get_name(0)
+  if path == "" then
+    return vim.uv.cwd()
+  end
+
+  local stat = vim.uv.fs_stat(path)
+  if stat and stat.type == "directory" then
+    return path
+  end
+
+  return vim.fs.dirname(path)
+end
+
+local function open_float_term(command, opts)
+  opts = opts or {}
+
+  local width = math.floor(vim.o.columns * 0.9)
+  local height = math.floor(vim.o.lines * 0.85)
+  local buf = vim.api.nvim_create_buf(false, true)
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = "editor",
+    width = width,
+    height = height,
+    col = math.floor((vim.o.columns - width) / 2),
+    row = math.floor((vim.o.lines - height) / 2),
+    border = "rounded",
+    style = "minimal",
+  })
+
+  local function close()
+    if vim.api.nvim_win_is_valid(win) then
+      vim.api.nvim_win_close(win, true)
+    end
+    if vim.api.nvim_buf_is_valid(buf) then
+      vim.api.nvim_buf_delete(buf, { force = true })
+    end
+  end
+
+  vim.keymap.set("t", "<Esc>", close, { buffer = buf, silent = true })
+
+  vim.fn.jobstart(command, {
+    term = true,
+    cwd = opts.cwd,
+    on_exit = function(_, code)
+      vim.schedule(function()
+        close()
+        if opts.on_exit then
+          opts.on_exit(code)
+        end
+      end)
+    end,
+  })
+  vim.cmd.startinsert()
+end
+
+local function open_yazi()
+  local chooser = vim.fn.tempname()
+  local start = vim.api.nvim_buf_get_name(0)
+  if start == "" then
+    start = current_dir()
+  end
+
+  open_float_term({ "yazi", "--chooser-file", chooser, start }, {
+    cwd = current_dir(),
+    on_exit = function()
+      local file = io.open(chooser, "r")
+      if not file then
+        return
+      end
+
+      local selection = file:read("*l")
+      file:close()
+      os.remove(chooser)
+
+      if selection and selection ~= "" then
+        vim.cmd.edit(vim.fn.fnameescape(selection))
+      end
+    end,
+  })
+end
+
+local function git_root()
+  local cwd = current_dir()
+  local result = vim
+    .system({ "git", "-C", cwd, "rev-parse", "--show-toplevel" }, { text = true })
+    :wait()
+  if result.code == 0 then
+    return vim.trim(result.stdout)
+  end
+
+  return cwd
+end
+
+local function open_lazygit()
+  open_float_term({ "lazygit" }, { cwd = git_root() })
+end
 
 local map = vim.keymap.set
 local opts = { silent = true }
@@ -118,7 +225,8 @@ end, opts)
 map({ "n", "x" }, "fw", function()
   require("fff").live_grep_under_cursor()
 end, opts)
-map({ "n", "v" }, "<leader>e", "<cmd>Yazi<cr>", opts)
+map({ "n", "v" }, "fe", open_yazi, opts)
+map("n", "lg", open_lazygit, opts)
 map("n", "U", "<C-r>", opts)
 map({ "n", "v" }, "gh", "0", opts)
 map({ "n", "v" }, "gl", "$", opts)
