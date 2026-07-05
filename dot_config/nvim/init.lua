@@ -32,6 +32,12 @@ vim.opt.undofile = true
 vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "80,100"
 
+vim.api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    vim.highlight.on_yank({ higroup = "YankHighlight", timeout = 200 })
+  end,
+})
+
 -- Theme
 local function is_macos_dark()
   if vim.fn.has("macunix") ~= 1 then
@@ -50,6 +56,8 @@ else
   vim.opt.background = "light"
   vim.cmd.colorscheme("retrobox")
 end
+
+vim.api.nvim_set_hl(0, "YankHighlight", { bg = "#ffff00", fg = "#000000" })
 
 -- Plugins
 local function install_fff_binary()
@@ -81,7 +89,13 @@ vim.pack.add({
   "https://github.com/folke/which-key.nvim",
 })
 install_fff_binary()
-require("which-key").setup()
+require("which-key").setup({
+  preset = "classic",
+  win = {
+    width = math.huge,
+    height = { min = 4, max = 15 },
+  },
+})
 require("which-key").add({
   { "<leader>b", group = "buffers" },
   { "<leader>f", group = "files" },
@@ -280,7 +294,7 @@ map("n", "<C-l>", "<C-w>l", key_opts("Window right"))
 
 -- Keymaps: buffers
 map("n", "<leader><leader>", pick_buffer, key_opts("Pick buffer"))
-map("n", "<leader>bb", "<C-^>", key_opts("Alternate buffer"))
+map("n", "<A-Tab>", "<C-^>", key_opts("Alternate buffer"))
 map("n", "<Tab>", "<cmd>bnext<cr>", key_opts("Next buffer"))
 map("n", "<S-Tab>", "<cmd>bprevious<cr>", key_opts("Previous buffer"))
 map("n", "<leader>bd", "<cmd>bdelete<cr>", key_opts("Delete buffer"))
