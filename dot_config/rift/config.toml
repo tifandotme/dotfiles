@@ -4,13 +4,13 @@ animation_duration = 0.2
 animation_fps = 100.0
 default_disable = false
 focus_follows_mouse = false
-mouse_follows_focus = true
+mouse_follows_focus = false
 mouse_hides_on_focus = false
 auto_focus_blacklist = ["com.raycast.macos"]
 run_on_start = [
   "sketchybar",
   "borders",
-  "osascript /Users/tifan/.config/aerospace/applescripts/wifi_off_on.applescript",
+  "osascript /Users/tifan/.config/rift/applescripts/wifi_off_on.applescript",
   "rift-cli subscribe cli --event workspace_changed --command sh --args -c --args 'sketchybar --trigger rift_workspace_changed RIFT_WORKSPACE_NAME=\"$RIFT_WORKSPACE_NAME\" RIFT_WORKSPACE_ID=\"$RIFT_WORKSPACE_ID\"'",
 ]
 hot_reload = true
@@ -112,11 +112,9 @@ app_rules = [
   { app_id = "net.imput.helium.debug", workspace = "1_personal" },
   { app_id = "com.apple.Safari", workspace = "1_personal" },
   { app_id = "org.chromium.Chromium", workspace = "1_personal" },
-  { app_id = "org.mozilla.firefox", workspace = "1_personal" },
   { app_id = "com.github.Electron", workspace = "2_work" },
   { app_id = "com.utmapp.UTM", workspace = "2_work" },
   { app_id = "com.postmanlabs.mac", workspace = "2_work" },
-  { app_id = "com.microsoft.VSCode", workspace = "3_editor" },
   { app_id = "dev.zed.Zed", workspace = "3_editor" },
   { app_id = "com.todesktop.230313mzl4w4u92", workspace = "3_editor" },
   { app_id = "com.anthropic.claudefordesktop", workspace = "3_editor" },
