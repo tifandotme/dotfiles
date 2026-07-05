@@ -394,6 +394,7 @@ end
 
 -- Keymaps
 local map = vim.keymap.set
+local format_buffer
 
 local function key_opts(desc)
   return { desc = desc, silent = true }
@@ -444,7 +445,7 @@ map({ "n", "v" }, "<leader>g", open_lazygit, key_opts("Lazygit"))
 
 -- Keymaps: LSP
 map("n", "<leader>p", function()
-  vim.lsp.buf.format({ timeout_ms = 1000 })
+  format_buffer(0)
 end, key_opts("Format file"))
 map("n", "<leader>k", vim.lsp.buf.hover, key_opts("Hover"))
 map("n", "gd", vim.lsp.buf.definition, key_opts("Go to definition"))
@@ -504,10 +505,40 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
+local function format_with_command(bufnr, command)
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local input = table.concat(lines, "\n")
+  if vim.bo[bufnr].endofline then
+    input = input .. "\n"
+  end
+
+  local result = vim.system(command, { stdin = input, text = true }):wait()
+  if result.code ~= 0 then
+    vim.notify(result.stderr, vim.log.levels.ERROR)
+    return
+  end
+
+  local output = vim.split(result.stdout, "\n", { plain = true })
+  if output[#output] == "" then
+    table.remove(output)
+  end
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, output)
+end
+
+function format_buffer(bufnr)
+  bufnr = bufnr == 0 and vim.api.nvim_get_current_buf() or bufnr
+  if vim.bo[bufnr].filetype == "nu" then
+    format_with_command(bufnr, { "nufmt", "--stdin" })
+    return
+  end
+
+  vim.lsp.buf.format({ bufnr = bufnr, timeout_ms = 1000 })
+end
+
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = vim.api.nvim_create_augroup("user-format", {}),
   callback = function(ev)
-    vim.lsp.buf.format({ bufnr = ev.buf, timeout_ms = 1000 })
+    format_buffer(ev.buf)
   end,
 })
 
@@ -542,4 +573,4 @@ vim.lsp.config("lua_ls", {
   },
 })
 
-vim.lsp.enable({ "vtsls", "oxfmt", "oxlint", "superhtml", "gopls", "stylua", "lua_ls" })
+vim.lsp.enable({ "vtsls", "oxfmt", "oxlint", "superhtml", "gopls", "stylua", "lua_ls", "nushell" })
