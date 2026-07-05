@@ -573,4 +573,14 @@ vim.lsp.config("lua_ls", {
   },
 })
 
-vim.lsp.enable({ "vtsls", "oxfmt", "oxlint", "superhtml", "gopls", "stylua", "lua_ls", "nushell" })
+vim.lsp.enable({
+  "vtsls",
+  "oxfmt",
+  "oxlint",
+  "superhtml",
+  "gopls",
+  "stylua",
+  "tombi",
+  "lua_ls",
+  "nushell",
+})
