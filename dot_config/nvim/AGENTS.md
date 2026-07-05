@@ -1,6 +1,9 @@
-Neovim config for a minimal terminal IDE. Prefer built-in Neovim features before adding plugins.
+Neovim config for a minimal terminal IDE. 
 
-Do not add plugins without user's permissions.
+- Prefer built-in Neovim features before adding plugins.
+- Do not add plugins without user's permissions.
+- Use vim.pack
+- Prefer minimal config, less is better. Suggest removal.
 
 ## Validation
 

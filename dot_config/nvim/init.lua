@@ -1,6 +1,8 @@
+-- Leaders
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Options
 vim.opt.termguicolors = true
 vim.opt.mouse = "a"
 vim.opt.number = true
@@ -30,6 +32,7 @@ vim.opt.undofile = true
 vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "80,100"
 
+-- Theme
 local function is_macos_dark()
   if vim.fn.has("macunix") ~= 1 then
     return false
@@ -48,6 +51,7 @@ else
   vim.cmd.colorscheme("retrobox")
 end
 
+-- Plugins
 local function install_fff_binary()
   local ok, download = pcall(require, "fff.download")
   if ok and not vim.uv.fs_stat(download.get_binary_path()) then
@@ -77,6 +81,7 @@ vim.pack.add({
 })
 install_fff_binary()
 
+-- Git signs
 require("gitsigns").setup({
   on_attach = function(bufnr)
     local gitsigns = require("gitsigns")
@@ -101,6 +106,7 @@ require("gitsigns").setup({
   end,
 })
 
+-- Floating terminal helpers
 local function current_dir()
   local path = vim.api.nvim_buf_get_name(0)
   if path == "" then
@@ -199,6 +205,7 @@ local function open_lazygit()
   open_float_term({ "lazygit" }, { cwd = git_root() })
 end
 
+-- Keymaps
 local map = vim.keymap.set
 local opts = { silent = true }
 
@@ -250,6 +257,7 @@ map("n", "[d", function()
   vim.diagnostic.jump({ count = -1, float = true })
 end, opts)
 
+-- Diagnostics
 vim.diagnostic.config({
   virtual_text = false,
   signs = true,
@@ -258,6 +266,7 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
+-- LSP
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("user-lsp", {}),
   callback = function(ev)
