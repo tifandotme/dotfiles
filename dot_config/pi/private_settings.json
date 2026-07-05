@@ -3,7 +3,7 @@
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.80.2",
+  "lastChangelogVersion": "0.80.3",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
