@@ -3,93 +3,94 @@ const BREW_FILE = "dot_Brewfile.tmpl"
 
 # Add non-template managed files to chezmoi and push to git
 export def sync [] {
-  try {
-    chezmoi re-add
-    let output = (chezmoi status)
-    if ($output != "") {
-      chezmoi diff
-      print ""
-      chezmoi status
-      print ""
-      error make {msg: "Run `chezmoi edit --apply <file>` on each template first. Then re-run this command."}
-    }
-    chezmoi git -- commit -am "update"
-    chezmoi git push
-  } catch {|e|
-    print $"error: ($e.msg)"
-  }
+    try {
+        chezmoi re-add
+        let output = (chezmoi status)
+        if $output != "" {
+            chezmoi diff
+            print ""
+            chezmoi status
+            print ""
+            error make {msg: "Run `chezmoi edit --apply <file>` on each template first. Then re-run this command."}
+        }
+        chezmoi git -- commit -am "update"
+        chezmoi git push
+    } catch {|e| print $"error: ($e.msg)" }
 }
 
 # Guard bun global package operations — use chezmoi instead
 export def --wrapped bun [...args: string] {
-  let has_global = ($args | any {|a| $a in ["-g" "--global"] })
-  let has_add_or_remove = ($args | any {|a| $a in ["add" "remove" "rm"] })
+    let has_global = $args | any {|a| $a in ["-g" "--global"] }
+    let has_add_or_remove = $args | any {|a| $a in ["add" "remove" "rm"] }
 
-  let is_cache_op = ($args | any {|a| $a == "cache" })
+    let is_cache_op = $args | any {|a| $a == "cache" }
 
-  if ($has_global and $has_add_or_remove) and not $is_cache_op {
-    print $"(ansi red_bold)🚫 NOPE!(ansi reset)"
-    print ""
-    print "You don't manually manage global packages, you absolute donut."
-    print ""
-    print "Edit this file instead:"
-    print $"  (ansi cyan)($BUN_FILE)(ansi reset)"
-    print ""
-    print $"Then run: (ansi green)chezmoi apply(ansi reset)"
-    return
-  }
+    if ($has_global and $has_add_or_remove) and not $is_cache_op {
+        print $"(ansi red_bold)🚫 NOPE!(ansi reset)"
+        print ""
+        print "You don't manually manage global packages, you absolute donut."
+        print ""
+        print "Edit this file instead:"
+        print $"  (ansi cyan)($BUN_FILE)(ansi reset)"
+        print ""
+        print $"Then run: (ansi green)chezmoi apply(ansi reset)"
+        return
+    }
 
-  ^bun ...$args
+    ^bun ...$args
 }
 
 # Guard brew package operations — use chezmoi instead
 export def --wrapped brew [...args: string] {
-  let has_forbidden = ($args | any {|a| $a in ["install" "uninstall" "remove" "reinstall" "tap" "untap" "rm"] })
-  let bypass_guard = ($env.CHEZMOI_BYPASS_BREW_GUARD? | default "0") == "1"
+    let has_forbidden = (
+        $args
+        | any {|a| $a in ["install" "uninstall" "remove" "reinstall" "tap" "untap" "rm"] }
+    )
+    let bypass_guard = ($env.CHEZMOI_BYPASS_BREW_GUARD? | default "0") == "1"
 
-  if ($has_forbidden and not $bypass_guard) {
-    print $"(ansi red_bold)🚫 HELL NO!(ansi reset)"
-    print ""
-    print "You don't manually manage packages, you magnificent walnut."
-    print ""
-    print "Edit this file instead:"
-    print $"  (ansi cyan)($BREW_FILE)(ansi reset)"
-    print ""
-    print $"Then run: (ansi green)chezmoi apply(ansi reset)"
-    print ""
-    print "Bypass with CHEZMOI_BYPASS_BREW_GUARD=1"
-    return
-  }
+    if $has_forbidden and not $bypass_guard {
+        print $"(ansi red_bold)🚫 HELL NO!(ansi reset)"
+        print ""
+        print "You don't manually manage packages, you magnificent walnut."
+        print ""
+        print "Edit this file instead:"
+        print $"  (ansi cyan)($BREW_FILE)(ansi reset)"
+        print ""
+        print $"Then run: (ansi green)chezmoi apply(ansi reset)"
+        print ""
+        print "Bypass with CHEZMOI_BYPASS_BREW_GUARD=1"
+        return
+    }
 
-  ^brew ...$args
+    ^brew ...$args
 }
 
 # Make `chezmoi cd` change the current Nushell cwd instead of spawning a child shell.
 export def --env --wrapped main [...args: string] {
-  if (($args | length) > 0) and ($args.0 == "cd") {
-    let path_args = ($args | skip 1)
-    if ($path_args | is-empty) {
-      cd (with-env {TERM: "dumb"} { ^chezmoi source-path })
-    } else {
-      let target = (with-env {TERM: "dumb"} { ^chezmoi source-path ...$path_args })
-      if (($target | path type) == "file") {
-        cd ($target | path dirname)
-      } else {
-        cd $target
-      }
+    if (($args | length) > 0) and ($args.0 == "cd") {
+        let path_args = $args | skip 1
+        if ($path_args | is-empty) {
+            cd (with-env {TERM: "dumb"} { ^chezmoi source-path })
+        } else {
+            let target = (with-env {TERM: "dumb"} { ^chezmoi source-path ...$path_args })
+            if ($target | path type) == "file" {
+                cd ($target | path dirname)
+            } else {
+                cd $target
+            }
+        }
+        return
     }
-    return
-  }
 
-  with-env {TERM: "dumb"} { ^chezmoi ...$args }
+    with-env {TERM: "dumb"} { ^chezmoi ...$args }
 }
 
 # Open lazygit in chezmoi source directory
 export def "lzg" [] {
-  lazygit -p (chezmoi source-path)
+    lazygit -p (chezmoi source-path)
 }
 
 # Open zed in chezmoi source directory
 export def "zed" [] {
-  ^zed (chezmoi source-path)
+    ^zed (chezmoi source-path)
 }

@@ -12,12 +12,15 @@ use utils.nu herdr-wrap
 
 alias _tv = tv
 def --wrapped tv [...args] {
-  _tv --color-always --extend-width-and-length ...$args | bat --style plain
+    _tv --color-always --extend-width-and-length ...$args | bat --style plain
 }
 
 def --wrapped lazygit [...args] {
-  let lzg_label = ([(pwd | path basename) " (lzg)"] | str join)
-  herdr-wrap $lzg_label {
+    let lzg_label = ([
+        (pwd | path basename)
+        " (lzg)"
+    ] | str join)
+    herdr-wrap $lzg_label {
     ^lazygit ...$args
   }
 }
@@ -25,8 +28,11 @@ def --wrapped lazygit [...args] {
 alias lzg = lazygit
 
 def --wrapped lazydocker [...args] {
-  let lzd_label = ([(pwd | path basename) " (lzd)"] | str join)
-  herdr-wrap $lzd_label {
+    let lzd_label = ([
+        (pwd | path basename)
+        " (lzd)"
+    ] | str join)
+    herdr-wrap $lzd_label {
     ^lazydocker ...$args
   }
 }
@@ -36,37 +42,46 @@ alias lzd = lazydocker
 alias d = docker
 
 def --wrapped backlog [...args] {
-  let backlog_label = ([(pwd | path basename) " (backlog)"] | str join)
-  herdr-wrap $backlog_label {
+    let backlog_label = ([
+        (pwd | path basename)
+        " (backlog)"
+    ] | str join)
+    herdr-wrap $backlog_label {
     ^backlog ...$args
   }
 }
 
 def --wrapped v [...args] {
-  let nvim_label = ([(pwd | path basename) " (nvim)"] | str join)
-  herdr-wrap $nvim_label {
+    let nvim_label = ([
+        (pwd | path basename)
+        " (nvim)"
+    ] | str join)
+    herdr-wrap $nvim_label {
     ^nvim ...$args
   }
 }
 
 def --wrapped vg [...args] {
-  let git_root_result = (git rev-parse --show-toplevel | complete)
+    let git_root_result = git rev-parse --show-toplevel | complete
 
-  if $git_root_result.exit_code != 0 {
-    print -e "vg: not inside a git repository"
-    return
-  }
+    if $git_root_result.exit_code != 0 {
+        print -e "vg: not inside a git repository"
+        return
+    }
 
-  let git_root = ($git_root_result.stdout | str trim)
-  let nvim_label = ([($git_root | path basename) " (nvim)"] | str join)
-  herdr-wrap $nvim_label {
+    let git_root = $git_root_result.stdout | str trim
+    let nvim_label = ([
+        ($git_root | path basename)
+        " (nvim)"
+    ] | str join)
+    herdr-wrap $nvim_label {
     cd $git_root
     ^nvim ...$args
   }
 }
 
 def --wrapped t [...args] {
-  herdr-wrap --tab "tuxedo" {
+    herdr-wrap --tab "tuxedo" {
     ^tuxedo ...$args
   }
 }
@@ -83,10 +98,9 @@ alias cm = chezmoi
 
 alias _pi = ^pi
 def --wrapped pi [...args] {
-  # pi-code-previews: avoid read/grep tool conflicts with pi-fff.
-  # with-env {CODE_PREVIEW_TOOLS: "bash,write,edit,find,ls"} {
-  _pi ...$args
-  # }
+    # pi-code-previews: avoid read/grep tool conflicts with pi-fff.
+    # with-env {CODE_PREVIEW_TOOLS: "bash,write,edit,find,ls"} {
+    _pi ...$args
 }
 
 alias _claude = ^claude
@@ -97,16 +111,16 @@ def --wrapped codex [...args] { _codex --dangerously-bypass-approvals-and-sandbo
 
 alias _cursor-gui = ^cursor
 def --wrapped cursor-gui [...args] {
-  let cursor_config_dir = $env.HOME | path join ".cursor"
-  with-env {CURSOR_CONFIG_DIR: $cursor_config_dir} {
+    let cursor_config_dir = $env.HOME | path join ".cursor"
+    with-env {CURSOR_CONFIG_DIR: $cursor_config_dir} {
     _cursor-gui --chat ...$args
   }
 }
 
 alias _cursor-agent = ^cursor-agent
 def --wrapped cursor [...args] {
-  let cursor_config_dir = $env.HOME | path join ".cursor"
-  with-env {CURSOR_CONFIG_DIR: $cursor_config_dir} {
+    let cursor_config_dir = $env.HOME | path join ".cursor"
+    with-env {CURSOR_CONFIG_DIR: $cursor_config_dir} {
     _cursor-agent --yolo ...$args
   }
 }
