@@ -16,14 +16,24 @@ require_cmd() {
 }
 
 read_keychain_payload() {
-  local -a args=(find-generic-password -s "$KEYCHAIN_SERVICE" -w)
+  local service
   local account="${CODEXBAR_CLAUDE_KEYCHAIN_ACCOUNT:-}"
+  local -a args
 
-  if [[ -n "$account" ]]; then
-    args+=(-a "$account")
+  # Exact name first; fall back to any suffixed variant (Claude Code now appends a machine hash)
+  if security find-generic-password -s "$KEYCHAIN_SERVICE" >/dev/null 2>&1; then
+    service="$KEYCHAIN_SERVICE"
+  else
+    service="$(security dump-keychain 2>/dev/null \
+      | grep -o "\"${KEYCHAIN_SERVICE}-[^\"]*\"" \
+      | tr -d '"' | head -1)"
+    [[ -n "$service" ]] || die "could not find Claude OAuth item in Keychain (service: ${KEYCHAIN_SERVICE}*)"
   fi
 
-  security "${args[@]}" 2>/dev/null || die "could not read Claude OAuth item from Keychain (service: $KEYCHAIN_SERVICE)"
+  args=(find-generic-password -s "$service" -w)
+  [[ -n "$account" ]] && args+=(-a "$account")
+
+  security "${args[@]}" 2>/dev/null || die "could not read Claude OAuth item from Keychain (service: $service)"
 }
 
 extract_access_token() {

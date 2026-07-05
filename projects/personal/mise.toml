@@ -1,2 +1,16 @@
 [env]
 CLOUDSDK_ACTIVE_CONFIG_NAME = "personal"
+
+[tasks.gcloud-auth-check]
+description = "Check personal gcloud auth"
+run = '''
+gcloud auth list --filter="account:ifan.anvity@gmail.com" --format="value(account)" | grep -qx "ifan.anvity@gmail.com" || {
+  echo "Missing gcloud credentials for ifan.anvity@gmail.com"
+  echo "Run: mise run gcloud-login"
+  exit 1
+}
+'''
+
+[tasks.gcloud-login]
+description = "Login personal gcloud account without activating it globally"
+run = "gcloud auth login ifan.anvity@gmail.com --no-activate"
