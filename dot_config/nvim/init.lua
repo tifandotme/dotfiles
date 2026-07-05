@@ -114,7 +114,7 @@ require("gitsigns").setup({
   end,
 })
 
--- Floating terminal helpers
+-- Features: floating terminals
 local function current_dir()
   local path = vim.api.nvim_buf_get_name(0)
   if path == "" then
@@ -171,6 +171,7 @@ local function open_float_term(command, opts)
   vim.cmd.startinsert()
 end
 
+-- Features: files
 local function open_yazi()
   local chooser = vim.fn.tempname()
   local start = vim.api.nvim_buf_get_name(0)
@@ -197,6 +198,7 @@ local function open_yazi()
   })
 end
 
+-- Features: git
 local function git_root()
   local cwd = current_dir()
   local result = vim
@@ -213,7 +215,7 @@ local function open_lazygit()
   open_float_term({ "lazygit" }, { cwd = git_root() })
 end
 
--- Buffers
+-- Features: buffers
 local function listed_buffers()
   return vim.tbl_filter(function(buf)
     return vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buflisted
@@ -256,36 +258,12 @@ local function key_opts(desc)
   return { desc = desc, silent = true }
 end
 
+-- Keymaps: general
 map("i", "jj", "<Esc>", key_opts("Exit insert mode"))
 map("i", "<C-Space>", "<C-x><C-o>", key_opts("Complete"))
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", key_opts("Clear search highlight"))
 map("n", "<leader>w", "<cmd>write<cr>", key_opts("Write file"))
 map("n", "<leader>r", "<cmd>source ~/.config/nvim/init.lua<cr>", key_opts("Reload config"))
-map("n", "<leader>p", function()
-  vim.lsp.buf.format({
-    timeout_ms = 1000,
-    filter = function(client)
-      return client.name == "oxfmt" or client.name == "superhtml"
-    end,
-  })
-end, key_opts("Format file"))
-map("n", "<leader><leader>", pick_buffer, key_opts("Pick buffer"))
-map("n", "<leader>bb", "<C-^>", key_opts("Alternate buffer"))
-map("n", "<Tab>", "<cmd>bnext<cr>", key_opts("Next buffer"))
-map("n", "<S-Tab>", "<cmd>bprevious<cr>", key_opts("Previous buffer"))
-map("n", "<leader>bd", "<cmd>bdelete<cr>", key_opts("Delete buffer"))
-map("n", "<leader>bo", delete_other_buffers, key_opts("Delete other buffers"))
-map("n", "<leader>ff", function()
-  require("fff").find_files()
-end, key_opts("Find files"))
-map("n", "<leader>fg", function()
-  require("fff").live_grep()
-end, key_opts("Live grep"))
-map({ "n", "x" }, "<leader>fw", function()
-  require("fff").live_grep_under_cursor()
-end, key_opts("Grep word"))
-map({ "n", "v" }, "<leader>fe", open_yazi, key_opts("File explorer"))
-map("n", "lg", open_lazygit, key_opts("Lazygit"))
 map("n", "U", "<C-r>", key_opts("Redo"))
 map({ "n", "v" }, "gh", "0", key_opts("Line start"))
 map({ "n", "v" }, "gl", "$", key_opts("Line end"))
@@ -300,6 +278,33 @@ map("n", "<C-j>", "<C-w>j", key_opts("Window down"))
 map("n", "<C-k>", "<C-w>k", key_opts("Window up"))
 map("n", "<C-l>", "<C-w>l", key_opts("Window right"))
 
+-- Keymaps: buffers
+map("n", "<leader><leader>", pick_buffer, key_opts("Pick buffer"))
+map("n", "<leader>bb", "<C-^>", key_opts("Alternate buffer"))
+map("n", "<Tab>", "<cmd>bnext<cr>", key_opts("Next buffer"))
+map("n", "<S-Tab>", "<cmd>bprevious<cr>", key_opts("Previous buffer"))
+map("n", "<leader>bd", "<cmd>bdelete<cr>", key_opts("Delete buffer"))
+map("n", "<leader>bo", delete_other_buffers, key_opts("Delete other buffers"))
+
+-- Keymaps: files
+map("n", "<leader>ff", function()
+  require("fff").find_files()
+end, key_opts("Find files"))
+map("n", "<leader>fg", function()
+  require("fff").live_grep()
+end, key_opts("Live grep"))
+map({ "n", "x" }, "<leader>fw", function()
+  require("fff").live_grep_under_cursor()
+end, key_opts("Grep word"))
+map({ "n", "v" }, "<leader>fe", open_yazi, key_opts("File explorer"))
+
+-- Keymaps: git
+map({ "n", "v" }, "lg", open_lazygit, key_opts("Lazygit"))
+
+-- Keymaps: LSP
+map("n", "<leader>p", function()
+  vim.lsp.buf.format({ timeout_ms = 1000 })
+end, key_opts("Format file"))
 map("n", "<leader>k", vim.lsp.buf.hover, key_opts("Hover"))
 map("n", "gd", vim.lsp.buf.definition, key_opts("Go to definition"))
 map("n", "]d", function()
@@ -319,6 +324,26 @@ vim.diagnostic.config({
 })
 
 -- LSP
+vim.api.nvim_create_user_command("LspClients", function()
+  vim.print(vim.lsp.get_clients({ bufnr = 0 }))
+end, {})
+
+vim.api.nvim_create_user_command("LspFormatters", function()
+  vim.print(vim.tbl_map(function(client)
+    return {
+      name = client.name,
+      format = client:supports_method("textDocument/formatting", 0),
+    }
+  end, vim.lsp.get_clients({ bufnr = 0 })))
+end, {})
+
+vim.api.nvim_create_user_command("LspRestartBuffer", function()
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+    client:stop(true)
+  end
+  vim.cmd.edit()
+end, {})
+
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("user-lsp", {}),
   callback = function(ev)
@@ -327,19 +352,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
       return
     end
 
-    if client:supports_method("textDocument/completion") then
-      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    if client.name == "vtsls" or client.name == "lua_ls" then
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
     end
 
-    if client.name == "oxfmt" or client.name == "superhtml" then
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = vim.api.nvim_create_augroup("user-format", { clear = false }),
-        buffer = ev.buf,
-        callback = function()
-          vim.lsp.buf.format({ bufnr = ev.buf, id = client.id, timeout_ms = 1000 })
-        end,
-      })
+    if client:supports_method("textDocument/completion") then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = false })
     end
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = vim.api.nvim_create_augroup("user-format", {}),
+  callback = function(ev)
+    vim.lsp.buf.format({ bufnr = ev.buf, timeout_ms = 1000 })
   end,
 })
 
@@ -358,6 +385,12 @@ vim.lsp.config("superhtml", {
   root_markers = { ".git" },
 })
 
+vim.lsp.config("stylua", {
+  cmd = { "stylua", "--lsp" },
+  filetypes = { "lua", "luau" },
+  root_markers = { ".stylua.toml", "stylua.toml", ".git" },
+})
+
 vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
@@ -368,4 +401,4 @@ vim.lsp.config("lua_ls", {
   },
 })
 
-vim.lsp.enable({ "vtsls", "oxfmt", "oxlint", "superhtml", "gopls", "lua_ls" })
+vim.lsp.enable({ "vtsls", "oxfmt", "oxlint", "superhtml", "gopls", "stylua", "lua_ls" })
