@@ -26,11 +26,61 @@ vim.opt.hlsearch = true
 vim.opt.showmode = true
 vim.opt.showcmd = true
 vim.opt.showmatch = true
+vim.opt.laststatus = 2
+
+-- Cache Git status briefly; `*` means the repo has uncommitted changes.
+local git_status_cache = { root = nil, value = "", expires = 0 }
+
+function _G.statusline_git()
+  local path = vim.api.nvim_buf_get_name(0)
+  if path == "" then
+    return ""
+  end
+
+  local root = vim.fs.root(vim.fs.dirname(path), ".git")
+  if not root then
+    return ""
+  end
+
+  local now = vim.uv.now()
+  if git_status_cache.root == root and now < git_status_cache.expires then
+    return git_status_cache.value
+  end
+
+  local branch = vim
+    .system({ "git", "-C", root, "branch", "--show-current" }, { text = true })
+    :wait()
+  local name = branch.code == 0 and vim.trim(branch.stdout) or ""
+  if name == "" then
+    local head = vim
+      .system({ "git", "-C", root, "rev-parse", "--short", "HEAD" }, { text = true })
+      :wait()
+    name = head.code == 0 and vim.trim(head.stdout) or ""
+  end
+
+  local status = vim.system({ "git", "-C", root, "status", "--porcelain" }, { text = true }):wait()
+  if status.code == 0 and status.stdout ~= "" then
+    name = name .. "*"
+  end
+
+  git_status_cache = { root = root, value = name == "" and "" or name .. " ", expires = now + 2000 }
+  return git_status_cache.value
+end
+
+vim.opt.statusline = " %f%m%r %= %{v:lua.statusline_git()}%y %l:%c %P "
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
 vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "80,100"
+vim.opt.listchars = { space = "·", tab = "→ ", trail = "·", nbsp = "␣" }
+
+local visual_modes = { v = true, V = true, [string.char(22)] = true }
+vim.api.nvim_create_autocmd("ModeChanged", {
+  callback = function()
+    vim.opt_local.list = visual_modes[vim.fn.mode()] or false
+  end,
+})
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
