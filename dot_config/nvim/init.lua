@@ -78,14 +78,22 @@ vim.pack.add({
   "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/dmtrKovalenko/fff.nvim",
   "https://github.com/lewis6991/gitsigns.nvim",
+  "https://github.com/folke/which-key.nvim",
 })
 install_fff_binary()
+require("which-key").setup()
+require("which-key").add({
+  { "<leader>b", group = "buffers" },
+  { "<leader>f", group = "files" },
+})
 
 -- Git signs
 require("gitsigns").setup({
   on_attach = function(bufnr)
     local gitsigns = require("gitsigns")
-    local git_opts = { buffer = bufnr, silent = true }
+    local function git_opts(desc)
+      return { buffer = bufnr, desc = desc, silent = true }
+    end
 
     vim.keymap.set("n", "]c", function()
       if vim.wo.diff then
@@ -93,16 +101,16 @@ require("gitsigns").setup({
       else
         gitsigns.nav_hunk("next")
       end
-    end, git_opts)
+    end, git_opts("Next hunk"))
     vim.keymap.set("n", "[c", function()
       if vim.wo.diff then
         vim.cmd.normal({ "[c", bang = true })
       else
         gitsigns.nav_hunk("prev")
       end
-    end, git_opts)
-    vim.keymap.set("n", "dp", gitsigns.reset_hunk, git_opts)
-    vim.keymap.set("n", "do", gitsigns.preview_hunk, git_opts)
+    end, git_opts("Previous hunk"))
+    vim.keymap.set("n", "dp", gitsigns.reset_hunk, git_opts("Reset hunk"))
+    vim.keymap.set("n", "do", gitsigns.preview_hunk, git_opts("Preview hunk"))
   end,
 })
 
@@ -146,7 +154,7 @@ local function open_float_term(command, opts)
     end
   end
 
-  vim.keymap.set("t", "<Esc>", close, { buffer = buf, silent = true })
+  vim.keymap.set("t", "<Esc>", close, { buffer = buf, desc = "Close terminal", silent = true })
 
   vim.fn.jobstart(command, {
     term = true,
@@ -205,15 +213,54 @@ local function open_lazygit()
   open_float_term({ "lazygit" }, { cwd = git_root() })
 end
 
+-- Buffers
+local function listed_buffers()
+  return vim.tbl_filter(function(buf)
+    return vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buflisted
+  end, vim.api.nvim_list_bufs())
+end
+
+local function buffer_label(buf)
+  local name = vim.api.nvim_buf_get_name(buf)
+  if name == "" then
+    return "[No Name]"
+  end
+
+  return vim.fn.fnamemodify(name, ":~:.")
+end
+
+local function pick_buffer()
+  vim.ui.select(listed_buffers(), {
+    prompt = "Buffers",
+    format_item = buffer_label,
+  }, function(buf)
+    if buf then
+      vim.api.nvim_set_current_buf(buf)
+    end
+  end)
+end
+
+local function delete_other_buffers()
+  local current = vim.api.nvim_get_current_buf()
+  for _, buf in ipairs(listed_buffers()) do
+    if buf ~= current then
+      vim.api.nvim_buf_delete(buf, {})
+    end
+  end
+end
+
 -- Keymaps
 local map = vim.keymap.set
-local opts = { silent = true }
 
-map("i", "jj", "<Esc>", opts)
-map("i", "<C-Space>", "<C-x><C-o>", opts)
-map("n", "<Esc>", "<cmd>nohlsearch<cr>", opts)
-map("n", "<leader>w", "<cmd>write<cr>", opts)
-map("n", "<leader>r", "<cmd>source ~/.config/nvim/init.lua<cr>", opts)
+local function key_opts(desc)
+  return { desc = desc, silent = true }
+end
+
+map("i", "jj", "<Esc>", key_opts("Exit insert mode"))
+map("i", "<C-Space>", "<C-x><C-o>", key_opts("Complete"))
+map("n", "<Esc>", "<cmd>nohlsearch<cr>", key_opts("Clear search highlight"))
+map("n", "<leader>w", "<cmd>write<cr>", key_opts("Write file"))
+map("n", "<leader>r", "<cmd>source ~/.config/nvim/init.lua<cr>", key_opts("Reload config"))
 map("n", "<leader>p", function()
   vim.lsp.buf.format({
     timeout_ms = 1000,
@@ -221,41 +268,46 @@ map("n", "<leader>p", function()
       return client.name == "oxfmt" or client.name == "superhtml"
     end,
   })
-end, opts)
-map({ "n", "v" }, "<leader>c", "gc", { remap = true, silent = true })
-map("n", "ff", function()
+end, key_opts("Format file"))
+map("n", "<leader><leader>", pick_buffer, key_opts("Pick buffer"))
+map("n", "<leader>bb", "<C-^>", key_opts("Alternate buffer"))
+map("n", "<Tab>", "<cmd>bnext<cr>", key_opts("Next buffer"))
+map("n", "<S-Tab>", "<cmd>bprevious<cr>", key_opts("Previous buffer"))
+map("n", "<leader>bd", "<cmd>bdelete<cr>", key_opts("Delete buffer"))
+map("n", "<leader>bo", delete_other_buffers, key_opts("Delete other buffers"))
+map("n", "<leader>ff", function()
   require("fff").find_files()
-end, opts)
-map("n", "fg", function()
+end, key_opts("Find files"))
+map("n", "<leader>fg", function()
   require("fff").live_grep()
-end, opts)
-map({ "n", "x" }, "fw", function()
+end, key_opts("Live grep"))
+map({ "n", "x" }, "<leader>fw", function()
   require("fff").live_grep_under_cursor()
-end, opts)
-map({ "n", "v" }, "fe", open_yazi, opts)
-map("n", "lg", open_lazygit, opts)
-map("n", "U", "<C-r>", opts)
-map({ "n", "v" }, "gh", "0", opts)
-map({ "n", "v" }, "gl", "$", opts)
-map("n", "ge", "G", opts)
-map("n", "j", "gj", opts)
-map("n", "k", "gk", opts)
-map("n", "0", "g0", opts)
-map("n", "$", "g$", opts)
-map("n", "q:", ":", opts)
-map("n", "<C-h>", "<C-w>h", opts)
-map("n", "<C-j>", "<C-w>j", opts)
-map("n", "<C-k>", "<C-w>k", opts)
-map("n", "<C-l>", "<C-w>l", opts)
+end, key_opts("Grep word"))
+map({ "n", "v" }, "<leader>fe", open_yazi, key_opts("File explorer"))
+map("n", "lg", open_lazygit, key_opts("Lazygit"))
+map("n", "U", "<C-r>", key_opts("Redo"))
+map({ "n", "v" }, "gh", "0", key_opts("Line start"))
+map({ "n", "v" }, "gl", "$", key_opts("Line end"))
+map("n", "ge", "G", key_opts("File end"))
+map("n", "j", "gj", key_opts("Down by display line"))
+map("n", "k", "gk", key_opts("Up by display line"))
+map("n", "0", "g0", key_opts("Display line start"))
+map("n", "$", "g$", key_opts("Display line end"))
+map("n", "q:", ":", key_opts("Command line"))
+map("n", "<C-h>", "<C-w>h", key_opts("Window left"))
+map("n", "<C-j>", "<C-w>j", key_opts("Window down"))
+map("n", "<C-k>", "<C-w>k", key_opts("Window up"))
+map("n", "<C-l>", "<C-w>l", key_opts("Window right"))
 
-map("n", "<leader>k", vim.lsp.buf.hover, opts)
-map("n", "gd", vim.lsp.buf.definition, opts)
+map("n", "<leader>k", vim.lsp.buf.hover, key_opts("Hover"))
+map("n", "gd", vim.lsp.buf.definition, key_opts("Go to definition"))
 map("n", "]d", function()
   vim.diagnostic.jump({ count = 1, float = true })
-end, opts)
+end, key_opts("Next diagnostic"))
 map("n", "[d", function()
   vim.diagnostic.jump({ count = -1, float = true })
-end, opts)
+end, key_opts("Previous diagnostic"))
 
 -- Diagnostics
 vim.diagnostic.config({
