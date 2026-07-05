@@ -8,130 +8,66 @@ alias lsa = eza --group-directories-first --classify=auto --sort=extension --one
 alias _cat = cat
 alias cat = bat --plain --theme=base16
 
-alias vim = nvim
+use utils.nu herdr-wrap
 
 alias _tv = tv
 def --wrapped tv [...args] {
   _tv --color-always --extend-width-and-length ...$args | bat --style plain
 }
 
-def __herdr_current_pane_label [] {
-  if ($env.HERDR_PANE_ID? | is-empty) {
-    return null
-  }
-
-  try {
-    ^herdr pane get $env.HERDR_PANE_ID
-    | from json
-    | get result.pane.label?
-  } catch {
-    null
-  }
-}
-
-def __herdr_current_tab_state [] {
-  if ($env.HERDR_PANE_ID? | is-empty) {
-    return null
-  }
-
-  try {
-    let pane = (^herdr pane get $env.HERDR_PANE_ID | from json | get result.pane)
-    let tab = (^herdr tab get $pane.tab_id | from json | get result.tab)
-
-    {
-      tab_id: $pane.tab_id
-      label: $tab.label
-      pane_count: $tab.pane_count
-    }
-  } catch {
-    null
-  }
-}
-
-def __herdr_rename_pane [label: string] {
-  if ($env.HERDR_PANE_ID? | is-not-empty) {
-    ^herdr pane rename $env.HERDR_PANE_ID $label | ignore
-  }
-}
-
-def __herdr_rename_tab [tab_id: string, label: string] {
-  ^herdr tab rename $tab_id $label | ignore
-}
-
-def __herdr_restore_pane_label [label] {
-  if ($env.HERDR_PANE_ID? | is-empty) {
-    return
-  }
-
-  if ($label | is-empty) {
-    ^herdr pane rename $env.HERDR_PANE_ID --clear | ignore
-  } else {
-    ^herdr pane rename $env.HERDR_PANE_ID $label | ignore
-  }
-}
-
-def __herdr_restore_tab_label [tab_id: string, label: string] {
-  ^herdr tab rename $tab_id $label | ignore
-}
-
 def --wrapped lazygit [...args] {
-  let lzg_label = ([(pwd | path basename) "(lzg)"] | str join)
-  let tab_state = (__herdr_current_tab_state)
-  let use_tab_label = (($tab_state | is-not-empty) and ($tab_state.pane_count == 1))
-  let previous_pane_label = (if $use_tab_label { null } else { __herdr_current_pane_label })
-
-  if $use_tab_label {
-    __herdr_rename_tab $tab_state.tab_id $lzg_label
-  } else {
-    __herdr_rename_pane $lzg_label
-  }
-
-  try {
+  let lzg_label = ([(pwd | path basename) " (lzg)"] | str join)
+  herdr-wrap $lzg_label {
     ^lazygit ...$args
-  } finally {
-    if $use_tab_label {
-      __herdr_restore_tab_label $tab_state.tab_id $tab_state.label
-    } else {
-      __herdr_restore_pane_label $previous_pane_label
-    }
   }
 }
 
 alias lzg = lazygit
+
+def --wrapped lazydocker [...args] {
+  let lzd_label = ([(pwd | path basename) " (lzd)"] | str join)
+  herdr-wrap $lzd_label {
+    ^lazydocker ...$args
+  }
+}
 
 alias lzd = lazydocker
 
 alias d = docker
 
 def --wrapped backlog [...args] {
-  let tab_state = (__herdr_current_tab_state)
+  let backlog_label = ([(pwd | path basename) " (backlog)"] | str join)
+  herdr-wrap $backlog_label {
+    ^backlog ...$args
+  }
+}
 
-  if ($tab_state | is-not-empty) {
-    __herdr_rename_tab $tab_state.tab_id "backlog"
+def --wrapped v [...args] {
+  let nvim_label = ([(pwd | path basename) " (nvim)"] | str join)
+  herdr-wrap $nvim_label {
+    ^nvim ...$args
+  }
+}
+
+def --wrapped vg [...args] {
+  let git_root_result = (git rev-parse --show-toplevel | complete)
+
+  if $git_root_result.exit_code != 0 {
+    print -e "vg: not inside a git repository"
+    return
   }
 
-  try {
-    ^backlog ...$args
-  } finally {
-    if ($tab_state | is-not-empty) {
-      __herdr_restore_tab_label $tab_state.tab_id $tab_state.label
-    }
+  let git_root = ($git_root_result.stdout | str trim)
+  let nvim_label = ([($git_root | path basename) " (nvim)"] | str join)
+  herdr-wrap $nvim_label {
+    cd $git_root
+    ^nvim ...$args
   }
 }
 
 def --wrapped t [...args] {
-  let tab_state = (__herdr_current_tab_state)
-
-  if ($tab_state | is-not-empty) {
-    __herdr_rename_tab $tab_state.tab_id "tuxedo"
-  }
-
-  try {
+  herdr-wrap --tab "tuxedo" {
     ^tuxedo ...$args
-  } finally {
-    if ($tab_state | is-not-empty) {
-      __herdr_restore_tab_label $tab_state.tab_id $tab_state.label
-    }
   }
 }
 

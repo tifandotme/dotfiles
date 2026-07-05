@@ -1,3 +1,5 @@
+use utils.nu herdr-wrap
+
 export def open-ports [] {
   lsof -i -P -n | grep LISTEN | lines | each {|line|
     let fields = ($line | split row -r '\\s+')
@@ -51,9 +53,12 @@ export def --wrapped sshs [...args] {
   TERM=xterm-256color ^sshs ...$args
 }
 
-def --env yazi [...args] {
+export def --env yazi [...args] {
   let tmp = (mktemp -t "yazi-cwd.XXXXXX")
-  ^yazi ...$args --cwd-file $tmp
+  let yazi_label = ([(pwd | path basename) " (yazi)"] | str join)
+  herdr-wrap $yazi_label {
+    ^yazi ...$args --cwd-file $tmp
+  }
   let cwd = (open $tmp)
   if $cwd != "" and $cwd != $env.PWD {
     cd $cwd
