@@ -296,10 +296,10 @@ end, key_opts("Live grep"))
 map({ "n", "x" }, "<leader>fw", function()
   require("fff").live_grep_under_cursor()
 end, key_opts("Grep word"))
-map({ "n", "v" }, "<leader>fe", open_yazi, key_opts("File explorer"))
+map({ "n", "v" }, "<leader>e", open_yazi, key_opts("File explorer"))
 
 -- Keymaps: git
-map({ "n", "v" }, "lg", open_lazygit, key_opts("Lazygit"))
+map({ "n", "v" }, "<leader>g", open_lazygit, key_opts("Lazygit"))
 
 -- Keymaps: LSP
 map("n", "<leader>p", function()
