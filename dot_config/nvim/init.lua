@@ -466,6 +466,7 @@ vim.diagnostic.config({
 })
 
 -- LSP
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 vim.api.nvim_create_user_command("LspClients", function()
   vim.print(vim.lsp.get_clients({ bufnr = 0 }))
 end, {})
@@ -535,20 +536,12 @@ function format_buffer(bufnr)
   vim.lsp.buf.format({ bufnr = bufnr, timeout_ms = 1000 })
 end
 
+-- format on save
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = vim.api.nvim_create_augroup("user-format", {}),
   callback = function(ev)
     format_buffer(ev.buf)
   end,
-})
-
-vim.lsp.config("oxlint", {
-  settings = {
-    disableNestedConfig = false,
-    fixKind = "safe_fix",
-    run = "onType",
-    unusedDisableDirectives = "deny",
-  },
 })
 
 vim.lsp.config("superhtml", {
@@ -579,8 +572,10 @@ vim.lsp.enable({
   "oxlint",
   "superhtml",
   "gopls",
+  "jsonls",
   "stylua",
   "tombi",
   "lua_ls",
   "nushell",
+  "yamlls",
 })
