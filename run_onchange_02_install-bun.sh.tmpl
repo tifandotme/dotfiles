@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
-# Bun packages hash: # {{ list "@commitlint/cli" "@dotenvx/dotenvx" "@sourcegraph/amp" "@vtsls/language-server" "actions-up" "fast-cli" "npm-check-updates" "opencode-ai" "opencommit" "oxfmt" "oxlint" "pkg" "skills" "vercel" | join "\n" | sha256sum }}
+# Bun packages hash: # {{ list "@commitlint/cli" "@dotenvx/dotenvx" "@effect/language-service" "@sourcegraph/amp" "@vtsls/language-server" "actions-up" "fast-cli" "npm-check-updates" "opencode-ai" "opencommit" "oxfmt" "oxlint" "pkg" "skills" "vercel" "vscode-langservers-extracted" "yaml-language-server" | join "\n" | sha256sum }}
 
 if command -v bun &>/dev/null; then
   normalize_bun_pkg() {
@@ -27,7 +27,10 @@ if command -v bun &>/dev/null; then
     "port-whisperer"
     "oxfmt"
     "oxlint"
+    "@effect/language-service"
     "@vtsls/language-server"
+    "vscode-langservers-extracted"
+    "yaml-language-server"
     "typescript"
     "skills"
     "@earendil-works/pi-coding-agent"
