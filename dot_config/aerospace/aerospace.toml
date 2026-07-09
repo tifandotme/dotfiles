@@ -145,10 +145,6 @@ if.app-id = "net.imput.helium"
 run = ["move-node-to-workspace 1_personal", "layout tiling"]
 
 [[on-window-detected]]
-if.app-id = "net.imput.helium.debug"
-run = ["move-node-to-workspace 1_personal", "layout tiling"]
-
-[[on-window-detected]]
 if.app-id = "com.apple.Safari"
 run = "move-node-to-workspace 1_personal"
 
@@ -172,6 +168,10 @@ run = "move-node-to-workspace 2_work"
 [[on-window-detected]]
 if.app-id = "com.postmanlabs.mac"
 run = "move-node-to-workspace 2_work"
+
+[[on-window-detected]]
+if.app-id = "net.imput.helium.debug"
+run = ["move-node-to-workspace 2_work", "layout tiling"]
 
 # Move to 3_editor workspace
 [[on-window-detected]]
