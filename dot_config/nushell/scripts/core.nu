@@ -8,7 +8,7 @@ alias lsa = eza --group-directories-first --classify=auto --sort=extension --one
 alias _cat = cat
 alias cat = bat --plain --theme=base16
 
-use utils.nu herdr-wrap
+use utils.nu [herdr-set-tab herdr-wrap]
 
 alias _tv = tv
 def --wrapped tv [...args] {
@@ -96,15 +96,21 @@ alias ncu = ncu --format group --root --cache --cacheFile $"($env.XDG_CACHE_HOME
 
 alias cm = chezmoi
 
-alias _pi = ^pi
-def --wrapped pi [...args] {
-    # pi-code-previews: avoid read/grep tool conflicts with pi-fff.
-    # with-env {CODE_PREVIEW_TOOLS: "bash,write,edit,find,ls"} {
-    _pi ...$args
+def __external [name: string] {
+    ^which $name | str trim
 }
 
-alias _claude = ^claude
-def --wrapped claude [...args] { _claude --dangerously-skip-permissions --no-chrome ...$args }
+def --wrapped pi [...args] {
+    herdr-set-tab ([($env.PWD | path basename), " (pi)"] | str join)
+    # pi-code-previews: avoid read/grep tool conflicts with pi-fff.
+    # with-env {CODE_PREVIEW_TOOLS: "bash,write,edit,find,ls"} {
+    run-external (__external pi) ...$args
+}
+
+def --wrapped claude [...args] {
+    herdr-set-tab ([($env.PWD | path basename), " (claude)"] | str join)
+    run-external (__external claude) ...(["--dangerously-skip-permissions", "--no-chrome"] ++ $args)
+}
 
 alias _codex = ^codex
 def --wrapped codex [...args] { _codex --dangerously-bypass-approvals-and-sandbox ...$args }

@@ -88,6 +88,21 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
+vim.filetype.add({
+  pattern = {
+    [".*Brewfile%.tmpl"] = "sh",
+    [".*%.bash%.tmpl"] = "bash",
+    [".*%.json%.tmpl"] = "json",
+    [".*%.lua%.tmpl"] = "lua",
+    [".*%.nu%.tmpl"] = "nu",
+    [".*%.sh%.tmpl"] = "sh",
+    [".*%.toml%.tmpl"] = "toml",
+    [".*%.ts%.tmpl"] = "typescript",
+    [".*%.ya?ml%.tmpl"] = "yaml",
+    [".*%.zsh%.tmpl"] = "zsh",
+  },
+})
+
 -- Theme
 local function is_macos_dark()
   if vim.fn.has("macunix") ~= 1 then
@@ -495,11 +510,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
       return
     end
 
-    if client.name == "vtsls" or client.name == "lua_ls" then
-      client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.documentRangeFormattingProvider = false
-    end
-
     if client:supports_method("textDocument/completion") then
       vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = false })
     end
@@ -526,14 +536,59 @@ local function format_with_command(bufnr, command)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, output)
 end
 
+local formatters_by_filetype = {
+  css = "oxfmt",
+  graphql = "oxfmt",
+  handlebars = "oxfmt",
+  htm = "superhtml",
+  html = "superhtml",
+  javascript = "oxfmt",
+  javascriptreact = "oxfmt",
+  json = "oxfmt",
+  json5 = "oxfmt",
+  jsonc = "oxfmt",
+  less = "oxfmt",
+  lua = "stylua",
+  luau = "stylua",
+  markdown = "oxfmt",
+  scss = "oxfmt",
+  shtml = "superhtml",
+  toml = "oxfmt",
+  typescript = "oxfmt",
+  typescriptreact = "oxfmt",
+  vue = "oxfmt",
+  xml = "superhtml",
+  yaml = "oxfmt",
+}
+
 function format_buffer(bufnr)
   bufnr = bufnr == 0 and vim.api.nvim_get_current_buf() or bufnr
+  if vim.bo[bufnr].filetype == "bash" or vim.bo[bufnr].filetype == "sh" then
+    format_with_command(bufnr, { "shfmt" })
+    return
+  end
   if vim.bo[bufnr].filetype == "nu" then
     format_with_command(bufnr, { "nufmt", "--stdin" })
     return
   end
+  if vim.bo[bufnr].filetype == "svg" then
+    format_with_command(bufnr, { "superhtml", "fmt", "--stdin" })
+    return
+  end
 
-  vim.lsp.buf.format({ bufnr = bufnr, timeout_ms = 1000 })
+  local formatter = formatters_by_filetype[vim.bo[bufnr].filetype]
+  if not formatter then
+    vim.lsp.buf.format({ bufnr = bufnr, timeout_ms = 1000 })
+    return
+  end
+
+  vim.lsp.buf.format({
+    bufnr = bufnr,
+    timeout_ms = 1000,
+    filter = function(client)
+      return client.name == formatter
+    end,
+  })
 end
 
 -- format on save
@@ -566,7 +621,24 @@ vim.lsp.config("lua_ls", {
   },
 })
 
+vim.lsp.config("vtsls", {
+  settings = {
+    vtsls = {
+      tsserver = {
+        globalPlugins = {
+          {
+            name = "@effect/language-service",
+            location = vim.fn.expand("~/.local/share/bun/install/global/node_modules"),
+            enableForWorkspaceTypeScriptVersions = true,
+          },
+        },
+      },
+    },
+  },
+})
+
 vim.lsp.enable({
+  "bashls",
   "vtsls",
   "oxfmt",
   "oxlint",

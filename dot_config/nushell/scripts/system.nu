@@ -69,8 +69,12 @@ export def get-app-id [app_name: string] {
     return $app_id
 }
 
+export def --wrapped ssh [...args] {
+    with-env {TERM: "xterm-256color"} { ^ssh ...$args }
+}
+
 export def --wrapped sshs [...args] {
-    ^sshs ...$args
+    with-env {TERM: "xterm-256color"} { ^sshs ...$args }
 }
 
 export def --env yazi [...args] {

@@ -47,14 +47,14 @@ GHOST=(
 
 # --------------- LEFT
 
-sketchybar --add event rift_workspace_changed
+sketchybar --add event aerospace_workspace_change
 
-workspaces=$(rift-cli query workspaces | jq -r '.[] | "\(.index)\t\(.name)"')
-first_workspace=$(echo "$workspaces" | head -n 1 | cut -f2)
-last_workspace=$(echo "$workspaces" | tail -n 1 | cut -f2)
+workspaces=$(aerospace list-workspaces --all)
+first_workspace=$(echo "$workspaces" | head -n 1)
+last_workspace=$(echo "$workspaces" | tail -n 1)
 
 # without setting icon.width, focused and unfocused icon will cause layout shift
-while IFS=$'\t' read -r index sid; do
+for sid in $workspaces; do
   sketchybar --add item space."$sid" left \
     --set space."$sid" \
     icon.width=20 \
@@ -66,11 +66,11 @@ while IFS=$'\t' read -r index sid; do
     background.drawing=off \
     icon="$(echo "$sid" | cut -d'_' -f1)" \
     icon.font="SF Mono:Semibold:12.5" \
-    click_script="rift-cli execute workspace switch $index" \
+    click_script="aerospace workspace $sid" \
     background.corner_radius=0 \
-    script="$CONFIG_DIR/plugins/rift.sh $sid" \
-    --subscribe space."$sid" rift_workspace_changed
-done <<<"$workspaces"
+    script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
+    --subscribe space."$sid" aerospace_workspace_change
+done
 
 sketchybar --set space."$first_workspace" padding_left=8
 sketchybar --set space."$last_workspace" padding_right=8
@@ -190,6 +190,15 @@ sketchybar --add item caffeinate right \
   icon.padding_right=0 \
   script="$PLUGIN_DIR/caffeinate.sh" \
   --subscribe caffeinate caffeinate_toggle
+
+sketchybar --add event send_message
+sketchybar --add event hide_message
+sketchybar --add item aerospace_mode right \
+  --set aerospace_mode \
+  "${GHOST[@]}" \
+  drawing=off \
+  script="$PLUGIN_DIR/aerospace_mode.sh" \
+  --subscribe aerospace_mode send_message hide_message
 
 # ------------------------------------------------------------------------------
 

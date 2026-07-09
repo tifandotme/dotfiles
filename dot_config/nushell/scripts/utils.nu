@@ -53,6 +53,13 @@ def __herdr_restore_tab_label [tab_id: string, label: string] {
     ^herdr tab rename $tab_id $label | ignore
 }
 
+export def herdr-set-tab [label: string] {
+    let tab_state = (__herdr_current_tab_state)
+    if ($tab_state | is-not-empty) {
+        __herdr_rename_tab $tab_state.tab_id $label
+    }
+}
+
 export def --env herdr-wrap [label: string, command: closure, --tab] {
     let tab_state = (__herdr_current_tab_state)
     let use_tab_label = (($tab_state | is-not-empty) and ($tab or ($tab_state.pane_count == 1)))
