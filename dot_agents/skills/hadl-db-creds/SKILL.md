@@ -6,39 +6,39 @@ disable-model-invocation: true
 
 # HADL DB Credentials
 
-For HADL database work, get credentials with:
+For HADL database work, get connection metadata as JSON:
 
 ```sh
 mise run db-creds
 ```
 
-It prints grouped `dotenv` credentials, including passwords. Treat the command as a black box. Do not inspect credential storage unless the command is broken.
+Treat the command as a black box. Do not inspect credential storage unless the command is broken.
 
-Start the matching tunnel before connecting:
+Pick the entry whose key, `database`, `label`, or `tunnel` matches the request. If more than one entry matches, ask. Each entry has `host`, `port`, `database`, `user`, `sslmode`, `tunnel`, and `tunnel_task`.
 
-- `mise run tunnel-windmill`
-- `mise run tunnel-staging`
-- `mise run tunnel-prod`
-- `mise run tunnels`
+For `password_source: "tableplus"`, use `password`. For `password_source: "gcloud-access-token"`, run:
 
-Before querying, check whether the needed local port is listening. If not, and `HERDR_ENV=1`, load the `herdr` skill, create a new workspace/space with a new tab, and run the matching tunnel there. If not running inside herdr, ask the user to start the tunnel.
-
-Output shape:
-
-```dotenv
-# staging
-DB_HOST=localhost
-DB_PORT=5434
-DB_NAME=...
-DB_USER=...
-DB_PASSWORD=...
-
-# prod
-DB_HOST=localhost
-DB_PORT=5435
-DB_NAME=...
-DB_USER=...
-DB_PASSWORD=...
+```sh
+mise run gcloud-auth-check
+mise run gcloud-access-token
 ```
 
-Do not paste passwords or sensitive query results into chat unless the user explicitly asks.
+and use the fresh token as the PostgreSQL password.
+
+Before querying, check whether the needed local `port` is listening.
+
+If not listening and inside herdr, run:
+
+```sh
+mise run tunnels-start
+```
+
+It finds or creates the exact `tunnels` workspace and runs `mise run tunnels` in its single tab. If duplicate `tunnels` workspaces exist, stop and ask the user to close or rename extras.
+
+Outside herdr, ask the user to run:
+
+```sh
+mise run tunnels
+```
+
+Use `sslmode=require` for `psql` connections through these tunnels. Do not paste passwords, access tokens, or sensitive query results into chat unless the user explicitly asks.
