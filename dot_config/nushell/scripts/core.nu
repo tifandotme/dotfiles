@@ -51,15 +51,18 @@ def --wrapped backlog [...args] {
   }
 }
 
-def --wrapped v [...args] {
+alias _nvim = ^nvim
+def --wrapped nvim [...args] {
     let nvim_label = ([
         (pwd | path basename)
         " (nvim)"
     ] | str join)
     herdr-wrap $nvim_label {
-    ^nvim ...$args
+    _nvim ...$args
   }
 }
+
+alias v = nvim
 
 def --wrapped vg [...args] {
     let git_root_result = git rev-parse --show-toplevel | complete
@@ -76,7 +79,7 @@ def --wrapped vg [...args] {
     ] | str join)
     herdr-wrap $nvim_label {
     cd $git_root
-    ^nvim ...$args
+    _nvim ...$args
   }
 }
 
