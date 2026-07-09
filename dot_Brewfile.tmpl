@@ -72,18 +72,23 @@ brew "mise" # Polyglot runtime manager (asdf rust clone)
 brew "gh"        # GitHub CLI
 brew "gibo"      # Access GitHub's .gitignore boilerplates
 brew "git-delta" # Syntax-highlighting pager for git/diff output
-brew "gitleaks"  # Audit git repos for secrets
-brew "lazygit"   # Simple terminal UI for git commands
+tap "jnsahaj/lumen"
+brew "jnsahaj/lumen/lumen" # Beautiful git diff viewer
+brew "gitleaks"            # Audit git repos for secrets
+brew "lazygit"             # Simple terminal UI for git commands
 
 # =============================================================================
 # DEVELOPMENT - TOOLS & FORMATTERS
 # =============================================================================
 
 # AI coding assistants
-brew "models" # TUI/CLI for browsing AI models, benchmarks, and coding agents
-brew "rtk"    # CLI proxy to minimize LLM token consumption
+brew "models"    # TUI/CLI for browsing AI models, benchmarks, and coding agents
+cask "openusage" # AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
+brew "rtk"       # CLI proxy to minimize LLM token consumption
 tap "ampcode/tap"
 brew "ampcode/tap/ampcode"
+tap "dmtrKovalenko/fff"
+brew "dmtrKovalenko/fff/fff-mcp" # Fast file search MCP server for AI agents
 
 # Task management
 tap "webstonehq/tap"
@@ -94,8 +99,13 @@ brew "actionlint" # Static checker for GitHub Actions workflow files
 brew "shellcheck" # Static analysis for shell scripts
 brew "shfmt"      # Autoformat shell script source code
 
+# Editors
+brew "neovim"              # Terminal-native code editor
+brew "lua-language-server" # Lua language server for Neovim config
+
 # General formatters
-brew "difftastic" # Diff that understands syntax
+brew "stylua" # Lua formatter
+brew "tombi"  # TOML formatter, linter and language server
 tap "hougesen/tap"
 brew "hougesen/tap/kdlfmt" # Code formatter for KDL documents
 brew "superhtml"           # HTML Language Server & Templating Library
@@ -179,11 +189,11 @@ brew "tealdeer" # Fast tldr implementation in Rust
 brew "tokei"    # Count code quickly
 
 # {{ if $isDarwin -}}
-brew "typst"          # Markup-based typesetting system
-brew "monolith"       # Save complete web pages as single HTML files
-brew "tidy-viewer"    # CLI CSV pretty printer
-brew "trafilatura"    # Discovery, extraction for Web text
-brew "yt-dlp"         # Feature-rich audio/video downloader
+brew "typst"       # Markup-based typesetting system
+brew "monolith"    # Save complete web pages as single HTML files
+brew "tidy-viewer" # CLI CSV pretty printer
+brew "trafilatura" # Discovery, extraction for Web text
+brew "yt-dlp"      # Feature-rich audio/video downloader
 # {{- end }}
 
 # =============================================================================
@@ -256,6 +266,7 @@ cask "qmk-toolbox" # Toolbox companion for QMK Firmware
 cask "gcloud-cli" # Set of tools to manage Google Cloud resources
 brew "cloud-sql-proxy"
 cask "openvpn-connect" # Client program for OpenVPN Access Server
+cask "windscribe"      # VPN client for secure internet access
 cask "tailscale-app"   # Mesh VPN based on WireGuard
 cask "teamviewer"      # Remote access and connectivity software
 
@@ -263,7 +274,6 @@ cask "teamviewer"      # Remote access and connectivity software
 # COMMUNICATION
 # =============================================================================
 
-cask "legcord"  # Custom Discord client
 cask "telegram" # Messaging app
 cask "whatsapp" # Native desktop client for WhatsApp
 cask "zoom"     # Video communication platform

@@ -134,10 +134,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/productivity/handoff/SKILL.md",
-      "skillFolderHash": "aa82ffd61d7a3bda110060b4e24ec782b983cb8d",
-      "pluginName": "mattpocock-skills",
+      "skillFolderHash": "3f7df8e717e41dfd6eacd03d47319a2e01248ffb",
       "installedAt": "2026-05-14T05:35:44.936Z",
-      "updatedAt": "2026-06-17T15:17:19.161Z"
+      "updatedAt": "2026-07-08T14:47:54.767Z"
     },
     "agent-browser": {
       "source": "vercel-labs/agent-browser",
@@ -153,9 +152,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/pbakaus/impeccable.git",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "skillFolderHash": "e0a050b12a585022e5b270cbb77a215a525672e3",
+      "skillFolderHash": "0953eb44c29ec01c3fc0ff7367461bd61b518615",
       "installedAt": "2026-05-29T15:16:30.143Z",
-      "updatedAt": "2026-07-04T08:26:09.918Z"
+      "updatedAt": "2026-07-08T02:53:35.641Z"
     },
     "thermo-nuclear-code-quality-review": {
       "source": "cursor/plugins",
@@ -201,9 +200,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/productivity/grilling/SKILL.md",
-      "skillFolderHash": "8b14ca97479f518f3f1ced6a35bf591554d7e0cb",
+      "skillFolderHash": "0ace40ac10f5c0b1534324e4e109ebfa831fb361",
       "installedAt": "2026-06-17T15:17:19.160Z",
-      "updatedAt": "2026-07-03T09:37:58.499Z"
+      "updatedAt": "2026-07-08T02:53:12.155Z"
     },
     "prototype": {
       "source": "mattpocock/skills",
@@ -219,27 +218,27 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/productivity/writing-great-skills/SKILL.md",
-      "skillFolderHash": "0875ef784dfdf0a3860f1cdc3937c2796b0314a5",
+      "skillFolderHash": "c84411b360fad91b8756e60fa17fd5b5761422dd",
       "installedAt": "2026-06-20T08:28:33.642Z",
-      "updatedAt": "2026-06-24T16:20:00.571Z"
+      "updatedAt": "2026-07-08T02:53:16.775Z"
     },
     "herdr": {
       "source": "ogulcancelik/herdr",
       "sourceType": "github",
       "sourceUrl": "https://github.com/ogulcancelik/herdr.git",
       "skillPath": "SKILL.md",
-      "skillFolderHash": "2bc1724c2dae72184a5d2ec070e30c70dc519f9b",
+      "skillFolderHash": "36b2e2f5463139a284483732131ce44977881239",
       "installedAt": "2026-06-22T08:40:53.868Z",
-      "updatedAt": "2026-07-05T05:43:09.292Z"
+      "updatedAt": "2026-07-09T02:36:07.304Z"
     },
     "find-docs": {
       "source": "upstash/context7",
       "sourceType": "github",
       "sourceUrl": "https://github.com/upstash/context7.git",
       "skillPath": "skills/find-docs/SKILL.md",
-      "skillFolderHash": "8755e7a70cef11f4237ef0178a76f08317344894",
+      "skillFolderHash": "f1f7597c0575b2c138a551a222f56808a86e16b1",
       "installedAt": "2026-06-23T15:15:07.862Z",
-      "updatedAt": "2026-07-03T09:38:10.501Z"
+      "updatedAt": "2026-07-08T02:53:54.751Z"
     },
     "hadl-trello": {
       "source": "hadl-labs/agent-skills",

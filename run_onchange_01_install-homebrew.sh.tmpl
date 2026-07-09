@@ -4,6 +4,6 @@
 # Brewfile hash: # {{ include "dot_Brewfile.tmpl" | sha256sum }}
 
 if command -v brew &>/dev/null; then
-  # Rendered Brewfile (hostname/OS conditionals); not the raw .tmpl in source.
-  brew bundle --force-cleanup --file="# {{ .chezmoi.destDir }}/.Brewfile"
+	# Rendered Brewfile (hostname/OS conditionals); not the raw .tmpl in source.
+	brew bundle --force-cleanup --file="# {{ .chezmoi.destDir }}/.Brewfile"
 fi

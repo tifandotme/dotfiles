@@ -1,85 +1,97 @@
 #!/usr/bin/env bash
 
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
-# Bun packages hash: # {{ list "@commitlint/cli" "@dotenvx/dotenvx" "@effect/language-service" "@sourcegraph/amp" "@vtsls/language-server" "actions-up" "fast-cli" "npm-check-updates" "opencode-ai" "opencommit" "oxfmt" "oxlint" "pkg" "skills" "vercel" "vscode-langservers-extracted" "yaml-language-server" | join "\n" | sha256sum }}
+# Bun packages hash: # {{ list "@commitlint/cli" "@dotenvx/dotenvx" "@effect/language-service" "@sourcegraph/amp" "@vtsls/language-server" "actions-up" "bash-language-server" "fast-cli" "npm-check-updates" "opencode-ai" "opencommit" "oxfmt" "oxlint" "pkg" "skills" "vercel" "vscode-langservers-extracted" "yaml-language-server" | join "\n" | sha256sum }}
 
 if command -v bun &>/dev/null; then
-  normalize_bun_pkg() {
-    local pkg="$1"
+	normalize_bun_pkg() {
+		local pkg="$1"
 
-    if [[ "$pkg" =~ ^(@[^/]+/[^@]+)@.+$ ]]; then
-      printf '%s\n' "${BASH_REMATCH[1]}"
-    elif [[ "$pkg" =~ ^([^@]+)@.+$ ]]; then
-      printf '%s\n' "${BASH_REMATCH[1]}"
-    else
-      printf '%s\n' "$pkg"
-    fi
-  }
+		if [[ "$pkg" =~ ^(@[^/]+/[^@]+)@.+$ ]]; then
+			printf '%s\n' "${BASH_REMATCH[1]}"
+		elif [[ "$pkg" =~ ^([^@]+)@.+$ ]]; then
+			printf '%s\n' "${BASH_REMATCH[1]}"
+		else
+			printf '%s\n' "$pkg"
+		fi
+	}
 
-  desired_bun_packages=(
-    # {{ if eq .chezmoi.os "darwin" -}}
-    "npm-check-updates"
-    "pkg"
-    "windmill-cli"
-    # {{ end -}}
-    "actions-up"
-    "vercel"
-    "port-whisperer"
-    "oxfmt"
-    "oxlint"
-    "@effect/language-service"
-    "@vtsls/language-server"
-    "vscode-langservers-extracted"
-    "yaml-language-server"
-    "typescript"
-    "skills"
-    "@earendil-works/pi-coding-agent"
-    "@openai/codex"
-    "@dotenvx/dotenvx"
-    "agent-browser"
-    "@n8n/cli"
-    "@actual-app/cli"
-    "backlog.md"
-    "portless"
-    "trello-cli"
-    "@bitwarden/cli"
-    # {{ if eq .chezmoi.hostname "box" -}}
-    "openclaw"
-    # {{- end }}
-  )
+	desired_bun_packages=(
+		# macOS-only packaging tools
+		# {{ if eq .chezmoi.os "darwin" -}}
+		# {{ end -}}
 
-  is_versioned_bun_pkg() {
-    local pkg="$1"
+		# updater
+		"npm-check-updates"
+		"actions-up"
 
-    [[ "$pkg" =~ ^(@[^/]+/[^@]+)@.+$ ]] || [[ "$pkg" =~ ^([^@]+)@.+$ ]]
-  }
+		# system
+		"port-whisperer"
 
-  desired_bun_package_names=()
-  for pkg in "${desired_bun_packages[@]}"; do
-    desired_bun_package_names+=("$(normalize_bun_pkg "$pkg")")
-  done
+		# devtools
+		"@effect/language-service"
+		"@vtsls/language-server"
+		"bash-language-server"
+		"vscode-langservers-extracted"
+		"yaml-language-server"
+		"typescript"
+		"oxfmt"
+		"oxlint"
+		"@dotenvx/dotenvx"
+		"vercel"
+		"portless"
 
-  # --json request to avoid the mess below: https://github.com/oven-sh/bun/issues/26222
-  installed_packages=$(bun pm ls -g 2>/dev/null | grep -E '^├──|^└──' | sed -E 's/^[├└]── //' | while read -r pkg; do normalize_bun_pkg "$pkg"; done | sort)
+		# agent-stuff
+		"skills"
+		"@earendil-works/pi-coding-agent"
+		"@openai/codex"
+		"agent-browser"
 
-  for pkg in "${desired_bun_packages[@]}"; do
-    if is_versioned_bun_pkg "$pkg"; then
-      echo "Installing bun global package: $pkg"
-      bun add -g "$pkg"
-      continue
-    fi
+		# apps clis
+		"@n8n/cli"
+		"@actual-app/cli"
+		"backlog.md"
+		"trello-cli"
+		"windmill-cli"
+		"@bitwarden/cli"
 
-    normalized_pkg=$(normalize_bun_pkg "$pkg")
-    if ! printf '%s\n' "$installed_packages" | grep -qxF "$normalized_pkg"; then
-      echo "Installing bun global package: $pkg"
-      bun add -g "$pkg"
-    fi
-  done
+		# VPS-only tools
+		# {{ if eq .chezmoi.hostname "box" -}}
+		# {{- end }}
+	)
 
-  while IFS= read -r pkg; do
-    if [[ -n "$pkg" ]] && ! printf '%s\n' "${desired_bun_package_names[@]}" | grep -qxF "$pkg"; then
-      echo "Removing unwanted bun global package: $pkg"
-      bun remove -g "$pkg"
-    fi
-  done <<<"$installed_packages"
+	is_versioned_bun_pkg() {
+		local pkg="$1"
+
+		[[ "$pkg" =~ ^(@[^/]+/[^@]+)@.+$ ]] || [[ "$pkg" =~ ^([^@]+)@.+$ ]]
+	}
+
+	desired_bun_package_names=()
+	for pkg in "${desired_bun_packages[@]}"; do
+		desired_bun_package_names+=("$(normalize_bun_pkg "$pkg")")
+	done
+
+	# --json request to avoid the mess below: https://github.com/oven-sh/bun/issues/26222
+	installed_packages=$(bun pm ls -g 2>/dev/null | grep -E '^├──|^└──' | sed -E 's/^[├└]── //' | while read -r pkg; do normalize_bun_pkg "$pkg"; done | sort)
+
+	for pkg in "${desired_bun_packages[@]}"; do
+		if is_versioned_bun_pkg "$pkg"; then
+			echo "Installing bun global package: $pkg"
+			bun add -g "$pkg"
+			continue
+		fi
+
+		normalized_pkg=$(normalize_bun_pkg "$pkg")
+		if ! printf '%s\n' "$installed_packages" | grep -qxF "$normalized_pkg"; then
+			echo "Installing bun global package: $pkg"
+			bun add -g "$pkg"
+		fi
+	done
+
+	while IFS= read -r pkg; do
+		if [[ -n "$pkg" ]] && ! printf '%s\n' "${desired_bun_package_names[@]}" | grep -qxF "$pkg"; then
+			echo "Removing unwanted bun global package: $pkg"
+			bun remove -g "$pkg"
+		fi
+	done <<<"$installed_packages"
 fi
