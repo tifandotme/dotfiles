@@ -152,9 +152,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/pbakaus/impeccable.git",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "skillFolderHash": "0953eb44c29ec01c3fc0ff7367461bd61b518615",
+      "skillFolderHash": "6ea3e5f6614e1f9df9c5bde834170bf51f3c09d6",
       "installedAt": "2026-05-29T15:16:30.143Z",
-      "updatedAt": "2026-07-08T02:53:35.641Z"
+      "updatedAt": "2026-07-10T02:34:47.539Z"
     },
     "thermo-nuclear-code-quality-review": {
       "source": "cursor/plugins",
@@ -209,9 +209,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/engineering/prototype/SKILL.md",
-      "skillFolderHash": "046ef7c3aae3ec1934b075b26dba1cf87c9b1d5a",
+      "skillFolderHash": "e50d76191bf197e3d947eb8c780c7009269ba589",
       "installedAt": "2026-06-17T15:17:19.165Z",
-      "updatedAt": "2026-06-29T13:51:19.521Z"
+      "updatedAt": "2026-07-10T15:52:42.251Z"
     },
     "writing-great-skills": {
       "source": "mattpocock/skills",
@@ -227,9 +227,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/ogulcancelik/herdr.git",
       "skillPath": "SKILL.md",
-      "skillFolderHash": "36b2e2f5463139a284483732131ce44977881239",
+      "skillFolderHash": "66be0b655fe922867f1eed100a41d67038b6ffd6",
       "installedAt": "2026-06-22T08:40:53.868Z",
-      "updatedAt": "2026-07-09T02:36:07.304Z"
+      "updatedAt": "2026-07-10T15:52:53.911Z"
     },
     "find-docs": {
       "source": "upstash/context7",

@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 script_name='pi-pr-create'
-model='openai-codex/gpt-5.4-mini'
+model='openai-codex/gpt-5.6-luna'
 max_attempts=3
 allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test|revert'
 dry_run=0
@@ -19,29 +19,29 @@ title=''
 body=''
 
 fail() {
-  printf '%s: %s\n' "$script_name" "$*" >&2
-  exit 1
+	printf '%s: %s\n' "$script_name" "$*" >&2
+	exit 1
 }
 
 log() {
-  printf '%s: %s\n' "$script_name" "$*" >&2
+	printf '%s: %s\n' "$script_name" "$*" >&2
 }
 
 cleanup() {
-  if [[ -n "$tmpdir" && -d "$tmpdir" ]]; then
-    rm -rf -- "$tmpdir"
-  fi
+	if [[ -n "$tmpdir" && -d "$tmpdir" ]]; then
+		rm -rf -- "$tmpdir"
+	fi
 }
 
 on_err() {
-  local exit_code="$1"
-  local line_no="$2"
-  log "unexpected error on line $line_no (exit $exit_code)"
-  exit "$exit_code"
+	local exit_code="$1"
+	local line_no="$2"
+	log "unexpected error on line $line_no (exit $exit_code)"
+	exit "$exit_code"
 }
 
 usage() {
-  cat <<'EOF'
+	cat <<'EOF'
 Usage:
   pi-pr-create [--dry-run] [--context-file PATH] [--output PATH]
   pi-pr-create [--dry-run] --from-file PATH
@@ -56,143 +56,143 @@ EOF
 }
 
 parse_args() {
-  while (($# > 0)); do
-    case "$1" in
-    --dry-run)
-      dry_run=1
-      ;;
-    --context-file)
-      shift
-      [[ $# -gt 0 ]] || fail "--context-file requires a path"
-      context_file="$1"
-      ;;
-    --output)
-      shift
-      [[ $# -gt 0 ]] || fail "--output requires a path"
-      output_file="$1"
-      ;;
-    --from-file)
-      shift
-      [[ $# -gt 0 ]] || fail "--from-file requires a path"
-      from_file="$1"
-      ;;
-    -h | --help)
-      usage
-      exit 0
-      ;;
-    *)
-      fail "unknown argument: $1"
-      ;;
-    esac
-    shift
-  done
+	while (($# > 0)); do
+		case "$1" in
+		--dry-run)
+			dry_run=1
+			;;
+		--context-file)
+			shift
+			[[ $# -gt 0 ]] || fail "--context-file requires a path"
+			context_file="$1"
+			;;
+		--output)
+			shift
+			[[ $# -gt 0 ]] || fail "--output requires a path"
+			output_file="$1"
+			;;
+		--from-file)
+			shift
+			[[ $# -gt 0 ]] || fail "--from-file requires a path"
+			from_file="$1"
+			;;
+		-h | --help)
+			usage
+			exit 0
+			;;
+		*)
+			fail "unknown argument: $1"
+			;;
+		esac
+		shift
+	done
 }
 
 check_dependencies() {
-  local -a required=(git gh sed awk)
-  local -a missing=()
-  local cmd=''
+	local -a required=(git gh sed awk)
+	local -a missing=()
+	local cmd=''
 
-  if [[ -z "$from_file" ]]; then
-    required+=(pi)
-  fi
+	if [[ -z "$from_file" ]]; then
+		required+=(pi)
+	fi
 
-  for cmd in "${required[@]}"; do
-    if ! command -v "$cmd" >/dev/null 2>&1; then
-      missing+=("$cmd")
-    fi
-  done
+	for cmd in "${required[@]}"; do
+		if ! command -v "$cmd" >/dev/null 2>&1; then
+			missing+=("$cmd")
+		fi
+	done
 
-  if ((${#missing[@]} > 0)); then
-    fail "missing required commands: ${missing[*]}"
-  fi
+	if ((${#missing[@]} > 0)); then
+		fail "missing required commands: ${missing[*]}"
+	fi
 }
 
 remote_default_branch() {
-  local remote='origin'
-  local ref=''
+	local remote='origin'
+	local ref=''
 
-  ref="$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null || true)"
-  if [[ -z "$ref" ]]; then
-    git remote set-head "$remote" --auto >/dev/null 2>&1 || true
-    ref="$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null || true)"
-  fi
+	ref="$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null || true)"
+	if [[ -z "$ref" ]]; then
+		git remote set-head "$remote" --auto >/dev/null 2>&1 || true
+		ref="$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null || true)"
+	fi
 
-  if [[ -n "$ref" ]]; then
-    printf '%s\n' "${ref#origin/}"
-    return 0
-  fi
+	if [[ -n "$ref" ]]; then
+		printf '%s\n' "${ref#origin/}"
+		return 0
+	fi
 
-  if git show-ref --verify --quiet refs/remotes/origin/main; then
-    printf 'main\n'
-    return 0
-  fi
+	if git show-ref --verify --quiet refs/remotes/origin/main; then
+		printf 'main\n'
+		return 0
+	fi
 
-  if git show-ref --verify --quiet refs/remotes/origin/master; then
-    printf 'master\n'
-    return 0
-  fi
+	if git show-ref --verify --quiet refs/remotes/origin/master; then
+		printf 'master\n'
+		return 0
+	fi
 
-  fail "could not detect origin default branch"
+	fail "could not detect origin default branch"
 }
 
 find_pr_template() {
-  local repo_root=''
-  local template=''
+	local repo_root=''
+	local template=''
 
-  repo_root="$(git rev-parse --show-toplevel)"
+	repo_root="$(git rev-parse --show-toplevel)"
 
-  for template in \
-    "$repo_root/.github/pull_request_template.md" \
-    "$repo_root/.github/PULL_REQUEST_TEMPLATE.md" \
-    "$repo_root/docs/pull_request_template.md"; do
-    if [[ -f "$template" ]]; then
-      printf '%s\n' "$template"
-      return 0
-    fi
-  done
+	for template in \
+		"$repo_root/.github/pull_request_template.md" \
+		"$repo_root/.github/PULL_REQUEST_TEMPLATE.md" \
+		"$repo_root/docs/pull_request_template.md"; do
+		if [[ -f "$template" ]]; then
+			printf '%s\n' "$template"
+			return 0
+		fi
+	done
 
-  if [[ -d "$repo_root/.github/PULL_REQUEST_TEMPLATE" ]]; then
-    template="$(find "$repo_root/.github/PULL_REQUEST_TEMPLATE" -maxdepth 1 -type f -name '*.md' | sort | head -n 1)"
-    if [[ -n "$template" ]]; then
-      printf '%s\n' "$template"
-      return 0
-    fi
-  fi
+	if [[ -d "$repo_root/.github/PULL_REQUEST_TEMPLATE" ]]; then
+		template="$(find "$repo_root/.github/PULL_REQUEST_TEMPLATE" -maxdepth 1 -type f -name '*.md' | sort | head -n 1)"
+		if [[ -n "$template" ]]; then
+			printf '%s\n' "$template"
+			return 0
+		fi
+	fi
 
-  return 1
+	return 1
 }
 
 truncate_file() {
-  local file="$1"
-  local max_bytes="$2"
+	local file="$1"
+	local max_bytes="$2"
 
-  if [[ ! -s "$file" ]]; then
-    return 0
-  fi
+	if [[ ! -s "$file" ]]; then
+		return 0
+	fi
 
-  if (($(wc -c <"$file") > max_bytes)); then
-    head -c "$max_bytes" "$file"
-    printf '\n[truncated]\n'
-  else
-    cat "$file"
-  fi
+	if (($(wc -c <"$file") > max_bytes)); then
+		head -c "$max_bytes" "$file"
+		printf '\n[truncated]\n'
+	else
+		cat "$file"
+	fi
 }
 
 build_prompt() {
-  local attempt="$1"
-  local feedback="${2:-}"
-  local previous_output="${3:-}"
-  local base_branch="$4"
-  local branch="$5"
-  local template_path="$6"
-  local commits_file="$7"
-  local diffstat_file="$8"
-  local diff_file="$9"
-  local template_file="${10}"
-  local extra_context_file="${11}"
+	local attempt="$1"
+	local feedback="${2:-}"
+	local previous_output="${3:-}"
+	local base_branch="$4"
+	local branch="$5"
+	local template_path="$6"
+	local commits_file="$7"
+	local diffstat_file="$8"
+	local diff_file="$9"
+	local template_file="${10}"
+	local extra_context_file="${11}"
 
-  cat >"$prompt_file" <<EOF
+	cat >"$prompt_file" <<EOF
 Create a GitHub pull request title and body for this branch.
 
 Output format:
@@ -220,25 +220,25 @@ Repository context:
 - Current branch: $branch
 EOF
 
-  if [[ -n "$extra_context_file" ]]; then
-    cat >>"$prompt_file" <<EOF
+	if [[ -n "$extra_context_file" ]]; then
+		cat >>"$prompt_file" <<EOF
 
 Additional author context:
 $(cat "$extra_context_file")
 
 Use this context to explain why the PR exists, what root cause was found, and why this fix was chosen. Treat the git diff as the source of truth for what changed.
 EOF
-  fi
+	fi
 
-  if [[ -n "$template_path" ]]; then
-    cat >>"$prompt_file" <<EOF
+	if [[ -n "$template_path" ]]; then
+		cat >>"$prompt_file" <<EOF
 - PR template: $template_path
 
 PR template:
 $(cat "$template_file")
 EOF
-  else
-    cat >>"$prompt_file" <<'EOF'
+	else
+		cat >>"$prompt_file" <<'EOF'
 
 No PR template found. Use this body structure:
 ## Why
@@ -250,9 +250,9 @@ No PR template found. Use this body structure:
 ## Testing
 [How to verify, or "Not run" with a short reason]
 EOF
-  fi
+	fi
 
-  cat >>"$prompt_file" <<EOF
+	cat >>"$prompt_file" <<EOF
 
 Commits ahead of base:
 $(cat "$commits_file")
@@ -264,102 +264,102 @@ Diff excerpt:
 $(truncate_file "$diff_file" 50000)
 EOF
 
-  if [[ "$attempt" -gt 1 ]]; then
-    cat >>"$prompt_file" <<EOF
+	if [[ "$attempt" -gt 1 ]]; then
+		cat >>"$prompt_file" <<EOF
 
 Previous output was invalid.
 Validation failure: $feedback
 Previous output:
 $previous_output
 EOF
-  fi
+	fi
 }
 
 generate_response() {
-  if ! raw_output="$({
-    pi \
-      --print \
-      --no-session \
-      --no-tools \
-      --no-context-files \
-      --no-skills \
-      --no-extensions \
-      --no-prompt-templates \
-      --model "$model" \
-      --thinking off \
-      @"$prompt_file"
-  } | sed -e $'s/\x1b\\[[0-9;]*m//g')"; then
-    fail "pi failed to generate PR content"
-  fi
+	if ! raw_output="$({
+		pi \
+			--print \
+			--no-session \
+			--no-tools \
+			--no-context-files \
+			--no-skills \
+			--no-extensions \
+			--no-prompt-templates \
+			--model "$model" \
+			--thinking off \
+			@"$prompt_file"
+	} | sed -e $'s/\x1b\\[[0-9;]*m//g')"; then
+		fail "pi failed to generate PR content"
+	fi
 }
 
 validate_response() {
-  local input="$1"
-  local parsed_title=''
-  local parsed_body=''
-  local subject=''
+	local input="$1"
+	local parsed_title=''
+	local parsed_body=''
+	local subject=''
 
-  input="${input//$'\r'/}"
-  parsed_title="$(printf '%s\n' "$input" | sed -n '1s/^TITLE:[[:space:]]*//p')"
-  parsed_body="$(printf '%s\n' "$input" | awk 'found { print } /^BODY:[[:space:]]*$/ { found=1 }')"
+	input="${input//$'\r'/}"
+	parsed_title="$(printf '%s\n' "$input" | sed -n '1s/^TITLE:[[:space:]]*//p')"
+	parsed_body="$(printf '%s\n' "$input" | awk 'found { print } /^BODY:[[:space:]]*$/ { found=1 }')"
 
-  if [[ -z "$parsed_title" ]]; then
-    printf 'ERROR: first line must be TITLE: <title>\n'
-    return 1
-  fi
+	if [[ -z "$parsed_title" ]]; then
+		printf 'ERROR: first line must be TITLE: <title>\n'
+		return 1
+	fi
 
-  if [[ -z "${parsed_body//[[:space:]]/}" ]]; then
-    printf 'ERROR: body is empty or missing BODY marker\n'
-    return 1
-  fi
+	if [[ -z "${parsed_body//[[:space:]]/}" ]]; then
+		printf 'ERROR: body is empty or missing BODY marker\n'
+		return 1
+	fi
 
-  if [[ ! "$parsed_title" =~ ^(${allowed_types})(\([A-Za-z0-9._/-]+\))?(!)?:\ .+ ]]; then
-    printf 'ERROR: title must match conventional commit format\n'
-    return 1
-  fi
+	if [[ ! "$parsed_title" =~ ^(${allowed_types})(\([A-Za-z0-9._/-]+\))?(!)?:\ .+ ]]; then
+		printf 'ERROR: title must match conventional commit format\n'
+		return 1
+	fi
 
-  if ((${#parsed_title} > 72)); then
-    printf 'ERROR: title is longer than 72 characters\n'
-    return 1
-  fi
+	if ((${#parsed_title} > 72)); then
+		printf 'ERROR: title is longer than 72 characters\n'
+		return 1
+	fi
 
-  subject="${parsed_title#*: }"
-  if [[ "$subject" =~ ^[A-Z] ]]; then
-    printf 'ERROR: title subject must start lowercase\n'
-    return 1
-  fi
+	subject="${parsed_title#*: }"
+	if [[ "$subject" =~ ^[A-Z] ]]; then
+		printf 'ERROR: title subject must start lowercase\n'
+		return 1
+	fi
 
-  if [[ "$subject" == *. ]]; then
-    printf 'ERROR: title subject must not end with a period\n'
-    return 1
-  fi
+	if [[ "$subject" == *. ]]; then
+		printf 'ERROR: title subject must not end with a period\n'
+		return 1
+	fi
 
-  if [[ "$parsed_body" == *'```'* ]]; then
-    printf 'ERROR: body must not include markdown fences\n'
-    return 1
-  fi
+	if [[ "$parsed_body" == *'```'* ]]; then
+		printf 'ERROR: body must not include markdown fences\n'
+		return 1
+	fi
 
-  if [[ "$parsed_body" == *'—'* ]]; then
-    printf 'ERROR: body must not use em dashes\n'
-    return 1
-  fi
+	if [[ "$parsed_body" == *'—'* ]]; then
+		printf 'ERROR: body must not use em dashes\n'
+		return 1
+	fi
 
-  title="$parsed_title"
-  body="$parsed_body"
+	title="$parsed_title"
+	body="$parsed_body"
 }
 
 push_branch() {
-  local remote_branch="$branch"
-  local upstream=''
+	local remote_branch="$branch"
+	local upstream=''
 
-  upstream="$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null || true)"
-  if [[ "$upstream" == origin/* ]]; then
-    remote_branch="${upstream#origin/}"
-  fi
+	upstream="$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null || true)"
+	if [[ "$upstream" == origin/* ]]; then
+		remote_branch="${upstream#origin/}"
+	fi
 
-  log "pushing branch to origin/$remote_branch"
-  git push --set-upstream origin "HEAD:$remote_branch" >&2
-  printf '%s\n' "$remote_branch"
+	log "pushing branch to origin/$remote_branch"
+	git push --set-upstream origin "HEAD:$remote_branch" >&2
+	printf '%s\n' "$remote_branch"
 }
 
 trap 'cleanup' EXIT
@@ -368,11 +368,11 @@ trap 'on_err $? $LINENO' ERR
 parse_args "$@"
 
 if [[ -n "$from_file" ]]; then
-  [[ -f "$from_file" ]] || fail "--from-file path does not exist: $from_file"
-  [[ -z "$context_file" ]] || fail "--context-file cannot be used with --from-file"
-  [[ -z "$output_file" ]] || fail "--output cannot be used with --from-file"
+	[[ -f "$from_file" ]] || fail "--from-file path does not exist: $from_file"
+	[[ -z "$context_file" ]] || fail "--context-file cannot be used with --from-file"
+	[[ -z "$output_file" ]] || fail "--output cannot be used with --from-file"
 elif [[ -n "$context_file" ]]; then
-  [[ -f "$context_file" ]] || fail "--context-file path does not exist: $context_file"
+	[[ -f "$context_file" ]] || fail "--context-file path does not exist: $context_file"
 fi
 
 check_dependencies
@@ -381,8 +381,8 @@ git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail "not inside a git re
 gh auth status >/dev/null 2>&1 || fail "gh CLI is not authenticated; run: gh auth login"
 
 if [[ -z "${PI_CODING_AGENT_DIR:-}" ]]; then
-  xdg_config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
-  export PI_CODING_AGENT_DIR="$xdg_config_home/pi"
+	xdg_config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+	export PI_CODING_AGENT_DIR="$xdg_config_home/pi"
 fi
 
 branch="$(git branch --show-current)"
@@ -390,7 +390,7 @@ branch="$(git branch --show-current)"
 
 base_branch="$(remote_default_branch)"
 if [[ "$branch" == "$base_branch" || "$branch" == main || "$branch" == master ]]; then
-  fail "current branch '$branch' is not a feature branch"
+	fail "current branch '$branch' is not a feature branch"
 fi
 
 base_ref="origin/$base_branch"
@@ -398,11 +398,11 @@ git fetch origin "$base_branch" >/dev/null 2>&1 || fail "could not fetch $base_r
 
 ahead_count="$(git rev-list --count "$base_ref..HEAD")"
 if [[ "$ahead_count" == 0 ]]; then
-  fail "no pending commits ahead of $base_ref"
+	fail "no pending commits ahead of $base_ref"
 fi
 
 if gh pr view --head "$branch" --json url --jq .url >/dev/null 2>&1; then
-  fail "a pull request already exists for branch '$branch'"
+	fail "a pull request already exists for branch '$branch'"
 fi
 
 tmpdir="$(mktemp -d)"
@@ -420,9 +420,9 @@ git diff --no-ext-diff --unified=3 "$base_ref..HEAD" >"$diff_file"
 
 template_path=''
 if template_path="$(find_pr_template)"; then
-  cat "$template_path" >"$template_file"
+	cat "$template_path" >"$template_file"
 else
-  : >"$template_file"
+	: >"$template_file"
 fi
 
 attempt=1
@@ -431,46 +431,46 @@ previous_output=''
 raw_output=''
 
 if [[ -n "$from_file" ]]; then
-  raw_output="$(cat "$from_file")"
-  validation_status=0
-  validate_response "$raw_output" >"$tmpdir/validation.txt" || validation_status=$?
-  if ((validation_status != 0)); then
-    fail "$(sed 's/^ERROR: //' "$tmpdir/validation.txt")"
-  fi
+	raw_output="$(cat "$from_file")"
+	validation_status=0
+	validate_response "$raw_output" >"$tmpdir/validation.txt" || validation_status=$?
+	if ((validation_status != 0)); then
+		fail "$(sed 's/^ERROR: //' "$tmpdir/validation.txt")"
+	fi
 else
-  while ((attempt <= max_attempts)); do
-    build_prompt "$attempt" "$feedback" "$previous_output" "$base_branch" "$branch" "$template_path" "$commits_file" "$diffstat_file" "$diff_file" "$template_file" "$context_file"
-    generate_response
+	while ((attempt <= max_attempts)); do
+		build_prompt "$attempt" "$feedback" "$previous_output" "$base_branch" "$branch" "$template_path" "$commits_file" "$diffstat_file" "$diff_file" "$template_file" "$context_file"
+		generate_response
 
-    validation_status=0
-    validate_response "$raw_output" >"$tmpdir/validation.txt" || validation_status=$?
-    validation_output="$(cat "$tmpdir/validation.txt")"
+		validation_status=0
+		validate_response "$raw_output" >"$tmpdir/validation.txt" || validation_status=$?
+		validation_output="$(cat "$tmpdir/validation.txt")"
 
-    if ((validation_status == 0)); then
-      break
-    fi
+		if ((validation_status == 0)); then
+			break
+		fi
 
-    feedback="$(printf '%s\n' "$validation_output" | sed 's/^ERROR: //')"
-    previous_output="$raw_output"
+		feedback="$(printf '%s\n' "$validation_output" | sed 's/^ERROR: //')"
+		previous_output="$raw_output"
 
-    if ((attempt < max_attempts)); then
-      log "retrying after validation failure: $feedback"
-    fi
+		if ((attempt < max_attempts)); then
+			log "retrying after validation failure: $feedback"
+		fi
 
-    if ((attempt == max_attempts)); then
-      printf 'Model: %s\n' "$model" >&2
-      printf 'Last output:\n%s\n' "$raw_output" >&2
-      fail "$feedback"
-    fi
+		if ((attempt == max_attempts)); then
+			printf 'Model: %s\n' "$model" >&2
+			printf 'Last output:\n%s\n' "$raw_output" >&2
+			fail "$feedback"
+		fi
 
-    attempt=$((attempt + 1))
-  done
+		attempt=$((attempt + 1))
+	done
 fi
 
 printf '%s\n' "$raw_output" >"$response_file"
 if [[ -n "$output_file" ]]; then
-  mkdir -p -- "$(dirname -- "$output_file")"
-  printf '%s\n' "$raw_output" >"$output_file"
+	mkdir -p -- "$(dirname -- "$output_file")"
+	printf '%s\n' "$raw_output" >"$output_file"
 fi
 printf '%s\n' "$body" >"$body_file"
 
@@ -478,13 +478,13 @@ printf 'Model: %s\n' "$model"
 printf 'Title: %s\n' "$title"
 printf 'Body file: %s\n' "$body_file"
 if [[ -n "$output_file" ]]; then
-  printf 'Output file: %s\n' "$output_file"
+	printf 'Output file: %s\n' "$output_file"
 fi
 printf '\n%s\n' "$body"
 
 if ((dry_run)); then
-  printf '\nDry run. Not creating PR.\n'
-  exit 0
+	printf '\nDry run. Not creating PR.\n'
+	exit 0
 fi
 
 head_branch="$(push_branch)"
