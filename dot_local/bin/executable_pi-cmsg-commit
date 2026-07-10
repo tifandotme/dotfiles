@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test|revert'
-model='openai-codex/gpt-5.4-mini'
+model='openai-codex/gpt-5.6-luna'
 max_attempts=3
 script_name='pi-cmsg-commit'
 tmpdir=''
@@ -11,40 +11,40 @@ prompt_file=''
 commit_msg_file=''
 
 fail() {
-  printf '%s: %s\n' "$script_name" "$*" >&2
-  exit 1
+	printf '%s: %s\n' "$script_name" "$*" >&2
+	exit 1
 }
 
 log_error() {
-  printf '%s: %s\n' "$script_name" "$*" >&2
+	printf '%s: %s\n' "$script_name" "$*" >&2
 }
 
 cleanup() {
-  if [[ -n "$tmpdir" && -d "$tmpdir" ]]; then
-    rm -rf -- "$tmpdir"
-  fi
+	if [[ -n "$tmpdir" && -d "$tmpdir" ]]; then
+		rm -rf -- "$tmpdir"
+	fi
 }
 
 on_err() {
-  local exit_code="$1"
-  local line_no="$2"
-  log_error "unexpected error on line $line_no (exit $exit_code)"
-  exit "$exit_code"
+	local exit_code="$1"
+	local line_no="$2"
+	log_error "unexpected error on line $line_no (exit $exit_code)"
+	exit "$exit_code"
 }
 
 check_dependencies() {
-  local -a missing=()
-  local cmd=''
+	local -a missing=()
+	local cmd=''
 
-  for cmd in git pi; do
-    if ! command -v "$cmd" >/dev/null 2>&1; then
-      missing+=("$cmd")
-    fi
-  done
+	for cmd in git pi; do
+		if ! command -v "$cmd" >/dev/null 2>&1; then
+			missing+=("$cmd")
+		fi
+	done
 
-  if ((${#missing[@]} > 0)); then
-    fail "missing required commands: ${missing[*]}"
-  fi
+	if ((${#missing[@]} > 0)); then
+		fail "missing required commands: ${missing[*]}"
+	fi
 }
 
 trap 'cleanup' EXIT
@@ -55,12 +55,12 @@ check_dependencies
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail "not inside a git repository"
 
 if git diff --cached --quiet --exit-code; then
-  fail "no staged changes"
+	fail "no staged changes"
 fi
 
 if [[ -z "${PI_CODING_AGENT_DIR:-}" ]]; then
-  xdg_config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
-  export PI_CODING_AGENT_DIR="$xdg_config_home/pi"
+	xdg_config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+	export PI_CODING_AGENT_DIR="$xdg_config_home/pi"
 fi
 
 diff_output="$(git diff --cached --no-ext-diff --unified=3 -- .)"
@@ -71,11 +71,11 @@ prompt_file="$tmpdir/prompt.txt"
 commit_msg_file="$tmpdir/commit-message.txt"
 
 build_prompt() {
-  local attempt="$1"
-  local feedback="${2:-}"
-  local previous_output="${3:-}"
+	local attempt="$1"
+	local feedback="${2:-}"
+	local previous_output="${3:-}"
 
-  cat >"$prompt_file" <<EOF
+	cat >"$prompt_file" <<EOF
 Write a Conventional Commit message for the staged git diff below.
 
 Requirements:
@@ -103,17 +103,17 @@ Requirements:
 - Do not use markdown fences, quotes, or commentary
 EOF
 
-  if [[ "$attempt" -gt 1 ]]; then
-    cat >>"$prompt_file" <<EOF
+	if [[ "$attempt" -gt 1 ]]; then
+		cat >>"$prompt_file" <<EOF
 
 Previous output was invalid.
 Validation failure: $feedback
 Previous output:
 $previous_output
 EOF
-  fi
+	fi
 
-  cat >>"$prompt_file" <<EOF
+	cat >>"$prompt_file" <<EOF
 
 Staged diff:
 $diff_output
@@ -121,74 +121,74 @@ EOF
 }
 
 generate_message() {
-  if ! raw_output="$({
-    pi \
-      --print \
-      --no-session \
-      --no-tools \
-      --no-context-files \
-      --no-skills \
-      --no-extensions \
-      --no-prompt-templates \
-      --model "$model" \
-      --thinking off \
-      @"$prompt_file"
-  } | sed -e 's/\x1b\[[0-9;]*m//g')"; then
-    return 1
-  fi
+	if ! raw_output="$({
+		pi \
+			--print \
+			--no-session \
+			--no-tools \
+			--no-context-files \
+			--no-skills \
+			--no-extensions \
+			--no-prompt-templates \
+			--model "$model" \
+			--thinking off \
+			@"$prompt_file"
+	} | sed -e 's/\x1b\[[0-9;]*m//g')"; then
+		return 1
+	fi
 }
 
 normalize_and_validate() {
-  local input="$1"
-  local -a lines=()
-  local line=''
-  local header=''
-  local idx=0
+	local input="$1"
+	local -a lines=()
+	local line=''
+	local header=''
+	local idx=0
 
-  input="${input//$'\r'/}"
+	input="${input//$'\r'/}"
 
-  while IFS= read -r line; do
-    lines+=("$line")
-  done <<<"$input"
+	while IFS= read -r line; do
+		lines+=("$line")
+	done <<<"$input"
 
-  while ((${#lines[@]} > 0)) && [[ -z "${lines[0]//[[:space:]]/}" ]]; do
-    lines=("${lines[@]:1}")
-  done
+	while ((${#lines[@]} > 0)) && [[ -z "${lines[0]//[[:space:]]/}" ]]; do
+		lines=("${lines[@]:1}")
+	done
 
-  while ((${#lines[@]} > 0)) && [[ -z "${lines[${#lines[@]} - 1]//[[:space:]]/}" ]]; do
-    unset 'lines[${#lines[@]}-1]'
-  done
+	while ((${#lines[@]} > 0)) && [[ -z "${lines[${#lines[@]} - 1]//[[:space:]]/}" ]]; do
+		unset 'lines[${#lines[@]}-1]'
+	done
 
-  if ((${#lines[@]} == 0)); then
-    printf 'ERROR: pi returned an empty commit message\n'
-    return 1
-  fi
+	if ((${#lines[@]} == 0)); then
+		printf 'ERROR: pi returned an empty commit message\n'
+		return 1
+	fi
 
-  header="${lines[0]}"
+	header="${lines[0]}"
 
-  if [[ "$header" == *'```'* || "$header" == '"'* || "$header" == *'"' || "$header" == "'"* || "$header" == *"'" ]]; then
-    printf 'ERROR: header must not use markdown fences or quotes\n'
-    return 1
-  fi
+	if [[ "$header" == *'```'* || "$header" == '"'* || "$header" == *'"' || "$header" == "'"* || "$header" == *"'" ]]; then
+		printf 'ERROR: header must not use markdown fences or quotes\n'
+		return 1
+	fi
 
-  if [[ ! "$header" =~ ^(${allowed_types})(\([A-Za-z0-9._/-]+\))?(!)?:\ .+ ]]; then
-    printf 'ERROR: header must match conventional commit format\n'
-    return 1
-  fi
+	if [[ ! "$header" =~ ^(${allowed_types})(\([A-Za-z0-9._/-]+\))?(!)?:\ .+ ]]; then
+		printf 'ERROR: header must match conventional commit format\n'
+		return 1
+	fi
 
-  if ((${#header} > 72)); then
-    printf 'ERROR: header is longer than 72 characters\n'
-    return 1
-  fi
+	if ((${#header} > 72)); then
+		printf 'ERROR: header is longer than 72 characters\n'
+		return 1
+	fi
 
-  for ((idx = 1; idx < ${#lines[@]}; idx++)); do
-    if [[ "${lines[idx]}" == *'```'* ]]; then
-      printf 'ERROR: body must not use markdown fences\n'
-      return 1
-    fi
-  done
+	for ((idx = 1; idx < ${#lines[@]}; idx++)); do
+		if [[ "${lines[idx]}" == *'```'* ]]; then
+			printf 'ERROR: body must not use markdown fences\n'
+			return 1
+		fi
+	done
 
-  printf '%s\n' "$input"
+	printf '%s\n' "$input"
 }
 
 attempt=1
@@ -198,35 +198,35 @@ message=''
 validation_output=''
 
 while ((attempt <= max_attempts)); do
-  build_prompt "$attempt" "$feedback" "$previous_output"
-  generate_message || fail "pi failed to generate a commit message with $model"
+	build_prompt "$attempt" "$feedback" "$previous_output"
+	generate_message || fail "pi failed to generate a commit message with $model"
 
-  trap - ERR
-  set +e
-  validation_output="$(normalize_and_validate "$raw_output")"
-  validation_status=$?
-  set -e
-  trap 'on_err $? $LINENO' ERR
+	trap - ERR
+	set +e
+	validation_output="$(normalize_and_validate "$raw_output")"
+	validation_status=$?
+	set -e
+	trap 'on_err $? $LINENO' ERR
 
-  if ((validation_status == 0)); then
-    message="$validation_output"
-    break
-  fi
+	if ((validation_status == 0)); then
+		message="$validation_output"
+		break
+	fi
 
-  feedback="$(printf '%s\n' "$validation_output" | sed 's/^ERROR: //')"
-  previous_output="$raw_output"
+	feedback="$(printf '%s\n' "$validation_output" | sed 's/^ERROR: //')"
+	previous_output="$raw_output"
 
-  if ((attempt < max_attempts)); then
-    printf '%s: retrying after validation failure: %s\n' "$script_name" "$feedback" >&2
-  fi
+	if ((attempt < max_attempts)); then
+		printf '%s: retrying after validation failure: %s\n' "$script_name" "$feedback" >&2
+	fi
 
-  if ((attempt == max_attempts)); then
-    printf 'Model: %s\n' "$model" >&2
-    printf 'Last output:\n%s\n' "$raw_output" >&2
-    fail "$feedback"
-  fi
+	if ((attempt == max_attempts)); then
+		printf 'Model: %s\n' "$model" >&2
+		printf 'Last output:\n%s\n' "$raw_output" >&2
+		fail "$feedback"
+	fi
 
-  attempt=$((attempt + 1))
+	attempt=$((attempt + 1))
 done
 
 printf '%s\n' "$message" >"$commit_msg_file"
