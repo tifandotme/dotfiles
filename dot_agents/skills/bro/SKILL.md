@@ -1,5 +1,6 @@
 ---
 name: bro
+description: Restate the previous response in plain, concise language without jargon.
 disable-model-invocation: true
 ---
 
