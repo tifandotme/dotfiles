@@ -1,10 +1,10 @@
 {
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-terra",
-  "defaultThinkingLevel": "high",
+  "defaultModel": "gpt-5.6-sol",
+  "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.80.6",
-  "quietStartup": false,
+  "quietStartup": true,
   "enableInstallTelemetry": false,
   "npmCommand": ["bun"],
   "theme": "dark",
@@ -53,5 +53,7 @@
   "showHardwareCursor": false,
   "retry": {
     "enabled": true
-  }
+  },
+  "showCacheMissNotices": true
 }
+

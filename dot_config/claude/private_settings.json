@@ -24,6 +24,11 @@
             "type": "command",
             "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' session",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-title-watch.sh'",
+            "timeout": 10
           }
         ]
       }

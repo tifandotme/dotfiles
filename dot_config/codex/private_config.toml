@@ -69,9 +69,10 @@ trusted_hash = "sha256:46e26997bf824839d906bd34a67e097821bfc3b89e853b0bd0576a01f
 
 [hooks.state."/Users/tifan/.config/codex/hooks.json:session_start:0:0"]
 trusted_hash = "sha256:1b6314b231c4707e21ed66c58764b82dc6cdec4a6a946c4b38ebb62d5408ce3d"
+enabled = true
 
 [hooks.state."/Users/tifan/.config/codex/hooks.json:session_start:1:0"]
-trusted_hash = "sha256:869356ac9626d421180374a2447eab02fc8036ac8e974719375397c56f3d99a7"
+trusted_hash = "sha256:70fb11fc38829f66942948c21f2c0472fecd171b26adbc2a6ac29780ee3bf674"
 
 [hooks.state."/Users/tifan/.config/codex/hooks.json:user_prompt_submit:0:0"]
 trusted_hash = "sha256:8a0387db42e8d560ed703de4276a0e9ac4e850e26f5a22de8ef0ae62a2ca2ad5"
