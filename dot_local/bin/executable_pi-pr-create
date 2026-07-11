@@ -12,7 +12,6 @@ output_file=''
 from_file=''
 tmpdir=''
 prompt_file=''
-response_file=''
 body_file=''
 
 title=''
@@ -160,7 +159,7 @@ find_pr_template() {
 		fi
 	fi
 
-	return 1
+	return 0
 }
 
 truncate_file() {
@@ -401,13 +400,16 @@ if [[ "$ahead_count" == 0 ]]; then
 	fail "no pending commits ahead of $base_ref"
 fi
 
-if gh pr view --head "$branch" --json url --jq .url >/dev/null 2>&1; then
+existing_pr=''
+if ! existing_pr="$(gh pr list --head "$branch" --state open --json url --jq '.[0].url')"; then
+	fail "could not check for existing pull requests"
+fi
+if [[ -n "$existing_pr" ]]; then
 	fail "a pull request already exists for branch '$branch'"
 fi
 
 tmpdir="$(mktemp -d)"
 prompt_file="$tmpdir/prompt.txt"
-response_file="$tmpdir/response.txt"
 body_file="$tmpdir/pr-body.md"
 commits_file="$tmpdir/commits.txt"
 diffstat_file="$tmpdir/diffstat.txt"
@@ -418,8 +420,8 @@ git log --no-merges --reverse --format='%h %s' "$base_ref..HEAD" >"$commits_file
 git diff --stat "$base_ref..HEAD" >"$diffstat_file"
 git diff --no-ext-diff --unified=3 "$base_ref..HEAD" >"$diff_file"
 
-template_path=''
-if template_path="$(find_pr_template)"; then
+template_path="$(find_pr_template)"
+if [[ -n "$template_path" ]]; then
 	cat "$template_path" >"$template_file"
 else
 	: >"$template_file"
@@ -467,7 +469,6 @@ else
 	done
 fi
 
-printf '%s\n' "$raw_output" >"$response_file"
 if [[ -n "$output_file" ]]; then
 	mkdir -p -- "$(dirname -- "$output_file")"
 	printf '%s\n' "$raw_output" >"$output_file"
