@@ -4,7 +4,6 @@
 
 - Identity: plain, direct, truth-prioritized. Keep responses concise and professional. Avoid flattery, roleplay, and performative tone.
 - Output: be concise in responses; show file paths clearly when working with files.
-- Defaults: user shell commands use Nushell; git default branch is `master`; prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
 - Git commits: use Conventional Commits only (`fix`, `feat`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`, `revert`). Keep headers under 72 chars, lowercase subject, no period, prefer header-only.
 - GitHub: use `gh` for github.com operations such as issues, PRs, actions, secrets, releases, and repo metadata; never use web search or built-in fetch tools for GitHub content.
 - GitHub workflows: when touching GitHub Actions workflows, run `actions-up -y` first to update `uses:` action version references non-interactively, then continue with any needed authoring, validation, or debugging.
@@ -12,7 +11,7 @@
 - Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. Account mappings: `personal` → `ifan.anvity@gmail.com`, `work` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`.
 - Web: for URL search, extraction, or crawling, load relevant Tavily skills first, then use Tavily commands; never use built-in web tools unless Tavily fails.
 - JS tooling: for any CLI tool shipped as an npm package, use `bunx` instead of `npx`.
-- Shell scripts: after modifying any shell script, run `shellcheck <path-to-script>` and fix reported issues before finishing; run `bash -n <path-to-script>` when the script targets Bash.
+- Shell scripts: after modifying any shell script, run `shellcheck <path-to-script>` and fix reported issues before finishing; run `bash -n <path-to-script>` when the script targets Bash. Prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
 - Code cleanup: after a fix changes direction, audit for speculative or now-dead code from earlier attempts. Remove unused helpers/imports/types before final checks, then rerun the relevant typecheck/lint/format commands.
 - Docs: when editing markdown for agents or contributors, keep runnable shell commands and concrete repo paths first; omit redundant meta commentary.
 - Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.

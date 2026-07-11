@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# App script hash: # {{ include "dot_config/infat/nvim-finder.applescript" | sha256sum }}
+# {{ if eq .chezmoi.os "darwin" -}}
+set -Eeuo pipefail
+
+app="$HOME/Applications/Neovim.app"
+script="${XDG_CONFIG_HOME:-$HOME/.config}/infat/nvim-finder.applescript"
+rm -rf "$app"
+osacompile -o "$app" "$script"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleIdentifier string com.tifan.nvim-finder' "$app/Contents/Info.plist"
+codesign --force --deep --sign - "$app"
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$app"
+
+# Infat resolves app paths relative to the current directory.
+cd "$HOME"
+
+# Infat uses NSWorkspace without linking AppKit.
+DYLD_INSERT_LIBRARIES=/System/Library/Frameworks/AppKit.framework/AppKit infat --config "${XDG_CONFIG_HOME:-$HOME/.config}/infat/config.toml"
+# {{- end }}

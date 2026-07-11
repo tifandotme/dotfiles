@@ -1,0 +1,7 @@
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# {{ if eq .chezmoi.os "darwin" -}}
+[types]
+plain-text = "Applications/Neovim.app"
+text = "Applications/Neovim.app"
+sourcecode = "Applications/Neovim.app"
+# {{- end }}
