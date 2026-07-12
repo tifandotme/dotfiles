@@ -3,6 +3,9 @@ require("full-border"):setup {
   -- Available values: ui.Border.PLAIN, ui.Border.ROUNDED
   type = ui.Border.PLAIN,
 }
+require("git"):setup {
+  order = 1500,
+}
 require("folder-rules"):setup()
 require("chezmoi"):setup()
 

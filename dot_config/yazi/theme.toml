@@ -11,6 +11,10 @@ border_style = { fg = "gray" }
 count_selected = { fg = "black", bg = "yellow", bold = true }
 count_copied = { fg = "black", bg = "yellow", blink_rapid = true, bold = true }
 
+[git]
+unknown_sign = "  "
+clean_sign = "  "
+
 [status]
 sep_left = { open = "", close = "" }
 sep_right = { open = "", close = "" }

@@ -33,5 +33,10 @@ use = "Gallardo994/clippy"
 rev = "8ce5541"
 hash = "977c6f4ffceada33ced20d941f1defab"
 
+[[plugin.deps]]
+use = "yazi-rs/plugins:git"
+rev = "1cf48ea"
+hash = "88e56a64b7ce7c4314427452343fef17"
+
 [flavor]
 deps = []

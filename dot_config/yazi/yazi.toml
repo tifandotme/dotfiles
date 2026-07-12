@@ -3,6 +3,10 @@
 #:schema https://yazi-rs.github.io/schemas/yazi.json
 
 [plugin]
+prepend_fetchers = [
+  { url = "*", run = "git", group = "git" },
+  { url = "*/", run = "git", group = "git" },
+]
 append_fetchers = [
   { id = "chezmoi", url = "*/", run = "chezmoi", prio = "low", group = "chezmoi" },
   { id = "chezmoi", url = "local://*", run = "chezmoi", prio = "low", group = "chezmoi" },
