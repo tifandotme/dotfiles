@@ -2,6 +2,8 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+local user_group = vim.api.nvim_create_augroup("user-config", { clear = true })
+
 -- Options
 vim.opt.termguicolors = true
 vim.opt.mouse = "a"
@@ -27,6 +29,12 @@ vim.opt.showmode = true
 vim.opt.showcmd = true
 vim.opt.showmatch = true
 vim.opt.laststatus = 2
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undofile = true
+vim.opt.signcolumn = "yes"
+vim.opt.colorcolumn = "80,100"
+vim.opt.listchars = { space = "·", tab = "→ ", trail = "·", nbsp = "␣" }
 
 -- Cache Git status briefly; `*` means the repo has uncommitted changes.
 local git_status_cache = { root = nil, value = "", expires = 0 }
@@ -68,21 +76,17 @@ function _G.statusline_git()
 end
 
 vim.opt.statusline = " %f%m%r %= %{v:lua.statusline_git()}%y %l:%c %P "
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undofile = true
-vim.opt.signcolumn = "yes"
-vim.opt.colorcolumn = "80,100"
-vim.opt.listchars = { space = "·", tab = "→ ", trail = "·", nbsp = "␣" }
 
 local visual_modes = { v = true, V = true, [string.char(22)] = true }
 vim.api.nvim_create_autocmd("ModeChanged", {
+  group = user_group,
   callback = function()
     vim.opt_local.list = visual_modes[vim.fn.mode()] or false
   end,
 })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
+  group = user_group,
   callback = function()
     vim.highlight.on_yank({ higroup = "YankHighlight", timeout = 200 })
   end,
@@ -105,7 +109,7 @@ vim.filetype.add({
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-  group = vim.api.nvim_create_augroup("user-json-indent", { clear = true }),
+  group = user_group,
   pattern = { "json", "jsonc", "json5" },
   callback = function()
     vim.opt_local.expandtab = true
@@ -146,6 +150,7 @@ end
 vim.g.fff = { lazy_sync = true }
 
 vim.api.nvim_create_autocmd("PackChanged", {
+  group = user_group,
   callback = function(ev)
     local name, kind = ev.data.spec.name, ev.data.kind
     if name == "fff.nvim" and (kind == "install" or kind == "update") then
@@ -364,6 +369,8 @@ local function pick_buffer()
     return
   end
 
+  -- FFF has no public custom-source API, so the buffer picker temporarily
+  -- replaces these internals and restores them when it closes.
   local file_picker = require("fff.file_picker")
   local original = {
     search = file_picker.search_files_paginated,
@@ -447,6 +454,10 @@ map("n", "j", "gj", key_opts("Down by display line"))
 map("n", "k", "gk", key_opts("Up by display line"))
 map("n", "0", "g0", key_opts("Display line start"))
 map("n", "$", "g$", key_opts("Display line end"))
+map("n", "<A-Down>", "<cmd>move .+1<cr>==", key_opts("Move line down"))
+map("n", "<A-Up>", "<cmd>move .-2<cr>==", key_opts("Move line up"))
+map("v", "<A-Down>", ":move '>+1<cr>gv=gv", key_opts("Move selection down"))
+map("v", "<A-Up>", ":move '<-2<cr>gv=gv", key_opts("Move selection up"))
 map("n", "q:", ":", key_opts("Command line"))
 map("n", "<C-h>", "<C-w>h", key_opts("Window left"))
 map("n", "<C-j>", "<C-w>j", key_opts("Window down"))
@@ -526,7 +537,7 @@ vim.api.nvim_create_user_command("LspRestartBuffer", function()
 end, {})
 
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("user-lsp", {}),
+  group = user_group,
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     if not client then
@@ -558,6 +569,24 @@ local function format_with_command(bufnr, command)
   end
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, output)
 end
+
+local command_formatters = {
+  bash = function(_)
+    return { "shfmt" }
+  end,
+  markdown = function(path)
+    return { "oxfmt", "--stdin-filepath", path:gsub("%.tmpl$", "") }
+  end,
+  nu = function(_)
+    return { "nufmt", "--stdin" }
+  end,
+  sh = function(_)
+    return { "shfmt" }
+  end,
+  svg = function(_)
+    return { "superhtml", "fmt", "--stdin" }
+  end,
+}
 
 local formatters_by_filetype = {
   css = "oxfmt",
@@ -595,24 +624,14 @@ local template_commands = {
 function format_buffer(bufnr)
   bufnr = bufnr == 0 and vim.api.nvim_get_current_buf() or bufnr
   local path = vim.api.nvim_buf_get_name(bufnr)
-  if vim.bo[bufnr].filetype == "bash" or vim.bo[bufnr].filetype == "sh" then
-    format_with_command(bufnr, { "shfmt" })
-    return
-  end
-  if vim.bo[bufnr].filetype == "markdown" then
-    format_with_command(bufnr, { "oxfmt", "--stdin-filepath", path:gsub("%.tmpl$", "") })
-    return
-  end
-  if vim.bo[bufnr].filetype == "nu" then
-    format_with_command(bufnr, { "nufmt", "--stdin" })
-    return
-  end
-  if vim.bo[bufnr].filetype == "svg" then
-    format_with_command(bufnr, { "superhtml", "fmt", "--stdin" })
+  local filetype = vim.bo[bufnr].filetype
+  local command = command_formatters[filetype]
+  if command then
+    format_with_command(bufnr, command(path))
     return
   end
 
-  local formatter = formatters_by_filetype[vim.bo[bufnr].filetype]
+  local formatter = formatters_by_filetype[filetype]
   if not formatter then
     vim.lsp.buf.format({ bufnr = bufnr, timeout_ms = 1000 })
     return
@@ -637,7 +656,7 @@ end
 
 -- format on save
 vim.api.nvim_create_autocmd("BufWritePre", {
-  group = vim.api.nvim_create_augroup("user-format", {}),
+  group = user_group,
   callback = function(ev)
     if vim.bo[ev.buf].filetype == "markdown" then
       return
@@ -691,6 +710,13 @@ vim.lsp.config("vtsls", {
         },
       },
     },
+  },
+})
+
+vim.lsp.config("tinymist", {
+  settings = {
+    formatterPrintWidth = 80,
+    formatterIndentSize = 2,
   },
 })
 
