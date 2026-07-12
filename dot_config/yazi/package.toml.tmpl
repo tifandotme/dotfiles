@@ -1,3 +1,4 @@
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 [[plugin.deps]]
 use = "Rolv-Apneseth/starship"
 rev = "159eaba"
@@ -28,10 +29,12 @@ use = "yazi-rs/plugins:toggle-pane"
 rev = "8cd50c6"
 hash = "15e5b67a241172cbb86b8fbf9e63692"
 
+# {{ if eq .chezmoi.os "darwin" }}
 [[plugin.deps]]
 use = "Gallardo994/clippy"
 rev = "8ce5541"
 hash = "977c6f4ffceada33ced20d941f1defab"
+# {{ end }}
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:git"

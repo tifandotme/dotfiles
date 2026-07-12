@@ -1,3 +1,4 @@
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 # default: https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/README.md
 
 #:schema https://yazi-rs.github.io/schemas/yazi.json
@@ -38,7 +39,9 @@ prepend_rules = [
 ]
 
 [opener]
+# {{ if eq .chezmoi.os "darwin" }}
 play = [{ run = 'open "$@" -a IINA', orphan = true, for = "unix" }]
+# {{ end }}
 view_csv = [
   { run = 'tv -a -f -e "$1" | bat --plain --paging=always --wrap=never', block = true, for = "unix" }
 ]
@@ -46,6 +49,8 @@ view_csv = [
 edit = [{ run = 'TERM=xterm-ghostty $EDITOR "$@"', block = true, for = "unix" }]
 
 [preview]
-max_width = 1200
-image_quality = 50
+max_width = 2400
+max_height = 1600
+image_quality = 80
+image_filter = "lanczos3"
 image_delay = 100

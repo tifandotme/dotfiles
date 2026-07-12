@@ -94,6 +94,7 @@ vim.filetype.add({
     [".*%.bash%.tmpl"] = "bash",
     [".*%.json%.tmpl"] = "json",
     [".*%.lua%.tmpl"] = "lua",
+    [".*%.md%.tmpl"] = "markdown",
     [".*%.nu%.tmpl"] = "nu",
     [".*%.sh%.tmpl"] = "sh",
     [".*%.toml%.tmpl"] = "toml",
@@ -101,6 +102,16 @@ vim.filetype.add({
     [".*%.ya?ml%.tmpl"] = "yaml",
     [".*%.zsh%.tmpl"] = "zsh",
   },
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("user-json-indent", { clear = true }),
+  pattern = { "json", "jsonc", "json5" },
+  callback = function()
+    vim.opt_local.expandtab = true
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+  end,
 })
 
 -- Theme
@@ -151,6 +162,8 @@ vim.pack.add({
   "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/dmtrKovalenko/fff.nvim",
   "https://github.com/lewis6991/gitsigns.nvim",
+  "https://github.com/selimacerbas/live-server.nvim",
+  "https://github.com/selimacerbas/markdown-preview.nvim",
   "https://github.com/folke/which-key.nvim",
 })
 install_fff_binary()
@@ -164,6 +177,11 @@ require("which-key").setup({
 require("which-key").add({
   { "<leader>b", group = "buffers" },
   { "<leader>f", group = "files" },
+  { "<leader>m", group = "markdown" },
+})
+
+require("markdown_preview").setup({
+  default_theme = is_macos_dark() and "dark" or "light",
 })
 
 -- Git signs
@@ -458,6 +476,11 @@ map({ "n", "v" }, "<leader>e", open_yazi, key_opts("File explorer"))
 -- Keymaps: git
 map({ "n", "v" }, "<leader>g", open_lazygit, key_opts("Lazygit"))
 
+-- Keymaps: markdown
+map("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", key_opts("Markdown preview"))
+map("n", "<leader>mr", "<cmd>MarkdownPreviewRefresh<cr>", key_opts("Refresh markdown preview"))
+map("n", "<leader>ms", "<cmd>MarkdownPreviewStop<cr>", key_opts("Stop markdown preview"))
+
 -- Keymaps: LSP
 map("n", "<leader>p", function()
   format_buffer(0)
@@ -550,10 +573,9 @@ local formatters_by_filetype = {
   less = "oxfmt",
   lua = "stylua",
   luau = "stylua",
-  markdown = "oxfmt",
   scss = "oxfmt",
   shtml = "superhtml",
-  toml = "oxfmt",
+  toml = "tombi",
   typescript = "oxfmt",
   typescriptreact = "oxfmt",
   vue = "oxfmt",
@@ -561,10 +583,24 @@ local formatters_by_filetype = {
   yaml = "oxfmt",
 }
 
+local template_commands = {
+  oxfmt = function(path)
+    return { "oxfmt", "--stdin-filepath", path }
+  end,
+  tombi = function(path)
+    return { "tombi", "format", "--stdin-filename", path, "-" }
+  end,
+}
+
 function format_buffer(bufnr)
   bufnr = bufnr == 0 and vim.api.nvim_get_current_buf() or bufnr
+  local path = vim.api.nvim_buf_get_name(bufnr)
   if vim.bo[bufnr].filetype == "bash" or vim.bo[bufnr].filetype == "sh" then
     format_with_command(bufnr, { "shfmt" })
+    return
+  end
+  if vim.bo[bufnr].filetype == "markdown" then
+    format_with_command(bufnr, { "oxfmt", "--stdin-filepath", path:gsub("%.tmpl$", "") })
     return
   end
   if vim.bo[bufnr].filetype == "nu" then
@@ -582,6 +618,14 @@ function format_buffer(bufnr)
     return
   end
 
+  if path:match("%.tmpl$") then
+    local command = template_commands[formatter]
+    if command then
+      format_with_command(bufnr, command(path:gsub("%.tmpl$", "")))
+      return
+    end
+  end
+
   vim.lsp.buf.format({
     bufnr = bufnr,
     timeout_ms = 1000,
@@ -595,7 +639,20 @@ end
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = vim.api.nvim_create_augroup("user-format", {}),
   callback = function(ev)
+    if vim.bo[ev.buf].filetype == "markdown" then
+      return
+    end
+
     format_buffer(ev.buf)
+  end,
+})
+
+-- oxfmt only starts in Oxfmt-configured or package.json workspaces by default.
+-- Fall back so it also formats this repo's standalone JSON files.
+vim.lsp.config("oxfmt", {
+  root_dir = function(bufnr, on_dir)
+    local path = vim.api.nvim_buf_get_name(bufnr)
+    on_dir(vim.fs.root(path, ".git") or vim.fs.dirname(path))
   end,
 })
 
@@ -647,6 +704,7 @@ vim.lsp.enable({
   "jsonls",
   "stylua",
   "tombi",
+  "tinymist",
   "lua_ls",
   "nushell",
   "yamlls",
