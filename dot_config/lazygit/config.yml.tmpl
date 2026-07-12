@@ -1,14 +1,18 @@
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 # yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
 os:
+  # {{ if eq .chezmoi.os "darwin" }}
   open: "bash -c 'open {{filename}}'"
+  # {{ else }}
+  open: "bash -c 'xdg-open {{filename}}'"
+  # {{ end }}
 git:
   overrideGpg: true
-  # {{ if eq .chezmoi.os "darwin" -}}
+  # {{ if eq .chezmoi.os "darwin" }}
   pagers:
     - pager: delta --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
       colorArg: always
-# {{ end -}}
+# {{ end }}
 
 gui:
   expandFocusedSidePanel: true
@@ -29,6 +33,12 @@ keybinding:
 # {{ if eq .chezmoi.os "darwin" -}}
 customCommands:
   - key: "C"
+    context: "files"
+    description: "Generate commit message with Claude"
+    command: "claude-cmsg-commit"
+    output: "log"
+    loadingText: "Generating commit message..."
+  - key: "G"
     context: "files"
     description: "Generate commit message with Pi"
     command: "pi-cmsg-commit"
