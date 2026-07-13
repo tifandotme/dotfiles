@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
+# {{ if eq .chezmoi.os "darwin" -}}
+set -Eeuo pipefail
+
+repo="$HOME/.config/sketchybar/external/sketchybar-app-font"
+font_source="$repo/dist/sketchybar-app-font.ttf"
+font_target="$HOME/Library/Fonts/sketchybar-app-font.ttf"
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/chezmoi"
+revision_file="$cache_dir/sketchybar-app-font.revision"
+revision="$(git -C "$repo" rev-parse HEAD)"
+
+if [[ -f "$revision_file" ]] && [[ "$(<"$revision_file")" == "$revision" ]] && [[ -f "$font_source" ]] && [[ -f "$repo/dist/icon_map.sh" ]] && [[ -f "$font_target" ]]; then
+	exit 0
+fi
+
+if ! command -v bun >/dev/null; then
+	printf '%s\n' 'bun is required to build sketchybar-app-font.' >&2
+	exit 1
+fi
+
+cd "$repo"
+bun install --frozen-lockfile
+bun run build
+
+mkdir -p "$(dirname "$font_target")"
+if ! cmp -s "$font_source" "$font_target"; then
+	cp "$font_source" "$font_target"
+fi
+
+mkdir -p "$cache_dir"
+printf '%s\n' "$revision" > "$revision_file"
+# {{ end -}}

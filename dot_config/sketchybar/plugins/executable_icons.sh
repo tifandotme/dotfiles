@@ -4,7 +4,7 @@
 
 # Source the icon map with all the application icons
 # shellcheck disable=SC1091
-source "$CONFIG_DIR/icon_map.sh"
+source "$CONFIG_DIR/external/sketchybar-app-font/dist/icon_map.sh"
 
 # Get icon from the mapping function
 __icon_map "$1"
