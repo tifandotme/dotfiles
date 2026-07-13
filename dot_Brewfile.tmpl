@@ -10,10 +10,8 @@
 # =============================================================================
 
 # Shells
-# {{ if $isDarwin -}}
-brew "fish"    # User-friendly command-line shell
-brew "nushell" # Modern shell for the GitHub era
-# {{- end }}
+brew "fish"     # External completion backend for Nushell
+brew "nushell"  # Modern shell for the GitHub era
 brew "starship" # Cross-shell prompt for astronauts
 
 # Modern CLI replacements
@@ -86,7 +84,7 @@ brew "lazygit"             # Simple terminal UI for git commands
 brew "models"    # TUI/CLI for browsing AI models, benchmarks, and coding agents
 cask "openusage" # AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
 brew "rtk"       # CLI proxy to minimize LLM token consumption
-cask "codex-app" # OpenAI's Codex desktop app for managing coding agents
+cask "chatgpt"   # OpenAI's ChatGPT desktop app
 tap "ampcode/tap"
 brew "ampcode/tap/ampcode"
 tap "dmtrKovalenko/fff"
@@ -234,7 +232,7 @@ brew "felixkratz/formulae/sketchybar" # Custom macOS statusbar
 # Fonts for UI customization
 cask "font-sf-mono"
 cask "font-sf-pro"
-cask "font-sketchybar-app-font"
+# sketchybar-app-font is built from its chezmoi external.
 cask "sf-symbols"
 
 # Window manager
@@ -287,6 +285,7 @@ cask "zoom"     # Video communication platform
 cask "anki"      # Memory training application
 cask "slack"     # Team communication and collaboration software
 cask "craft"     # Native document editor
+cask "obsidian"  # Knowledge base for Markdown files
 cask "tolaria"   # Markdown knowledgebase manager
 cask "whimsical" # Collaboration and diagramming tool
 

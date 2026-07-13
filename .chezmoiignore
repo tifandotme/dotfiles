@@ -23,8 +23,11 @@ work/
 personal/
 .zprofile
 .zshrc
-.config/cmux
+.cache/sketchybar
+.config/aerospace
+.config/gcloud
 .config/ghostty
+.config/infat
 .config/sketchybar
 .config/borders
 .config/raycast
@@ -32,7 +35,6 @@ personal/
 .config/colima
 .config/zed
 .config/spotify-player
-.config/nushell
 .config/fish
 .config/gws-hadl
 .config/herdr

@@ -1,20 +1,21 @@
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 
-# {{ if eq .chezmoi.os "darwin" -}}
-
-[".config/sketchybar/external/sketchybar-app-font"]
-type = "git-repo"
-url = "https://github.com/kvndrsslr/sketchybar-app-font.git"
-refreshPeriod = "168h"
-[".config/sketchybar/external/sketchybar-app-font"."pull"]
-args = ["--rebase", "--autostash"]
-
 [".config/nushell/scripts/external/bash-env-nushell"]
 type = "git-repo"
 url = "git@github.com:tesujimath/bash-env-nushell.git"
 refreshPeriod = "168h"
 
 [".config/nushell/scripts/external/bash-env-nushell"."pull"]
+args = ["--rebase", "--autostash"]
+
+# {{ if eq .chezmoi.os "darwin" -}}
+
+[".config/sketchybar/external/sketchybar-app-font"]
+type = "git-repo"
+url = "https://github.com/kvndrsslr/sketchybar-app-font.git"
+refreshPeriod = "168h"
+
+[".config/sketchybar/external/sketchybar-app-font"."pull"]
 args = ["--rebase", "--autostash"]
 
 [".config/ghostty/shaders/cursors"]
