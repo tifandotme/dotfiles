@@ -95,6 +95,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 vim.filetype.add({
   pattern = {
     [".*Brewfile%.tmpl"] = "sh",
+    [".*bash_profile"] = "bash",
     [".*%.bash%.tmpl"] = "bash",
     [".*%.json%.tmpl"] = "json",
     [".*%.lua%.tmpl"] = "lua",

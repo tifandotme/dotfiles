@@ -1,5 +1,10 @@
-source "$HOME/.secrets"
+# shellcheck shell=sh
+# shellcheck source=/dev/null
+[ -f "$HOME/.secrets" ] && . "$HOME/.secrets"
+
+# shellcheck source=/dev/null
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
 if command -v nu >/dev/null 2>&1; then
-	SHELL=$(which nu) exec nu
+  exec nu
 fi
