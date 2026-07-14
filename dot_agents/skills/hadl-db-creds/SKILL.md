@@ -1,7 +1,6 @@
 ---
 name: hadl-db-creds
 description: Provides the local command contract for HADL database credentials and tunnels. Use when an agent needs to inspect, traverse, or query HADL, Aquasense, Backoffice, staging, production, or windmill databases.
-disable-model-invocation: true
 ---
 
 # HADL DB Credentials
