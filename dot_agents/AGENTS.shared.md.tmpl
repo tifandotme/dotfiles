@@ -1,4 +1,5 @@
 <!-- context7 -->
+
 {{ output "gh" "api" "-H" "Accept: application/vnd.github.raw" "repos/upstash/context7/contents/rules/context7-cli.md" "--cache" "168h" -}}
 <!-- context7 -->
 
@@ -11,7 +12,7 @@
 - Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. Account mappings: `personal` → `ifan.anvity@gmail.com`, `work` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`.
 - Web: for URL search, extraction, or crawling, load relevant Tavily skills first, then use Tavily commands; never use built-in web tools unless Tavily fails.
 - JS tooling: for any CLI tool shipped as an npm package, use `bunx` instead of `npx`.
-- Shell scripts: after modifying any shell script, run `shellcheck <path-to-script>` and fix reported issues before finishing; run `bash -n <path-to-script>` when the script targets Bash. Prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
+- Shell scripts: after modifying one, run `shfmt -w -ln <bash|posix|mksh|bats|zsh> <path-to-script>` with its dialect. Run `shellcheck <path-to-script>` for Bash or POSIX-compatible scripts, `bash -n <path-to-script>` for Bash, and `zsh -n <path-to-script>` for Zsh. Prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
 - Code cleanup: after a fix changes direction, audit for speculative or now-dead code from earlier attempts. Remove unused helpers/imports/types before final checks, then rerun the relevant typecheck/lint/format commands.
 - Docs: when editing markdown for agents or contributors, keep runnable shell commands and concrete repo paths first; omit redundant meta commentary.
 - Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.
