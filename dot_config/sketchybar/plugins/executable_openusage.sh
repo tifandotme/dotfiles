@@ -17,7 +17,7 @@ usage="$(curl --connect-timeout 1 --max-time 2 --silent --show-error --fail "htt
 }
 
 metric_data="$(jq -r --arg label "$metric" '
-  .lines[] | select(.type == "progress" and .label == $label) |
+  (.lines[] | select(.type == "progress" and .label == $label)) // { "used": 0 } |
   if .resetsAt != null and .periodDurationMs != null then
     (.periodDurationMs / 1000) as $duration |
     (.resetsAt | sub("\\.[0-9]+Z$"; "Z") | fromdateiso8601) as $resets_at |
