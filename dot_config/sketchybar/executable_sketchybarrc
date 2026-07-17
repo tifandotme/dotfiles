@@ -175,8 +175,8 @@ sketchybar --add item claude_session right \
 	icon.font="sketchybar-app-font:Regular:12.0" \
 	script="$PLUGIN_DIR/openusage.sh claude Session"
 
-sketchybar --add item openusage_spacer right \
-	--set openusage_spacer \
+sketchybar --add item claude_codex_spacer right \
+	--set claude_codex_spacer \
 	background.drawing=off \
 	icon.drawing=off \
 	label.drawing=off \
@@ -230,6 +230,15 @@ sketchybar --add bracket codex_usage codex_session codex_weekly \
 #   click_script="open -a 'Mullvad VPN'" \
 #   script="$PLUGIN_DIR/vpn.sh" \
 #   --subscribe vpn wifi_change front_app_switched
+
+sketchybar --add item openusage_spacer right \
+	--set openusage_spacer \
+	background.drawing=off \
+	icon.drawing=off \
+	label.drawing=off \
+	padding_left=0 \
+	padding_right=0 \
+	width=5
 
 sketchybar --add item slack right \
 	--set slack \
