@@ -3,7 +3,7 @@
   "defaultModel": "gpt-5.6-terra",
   "defaultThinkingLevel": "high",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.80.6",
+  "lastChangelogVersion": "0.80.10",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": ["bun"],
@@ -54,3 +54,4 @@
   },
   "showCacheMissNotices": true
 }
+
