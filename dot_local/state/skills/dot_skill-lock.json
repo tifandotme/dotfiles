@@ -215,9 +215,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/ogulcancelik/herdr.git",
       "skillPath": "SKILL.md",
-      "skillFolderHash": "9c9490d764d306b6cc093b5b3de1ccd4e6467c94",
+      "skillFolderHash": "8d2af4e046c2a95dfc54aafd6f88da12389d76e8",
       "installedAt": "2026-06-22T08:40:53.868Z",
-      "updatedAt": "2026-07-16T02:20:22.615Z"
+      "updatedAt": "2026-07-17T09:29:23.479Z"
     },
     "find-docs": {
       "source": "upstash/context7",
