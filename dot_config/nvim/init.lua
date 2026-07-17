@@ -93,13 +93,22 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 vim.filetype.add({
+  filename = {
+    dot_bashrc = "bash",
+    dot_zprofile = "zsh",
+    dot_zshenv = "zsh",
+    dot_zshrc = "zsh",
+  },
   pattern = {
     [".*Brewfile%.tmpl"] = "sh",
     [".*bash_profile"] = "bash",
+    [".*%.bash"] = "bash",
     [".*%.bash%.tmpl"] = "bash",
+    [".*%.bats"] = "bats",
     [".*%.json%.tmpl"] = "json",
     [".*%.lua%.tmpl"] = "lua",
     [".*%.md%.tmpl"] = "markdown",
+    [".*%.mksh"] = "mksh",
     [".*%.nu%.tmpl"] = "nu",
     [".*%.sh%.tmpl"] = "sh",
     [".*%.toml%.tmpl"] = "toml",
@@ -301,23 +310,6 @@ local function open_yazi()
   })
 end
 
--- Features: git
-local function git_root()
-  local cwd = current_dir()
-  local result = vim
-    .system({ "git", "-C", cwd, "rev-parse", "--show-toplevel" }, { text = true })
-    :wait()
-  if result.code == 0 then
-    return vim.trim(result.stdout)
-  end
-
-  return cwd
-end
-
-local function open_lazygit()
-  open_float_term({ "lazygit" }, { cwd = git_root() })
-end
-
 -- Features: buffers
 local function listed_buffers()
   return vim.tbl_filter(function(buf)
@@ -485,9 +477,6 @@ map({ "n", "x" }, "<leader>fw", function()
 end, key_opts("Grep word"))
 map({ "n", "v" }, "<leader>e", open_yazi, key_opts("File explorer"))
 
--- Keymaps: git
-map({ "n", "v" }, "<leader>g", open_lazygit, key_opts("Lazygit"))
-
 -- Keymaps: markdown
 map("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", key_opts("Markdown preview"))
 map("n", "<leader>mr", "<cmd>MarkdownPreviewRefresh<cr>", key_opts("Refresh markdown preview"))
@@ -573,10 +562,16 @@ end
 
 local command_formatters = {
   bash = function(_)
-    return { "shfmt" }
+    return { "shfmt", "-ln", "bash" }
+  end,
+  bats = function(_)
+    return { "shfmt", "-ln", "bats" }
   end,
   markdown = function(path)
     return { "oxfmt", "--stdin-filepath", path:gsub("%.tmpl$", "") }
+  end,
+  mksh = function(_)
+    return { "shfmt", "-ln", "mksh" }
   end,
   nu = function(_)
     return { "nufmt", "--stdin" }
@@ -586,6 +581,9 @@ local command_formatters = {
   end,
   svg = function(_)
     return { "superhtml", "fmt", "--stdin" }
+  end,
+  zsh = function(_)
+    return { "shfmt", "-ln", "zsh" }
   end,
 }
 

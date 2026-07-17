@@ -1,4 +1,3 @@
-# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 [[plugin.deps]]
 use = "Rolv-Apneseth/starship"
 rev = "159eaba"
@@ -6,39 +5,37 @@ hash = "7de446280b1ba8c49ffd86dbc24bbbe6"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
-rev = "8cd50c6"
+rev = "bb758e2"
 hash = "7b625412411be411153886894d9acaf"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "8cd50c6"
+rev = "bb758e2"
 hash = "187cc58ba7ac3befd49c342129e6f1b6"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:jump-to-char"
-rev = "8cd50c6"
+rev = "bb758e2"
 hash = "7a4b4237223aaa94e589d1c01a23542a"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:piper"
-rev = "8cd50c6"
+rev = "bb758e2"
 hash = "e0d59bd47866a6a574c74574097e5070"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:toggle-pane"
-rev = "8cd50c6"
+rev = "bb758e2"
 hash = "15e5b67a241172cbb86b8fbf9e63692"
 
-# {{ if eq .chezmoi.os "darwin" }}
 [[plugin.deps]]
 use = "Gallardo994/clippy"
 rev = "8ce5541"
 hash = "977c6f4ffceada33ced20d941f1defab"
-# {{ end }}
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:git"
-rev = "1cf48ea"
+rev = "bb758e2"
 hash = "88e56a64b7ce7c4314427452343fef17"
 
 [flavor]

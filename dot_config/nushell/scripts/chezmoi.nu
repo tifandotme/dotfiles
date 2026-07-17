@@ -82,7 +82,7 @@ export def --env --wrapped main [...args: string] {
         return
     }
 
-    with-env {TERM: "dumb"} { ^chezmoi ...$args }
+    ^chezmoi ...$args
 }
 
 # Open lazygit in chezmoi source directory

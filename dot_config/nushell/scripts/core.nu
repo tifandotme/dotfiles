@@ -104,15 +104,39 @@ def __external [name: string] {
 }
 
 def --wrapped pi [...args] {
-    herdr-set-tab ([($env.PWD | path basename), " (pi)"] | str join)
+    herdr-set-tab ([
+        ($env.PWD | path basename)
+        " (pi)"
+    ] | str join)
     # pi-code-previews: avoid read/grep tool conflicts with pi-fff.
     # with-env {CODE_PREVIEW_TOOLS: "bash,write,edit,find,ls"} {
     run-external (__external pi) ...$args
 }
 
 def --wrapped claude [...args] {
-    herdr-set-tab ([($env.PWD | path basename), " (claude)"] | str join)
+    herdr-set-tab ([
+        ($env.PWD | path basename)
+        " (claude)"
+    ] | str join)
     run-external (__external claude) ...(["--dangerously-skip-permissions", "--no-chrome"] ++ $args)
+}
+
+def --wrapped cliproxyapi [...args] {
+    let config = $env.XDG_CONFIG_HOME | path join cliproxyapi config.yaml
+    run-external (__external cliproxyapi) ...(["--config", $config] ++ $args)
+}
+
+def --wrapped claudex [...args] {
+    let proxy_env = [
+        [ANTHROPIC_BASE_URL "http://127.0.0.1:8317"]
+        [ANTHROPIC_AUTH_TOKEN "sk-dummy"]
+        [ANTHROPIC_DEFAULT_OPUS_MODEL "gpt-5.6-sol(high)"]
+        [ANTHROPIC_DEFAULT_SONNET_MODEL "gpt-5.6-terra(medium)"]
+        [ANTHROPIC_DEFAULT_HAIKU_MODEL "gpt-5.6-luna(low)"]
+    ] | into record
+    with-env $proxy_env {
+        claude ...$args
+    }
 }
 
 alias _codex = ^codex

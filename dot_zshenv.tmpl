@@ -1,0 +1,13 @@
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# {{ if eq .chezmoi.os "darwin" -}}
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+# {{- end }}
+
+# .zshenv is the only file zsh always sources (login, interactive, or `zsh -c`),
+# so shared env (XDG_*, CLAUDE_CONFIG_DIR, PATH additions, etc.) lives here too.
+# shellcheck source=/dev/null
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
+
+# Non-interactive zsh (e.g. Cursor Agent CLI `zsh -c`) does not load shell integration,
+# but the agent wrapper still calls dump_zsh_state. Stub avoids "command not found".
+dump_zsh_state() { :; }

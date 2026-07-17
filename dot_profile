@@ -4,3 +4,34 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+export CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$XDG_CONFIG_HOME/claude}"
+export CODEX_HOME="${CODEX_HOME:-$XDG_CONFIG_HOME/codex}"
+export CODEX_SQLITE_HOME="${CODEX_SQLITE_HOME:-$XDG_STATE_HOME/codex}"
+export PI_CODING_AGENT_DIR="${PI_CODING_AGENT_DIR:-$XDG_CONFIG_HOME/pi}"
+export PI_AGENT_DIR="${PI_AGENT_DIR:-$PI_CODING_AGENT_DIR/sessions}"
+export AGENT_NATIVE_PLANS_MODE="${AGENT_NATIVE_PLANS_MODE:-local-files}"
+export PI_FFF_MODE="${PI_FFF_MODE:-override}"
+export FFF_FRECENCY_DB="${FFF_FRECENCY_DB:-$XDG_STATE_HOME/pi/fff/frecency.lmdb}"
+export FFF_HISTORY_DB="${FFF_HISTORY_DB:-$XDG_STATE_HOME/pi/fff/history.lmdb}"
+export PILENS_DATA_DIR="${PILENS_DATA_DIR:-$XDG_STATE_HOME/pi-lens/projects}"
+
+export GNUPGHOME="${GNUPGHOME:-$XDG_DATA_HOME/gnupg}"
+export DOCKER_CONFIG="${DOCKER_CONFIG:-$XDG_CONFIG_HOME/docker}"
+export NPM_CONFIG_USERCONFIG="${NPM_CONFIG_USERCONFIG:-$XDG_CONFIG_HOME/npm/config}"
+export BUN_INSTALL="${BUN_INSTALL:-$XDG_DATA_HOME/bun}"
+export GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE="${GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE:-$XDG_CONFIG_HOME/gws/creds.json}"
+export TODO_DIR="${TODO_DIR:-$HOME/Documents/todo}"
+
+export EDITOR="${EDITOR:-nvim}"
+export LESS="${LESS:--I}"
+export HOMEBREW_NO_ENV_HINTS="${HOMEBREW_NO_ENV_HINTS:-true}"
+export HOMEBREW_NO_ANALYTICS="${HOMEBREW_NO_ANALYTICS:-true}"
+
+for _dir in "$HOME/.local/bin" "$BUN_INSTALL/bin" "$XDG_DATA_HOME/mise/shims" "$HOME/.cargo/bin"; do
+  case ":$PATH:" in
+    *":$_dir:"*) ;;
+    *) PATH="$_dir:$PATH" ;;
+  esac
+done
+unset _dir
+export PATH

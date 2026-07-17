@@ -26,6 +26,12 @@ export def start [] {
         }
     }
 
+    # An interrupted Rust download can leave cargo without an active toolchain.
+    if (which rustup | is-not-empty) {
+        print $"\n(ansi green_bold)==>(ansi reset) Checking (ansi green)Rust(ansi reset) toolchain"
+        rustup check
+    }
+
     if (which cargo | is-not-empty) {
         print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)nufmt(ansi reset)"
         cargo install --git https://github.com/nushell/nufmt --locked

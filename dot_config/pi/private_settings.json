@@ -1,14 +1,12 @@
 {
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-terra",
-  "defaultThinkingLevel": "medium",
+  "defaultThinkingLevel": "high",
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.80.6",
   "quietStartup": false,
   "enableInstallTelemetry": false,
-  "npmCommand": [
-    "bun"
-  ],
+  "npmCommand": ["bun"],
   "theme": "dark",
   "treeFilterMode": "user-only",
   "packages": [
@@ -17,8 +15,8 @@
     "../../projects/personal/pi-extensions/packages/pi-mermaid-open",
     "../../projects/personal/pi-extensions/packages/pi-preferred-thinking",
     "../../projects/personal/pi-extensions/packages/pi-recap",
-    "../../projects/personal/pi-extensions/packages/pi-fixed-editor",
     "../../projects/personal/pi-extensions/packages/pi-rename",
+    "../../projects/personal/pi-extensions/packages/pi-fixed-editor",
     "../../projects/personal/pi-extensions/packages/pi-inline-skills",
     "../../projects/personal/pi-extensions/packages/pi-review",
     "npm:pi-code-previews",
@@ -40,9 +38,7 @@
     "clearOnShrink": false
   },
   "enabledModels": [
-    "openai-codex/gpt-5.5",
-    "openai-codex/gpt-5.4-mini",
-    "anthropic/claude-sonnet-4-6",
+    "anthropic/claude-sonnet-5",
     "openai-codex/gpt-5.6-luna",
     "openai-codex/gpt-5.6-sol",
     "openai-codex/gpt-5.6-terra"
