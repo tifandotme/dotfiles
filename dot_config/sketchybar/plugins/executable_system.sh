@@ -6,7 +6,7 @@ source "$HOME/.config/theme/palette.sh"
 # Prevent multiple instances
 LOCKFILE="/tmp/sketchybar_system.lock"
 if [ -f "$LOCKFILE" ]; then
-  exit 0
+	exit 0
 fi
 echo $$ >"$LOCKFILE"
 
@@ -23,33 +23,19 @@ USAGE=$((100 - ${IDLE%.*}))
 if [ "$USAGE" -lt 0 ]; then USAGE=0; fi
 if [ "$USAGE" -gt 100 ]; then USAGE=100; fi
 
-TOTAL_MEMORY=$(sysctl -n hw.memsize)
-VM_STAT=$(vm_stat)
+MEMORY_AVAILABLE=$(memory_pressure | awk '/System-wide memory free percentage:/ { gsub(/%/, "", $NF); print $NF; exit }')
 
-USED_MEMORY=$(echo "$VM_STAT" | awk '
-  /page size of/ { page = $8; gsub(/\./, "", page) }
-  /Pages active:/ { active = $3 }
-  /Pages wired down:/ { wired = $4 }
-  /Pages occupied by compressor:/ { compressed = $5 }
-  END {
-    gsub(/\./, "", active); gsub(/\./, "", wired); gsub(/\./, "", compressed)
-    print (active + wired + compressed) * page
-  }
-')
-
-MEMORY_PERCENTAGE=$((USED_MEMORY * 100 / TOTAL_MEMORY))
-
-if [ "$USAGE" -ge 80 ] || [ "$MEMORY_PERCENTAGE" -ge 80 ]; then
-  ICON_COLOR="$DANGER"
-  LABEL_COLOR="$DANGER"
+if [ "$USAGE" -ge 80 ] || [ "$MEMORY_AVAILABLE" -le 20 ]; then
+	ICON_COLOR="$DANGER"
+	LABEL_COLOR="$DANGER"
 else
-  LABEL_COLOR="$FOREGROUND"
-  ICON_COLOR="$ACCENT"
+	LABEL_COLOR="$FOREGROUND"
+	ICON_COLOR="$ACCENT"
 fi
 
 sketchybar --set "$NAME" \
-  icon="􀫥" \
-  label="C ${USAGE}% R ${MEMORY_PERCENTAGE}%" \
-  label.color="$LABEL_COLOR" \
-  icon.color="$ICON_COLOR" \
-  icon.padding_right=6
+	icon="􀫥" \
+	label="C ${USAGE}% M ${MEMORY_AVAILABLE}% avl" \
+	label.color="$LABEL_COLOR" \
+	icon.color="$ICON_COLOR" \
+	icon.padding_right=6

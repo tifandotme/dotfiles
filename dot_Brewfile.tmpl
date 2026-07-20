@@ -50,7 +50,7 @@ brew "ffmpegthumbnailer" # Create thumbnails for video files
 # =============================================================================
 
 # JavaScript/TypeScript
-tap "oven-sh/bun"
+tap "oven-sh/bun", trusted: true
 brew "oven-sh/bun/bun" # Fast JavaScript runtime, bundler, package manager
 
 # Go
@@ -71,7 +71,7 @@ brew "mise" # Polyglot runtime manager (asdf rust clone)
 brew "gh"        # GitHub CLI
 brew "gibo"      # Access GitHub's .gitignore boilerplates
 brew "git-delta" # Syntax-highlighting pager for git/diff output
-tap "jnsahaj/lumen"
+tap "jnsahaj/lumen", trusted: true
 brew "jnsahaj/lumen/lumen" # Beautiful git diff viewer
 brew "gitleaks"            # Audit git repos for secrets
 brew "lazygit"             # Simple terminal UI for git commands
@@ -86,13 +86,13 @@ brew "models"      # TUI/CLI for browsing AI models, benchmarks, and coding agen
 cask "openusage"   # AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
 brew "rtk"         # CLI proxy to minimize LLM token consumption
 cask "chatgpt"     # OpenAI's ChatGPT desktop app
-tap "ampcode/tap"
+tap "ampcode/tap", trusted: true
 brew "ampcode/tap/ampcode"
-tap "dmtrKovalenko/fff"
+tap "dmtrKovalenko/fff", trusted: true
 brew "dmtrKovalenko/fff/fff-mcp" # Fast file search MCP server for AI agents
 
 # Task management
-tap "webstonehq/tap"
+tap "webstonehq/tap", trusted: true
 brew "webstonehq/tap/tuxedo" # Fast terminal UI for todo.txt
 
 # Shell scripting
@@ -108,7 +108,7 @@ brew "tinymist"            # Typst language server and formatter
 # General formatters
 brew "stylua" # Lua formatter
 brew "tombi"  # TOML formatter, linter and language server
-tap "hougesen/tap"
+tap "hougesen/tap", trusted: true
 brew "hougesen/tap/kdlfmt" # Code formatter for KDL documents
 brew "superhtml"           # HTML Language Server & Templating Library
 brew "topiary"             # Uniform formatter for simple languages
@@ -159,7 +159,7 @@ brew "bandwhich"                     # Terminal bandwidth utilization tool
 brew "gping"                         # Ping, but with a graph
 brew "mosh"                          # Remote terminal application
 brew "oha"                           # HTTP load generator and benchmark tool
-tap "teamookla/speedtest"            # Official Ookla Speedtest CLI (speedtest.net)
+tap "teamookla/speedtest", trusted: true # Official Ookla Speedtest CLI (speedtest.net)
 brew "teamookla/speedtest/speedtest" # Command-line internet bandwidth test
 brew "rustscan"                      # Modern Day Portscanner
 
@@ -208,7 +208,7 @@ brew "gdu"       # Disk usage analyzer with console interface
 brew "gnupg"     # GNU Privacy Guard (OpenPGP)
 brew "hyperfine" # Command-line benchmarking tool
 brew "sshs"      # Graphical command-line client for SSH
-tap "gromgit/brewtils"
+tap "gromgit/brewtils", trusted: true
 brew "gromgit/brewtils/taproom" # TUI for browsing Homebrew taps and formulae
 brew "asciinema"                # Record and share terminal sessions
 
@@ -226,7 +226,7 @@ brew "slackdump" # Export Slack data without admin privileges
 # MACOS WINDOW MANAGEMENT & CUSTOMIZATION
 # =============================================================================
 
-tap "felixkratz/formulae"
+tap "felixkratz/formulae", trusted: true
 brew "felixkratz/formulae/borders"    # Window border system for macOS
 brew "felixkratz/formulae/sketchybar" # Custom macOS statusbar
 
@@ -237,7 +237,7 @@ cask "font-sf-pro"
 cask "sf-symbols"
 
 # Window manager
-tap "nikitabobko/tap"
+tap "nikitabobko/tap", trusted: true
 cask "aerospace" # i3-like tiling window manager
 
 # =============================================================================

@@ -130,7 +130,7 @@ sketchybar --add item system right \
 	--set system \
 	icon="􀴽" \
 	icon.padding_right=0 \
-	update_freq=1 \
+	update_freq=5 \
 	script="$PLUGIN_DIR/system.sh"
 
 # Start smart battery monitor in background

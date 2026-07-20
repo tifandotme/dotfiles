@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.tifan.openusage</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/Applications/OpenUsage.app/Contents/MacOS/OpenUsage</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>PI_CODING_AGENT_DIR</key>
+      <string>{{ .chezmoi.homeDir }}/.config/pi</string>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+  </dict>
+</plist>

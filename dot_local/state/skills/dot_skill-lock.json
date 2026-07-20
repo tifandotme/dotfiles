@@ -132,18 +132,18 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
       "skillPath": "skills/agent-browser/SKILL.md",
-      "skillFolderHash": "9b31e495b887e4ca123960415eca69fc7e1bba28",
+      "skillFolderHash": "037e8078db4b20b4aa25c04f21c6de7d335ec449",
       "installedAt": "2026-05-16T19:23:19.235Z",
-      "updatedAt": "2026-06-21T04:31:18.402Z"
+      "updatedAt": "2026-07-20T02:43:22.090Z"
     },
     "impeccable": {
       "source": "pbakaus/impeccable",
       "sourceType": "github",
       "sourceUrl": "https://github.com/pbakaus/impeccable.git",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "skillFolderHash": "6ea3e5f6614e1f9df9c5bde834170bf51f3c09d6",
+      "skillFolderHash": "38010096ce2a44cd22329d5a91247f88a06fbcb9",
       "installedAt": "2026-05-29T15:16:30.143Z",
-      "updatedAt": "2026-07-10T02:34:47.539Z"
+      "updatedAt": "2026-07-20T15:03:43.077Z"
     },
     "thermo-nuclear-code-quality-review": {
       "source": "cursor/plugins",
@@ -215,9 +215,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/ogulcancelik/herdr.git",
       "skillPath": "SKILL.md",
-      "skillFolderHash": "8d2af4e046c2a95dfc54aafd6f88da12389d76e8",
+      "skillFolderHash": "6f7ef04e7dd5a8ec35c5aac8c9b6be1447290399",
       "installedAt": "2026-06-22T08:40:53.868Z",
-      "updatedAt": "2026-07-17T09:29:23.479Z"
+      "updatedAt": "2026-07-20T15:04:05.318Z"
     },
     "find-docs": {
       "source": "upstash/context7",
