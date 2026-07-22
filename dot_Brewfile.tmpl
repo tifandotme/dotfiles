@@ -155,13 +155,13 @@ brew "googleworkspace-cli"
 # =============================================================================
 
 # Network utilities
-brew "bandwhich"                     # Terminal bandwidth utilization tool
-brew "gping"                         # Ping, but with a graph
-brew "mosh"                          # Remote terminal application
-brew "oha"                           # HTTP load generator and benchmark tool
+brew "bandwhich"                         # Terminal bandwidth utilization tool
+brew "gping"                             # Ping, but with a graph
+brew "mosh"                              # Remote terminal application
+brew "oha"                               # HTTP load generator and benchmark tool
 tap "teamookla/speedtest", trusted: true # Official Ookla Speedtest CLI (speedtest.net)
-brew "teamookla/speedtest/speedtest" # Command-line internet bandwidth test
-brew "rustscan"                      # Modern Day Portscanner
+brew "teamookla/speedtest/speedtest"     # Command-line internet bandwidth test
+brew "rustscan"                          # Modern Day Portscanner
 
 # {{ if $isDarwin -}}
 # Android tools
@@ -214,7 +214,8 @@ brew "asciinema"                # Record and share terminal sessions
 
 # {{ if $isDarwin -}}
 brew "batt"      # Control battery charging on Apple Silicon MacBooks
-brew "caligula"  # User-friendly TUI for disk imaging
+tap "philocalyst/tap", trusted: true
+brew "philocalyst/tap/caligula" # User-friendly TUI for disk imaging
 brew "mole"      # Deep clean and optimize your Mac
 brew "sherlock"  # Hunt down social media accounts by username
 brew "slackdump" # Export Slack data without admin privileges
@@ -283,13 +284,13 @@ cask "zoom"     # Video communication platform
 # PRODUCTIVITY & NOTES
 # =============================================================================
 
-cask "anki"      # Memory training application
-cask "slack"     # Team communication and collaboration software
+cask "anki"         # Memory training application
+cask "slack"        # Team communication and collaboration software
 cask "craft"        # Native document editor
 cask "google-drive" # Client for Google Drive storage
-cask "obsidian"  # Knowledge base for Markdown files
-cask "tolaria"   # Markdown knowledgebase manager
-cask "whimsical" # Collaboration and diagramming tool
+cask "obsidian"     # Knowledge base for Markdown files
+cask "tolaria"      # Markdown knowledgebase manager
+cask "whimsical"    # Collaboration and diagramming tool
 
 # =============================================================================
 # MEDIA & ENTERTAINMENT
@@ -308,7 +309,6 @@ cask "bitwarden"    # Desktop password and login vault
 cask "crystalfetch" # UI for creating Windows installer ISO
 cask "handy"        # Speech to text application
 cask "keycastr"     # Open-source keystroke visualiser
-cask "localsend"    # Open-source cross-platform alternative to AirDrop
 cask "notunes"      # Prevent iTunes/Apple Music from launching
 cask "raycast"      # Control your tools with a few keystrokes
 
