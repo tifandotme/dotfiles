@@ -1,14 +1,13 @@
 {
   "trustedtaps": [
-    "nikitabobko/tap",
     "ampcode/tap",
     "dmtrkovalenko/fff",
     "felixkratz/formulae",
     "gromgit/brewtils",
     "hougesen/tap",
     "jnsahaj/lumen",
+    "nikitabobko/tap",
     "oven-sh/bun",
-    "philocalyst/tap",
     "teamookla/speedtest",
     "webstonehq/tap"
   ]
