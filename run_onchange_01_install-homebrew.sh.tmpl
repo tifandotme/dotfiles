@@ -4,6 +4,8 @@
 # Brewfile hash: # {{ include "dot_Brewfile.tmpl" | sha256sum }}
 
 if command -v brew &>/dev/null; then
+	# Homebrew refuses a group-writable trust store; chezmoi creates parents using umask.
+	chmod go-w "$HOME/.config/homebrew"
 	# Rendered Brewfile (hostname/OS conditionals); not the raw .tmpl in source.
 	brew bundle install --force-cleanup --zap --file="# {{ .chezmoi.destDir }}/.Brewfile"
 fi
