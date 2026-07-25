@@ -1,4 +1,5 @@
-{{ $palette := fromJson (include "dot_config/theme/palette.json") }}
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# {{ $palette := fromJson (include "dot_config/theme/palette.json") }}
 
 onboarding = false
 
@@ -36,6 +37,14 @@ key = "super+t"
 type = "shell"
 command = 'herdr tab create --cwd "${HERDR_ACTIVE_PANE_CWD:-$PWD}" --focus'
 description = "new tab in focused pane cwd"
+
+[[keys.command]]
+key = "prefix+l"
+type = "popup"
+command = "lazygit"
+width = "90%"
+height = "90%"
+description = "open lazygit"
 
 [ui]
 prompt_new_tab_name = false

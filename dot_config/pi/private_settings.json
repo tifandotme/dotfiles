@@ -1,12 +1,14 @@
 {
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-terra",
-  "defaultThinkingLevel": "high",
+  "defaultModel": "gpt-5.6-sol",
+  "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.80.10",
   "quietStartup": false,
   "enableInstallTelemetry": false,
-  "npmCommand": ["bun"],
+  "npmCommand": [
+    "bun"
+  ],
   "theme": "dark",
   "treeFilterMode": "user-only",
   "packages": [
@@ -30,7 +32,8 @@
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@ff-labs/pi-fff",
     "git:github.com/DietrichGebert/ponytail",
-    "npm:@vanillagreen/pi-prompt-stash"
+    "npm:@vanillagreen/pi-prompt-stash",
+    "npm:@plannotator/pi-extension"
   ],
   "enableSkillCommands": false,
   "terminal": {
@@ -54,4 +57,3 @@
   },
   "showCacheMissNotices": true
 }
-
