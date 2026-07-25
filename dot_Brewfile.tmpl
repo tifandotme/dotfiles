@@ -85,7 +85,6 @@ brew "cliproxyapi" # Expose Codex and other model providers through compatible A
 brew "models"      # TUI/CLI for browsing AI models, benchmarks, and coding agents
 # {{ if $isDarwin -}}
 cask "openusage" # AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
-cask "chatgpt"   # OpenAI's ChatGPT desktop app
 # {{- end }}
 brew "rtk" # CLI proxy to minimize LLM token consumption
 tap "ampcode/tap", trusted: true
@@ -124,12 +123,12 @@ brew "tflint" # Linter for Terraform files
 
 # {{ if $isDarwin -}}
 brew "colima" # Container runtimes on macOS with minimal setup
-# {{- end }}
-brew "ctop"           # Top-like interface for container metrics
 brew "docker"         # Pack, ship and run applications as containers
 brew "docker-compose" # Isolated development environments using Docker
 brew "docker-buildx"  # Docker CLI plugin for extended build capabilities with BuildKit
-brew "lazydocker"     # Lazier way to manage everything Docker
+# {{- end }}
+brew "ctop"       # Top-like interface for container metrics
+brew "lazydocker" # Lazier way to manage everything Docker
 brew "skopeo"         # Work with remote container image registries
 
 # =============================================================================
@@ -215,12 +214,12 @@ brew "gromgit/brewtils/taproom" # TUI for browsing Homebrew taps and formulae
 brew "asciinema"                # Record and share terminal sessions
 
 # {{ if $isDarwin -}}
-brew "batt"      # Control battery charging on Apple Silicon MacBooks
+brew "batt" # Control battery charging on Apple Silicon MacBooks
 tap "philocalyst/tap", trusted: true
 brew "philocalyst/tap/caligula" # User-friendly TUI for disk imaging
-brew "mole"      # Deep clean and optimize your Mac
-brew "sherlock"  # Hunt down social media accounts by username
-brew "slackdump" # Export Slack data without admin privileges
+brew "mole"                     # Deep clean and optimize your Mac
+brew "sherlock"                 # Hunt down social media accounts by username
+brew "slackdump"                # Export Slack data without admin privileges
 # {{- end }}
 
 # {{ if $isDarwin -}}
@@ -248,15 +247,13 @@ cask "aerospace" # i3-like tiling window manager
 # =============================================================================
 
 # Database clients
-cask "db-browser-for-sqlite"
 cask "dbeaver-community" # Universal database tool and SQL client
 cask "redis-insight"     # GUI for Redis application development
 cask "sequel-ace"        # MySQL/MariaDB database management
 cask "tableplus"         # Native GUI tool for relational databases
 
 # Editors
-cask "cursor" # AI-powered code editor
-cask "zed"    # Multiplayer code editor
+cask "zed" # Multiplayer code editor
 
 # Terminal emulator
 cask "ghostty" # Terminal emulator with GPU acceleration

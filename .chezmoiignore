@@ -50,6 +50,5 @@ Library/LaunchAgents/**
 .bashrc
 .bash_profile
 .inputrc
-.openclaw
 
 # {{- end -}}
