@@ -141,9 +141,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/pbakaus/impeccable.git",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "skillFolderHash": "38010096ce2a44cd22329d5a91247f88a06fbcb9",
+      "skillFolderHash": "cfdb4683fb100017919a65e293c484bfc392dce1",
       "installedAt": "2026-05-29T15:16:30.143Z",
-      "updatedAt": "2026-07-20T15:03:43.077Z"
+      "updatedAt": "2026-07-24T04:50:12.343Z"
     },
     "thermo-nuclear-code-quality-review": {
       "source": "cursor/plugins",
@@ -215,9 +215,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/ogulcancelik/herdr.git",
       "skillPath": "SKILL.md",
-      "skillFolderHash": "6f7ef04e7dd5a8ec35c5aac8c9b6be1447290399",
+      "skillFolderHash": "c0fb777ed7c7950c6a2f397113c1842c2e679306",
       "installedAt": "2026-06-22T08:40:53.868Z",
-      "updatedAt": "2026-07-20T15:04:05.318Z"
+      "updatedAt": "2026-07-24T04:50:26.319Z"
     },
     "find-docs": {
       "source": "upstash/context7",
@@ -245,6 +245,36 @@
       "skillFolderHash": "6cc3028d5a726a16eeb2f6289fe519a7566d5285",
       "installedAt": "2026-07-11T06:30:22.066Z",
       "updatedAt": "2026-07-15T06:00:51.962Z"
+    },
+    "html": {
+      "source": "plannotator/effective-html",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/plannotator/effective-html.git",
+      "skillPath": "skills/html/SKILL.md",
+      "skillFolderHash": "d0972373c2650be81ec47175400a138911342c26",
+      "pluginName": "plannotator-effective-html",
+      "installedAt": "2026-07-22T03:42:03.533Z",
+      "updatedAt": "2026-07-22T03:42:03.533Z"
+    },
+    "html-diagram": {
+      "source": "plannotator/effective-html",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/plannotator/effective-html.git",
+      "skillPath": "skills/html-diagram/SKILL.md",
+      "skillFolderHash": "9a9706aa8e9b3f4649898eacdeedb9be187c2127",
+      "pluginName": "plannotator-effective-html",
+      "installedAt": "2026-07-22T03:42:03.539Z",
+      "updatedAt": "2026-07-22T03:42:03.539Z"
+    },
+    "html-plan": {
+      "source": "plannotator/effective-html",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/plannotator/effective-html.git",
+      "skillPath": "skills/html-plan/SKILL.md",
+      "skillFolderHash": "85777e0c36ea91c8a2d05e0840a7965a8209639f",
+      "pluginName": "plannotator-effective-html",
+      "installedAt": "2026-07-22T03:42:03.540Z",
+      "updatedAt": "2026-07-22T03:42:03.540Z"
     }
   },
   "dismissed": {

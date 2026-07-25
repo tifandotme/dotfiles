@@ -23,8 +23,12 @@ work/
 personal/
 .zprofile
 .zshrc
+Library/LaunchAgents/**
 .cache/sketchybar
 .config/aerospace
+.config/claude/settings.json
+.config/codex/config.toml
+.config/codex/hooks.json
 .config/gcloud
 .config/ghostty
 .config/infat
