@@ -6,5 +6,7 @@
   "app.model.cycleForward": [],
   "app.model.cycleBackward": [],
   "app.tools.expand": ["ctrl+o"],
-  "app.message.followUp": ["ctrl+shift+enter"]
+  "app.message.followUp": ["ctrl+shift+enter"],
+  "app.models.save": ["ctrl+shift+s"],
+  "app.session.toggleSort": ["ctrl+shift+s"]
 }

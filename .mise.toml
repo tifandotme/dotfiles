@@ -1,0 +1,3 @@
+[tasks.machine-map]
+description = "Show which chezmoi files and rendered lines apply to each machine"
+run = "bun scripts/machine-map.ts"
