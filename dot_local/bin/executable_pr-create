@@ -2,8 +2,11 @@
 
 set -Eeuo pipefail
 
-script_name='pi-pr-create'
-model='openai-codex/gpt-5.6-luna'
+script_name='pr-create'
+generator=''
+model=''
+claude_model='sonnet'
+pi_model='openai-codex/gpt-5.6-terra'
 max_attempts=3
 allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test|revert'
 dry_run=0
@@ -42,12 +45,13 @@ on_err() {
 usage() {
 	cat <<'EOF'
 Usage:
-  pi-pr-create [--dry-run] [--context-file PATH] [--output PATH]
-  pi-pr-create [--dry-run] --from-file PATH
+  pr-create --generator <claude|pi> [--dry-run] [--context-file PATH] [--output PATH]
+  pr-create [--dry-run] --from-file PATH
 
 Create a GitHub pull request from commits on the current branch ahead of the remote default branch.
 
 Options:
+  --generator NAME     Generate PR content with claude or pi.
   --context-file PATH  Include additional author context in the PR generation prompt.
   --output PATH        Write the generated TITLE/BODY response to PATH.
   --from-file PATH     Validate and create the PR from a saved TITLE/BODY response without regenerating.
@@ -59,6 +63,11 @@ parse_args() {
 		case "$1" in
 		--dry-run)
 			dry_run=1
+			;;
+		--generator)
+			shift
+			[[ $# -gt 0 ]] || fail "--generator requires claude or pi"
+			generator="$1"
 			;;
 		--context-file)
 			shift
@@ -93,7 +102,7 @@ check_dependencies() {
 	local cmd=''
 
 	if [[ -z "$from_file" ]]; then
-		required+=(pi)
+		required+=("$generator")
 	fi
 
 	for cmd in "${required[@]}"; do
@@ -275,21 +284,39 @@ EOF
 }
 
 generate_response() {
-	if ! raw_output="$({
-		pi \
-			--print \
-			--no-session \
-			--no-tools \
-			--no-context-files \
-			--no-skills \
-			--no-extensions \
-			--no-prompt-templates \
-			--model "$model" \
-			--thinking off \
-			@"$prompt_file"
-	} | sed -e $'s/\x1b\\[[0-9;]*m//g')"; then
-		fail "pi failed to generate PR content"
-	fi
+	case "$generator" in
+	claude)
+		if ! raw_output="$(
+			claude \
+				--print \
+				--no-session-persistence \
+				--tools '' \
+				--disable-slash-commands \
+				--setting-sources '' \
+				--model "$model" \
+				<"$prompt_file"
+		)"; then
+			fail "claude failed to generate PR content"
+		fi
+		;;
+	pi)
+		if ! raw_output="$({
+			pi \
+				--print \
+				--no-session \
+				--no-tools \
+				--no-context-files \
+				--no-skills \
+				--no-extensions \
+				--no-prompt-templates \
+				--model "$model" \
+				--thinking off \
+				@"$prompt_file"
+		} | sed -e $'s/\x1b\\[[0-9;]*m//g')"; then
+			fail "pi failed to generate PR content"
+		fi
+		;;
+	esac
 }
 
 validate_response() {
@@ -348,17 +375,9 @@ validate_response() {
 }
 
 push_branch() {
-	local remote_branch="$branch"
-	local upstream=''
-
-	upstream="$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null || true)"
-	if [[ "$upstream" == origin/* ]]; then
-		remote_branch="${upstream#origin/}"
-	fi
-
-	log "pushing branch to origin/$remote_branch"
-	git push --set-upstream origin "HEAD:$remote_branch" >&2
-	printf '%s\n' "$remote_branch"
+	log "pushing branch to origin/$branch"
+	git push --set-upstream origin "HEAD:$branch" >&2
+	printf '%s\n' "$branch"
 }
 
 trap 'cleanup' EXIT
@@ -367,11 +386,29 @@ trap 'on_err $? $LINENO' ERR
 parse_args "$@"
 
 if [[ -n "$from_file" ]]; then
+	[[ -z "$generator" ]] || fail "--generator cannot be used with --from-file"
 	[[ -f "$from_file" ]] || fail "--from-file path does not exist: $from_file"
 	[[ -z "$context_file" ]] || fail "--context-file cannot be used with --from-file"
 	[[ -z "$output_file" ]] || fail "--output cannot be used with --from-file"
-elif [[ -n "$context_file" ]]; then
-	[[ -f "$context_file" ]] || fail "--context-file path does not exist: $context_file"
+else
+	case "$generator" in
+	claude)
+		model="$claude_model"
+		;;
+	pi)
+		model="$pi_model"
+		;;
+	'')
+		fail "--generator requires claude or pi"
+		;;
+	*)
+		fail "unsupported generator: $generator"
+		;;
+	esac
+
+	if [[ -n "$context_file" ]]; then
+		[[ -f "$context_file" ]] || fail "--context-file path does not exist: $context_file"
+	fi
 fi
 
 check_dependencies
@@ -475,7 +512,9 @@ if [[ -n "$output_file" ]]; then
 fi
 printf '%s\n' "$body" >"$body_file"
 
-printf 'Model: %s\n' "$model"
+if [[ -n "$generator" ]]; then
+	printf 'Generator: %s (%s)\n' "$generator" "$model"
+fi
 printf 'Title: %s\n' "$title"
 printf 'Body file: %s\n' "$body_file"
 if [[ -n "$output_file" ]]; then

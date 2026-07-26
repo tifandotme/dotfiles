@@ -1,6 +1,6 @@
 ---
 name: pr-from-conversation
-description: Draft a GitHub pull request from the current conversation, branch diff, and repository PR template. Use when the user wants to review PR text before creating the PR with pi-pr-create.
+description: Draft a GitHub pull request from the current conversation, branch diff, and repository PR template. Use when the user wants to review PR text before creating the PR with pr-create.
 ---
 
 # PR From Conversation
@@ -60,7 +60,7 @@ Use this skill at the end of a coding conversation to preserve why the branch ex
 7. Before creating the PR, confirm that `HEAD` and the base diff are unchanged since the reviewed draft. If either changed, update the draft and request approval again. If the user approves, create the PR:
 
    ```bash
-   pi-pr-create --from-file "$pr"
+   pr-create --from-file "$pr"
    ```
 
 8. Delete the temporary directory when done unless the user asks to keep it:

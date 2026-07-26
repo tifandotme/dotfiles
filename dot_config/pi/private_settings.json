@@ -3,12 +3,10 @@
   "defaultModel": "gpt-5.6-sol",
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.80.10",
+  "lastChangelogVersion": "0.82.1",
   "quietStartup": false,
   "enableInstallTelemetry": false,
-  "npmCommand": [
-    "bun"
-  ],
+  "npmCommand": ["bun"],
   "theme": "dark",
   "treeFilterMode": "user-only",
   "packages": [
@@ -29,11 +27,11 @@
     "npm:pi-mcp-adapter",
     "npm:pi-subdir-context",
     "npm:@ogulcancelik/pi-herdr",
-    "npm:@gotgenes/pi-subagents",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@ff-labs/pi-fff",
     "git:github.com/DietrichGebert/ponytail",
-    "npm:@plannotator/pi-extension"
+    "npm:@plannotator/pi-extension",
+    "npm:@tintinweb/pi-subagents"
   ],
   "enableSkillCommands": false,
   "terminal": {
@@ -57,3 +55,4 @@
   },
   "showCacheMissNotices": true
 }
+
