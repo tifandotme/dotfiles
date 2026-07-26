@@ -60,9 +60,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/jakubkrehel/make-interfaces-feel-better.git",
       "skillPath": "skills/make-interfaces-feel-better/SKILL.md",
-      "skillFolderHash": "ae0b04b484f3c222048395723a253f6959bf727d",
+      "skillFolderHash": "e880ad90e8a0a8384f5cfae2cdd6a854e2de5d89",
       "installedAt": "2026-04-22T03:16:55.390Z",
-      "updatedAt": "2026-07-15T05:59:46.944Z"
+      "updatedAt": "2026-07-25T08:33:08.504Z"
     },
     "tdd": {
       "source": "mattpocock/skills",
@@ -141,9 +141,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/pbakaus/impeccable.git",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "skillFolderHash": "cfdb4683fb100017919a65e293c484bfc392dce1",
+      "skillFolderHash": "413fd44ac7997c03cbec1cc545d9607c307ee652",
       "installedAt": "2026-05-29T15:16:30.143Z",
-      "updatedAt": "2026-07-24T04:50:12.343Z"
+      "updatedAt": "2026-07-26T06:37:51.476Z"
     },
     "thermo-nuclear-code-quality-review": {
       "source": "cursor/plugins",
@@ -215,18 +215,18 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/ogulcancelik/herdr.git",
       "skillPath": "SKILL.md",
-      "skillFolderHash": "c0fb777ed7c7950c6a2f397113c1842c2e679306",
+      "skillFolderHash": "e536bd8bd99de975cb2d15bb384e6e35f88ef88e",
       "installedAt": "2026-06-22T08:40:53.868Z",
-      "updatedAt": "2026-07-24T04:50:26.319Z"
+      "updatedAt": "2026-07-26T06:38:08.410Z"
     },
     "find-docs": {
       "source": "upstash/context7",
       "sourceType": "github",
       "sourceUrl": "https://github.com/upstash/context7.git",
       "skillPath": "skills/find-docs/SKILL.md",
-      "skillFolderHash": "f1f7597c0575b2c138a551a222f56808a86e16b1",
+      "skillFolderHash": "b635cd66f1414befd36d18646561398de2ddab54",
       "installedAt": "2026-06-23T15:15:07.862Z",
-      "updatedAt": "2026-07-08T02:53:54.751Z"
+      "updatedAt": "2026-07-25T08:33:49.477Z"
     },
     "hadl-trello": {
       "source": "hadl-labs/agent-skills",

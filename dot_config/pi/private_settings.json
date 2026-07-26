@@ -19,6 +19,7 @@
     "../../projects/personal/pi-extensions/packages/pi-recap",
     "../../projects/personal/pi-extensions/packages/pi-rename",
     "../../projects/personal/pi-extensions/packages/pi-fixed-editor",
+    "../../projects/personal/pi-extensions/packages/pi-stash",
     "../../projects/personal/pi-extensions/packages/pi-inline-skills",
     "../../projects/personal/pi-extensions/packages/pi-review",
     "npm:pi-code-previews",
@@ -32,7 +33,6 @@
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@ff-labs/pi-fff",
     "git:github.com/DietrichGebert/ponytail",
-    "npm:@vanillagreen/pi-prompt-stash",
     "npm:@plannotator/pi-extension"
   ],
   "enableSkillCommands": false,
