@@ -39,9 +39,6 @@ Library/LaunchAgents/**
 .config/colima
 .config/zed
 .config/spotify-player
-.config/fish
-.config/gws-hadl
-.config/herdr
 
 # {{- end -}}
 
