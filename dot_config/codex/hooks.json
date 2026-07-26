@@ -24,7 +24,7 @@
       {
         "hooks": [
           {
-            "command": "bash '/Users/tifan/.config/codex/herdr-agent-state.sh' session",
+            "command": "bash -lc 'exec \"$HOME/.config/codex/herdr-agent-state.sh\" session'",
             "timeout": 10,
             "type": "command"
           }
