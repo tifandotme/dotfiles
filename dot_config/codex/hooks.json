@@ -40,6 +40,15 @@
             "type": "command"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -lc 'exec \"$HOME/.local/bin/plannotator\"'",
+            "timeout": 345600
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [

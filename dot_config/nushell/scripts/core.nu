@@ -21,8 +21,8 @@ def --wrapped lazygit [...args] {
         " (lzg)"
     ] | str join)
     herdr-wrap $lzg_label {
-    ^lazygit ...$args
-  }
+        ^lazygit ...$args
+    }
 }
 
 alias lzg = lazygit
@@ -33,8 +33,8 @@ def --wrapped lazydocker [...args] {
         " (lzd)"
     ] | str join)
     herdr-wrap $lzd_label {
-    ^lazydocker ...$args
-  }
+        ^lazydocker ...$args
+    }
 }
 
 alias lzd = lazydocker
@@ -47,8 +47,8 @@ def --wrapped backlog [...args] {
         " (backlog)"
     ] | str join)
     herdr-wrap $backlog_label {
-    ^backlog ...$args
-  }
+        ^backlog ...$args
+    }
 }
 
 alias _nvim = ^nvim
@@ -58,8 +58,8 @@ def --wrapped nvim [...args] {
         " (nvim)"
     ] | str join)
     herdr-wrap $nvim_label {
-    _nvim ...$args
-  }
+        _nvim ...$args
+    }
 }
 
 alias v = nvim
@@ -78,15 +78,15 @@ def --wrapped vg [...args] {
         " (nvim)"
     ] | str join)
     herdr-wrap $nvim_label {
-    cd $git_root
-    _nvim ...$args
-  }
+        cd $git_root
+        _nvim ...$args
+    }
 }
 
 def --wrapped t [...args] {
     herdr-wrap --tab "tuxedo" {
-    ^tuxedo ...$args
-  }
+        ^tuxedo ...$args
+    }
 }
 
 alias g = git
