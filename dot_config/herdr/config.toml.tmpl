@@ -52,7 +52,18 @@ mouse_capture = true
 confirm_close = true
 
 [ui.sidebar.spaces]
-row_gap = 1
+row_gap = 0
+rows = [
+  ["state_icon", "workspace"],
+  [{ token = "branch", dim = true }, "git_status"],
+]
+
+[ui.sidebar.agents]
+row_gap = 0
+rows = [
+  ["state_icon", { token = "tab", dim = false }],
+  ["agent"],
+]
 
 [ui.toast]
 delivery = "terminal"
