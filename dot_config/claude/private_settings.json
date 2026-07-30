@@ -58,7 +58,7 @@
       "Working"
     ]
   },
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "awaySummaryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
