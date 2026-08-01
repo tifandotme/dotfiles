@@ -1,7 +1,7 @@
 {
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-sol",
-  "defaultThinkingLevel": "medium",
+  "defaultModel": "gpt-5.6-terra",
+  "defaultThinkingLevel": "high",
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.82.1",
   "quietStartup": false,
@@ -27,8 +27,7 @@
     "npm:pi-mcp-adapter",
     "npm:pi-subdir-context",
     "npm:@ogulcancelik/pi-herdr",
-    "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:@ff-labs/pi-fff",
+    "npm:@ff-labs/pi-fff@nightly",
     "git:github.com/DietrichGebert/ponytail",
     "npm:@plannotator/pi-extension",
     "npm:@tintinweb/pi-subagents"
@@ -55,4 +54,3 @@
   },
   "showCacheMissNotices": true
 }
-

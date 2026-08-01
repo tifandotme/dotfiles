@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.tifan.global-envs</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/sh</string>
+      <string>-c</string>
+      <string>launchctl setenv PI_CODING_AGENT_DIR '{{ .chezmoi.homeDir }}/.config/pi'
+launchctl setenv CLAUDE_CONFIG_DIR '{{ .chezmoi.homeDir }}/.config/claude'
+launchctl setenv CODEX_HOME '{{ .chezmoi.homeDir }}/.config/codex'
+launchctl setenv CODEX_SQLITE_HOME '{{ .chezmoi.homeDir }}/.local/state/codex'
+launchctl setenv PI_AGENT_DIR '{{ .chezmoi.homeDir }}/.config/pi/sessions'</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+  </dict>
+</plist>

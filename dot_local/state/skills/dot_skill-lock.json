@@ -141,9 +141,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/pbakaus/impeccable.git",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "skillFolderHash": "413fd44ac7997c03cbec1cc545d9607c307ee652",
+      "skillFolderHash": "dcd1ef1a18da8e158bbbec8dca856f4d4c5c159e",
       "installedAt": "2026-05-29T15:16:30.143Z",
-      "updatedAt": "2026-07-26T06:37:51.476Z"
+      "updatedAt": "2026-08-01T11:56:35.947Z"
     },
     "thermo-nuclear-code-quality-review": {
       "source": "cursor/plugins",
@@ -210,15 +210,6 @@
       "installedAt": "2026-06-20T08:28:33.642Z",
       "updatedAt": "2026-07-15T06:00:36.016Z"
     },
-    "herdr": {
-      "source": "ogulcancelik/herdr",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/ogulcancelik/herdr.git",
-      "skillPath": "SKILL.md",
-      "skillFolderHash": "e536bd8bd99de975cb2d15bb384e6e35f88ef88e",
-      "installedAt": "2026-06-22T08:40:53.868Z",
-      "updatedAt": "2026-07-26T06:38:08.410Z"
-    },
     "find-docs": {
       "source": "upstash/context7",
       "sourceType": "github",
@@ -251,30 +242,36 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/plannotator/effective-html.git",
       "skillPath": "skills/html/SKILL.md",
-      "skillFolderHash": "d0972373c2650be81ec47175400a138911342c26",
-      "pluginName": "plannotator-effective-html",
+      "skillFolderHash": "575497e06b387da49357c9dbfcf5ecb8e3f26328",
       "installedAt": "2026-07-22T03:42:03.533Z",
-      "updatedAt": "2026-07-22T03:42:03.533Z"
+      "updatedAt": "2026-08-01T11:56:42.889Z"
     },
     "html-diagram": {
       "source": "plannotator/effective-html",
       "sourceType": "github",
       "sourceUrl": "https://github.com/plannotator/effective-html.git",
       "skillPath": "skills/html-diagram/SKILL.md",
-      "skillFolderHash": "9a9706aa8e9b3f4649898eacdeedb9be187c2127",
-      "pluginName": "plannotator-effective-html",
+      "skillFolderHash": "32d02ec8124ec1bbf8ef52cc8b83beef84c65063",
       "installedAt": "2026-07-22T03:42:03.539Z",
-      "updatedAt": "2026-07-22T03:42:03.539Z"
+      "updatedAt": "2026-08-01T11:56:50.279Z"
     },
     "html-plan": {
       "source": "plannotator/effective-html",
       "sourceType": "github",
       "sourceUrl": "https://github.com/plannotator/effective-html.git",
       "skillPath": "skills/html-plan/SKILL.md",
-      "skillFolderHash": "85777e0c36ea91c8a2d05e0840a7965a8209639f",
-      "pluginName": "plannotator-effective-html",
+      "skillFolderHash": "82fd49f2fe7a2b34d758fb8a5774f44e206f1de1",
       "installedAt": "2026-07-22T03:42:03.540Z",
-      "updatedAt": "2026-07-22T03:42:03.540Z"
+      "updatedAt": "2026-08-01T11:56:58.418Z"
+    },
+    "herdr": {
+      "source": "herdrdev/herdr",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/herdrdev/herdr.git",
+      "skillPath": "skills/herdr/SKILL.md",
+      "skillFolderHash": "4821f1d39ccae24b9b274b03184edaaf198a3994",
+      "installedAt": "2026-08-01T12:06:39.120Z",
+      "updatedAt": "2026-08-01T12:06:39.120Z"
     }
   },
   "dismissed": {

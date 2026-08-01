@@ -123,9 +123,9 @@ def --wrapped claudex [...args] {
     let proxy_env = [
         [ANTHROPIC_BASE_URL "http://127.0.0.1:8317"]
         [ANTHROPIC_AUTH_TOKEN "sk-dummy"]
-        [ANTHROPIC_DEFAULT_OPUS_MODEL "gpt-5.6-sol(high)"]
-        [ANTHROPIC_DEFAULT_SONNET_MODEL "gpt-5.6-terra(medium)"]
-        [ANTHROPIC_DEFAULT_HAIKU_MODEL "gpt-5.6-luna(low)"]
+        [ANTHROPIC_DEFAULT_OPUS_MODEL "gpt-5.6-sol(medium)"]
+        [ANTHROPIC_DEFAULT_SONNET_MODEL "gpt-5.6-terra(high)"]
+        [ANTHROPIC_DEFAULT_HAIKU_MODEL "gpt-5.6-luna(medium)"]
     ] | into record
     with-env $proxy_env {
         claude ...$args
