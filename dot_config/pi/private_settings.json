@@ -3,7 +3,7 @@
   "defaultModel": "gpt-5.6-terra",
   "defaultThinkingLevel": "high",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.82.1",
+  "lastChangelogVersion": "0.83.0",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": ["bun"],
@@ -26,7 +26,6 @@
     "npm:pi-rtk-optimizer",
     "npm:pi-mcp-adapter",
     "npm:pi-subdir-context",
-    "npm:@ogulcancelik/pi-herdr",
     "npm:@ff-labs/pi-fff@nightly",
     "git:github.com/DietrichGebert/ponytail",
     "npm:@plannotator/pi-extension",
@@ -54,3 +53,4 @@
   },
   "showCacheMissNotices": true
 }
+
