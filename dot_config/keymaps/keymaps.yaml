@@ -70,8 +70,8 @@ keymaps:
         description: Open fzf directory menu
       - key: ctrl+r
         description: Open fzf history menu
-      - key: ctrl+x
-        description: Open visual history search (old default)
+      - key: ctrl+b
+        description: Open project
       # Editing
       - key: alt+enter
         description: Insert newline
@@ -84,3 +84,22 @@ keymaps:
       - key: i
         description: Enter vi insert mode
         mode: vi_normal
+
+  - program: claude-code
+    bindings:
+      - key: ctrl+l
+        description: Open model picker
+
+  - program: pi
+    bindings:
+      - key: enter
+        description: Queue follow-up
+        mode: agent working
+      - key: ctrl+enter
+        description: Queue steering message
+        mode: agent working
+      - key: alt+up
+        description: Restore queued messages
+        mode: agent working
+      - key: ctrl+l
+        description: Open model selector
