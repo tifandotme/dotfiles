@@ -45,6 +45,9 @@ trust_level = "trusted"
 [projects."/Users/tifan/Documents/Codex/2026-07-30/create-a-scheduled-task-called-weekday"]
 trust_level = "trusted"
 
+[projects."/Users/tifan/Documents/Codex/2026-08-02/wdyt"]
+trust_level = "trusted"
+
 [tui]
 theme = "ansi"
 status_line = [
@@ -93,9 +96,14 @@ trusted_hash = "sha256:ed191bf0351dc5cdeef2e3a7f568314f2730ed01e0b0cbbd990973229
 trusted_hash = "sha256:5b325ac6d2647ec912753a0fc125c4b865845720185c4438a85a6a62dee7dd1a"
 
 [marketplaces.openai-bundled]
-last_updated = "2026-07-30T05:52:42Z"
+last_updated = "2026-08-02T08:58:33Z"
 source_type = "local"
 source = "/Users/tifan/.config/codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-08-02T09:01:58Z"
+source_type = "local"
+source = "/Users/tifan/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
 [plugins."visualize@openai-bundled"]
 enabled = true
@@ -112,6 +120,21 @@ enabled = true
 [plugins."sites@openai-bundled"]
 enabled = true
 
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
 [mcp_servers.node_repl]
 args = []
 command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
@@ -123,13 +146,13 @@ NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_n
 NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/tifan/.config/codex"
 CODEX_HOME = "/Users/tifan/.config/codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f,e13fd947e846d3d306e9249dd3c73d14931b6494803dbafb16cef85e6add9506"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "028a14b6eaa6d98dac2aae00764345ab9f244801ed8493d42b9af3be5575006e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.721.41059"
+BROWSER_USE_CODEX_APP_VERSION = "26.727.51351"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 
 [mcp_servers.computer-use]
@@ -140,7 +163,7 @@ enabled = false
 
 [shell_environment_policy.set]
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f,e13fd947e846d3d306e9249dd3c73d14931b6494803dbafb16cef85e6add9506"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "028a14b6eaa6d98dac2aae00764345ab9f244801ed8493d42b9af3be5575006e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/tifan/.config/codex"
 
 [desktop]

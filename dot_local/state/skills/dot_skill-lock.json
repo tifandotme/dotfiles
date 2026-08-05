@@ -141,9 +141,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/pbakaus/impeccable.git",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "skillFolderHash": "dcd1ef1a18da8e158bbbec8dca856f4d4c5c159e",
+      "skillFolderHash": "cb64801c3c3ee2e00324ce6f5ded1e1100326155",
       "installedAt": "2026-05-29T15:16:30.143Z",
-      "updatedAt": "2026-08-01T11:56:35.947Z"
+      "updatedAt": "2026-08-05T03:47:22.096Z"
     },
     "thermo-nuclear-code-quality-review": {
       "source": "cursor/plugins",
@@ -233,36 +233,36 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/BuilderIO/skills.git",
       "skillPath": "skills/visual-recap/SKILL.md",
-      "skillFolderHash": "6cc3028d5a726a16eeb2f6289fe519a7566d5285",
+      "skillFolderHash": "741f8e5e7177b27c1a0949919b4e61e58a51224b",
       "installedAt": "2026-07-11T06:30:22.066Z",
-      "updatedAt": "2026-07-15T06:00:51.962Z"
+      "updatedAt": "2026-08-05T03:47:28.167Z"
     },
     "html": {
       "source": "plannotator/effective-html",
       "sourceType": "github",
       "sourceUrl": "https://github.com/plannotator/effective-html.git",
       "skillPath": "skills/html/SKILL.md",
-      "skillFolderHash": "575497e06b387da49357c9dbfcf5ecb8e3f26328",
+      "skillFolderHash": "926c2a2bda2e983c51124c4232e8562ac281dc06",
       "installedAt": "2026-07-22T03:42:03.533Z",
-      "updatedAt": "2026-08-01T11:56:42.889Z"
+      "updatedAt": "2026-08-03T02:41:25.885Z"
     },
     "html-diagram": {
       "source": "plannotator/effective-html",
       "sourceType": "github",
       "sourceUrl": "https://github.com/plannotator/effective-html.git",
       "skillPath": "skills/html-diagram/SKILL.md",
-      "skillFolderHash": "32d02ec8124ec1bbf8ef52cc8b83beef84c65063",
+      "skillFolderHash": "9d773f19558970f4074244f1dd6aa0e499209045",
       "installedAt": "2026-07-22T03:42:03.539Z",
-      "updatedAt": "2026-08-01T11:56:50.279Z"
+      "updatedAt": "2026-08-03T02:41:36.588Z"
     },
     "html-plan": {
       "source": "plannotator/effective-html",
       "sourceType": "github",
       "sourceUrl": "https://github.com/plannotator/effective-html.git",
       "skillPath": "skills/html-plan/SKILL.md",
-      "skillFolderHash": "82fd49f2fe7a2b34d758fb8a5774f44e206f1de1",
+      "skillFolderHash": "799c7fa971764c0110a6f3b5cf3f0bdf6aba5c03",
       "installedAt": "2026-07-22T03:42:03.540Z",
-      "updatedAt": "2026-08-01T11:56:58.418Z"
+      "updatedAt": "2026-08-03T02:41:46.856Z"
     },
     "herdr": {
       "source": "herdrdev/herdr",
@@ -272,6 +272,69 @@
       "skillFolderHash": "4821f1d39ccae24b9b274b03184edaaf198a3994",
       "installedAt": "2026-08-01T12:06:39.120Z",
       "updatedAt": "2026-08-01T12:06:39.120Z"
+    },
+    "better-accessibility": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/jakubkrehel/skills.git",
+      "skillPath": "skills/better-accessibility/SKILL.md",
+      "skillFolderHash": "de3c03dd915359ff07bbf20bf532339c39d660b1",
+      "installedAt": "2026-08-04T04:02:04.465Z",
+      "updatedAt": "2026-08-04T04:02:04.465Z"
+    },
+    "better-colors": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/jakubkrehel/skills.git",
+      "skillPath": "skills/better-colors/SKILL.md",
+      "skillFolderHash": "efb5db3cbc324ea836305baac585d07e4c725696",
+      "installedAt": "2026-08-04T04:02:04.472Z",
+      "updatedAt": "2026-08-04T04:02:04.472Z"
+    },
+    "better-interface": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/jakubkrehel/skills.git",
+      "skillPath": "skills/better-interface/SKILL.md",
+      "skillFolderHash": "b22cb60dec45b446adb9125fb2c159b125c1c6be",
+      "installedAt": "2026-08-04T04:02:04.473Z",
+      "updatedAt": "2026-08-04T04:02:04.473Z"
+    },
+    "better-layout": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/jakubkrehel/skills.git",
+      "skillPath": "skills/better-layout/SKILL.md",
+      "skillFolderHash": "7b95fd9f974618314df4f073079e0dd95587cdd8",
+      "installedAt": "2026-08-04T04:02:04.473Z",
+      "updatedAt": "2026-08-04T04:02:04.473Z"
+    },
+    "better-typography": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/jakubkrehel/skills.git",
+      "skillPath": "skills/better-typography/SKILL.md",
+      "skillFolderHash": "a175046f0135de4056196a8d69e856f1583a9b6e",
+      "installedAt": "2026-08-04T04:02:04.474Z",
+      "updatedAt": "2026-08-04T04:02:04.474Z"
+    },
+    "better-ui": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/jakubkrehel/skills.git",
+      "skillPath": "skills/better-ui/SKILL.md",
+      "skillFolderHash": "3965b5bc70657d64f0163a65389990c6044d0290",
+      "installedAt": "2026-08-04T04:02:04.475Z",
+      "updatedAt": "2026-08-04T04:02:04.475Z"
+    },
+    "better-writing": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/jakubkrehel/skills.git",
+      "skillPath": "skills/better-writing/SKILL.md",
+      "skillFolderHash": "901c085a23945001618b2aee838accedae2d1a27",
+      "installedAt": "2026-08-04T04:02:04.476Z",
+      "updatedAt": "2026-08-04T04:02:04.476Z"
     }
   },
   "dismissed": {

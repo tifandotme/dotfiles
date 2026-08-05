@@ -29,7 +29,7 @@
     "npm:@ff-labs/pi-fff@nightly",
     "git:github.com/DietrichGebert/ponytail",
     "npm:@plannotator/pi-extension",
-    "npm:@tintinweb/pi-subagents"
+    "npm:pi-herdr-subagents"
   ],
   "enableSkillCommands": false,
   "terminal": {

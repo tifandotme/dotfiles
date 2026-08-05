@@ -6,7 +6,10 @@
     <string>com.tifan.openusage</string>
     <key>ProgramArguments</key>
     <array>
-      <string>/Applications/OpenUsage.app/Contents/MacOS/OpenUsage</string>
+      <string>/bin/sh</string>
+      <string>-c</string>
+      <string>sleep 60
+exec /Applications/OpenUsage.app/Contents/MacOS/OpenUsage</string>
     </array>
     <key>EnvironmentVariables</key>
     <dict>
