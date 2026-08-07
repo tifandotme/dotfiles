@@ -12,11 +12,9 @@
   "packages": [
     "../../projects/personal/pi-extensions/packages/pi-copy-response",
     "../../projects/personal/pi-extensions/packages/pi-handoff",
-    "../../projects/personal/pi-extensions/packages/pi-mermaid-open",
     "../../projects/personal/pi-extensions/packages/pi-preferred-thinking",
     "../../projects/personal/pi-extensions/packages/pi-recap",
     "../../projects/personal/pi-extensions/packages/pi-rename",
-    "../../projects/personal/pi-extensions/packages/pi-fixed-editor",
     "../../projects/personal/pi-extensions/packages/pi-stash",
     "../../projects/personal/pi-extensions/packages/pi-inline-skills",
     "../../projects/personal/pi-extensions/packages/pi-review",
@@ -33,7 +31,6 @@
   ],
   "enableSkillCommands": false,
   "terminal": {
-    "showTerminalProgress": false,
     "clearOnShrink": false
   },
   "enabledModels": [
@@ -42,15 +39,13 @@
     "openai-codex/gpt-5.6-sol",
     "openai-codex/gpt-5.6-terra"
   ],
-  "transport": "auto",
   "compaction": {
     "enabled": false
   },
   "collapseChangelog": true,
-  "showHardwareCursor": false,
+  "tuiMode": "fullscreen",
   "retry": {
     "enabled": true
   },
   "showCacheMissNotices": true
 }
-

@@ -55,7 +55,9 @@
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
-    "verbs": ["Working"]
+    "verbs": [
+      "Working"
+    ]
   },
   "effortLevel": "medium",
   "awaySummaryEnabled": true,

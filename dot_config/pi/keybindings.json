@@ -6,8 +6,8 @@
   "app.model.cycleForward": [],
   "app.model.cycleBackward": [],
   "app.tools.expand": ["ctrl+o"],
-  "tui.input.submit": ["ctrl+enter"],
-  "app.message.followUp": ["enter"],
+  "tui.input.submit": ["enter"],
+  "app.message.followUp": ["ctrl+enter"],
   "app.models.save": ["ctrl+shift+s"],
   "app.session.toggleSort": ["ctrl+shift+s"]
 }

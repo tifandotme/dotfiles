@@ -101,17 +101,17 @@ sketchybar --add item front_app left \
 #   --subscribe spotify spotify_update
 
 # SPOTIFY-PLAYER TUI
-sketchybar --add item spotify center \
-	--set spotify \
-	label.max_chars=40 \
-	label.scroll_duration=300 \
-	scroll_texts=on \
-	"${GHOST[@]}" \
-	label.shadow.drawing=off \
-	icon="􀑪" \
-	drawing=off \
-	update_freq=5 \
-	script="$PLUGIN_DIR/spotify.sh"
+# sketchybar --add item spotify center \
+#	--set spotify \
+#	label.max_chars=40 \
+#	label.scroll_duration=300 \
+#	scroll_texts=on \
+#	"${GHOST[@]}" \
+#	label.shadow.drawing=off \
+#	icon="􀑪" \
+#	drawing=off \
+#	update_freq=5 \
+#	script="$PLUGIN_DIR/spotify.sh"
 
 # --------------- RIGHT
 
@@ -239,6 +239,11 @@ sketchybar --add item openusage_spacer right \
 	padding_left=0 \
 	padding_right=0 \
 	width=5
+
+sketchybar --add item herdr_agents right \
+	--set herdr_agents \
+	update_freq=5 \
+	script="$PLUGIN_DIR/herdr.sh"
 
 sketchybar --add item slack right \
 	--set slack \
