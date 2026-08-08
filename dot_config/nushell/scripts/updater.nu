@@ -88,6 +88,10 @@ export def start [] {
     if (which pi | is-not-empty) {
         print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)pi(ansi reset) and installed packages"
 
+        # Upgrade Pi first. Older versions do not support --extensions; bare update
+        # upgrades those versions and lets the second update use the new CLI.
+        pi update
+
         # Keep the extension package prefix's Pi peer in sync with the Pi CLI before
         # updating extensions. Pi is configured to use bun for package operations;
         # stale auto-installed Pi peers can otherwise block extension updates.
