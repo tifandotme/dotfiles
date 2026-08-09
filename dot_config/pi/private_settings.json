@@ -19,7 +19,6 @@
     "../../projects/personal/pi-extensions/packages/pi-inline-skills",
     "../../projects/personal/pi-extensions/packages/pi-mermaid-open",
     "../../projects/personal/pi-extensions/packages/pi-review",
-    "npm:pi-code-previews",
     "npm:pi-add-dir",
     "npm:pi-codex-goal",
     "npm:pi-rtk-optimizer",
