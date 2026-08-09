@@ -3,6 +3,8 @@
   "tui.editor.cursorDown": ["down", "ctrl+n"],
   "tui.select.up": ["up", "ctrl+p"],
   "tui.select.down": ["down", "ctrl+n"],
+  "tui.altScreen.previousPrompt": "ctrl+k",
+  "tui.altScreen.nextPrompt": "ctrl+j",
   "app.model.cycleForward": [],
   "app.model.cycleBackward": [],
   "app.tools.expand": ["ctrl+o"],

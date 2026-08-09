@@ -92,8 +92,6 @@ def --wrapped t [...args] {
 alias g = git
 
 alias b = bun
-alias ab-helium = agent-browser --session helium
-alias ab-aquasense = agent-browser --session aquasense
 alias npx = bunx
 
 alias _ncu = ncu
