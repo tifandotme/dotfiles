@@ -1,6 +1,6 @@
 {
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-terra",
+  "defaultModel": "gpt-5.6-luna",
   "defaultThinkingLevel": "high",
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.84.1",
@@ -17,6 +17,7 @@
     "../../projects/personal/pi-extensions/packages/pi-rename",
     "../../projects/personal/pi-extensions/packages/pi-stash",
     "../../projects/personal/pi-extensions/packages/pi-inline-skills",
+    "../../projects/personal/pi-extensions/packages/pi-mermaid-open",
     "../../projects/personal/pi-extensions/packages/pi-review",
     "npm:pi-code-previews",
     "npm:pi-add-dir",
@@ -36,8 +37,8 @@
   "enabledModels": [
     "anthropic/claude-sonnet-5",
     "openai-codex/gpt-5.6-luna",
-    "openai-codex/gpt-5.6-sol",
-    "openai-codex/gpt-5.6-terra"
+    "openai-codex/gpt-5.6-terra",
+    "openai-codex/gpt-5.6-sol"
   ],
   "compaction": {
     "enabled": false
@@ -49,4 +50,3 @@
   },
   "showCacheMissNotices": true
 }
-
