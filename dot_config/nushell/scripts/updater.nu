@@ -119,7 +119,6 @@ export def start [] {
         print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)Claude Code(ansi reset)"
         claude update
     }
-
 }
 
 # Clean caches and uninstall unused packages (do this rarely)
