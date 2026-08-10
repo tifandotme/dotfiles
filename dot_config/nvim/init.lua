@@ -180,6 +180,7 @@ vim.pack.add({
   "https://github.com/selimacerbas/live-server.nvim",
   "https://github.com/selimacerbas/markdown-preview.nvim",
   "https://github.com/folke/which-key.nvim",
+  "https://github.com/jake-stewart/multicursor.nvim",
 })
 install_fff_binary()
 require("which-key").setup({
@@ -433,12 +434,23 @@ local function key_opts(desc)
   return { desc = desc, silent = true }
 end
 
+local multicursor = require("multicursor-nvim")
+multicursor.setup()
+map({ "n", "x" }, "<C-n>", function()
+  multicursor.matchAddCursor(1)
+end, key_opts("Add next matching cursor"))
+multicursor.addKeymapLayer(function(layer_map)
+  layer_map({ "n", "x" }, "<Esc>", multicursor.clearCursors)
+end)
+
 -- Keymaps: general
 map("i", "jj", "<Esc>", key_opts("Exit insert mode"))
 map("i", "<C-Space>", "<C-x><C-o>", key_opts("Complete"))
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", key_opts("Clear search highlight"))
 map("n", "<leader>w", "<cmd>write<cr>", key_opts("Write file"))
 map("n", "<leader>r", "<cmd>source ~/.config/nvim/init.lua<cr>", key_opts("Reload config"))
+map("n", "<leader>c", "gcc", { remap = true, desc = "Toggle comment", silent = true })
+map("x", "<leader>c", "gc", { remap = true, desc = "Toggle comments", silent = true })
 map("n", "U", "<C-r>", key_opts("Redo"))
 map({ "n", "v" }, "gh", "0", key_opts("Line start"))
 map({ "n", "v" }, "gl", "$", key_opts("Line end"))
