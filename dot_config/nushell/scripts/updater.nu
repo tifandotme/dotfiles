@@ -88,31 +88,8 @@ export def start [] {
     if (which pi | is-not-empty) {
         print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)pi(ansi reset) and installed packages"
 
-        # Upgrade Pi first. Older versions do not support --extensions; bare update
-        # upgrades those versions and lets the second update use the new CLI.
-        pi update
-
-        # Keep the extension package prefix's Pi peer in sync with the Pi CLI before
-        # updating extensions. Pi is configured to use bun for package operations;
-        # stale auto-installed Pi peers can otherwise block extension updates.
-        if (which bun | is-not-empty) {
-            let pi_version_output = pi --version | complete
-            let pi_version_stdout = $pi_version_output.stdout | str trim
-            let pi_version_stderr = $pi_version_output.stderr | str trim
-            let pi_version = if $pi_version_stdout != "" { $pi_version_stdout } else { $pi_version_stderr }
-            let pi_config_dir = (
-                $env
-                | get -o PI_CODING_AGENT_DIR
-                | default ($env.HOME | path join ".config" "pi")
-            )
-            let pi_npm_dir = $pi_config_dir | path join "npm"
-
-            if $pi_version != "" {
-                bun install $"@earendil-works/pi-coding-agent@($pi_version)" --cwd $pi_npm_dir --omit=peer
-            }
-        }
-
-        pi update --extensions
+        # Pi's package manager updates itself and installed extensions together.
+        pi update --all
     }
 
     if (which claude | is-not-empty) {
