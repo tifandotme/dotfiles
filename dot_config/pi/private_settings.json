@@ -6,7 +6,9 @@
   "lastChangelogVersion": "0.84.1",
   "quietStartup": false,
   "enableInstallTelemetry": false,
-  "npmCommand": ["bun"],
+  "npmCommand": [
+    "bun"
+  ],
   "theme": "dark",
   "treeFilterMode": "user-only",
   "packages": [
