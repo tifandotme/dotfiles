@@ -23,6 +23,57 @@ def __project-dirs [] {
     $project_dirs | sort
 }
 
+def __trust-claude-workspace [path: string] {
+    let workspace = ($path | path expand)
+    let config_dir = ($env.CLAUDE_CONFIG_DIR? | default $"($env.XDG_CONFIG_HOME)/claude" | path expand)
+    let config = ($config_dir | path join ".claude.json")
+
+    if not ($workspace | path exists) {
+        print -e $"Cannot trust missing workspace: ($workspace)"
+        return false
+    }
+    if not ($config | path exists) {
+        print -e $"Claude config not found: ($config)"
+        return false
+    }
+
+    let settings = (try {
+        open $config
+    } catch {
+        print -e $"Cannot read Claude config: ($config)"
+        return false
+    })
+    let projects = (try { $settings.projects } catch { {} })
+    let trusted = (try { $projects | get ($workspace) | get hasTrustDialogAccepted } catch { false })
+    if $trusted == true {
+        return true
+    }
+
+    let current_project = (try { $projects | get ($workspace) } catch { {} })
+    let updated_projects = ($projects | merge {
+        ($workspace): ($current_project | upsert hasTrustDialogAccepted true)
+    })
+    let updated_settings = ($settings | upsert projects $updated_projects)
+    let temp = (try {
+        ^mktemp $"($config).tmp.XXXXXX" | str trim
+    } catch {
+        print -e $"Cannot create temporary Claude config"
+        return false
+    })
+
+    try {
+        $updated_settings | to json --indent 2 | save --force $temp
+        let mode = (^stat -f "%Lp" $config | str trim)
+        ^chmod $mode $temp
+        ^mv $temp $config
+        true
+    } catch {
+        ^rm -f $temp
+        print -e $"Cannot update Claude config: ($config)"
+        false
+    }
+}
+
 def __git-worktree-inventory [project: string] {
     let result = (^git -C $project worktree list --porcelain | complete)
     if $result.exit_code != 0 {
@@ -616,11 +667,31 @@ export def --env open-project [default_project: string = ""] {
         }
 
         if $kind == "worktree" {
+            if not (__trust-claude-workspace $path) {
+                return
+            }
             ^herdr worktree open --cwd $project --path $path --focus | ignore
             return
         }
 
-        ^herdr worktree create --cwd $project --focus | ignore
+        let created = (^herdr worktree create --cwd $project --focus | complete)
+        if $created.exit_code != 0 {
+            print -e "Herdr could not create the worktree."
+            return
+        }
+        let payload = (try {
+            $created.stdout | from json
+        } catch {
+            print -e "Herdr returned invalid worktree data."
+            return
+        })
+        let created_path = (try {
+            $payload.result.worktree.path
+        } catch {
+            print -e "Herdr did not return the new worktree path."
+            return
+        })
+        __trust-claude-workspace $created_path | ignore
     } catch {
         print "No project directory found."
     }
