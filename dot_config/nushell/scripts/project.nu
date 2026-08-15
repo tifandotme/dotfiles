@@ -67,6 +67,133 @@ def __relative-home [path: string] {
     }
 }
 
+def __pr-check-summary [checks] {
+    let reset = (ansi reset)
+    let green = (ansi green_bold)
+    let red = (ansi red_bold)
+    let yellow = (ansi yellow_bold)
+    let muted = (ansi dark_gray_dimmed)
+    if ($checks | is-empty) {
+        return $"($muted)none($reset)"
+    }
+
+    let check_states = ($checks | each {|check|
+        let conclusion = (try { $check.conclusion } catch { "" })
+        let raw_state = if ($conclusion | is-not-empty) {
+            $conclusion
+        } else {
+            try { $check.state } catch {
+                try { $check.status } catch { "" }
+            }
+        }
+        let state = $raw_state | str uppercase
+        if $state in ["SUCCESS" "NEUTRAL" "SKIPPED"] {
+            "pass"
+        } else if $state in ["FAILURE" "ERROR" "CANCELLED" "TIMED_OUT" "ACTION_REQUIRED"] {
+            "fail"
+        } else {
+            "pending"
+        }
+    })
+    let passed = $check_states | where {|state| $state == "pass" } | length
+    let failed = $check_states | where {|state| $state == "fail" } | length
+    let pending = $check_states | where {|state| $state == "pending" } | length
+    mut parts = []
+    if $passed > 0 {
+        $parts = ($parts | append $"($green)($passed) passed($reset)")
+    }
+    if $failed > 0 {
+        $parts = ($parts | append $"($red)($failed) failed($reset)")
+    }
+    if $pending > 0 {
+        $parts = ($parts | append $"($yellow)($pending) pending($reset)")
+    }
+    $parts | str join ", "
+}
+
+def __preview-prs [path: string, branch: string] {
+    let reset = (ansi reset)
+    let label = (ansi cyan_bold)
+    let green = (ansi green_bold)
+    let cyan = (ansi cyan_bold)
+    let red = (ansi red_dimmed)
+    let yellow = (ansi yellow_bold)
+    let muted = (ansi dark_gray_dimmed)
+    let result = (do {
+        cd $path
+        ^gh pr list --head $branch --state all --limit 30 --json number,title,state,isDraft,baseRefName,url,statusCheckRollup
+    } | complete)
+    if $result.exit_code != 0 {
+        print $"($label)PR:($reset) ($yellow)unavailable($reset)"
+        return
+    }
+
+    let prs = (
+        try {
+            $result.stdout | from json
+        } catch { [] }
+    )
+    if ($prs | is-empty) {
+        print $"($label)PR:($reset) ($muted)none($reset)"
+        return
+    }
+
+    mut ordered_prs = $prs | where state == "OPEN"
+    $ordered_prs = ($ordered_prs | append ($prs | where state != "OPEN"))
+    print $"($label)PRs:($reset) ($ordered_prs | length)"
+    for pr in $ordered_prs {
+        let state_color = if $pr.state == "OPEN" {
+            $green
+        } else if $pr.state == "MERGED" {
+            $cyan
+        } else {
+            $red
+        }
+        let draft = if $pr.isDraft { $"  ($yellow)DRAFT($reset)" } else { "" }
+        print $"#($pr.number)  ($state_color)($pr.state)($reset)  -> ($pr.baseRefName)($draft)"
+        print $"  ($pr.title)"
+        if $pr.state == "OPEN" {
+            let checks = (try { $pr.statusCheckRollup } catch { [] })
+            print $"  Checks: (__pr-check-summary $checks)"
+        }
+    }
+}
+
+def __worktree-preview [kind: string, path: string, branch: string] {
+    let reset = (ansi reset)
+    let label = (ansi cyan_bold)
+    let green = (ansi green_bold)
+    let red = (ansi red_bold)
+    print $"($label)Type:($reset) ($kind)"
+    print $"($label)Branch:($reset) ($branch)"
+    print $"($label)Path:($reset) ($path)"
+    let action = if $kind == "worktree" {
+        "Enter opens/focuses"
+    } else {
+        "Enter creates and focuses"
+    }
+    print $"($label)Herdr:($reset) ($action)"
+    print ""
+
+    let git_status = (^git -C $path status --short | complete)
+    if $git_status.exit_code != 0 {
+        print $"($label)Git:($reset) ($red)unavailable($reset)"
+    } else {
+        let status = $git_status.stdout | str trim
+        if ($status | is-empty) {
+            print $"($label)Git:($reset) ($green)clean($reset)"
+        } else {
+            print $"($label)Git:($reset) ($red)dirty($reset)"
+            print $status
+        }
+    }
+
+    if $kind == "worktree" {
+        print ""
+        __preview-prs $path $branch
+    }
+}
+
 def __tree-row [
     kind: string
     project: string
@@ -158,7 +285,7 @@ export def --env open-project [default_project: string = ""] {
         }
 
         let delimiter = (char tab)
-        let preview = "printf 'Type: %s\\nBranch: %s\\nPath: %s\\nHerdr: Enter opens/focuses\\n\\n' {1} {4} {3}; git -C {3} status --short"
+        let preview = "FZF_KIND={1} FZF_PATH={3} FZF_BRANCH={4} nu -c 'source ~/.config/nushell/scripts/project.nu; __worktree-preview $env.FZF_KIND $env.FZF_PATH $env.FZF_BRANCH'"
         mut fzf_args = [
             "--ansi"
             "--delimiter" $delimiter
