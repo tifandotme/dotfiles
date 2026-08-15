@@ -39,6 +39,14 @@ command = 'herdr tab create --cwd "${HERDR_ACTIVE_PANE_CWD:-$PWD}" --focus'
 description = "new tab in focused pane cwd"
 
 [[keys.command]]
+key = "ctrl+b"
+type = "popup"
+command = "nu -c 'source ~/.config/nushell/scripts/core.nu; source ~/.config/nushell/scripts/project.nu; open-project'"
+width = "90%"
+height = "90%"
+description = "open worktree picker"
+
+[[keys.command]]
 key = "prefix+l"
 type = "popup"
 command = "lazygit"
