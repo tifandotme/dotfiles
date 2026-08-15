@@ -250,64 +250,44 @@ def __preview-prs [path: string, branch: string] {
     let red = (ansi red_dimmed)
     let yellow = (ansi yellow_bold)
     let muted = (ansi dark_gray_dimmed)
-    let query = 'query PullRequestList($owner: String!, $repo: String!, $limit: Int!, $headBranch: String!) {
-        repository(owner: $owner, name: $repo) {
-            pullRequests(
-                states: [OPEN, CLOSED, MERGED]
-                headRefName: $headBranch
-                first: $limit
-                orderBy: {field: CREATED_AT, direction: DESC}
-            ) {
-                nodes {
-                    number
-                    title
-                    state
-                    isDraft
-                    baseRefName
-                    statusCheckRollup: commits(last: 1) {
-                        nodes {
-                            commit {
-                                statusCheckRollup {
-                                    contexts(first: 100) {
-                                        nodes {
-                                            ... on StatusContext { state }
-                                            ... on CheckRun { status conclusion }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }'
-    let result = (do {
-        cd $path
-        ^gh api graphql --cache 60s -F owner='{owner}' -F repo='{repo}' -F limit=30 -f $"headBranch=($branch)" -f $"query=($query)"
-    } | complete)
-    if $result.exit_code != 0 {
-        print $"($label)PR:($reset) ($yellow)unavailable($reset)"
-        return
-    }
-
-    let prs = (
-        try {
-            $result.stdout
-            | from json
-            | get data.repository.pullRequests.nodes
-            | each {|pr|
-                let checks = (
-                    try {
-                        $pr.statusCheckRollup.nodes
-                        | each {|commit| $commit.commit.statusCheckRollup.contexts.nodes }
-                        | flatten
-                    } catch { [] }
-                )
-                $pr | upsert statusCheckRollup $checks
-            }
-        } catch { [] }
+    let cache_root = (
+        $env.XDG_CACHE_HOME?
+        | default ($env.HOME | path join ".cache")
+        | path join "nushell" "project-prs"
     )
+    let cache_key = [$path $branch] | str join "\n" | hash sha256
+    let cache_file = $cache_root | path join $"($cache_key).json"
+    let cached = (
+        try {
+            let cache_info = ls $cache_file | first
+            if (((date now) - $cache_info.modified) < 1min) {
+                open $cache_file | get prs
+            } else {
+                null
+            }
+        } catch { null }
+    )
+    let prs = if $cached == null {
+        let result = (do {
+            cd $path
+            ^gh pr list --head $branch --state all --limit 30 --json number,title,state,isDraft,baseRefName,statusCheckRollup
+        } | complete)
+        if $result.exit_code != 0 {
+            print $"($label)PR:($reset) ($yellow)unavailable($reset)"
+            return
+        }
+
+        let fresh_prs = (
+            try { $result.stdout | from json } catch { [] }
+        )
+        try {
+            mkdir $cache_root | ignore
+            {prs: $fresh_prs} | to json | save -f $cache_file
+        } catch { }
+        $fresh_prs
+    } else {
+        $cached
+    }
     if ($prs | is-empty) {
         print $"($label)PR:($reset) ($muted)none($reset)"
         return
