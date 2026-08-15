@@ -13,6 +13,7 @@ export AGENT_NATIVE_PLANS_MODE="${AGENT_NATIVE_PLANS_MODE:-local-files}"
 export PI_FFF_MODE="${PI_FFF_MODE:-override}"
 export FFF_FRECENCY_DB="${FFF_FRECENCY_DB:-$XDG_STATE_HOME/pi/fff/frecency.lmdb}"
 export FFF_HISTORY_DB="${FFF_HISTORY_DB:-$XDG_STATE_HOME/pi/fff/history.lmdb}"
+export FFF_ENABLE_HOME_SCAN=0
 export PILENS_DATA_DIR="${PILENS_DATA_DIR:-$XDG_STATE_HOME/pi-lens/projects}"
 
 export GNUPGHOME="${GNUPGHOME:-$XDG_DATA_HOME/gnupg}"
