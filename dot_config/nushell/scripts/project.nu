@@ -250,9 +250,41 @@ def __preview-prs [path: string, branch: string] {
     let red = (ansi red_dimmed)
     let yellow = (ansi yellow_bold)
     let muted = (ansi dark_gray_dimmed)
+    let query = 'query PullRequestList($owner: String!, $repo: String!, $limit: Int!, $headBranch: String!) {
+        repository(owner: $owner, name: $repo) {
+            pullRequests(
+                states: [OPEN, CLOSED, MERGED]
+                headRefName: $headBranch
+                first: $limit
+                orderBy: {field: CREATED_AT, direction: DESC}
+            ) {
+                nodes {
+                    number
+                    title
+                    state
+                    isDraft
+                    baseRefName
+                    statusCheckRollup: commits(last: 1) {
+                        nodes {
+                            commit {
+                                statusCheckRollup {
+                                    contexts(first: 100) {
+                                        nodes {
+                                            ... on StatusContext { state }
+                                            ... on CheckRun { status conclusion }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }'
     let result = (do {
         cd $path
-        ^gh pr list --head $branch --state all --limit 30 --json number,title,state,isDraft,baseRefName,statusCheckRollup
+        ^gh api graphql --cache 60s -F owner='{owner}' -F repo='{repo}' -F limit=30 -f $"headBranch=($branch)" -f $"query=($query)"
     } | complete)
     if $result.exit_code != 0 {
         print $"($label)PR:($reset) ($yellow)unavailable($reset)"
@@ -261,7 +293,19 @@ def __preview-prs [path: string, branch: string] {
 
     let prs = (
         try {
-            $result.stdout | from json
+            $result.stdout
+            | from json
+            | get data.repository.pullRequests.nodes
+            | each {|pr|
+                let checks = (
+                    try {
+                        $pr.statusCheckRollup.nodes
+                        | each {|commit| $commit.commit.statusCheckRollup.contexts.nodes }
+                        | flatten
+                    } catch { [] }
+                )
+                $pr | upsert statusCheckRollup $checks
+            }
         } catch { [] }
     )
     if ($prs | is-empty) {
