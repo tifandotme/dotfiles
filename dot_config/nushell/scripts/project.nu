@@ -1,6 +1,6 @@
 def __project-dirs [] {
     mut project_dirs = []
-    let projects_dir = $env.XDG_PROJECTS_DIR? | default ($env.HOME | path join 'projects')
+    let projects_dir = $env.XDG_PROJECTS_DIR
 
     for base in [
         ($projects_dir | path join 'personal')
@@ -132,20 +132,8 @@ def __preview-sessions [path: string] {
         if ($branch | is-empty) { "(detached)" } else { $branch }
     }
     let max_sessions = 10
-    let sessions_root = (
-        $env.PI_AGENT_DIR?
-        | default (
-            $env.PI_CODING_AGENT_DIR?
-            | default ($env.HOME | path join ".config" "pi")
-            | path join "sessions"
-        )
-        | path expand
-    )
-    let claude_root = (
-        $env.CLAUDE_CONFIG_DIR?
-        | default ($env.HOME | path join ".config" "claude")
-        | path expand
-    )
+    let sessions_root = $env.PI_AGENT_DIR | path expand
+    let claude_root = $env.CLAUDE_CONFIG_DIR | path expand
     let pi_path_key = $path | str replace --all "/" "-"
     let claude_path_key = $path | str replace --all "/" "-" | str replace --all "." "-"
     let pi_dir = $sessions_root | path join $"-($pi_path_key)--"
@@ -311,11 +299,7 @@ def __preview-prs [path: string, branch: string] {
     let yellow = (ansi yellow_bold)
     let link_color = (ansi --escape {fg: "#60a5fa", attr: u})
     let muted = (ansi dark_gray_dimmed)
-    let cache_root = (
-        $env.XDG_CACHE_HOME?
-        | default ($env.HOME | path join ".cache")
-        | path join "nushell" "project-prs"
-    )
+    let cache_root = $env.XDG_CACHE_HOME | path join "nushell" "project-prs"
     let cache_key = [$path $branch "with-url"] | str join "\n" | hash sha256
     let cache_file = $cache_root | path join $"($cache_key).json"
     let cached = (
@@ -492,25 +476,52 @@ def __project-rows-output [] {
     __project-rows | str join "\n"
 }
 
+def __worktree-dialog [header: string, options: list<string>] {
+    mut fzf_args = [
+        "--ansi"
+        "--style" "minimal"
+        "--border" "none"
+        "--layout" "reverse-list"
+        "--info" "hidden"
+        "--no-scrollbar"
+        "--no-input"
+        "--pointer" ">"
+        "--color"
+        "fg:-1,bg:-1,fg+:-1,bg+:-1,pointer:cyan,prompt:cyan,header:yellow"
+    ]
+    if ($header | is-not-empty) {
+        $fzf_args = ($fzf_args | append ["--header" $header "--header-first"])
+    }
+    $options | str join "\n" | ^fzf ...$fzf_args | str trim
+}
+
+def __worktree-notice [header: string] {
+    __worktree-dialog $header ["Back"] | ignore
+}
+
 def __close-worktree [kind: string, path: string] {
     if $kind != "worktree" {
-        print -e "Only existing worktrees can be closed."
+        __worktree-notice "Only existing worktrees can be closed."
         return
     }
 
     let git_status = (^git -C $path status --porcelain | complete)
     if $git_status.exit_code != 0 {
-        print -e "Cannot inspect worktree status."
+        __worktree-notice "Cannot inspect worktree status."
         return
     }
     if ($git_status.stdout | str trim | is-not-empty) {
-        print -e "Cannot close a dirty worktree. Commit or clean it first."
+        let header = [
+            "Cannot close a dirty worktree."
+            "Commit or clean it first."
+        ] | str join (char nl)
+        __worktree-notice $header
         return
     }
 
     let lookup = (^herdr worktree list --cwd $path | complete)
     if $lookup.exit_code != 0 {
-        print -e "Cannot find the Herdr workspace for this worktree."
+        __worktree-notice "Cannot find the Herdr workspace for this worktree."
         return
     }
     let payload = (
@@ -526,28 +537,29 @@ def __close-worktree [kind: string, path: string] {
         } catch { null }
     )
     if $worktree == null {
-        print -e "Cannot find the selected worktree."
+        __worktree-notice "Cannot find the selected worktree."
         return
     }
     let workspace_id = (try { $worktree.open_workspace_id } catch { "" })
     if ($workspace_id | is-empty) {
-        print -e "This worktree is not open in Herdr."
+        __worktree-notice "This worktree is not open in Herdr."
         return
     }
 
-    let answer = input $"Close worktree ($path)? [y/N] " | str trim | str lowercase
-    if $answer not-in ["y" "yes"] {
+    let choice = (__worktree-dialog "Close worktree?" ["No" "Yes"])
+    if $choice != "Yes" {
         return
     }
 
     let removed = (^herdr worktree remove --workspace $workspace_id | complete)
     if $removed.exit_code != 0 {
         let reason = $removed.stderr | str trim
-        if ($reason | is-empty) {
-            print -e "Herdr could not close the worktree."
+        let header = if ($reason | is-empty) {
+            "Herdr could not close the worktree."
         } else {
-            print -e $"Herdr could not close the worktree: ($reason)"
+            $"Herdr could not close the worktree:\n($reason)"
         }
+        __worktree-notice $header
     }
 }
 
@@ -560,9 +572,9 @@ export def --env open-project [default_project: string = ""] {
         }
 
         let delimiter = (char tab)
-        let preview = "FZF_KIND={1} FZF_PATH={3} FZF_BRANCH={4} nu -c 'source ~/.config/nushell/scripts/project.nu; __worktree-preview $env.FZF_KIND $env.FZF_PATH $env.FZF_BRANCH'"
-        let close = "FZF_KIND={1} FZF_PATH={3} nu -c 'source ~/.config/nushell/scripts/project.nu; __close-worktree $env.FZF_KIND $env.FZF_PATH'"
-        let reload = "nu -c 'source ~/.config/nushell/scripts/core.nu; source ~/.config/nushell/scripts/project.nu; __project-rows-output'"
+        let preview = "env PWD=\"$HOME\" FZF_KIND={1} FZF_PATH={3} FZF_BRANCH={4} nu -c 'source ~/.config/nushell/scripts/project.nu; __worktree-preview $env.FZF_KIND $env.FZF_PATH $env.FZF_BRANCH'"
+        let close = "env PWD=\"$HOME\" FZF_KIND={1} FZF_PATH={3} nu -c 'source ~/.config/nushell/scripts/project.nu; __close-worktree $env.FZF_KIND $env.FZF_PATH'"
+        let reload = "env PWD=\"$HOME\" nu -c 'source ~/.config/nushell/scripts/core.nu; source ~/.config/nushell/scripts/project.nu; __project-rows-output'"
         let close_binding = "ctrl-x:execute(" + $close + ")+reload(" + $reload + ")"
         mut fzf_args = [
             "--ansi"
