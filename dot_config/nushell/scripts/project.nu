@@ -121,7 +121,7 @@ def __preview-prs [path: string, branch: string] {
     let muted = (ansi dark_gray_dimmed)
     let result = (do {
         cd $path
-        ^gh pr list --head $branch --state all --limit 30 --json number,title,state,isDraft,baseRefName,url,statusCheckRollup
+        ^gh pr list --head $branch --state all --limit 30 --json number,title,state,isDraft,baseRefName,statusCheckRollup
     } | complete)
     if $result.exit_code != 0 {
         print $"($label)PR:($reset) ($yellow)unavailable($reset)"
