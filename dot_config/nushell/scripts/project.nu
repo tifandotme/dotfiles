@@ -67,37 +67,12 @@ def __relative-home [path: string] {
     }
 }
 
-def __herdr-open-workspaces [] {
-    if ($env.HERDR_ENV? | default "") != "1" {
-        return []
-    }
-
-    try {
-        ^herdr workspace list
-        | from json
-        | get result.workspaces
-        | each {|workspace|
-            let path = (try { $workspace.worktree.checkout_path } catch {
-                try { $workspace.worktree.path } catch { "" }
-            })
-            {
-                path: $path
-                workspace_id: $workspace.workspace_id
-            }
-        }
-        | where path != ""
-    } catch {
-        []
-    }
-}
-
 def __tree-row [
     kind: string
     project: string
     path: string
     branch: string
     display: string
-    state: string
 ] {
     [
         $kind
@@ -105,7 +80,6 @@ def __tree-row [
         $path
         $branch
         $display
-        $state
     ] | str join (char tab)
 }
 
@@ -126,7 +100,6 @@ def __new-worktree-branch [] {
 
 export def --env open-project [default_project: string = ""] {
     try {
-        let open_workspaces = (__herdr-open-workspaces)
         let reset = (ansi reset)
         let project_color = (ansi cyan_bold)
         let marker_color = (ansi dark_gray)
@@ -151,7 +124,6 @@ export def --env open-project [default_project: string = ""] {
                         $project
                         "<new branch>"
                         $display
-                        "creates and focuses"
                     )
                 )
             )
@@ -159,11 +131,6 @@ export def --env open-project [default_project: string = ""] {
             let last_worktree_index = ($inventory.worktrees | length) - 1
             for entry in ($inventory.worktrees | enumerate) {
                 let worktree = $entry.item
-                let is_open = (
-                    $open_workspaces
-                    | any {|workspace| $workspace.path == $worktree.path}
-                )
-                let state = if $is_open { "already open" } else { "not open" }
                 let branch_marker = if $entry.index == $last_worktree_index { "└─" } else { "├─" }
                 let display = [
                     $"($marker_color)($branch_marker)($reset)"
@@ -179,7 +146,6 @@ export def --env open-project [default_project: string = ""] {
                             $worktree.path
                             $worktree.branch
                             $display
-                            $state
                         )
                     )
                 )
@@ -192,7 +158,7 @@ export def --env open-project [default_project: string = ""] {
         }
 
         let delimiter = (char tab)
-        let preview = "printf 'Type: {1}\\nBranch: {4}\\nPath: {3}\\nHerdr: {6}\\n\\n'; git -C {3} status --short"
+        let preview = "printf 'Type: %s\\nBranch: %s\\nPath: %s\\nHerdr: Enter opens/focuses\\n\\n' {1} {4} {3}; git -C {3} status --short"
         mut fzf_args = [
             "--ansi"
             "--delimiter" $delimiter
@@ -234,12 +200,7 @@ export def --env open-project [default_project: string = ""] {
         }
 
         if $kind == "worktree" {
-            let workspace = $open_workspaces | where path == $path | first
-            if ($workspace | is-not-empty) {
-                ^herdr workspace focus $workspace.workspace_id | ignore
-            } else {
-                ^herdr worktree open --cwd $project --path $path --focus | ignore
-            }
+            ^herdr worktree open --cwd $project --path $path --focus | ignore
             return
         }
 
