@@ -111,6 +111,137 @@ def __pr-check-summary [checks] {
     $parts | str join ", "
 }
 
+def __format-session-time [value] {
+    try {
+        $value | into datetime | date humanize
+    } catch { "unknown" }
+}
+
+def __preview-sessions [path: string, branch: string] {
+    let reset = (ansi reset)
+    let label = (ansi cyan_bold)
+    let muted = (ansi dark_gray_dimmed)
+    let sessions_root = (
+        $env.PI_AGENT_DIR?
+        | default (
+            $env.PI_CODING_AGENT_DIR?
+            | default ($env.HOME | path join ".config" "pi")
+            | path join "sessions"
+        )
+        | path expand
+    )
+    let claude_root = (
+        $env.CLAUDE_CONFIG_DIR?
+        | default ($env.HOME | path join ".config" "claude")
+        | path expand
+    )
+    let pi_path_key = $path | str replace --all "/" "-"
+    let claude_path_key = $path | str replace --all "/" "-" | str replace --all "." "-"
+    let pi_dir = $sessions_root | path join $"-($pi_path_key)--"
+    let claude_dir = $claude_root | path join "projects" $claude_path_key
+    mut sessions = []
+
+    let pi_files = (glob $"($pi_dir)/*.jsonl")
+    if ($pi_files | is-not-empty) {
+        for info in (try { ls ...$pi_files } catch { [] }) {
+            let header = (
+                try {
+                    open $info.name
+                    | lines
+                    | first
+                    | from json
+                } catch { null }
+            )
+            if $header == null or (try { $header.type } catch { "" }) != "session" {
+                continue
+            }
+            if (try { $header.cwd } catch { "" }) != $path {
+                continue
+            }
+            let file_name = $info.name | path basename | str replace ".jsonl" ""
+            let session_id = (
+                try { $header.id } catch {
+                    $file_name | split row "_" | last
+                }
+            )
+            let short_id = $session_id | str substring 0..7
+            let title = (
+                try { $header.name } catch { $"Pi session ($short_id)" }
+            )
+            let title = if ($title | is-empty) { $"Pi session ($short_id)" } else { $title }
+            let session = {
+                agent: "pi"
+                title: $title
+                last_active: (__format-session-time $info.modified)
+                sort_key: $info.modified
+                branch: $branch
+                size: $info.size
+            }
+            $sessions = ($sessions | append $session)
+        }
+    }
+
+    let claude_files = (glob $"($claude_dir)/*.jsonl")
+    if ($claude_files | is-not-empty) {
+        for info in (try { ls ...$claude_files } catch { [] }) {
+            let entries = (
+                try {
+                    open $info.name
+                    | lines
+                    | each {|line| try { $line | from json } catch { null } }
+                } catch { [] }
+            )
+            let cwd_record = (
+                $entries
+                | where {|entry| (try { $entry.cwd } catch { "" }) == $path }
+                | first
+            )
+            if $cwd_record == null {
+                continue
+            }
+            let session_id = (
+                try { $cwd_record.sessionId } catch {
+                    $info.name | path basename | str replace ".jsonl" ""
+                }
+            )
+            let short_id = $session_id | str substring 0..7
+            let title_record = (
+                $entries
+                | where {|entry| (try { $entry.type } catch { "" }) == "custom-title" }
+                | last
+            )
+            let title = (
+                try { $title_record.customTitle } catch { $"Claude session ($short_id)" }
+            )
+            let title = if ($title | is-empty) { $"Claude session ($short_id)" } else { $title }
+            let session_branch = (try { $cwd_record.gitBranch } catch { "" })
+            let session_branch = if ($session_branch | is-empty) { $branch } else { $session_branch }
+            let session = {
+                agent: "Claude Code"
+                title: $title
+                last_active: (__format-session-time $info.modified)
+                sort_key: $info.modified
+                branch: $session_branch
+                size: $info.size
+            }
+            $sessions = ($sessions | append $session)
+        }
+    }
+
+    print ""
+    if ($sessions | is-empty) {
+        print $"($label)Sessions:($reset) ($muted)none($reset)"
+        return
+    }
+
+    let session_count = $sessions | length
+    print $"($label)Sessions:($reset) ($session_count)"
+    for session in ($sessions | sort-by sort_key | reverse) {
+        print $"  ($session.title)"
+        print $"    ($session.last_active) • ($session.branch) • ($session.size) • ($session.agent)"
+    }
+}
+
 def __preview-prs [path: string, branch: string] {
     let reset = (ansi reset)
     let label = (ansi cyan_bold)
@@ -187,6 +318,8 @@ def __worktree-preview [kind: string, path: string, branch: string] {
             print $status
         }
     }
+
+    __preview-sessions $path $branch
 
     if $kind == "worktree" {
         print ""
