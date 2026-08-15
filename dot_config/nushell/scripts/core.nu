@@ -104,10 +104,54 @@ def __external [name: string] {
 }
 
 def --wrapped pi [...args] {
+    if ($args | any {|arg|
+        $arg == "--mcp-config" or ($arg | str starts-with "--mcp-config=")
+    }) {
+        error make {msg: "pi selects the MCP config from the current directory; do not pass --mcp-config"}
+    }
+
+    let real_cwd = (^realpath (pwd) | str trim)
+    let work_root = (^realpath ($env.HOME | path join "projects" "work") | str trim)
+    let pi_config_dir = (
+        $env
+        | get -o PI_CODING_AGENT_DIR
+        | default ($env.HOME | path join ".config" "pi")
+        | path expand
+    )
+    let config_name = if (
+        $real_cwd == $work_root
+        or ($real_cwd | str starts-with $"($work_root)(char separator)")
+    ) {
+        "mcp-work.json"
+    } else {
+        "mcp-personal.json"
+    }
+    let mcp_config = $pi_config_dir | path join $config_name
+
+    if not ($mcp_config | path exists) {
+        error make {msg: $"MCP config not found: ($mcp_config)"}
+    }
+
+    # Package commands must be first; they do not use the MCP config.
+    let package_commands = [
+        "install"
+        "remove"
+        "uninstall"
+        "update"
+        "list"
+        "config"
+        "auth"
+    ]
+    let first_arg = if ($args | is-empty) { "" } else { $args.0 }
+    let pi_args = if $first_arg in $package_commands {
+        $args
+    } else {
+        ["--mcp-config" $mcp_config] ++ $args
+    }
 
     # pi-code-previews: avoid read/grep tool conflicts with pi-fff.
     # with-env {CODE_PREVIEW_TOOLS: "bash,write,edit,find,ls"} {
-    run-external (__external pi) ...$args
+    run-external (__external pi) ...$pi_args
 }
 
 def --wrapped claude [...args] {
@@ -125,7 +169,7 @@ def --wrapped claudex [...args] {
         [ANTHROPIC_AUTH_TOKEN "sk-dummy"]
         [ANTHROPIC_DEFAULT_OPUS_MODEL "gpt-5.6-sol(medium)"]
         [ANTHROPIC_DEFAULT_SONNET_MODEL "gpt-5.6-terra(high)"]
-        [ANTHROPIC_DEFAULT_HAIKU_MODEL "gpt-5.6-luna(medium)"]
+        [ANTHROPIC_DEFAULT_HAIKU_MODEL "gpt-5.6-luna(high)"]
     ] | into record
     with-env $proxy_env {
         claude ...$args
