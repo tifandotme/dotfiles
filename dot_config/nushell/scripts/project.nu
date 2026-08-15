@@ -117,10 +117,21 @@ def __format-session-time [value] {
     } catch { "unknown" }
 }
 
-def __preview-sessions [path: string, branch: string] {
+def __preview-sessions [path: string] {
     let reset = (ansi reset)
     let label = (ansi cyan_bold)
+    let pi_color = (ansi --escape {fg: "#7dd3fc", attr: b})
+    let claude_color = (ansi --escape {fg: "#d97757", attr: b})
+    let named_color = (ansi yellow_bold)
     let muted = (ansi dark_gray_dimmed)
+    let branch_result = (^git -C $path branch --show-current | complete)
+    let session_branch = if $branch_result.exit_code != 0 {
+        "(unknown)"
+    } else {
+        let branch = $branch_result.stdout | str trim
+        if ($branch | is-empty) { "(detached)" } else { $branch }
+    }
+    let max_sessions = 10
     let sessions_root = (
         $env.PI_AGENT_DIR?
         | default (
@@ -142,14 +153,24 @@ def __preview-sessions [path: string, branch: string] {
     mut sessions = []
 
     let pi_files = (glob $"($pi_dir)/*.jsonl")
+    let pi_capped = ($pi_files | length) > $max_sessions
     if ($pi_files | is-not-empty) {
-        for info in (try { ls ...$pi_files } catch { [] }) {
+        for info in (
+            try {
+                ls ...$pi_files
+                | sort-by modified
+                | reverse
+                | first $max_sessions
+            } catch { [] }
+        ) {
+            let lines = (
+                try {
+                    open $info.name | lines
+                } catch { [] }
+            )
             let header = (
                 try {
-                    open $info.name
-                    | lines
-                    | first
-                    | from json
+                    $lines | first | from json
                 } catch { null }
             )
             if $header == null or (try { $header.type } catch { "" }) != "session" {
@@ -158,32 +179,42 @@ def __preview-sessions [path: string, branch: string] {
             if (try { $header.cwd } catch { "" }) != $path {
                 continue
             }
-            let file_name = $info.name | path basename | str replace ".jsonl" ""
-            let session_id = (
-                try { $header.id } catch {
-                    $file_name | split row "_" | last
-                }
+            let title_entry = (
+                $lines
+                | where {|line| $line | str contains "session_info" }
+                | each {|line| try { $line | from json } catch { null } }
+                | where {|entry| (try { $entry.type } catch { "" }) == "session_info" }
+                | last
             )
-            let short_id = $session_id | str substring 0..7
-            let title = (
-                try { $header.name } catch { $"Pi session ($short_id)" }
-            )
-            let title = if ($title | is-empty) { $"Pi session ($short_id)" } else { $title }
+            let title = (try { $title_entry.name } catch { "Untitled session" })
+            let title = if ($title | is-empty) { "Untitled session" } else { $title }
+            let title = if $title == "Untitled session" {
+                $title
+            } else {
+                $"($named_color)($title)($reset)"
+            }
             let session = {
-                agent: "pi"
+                agent: "Pi"
                 title: $title
                 last_active: (__format-session-time $info.modified)
                 sort_key: $info.modified
-                branch: $branch
-                size: $info.size
+                branch: $session_branch
             }
             $sessions = ($sessions | append $session)
         }
     }
 
     let claude_files = (glob $"($claude_dir)/*.jsonl")
+    let claude_capped = ($claude_files | length) > $max_sessions
     if ($claude_files | is-not-empty) {
-        for info in (try { ls ...$claude_files } catch { [] }) {
+        for info in (
+            try {
+                ls ...$claude_files
+                | sort-by modified
+                | reverse
+                | first $max_sessions
+            } catch { [] }
+        ) {
             let entries = (
                 try {
                     open $info.name
@@ -199,30 +230,26 @@ def __preview-sessions [path: string, branch: string] {
             if $cwd_record == null {
                 continue
             }
-            let session_id = (
-                try { $cwd_record.sessionId } catch {
-                    $info.name | path basename | str replace ".jsonl" ""
-                }
-            )
-            let short_id = $session_id | str substring 0..7
             let title_record = (
                 $entries
                 | where {|entry| (try { $entry.type } catch { "" }) == "custom-title" }
                 | last
             )
-            let title = (
-                try { $title_record.customTitle } catch { $"Claude session ($short_id)" }
-            )
-            let title = if ($title | is-empty) { $"Claude session ($short_id)" } else { $title }
-            let session_branch = (try { $cwd_record.gitBranch } catch { "" })
-            let session_branch = if ($session_branch | is-empty) { $branch } else { $session_branch }
+            let title = (try { $title_record.customTitle } catch { "Untitled session" })
+            let title = if ($title | is-empty) { "Untitled session" } else { $title }
+            let title = if $title == "Untitled session" {
+                $title
+            } else {
+                $"($named_color)($title)($reset)"
+            }
+            let recorded_branch = (try { $cwd_record.gitBranch } catch { "" })
+            let session_branch = if ($recorded_branch | is-empty) { $session_branch } else { $recorded_branch }
             let session = {
-                agent: "Claude Code"
+                agent: "Claude"
                 title: $title
                 last_active: (__format-session-time $info.modified)
                 sort_key: $info.modified
                 branch: $session_branch
-                size: $info.size
             }
             $sessions = ($sessions | append $session)
         }
@@ -234,12 +261,45 @@ def __preview-sessions [path: string, branch: string] {
         return
     }
 
+    let pi_sessions = $sessions | where agent == "Pi" | sort-by sort_key | reverse
+    let claude_sessions = $sessions | where agent == "Claude" | sort-by sort_key | reverse
     let session_count = $sessions | length
-    print $"($label)Sessions:($reset) ($session_count)"
-    for session in ($sessions | sort-by sort_key | reverse) {
-        print $"  ($session.title)"
-        print $"    ($session.last_active) • ($session.branch) • ($session.size) • ($session.agent)"
+    let pi_count = $pi_sessions | length
+    let claude_count = $claude_sessions | length
+    let pi_header = if $pi_capped {
+        $"Pi (($pi_count)) shown; more available"
+    } else {
+        $"Pi ($pi_count)"
     }
+    let claude_header = if $claude_capped {
+        $"Claude (($claude_count)) shown; more available"
+    } else {
+        $"Claude ($claude_count)"
+    }
+    print $"($label)Sessions:($reset) ($session_count) shown"
+    if ($pi_sessions | is-not-empty) {
+        print $"  ($pi_color)($pi_header)($reset)"
+        for session in $pi_sessions {
+            print $"    ($session.title)"
+            print $"      ($session.last_active) • ($session.branch)"
+        }
+    }
+    if ($claude_sessions | is-not-empty) {
+        if ($pi_sessions | is-not-empty) {
+            print ""
+        }
+        print $"  ($claude_color)($claude_header)($reset)"
+        for session in $claude_sessions {
+            print $"    ($session.title)"
+            print $"      ($session.last_active) • ($session.branch)"
+        }
+    }
+}
+
+def __terminal-link [text: string, url: string] {
+    let esc = (char --unicode '1b')
+    let bel = (char --unicode '07')
+    $"($esc)]8;;($url)($bel)($text)($esc)]8;;($bel)"
 }
 
 def __preview-prs [path: string, branch: string] {
@@ -249,13 +309,14 @@ def __preview-prs [path: string, branch: string] {
     let cyan = (ansi cyan_bold)
     let red = (ansi red_dimmed)
     let yellow = (ansi yellow_bold)
+    let link_color = (ansi --escape {fg: "#60a5fa", attr: u})
     let muted = (ansi dark_gray_dimmed)
     let cache_root = (
         $env.XDG_CACHE_HOME?
         | default ($env.HOME | path join ".cache")
         | path join "nushell" "project-prs"
     )
-    let cache_key = [$path $branch] | str join "\n" | hash sha256
+    let cache_key = [$path $branch "with-url"] | str join "\n" | hash sha256
     let cache_file = $cache_root | path join $"($cache_key).json"
     let cached = (
         try {
@@ -270,7 +331,7 @@ def __preview-prs [path: string, branch: string] {
     let prs = if $cached == null {
         let result = (do {
             cd $path
-            ^gh pr list --head $branch --state all --limit 30 --json number,title,state,isDraft,baseRefName,statusCheckRollup
+            ^gh pr list --head $branch --state all --limit 30 --json number,title,state,isDraft,baseRefName,statusCheckRollup,url
         } | complete)
         if $result.exit_code != 0 {
             print $"($label)PR:($reset) ($yellow)unavailable($reset)"
@@ -305,7 +366,14 @@ def __preview-prs [path: string, branch: string] {
             $red
         }
         let draft = if $pr.isDraft { $"  ($yellow)DRAFT($reset)" } else { "" }
-        print $"#($pr.number)  ($state_color)($pr.state)($reset)  -> ($pr.baseRefName)($draft)"
+        let url = (try { $pr.url } catch { "" })
+        let number = if ($url | is-empty) {
+            $"#($pr.number)"
+        } else {
+            let link = (__terminal-link $"#($pr.number)" $url)
+            $"($link_color)($link)($reset)"
+        }
+        print $"($number)  ($state_color)($pr.state)($reset)  -> ($pr.baseRefName)($draft)"
         print $"  ($pr.title)"
         if $pr.state == "OPEN" {
             let checks = (try { $pr.statusCheckRollup } catch { [] })
@@ -319,15 +387,12 @@ def __worktree-preview [kind: string, path: string, branch: string] {
     let label = (ansi cyan_bold)
     let green = (ansi green_bold)
     let red = (ansi red_bold)
-    print $"($label)Type:($reset) ($kind)"
-    print $"($label)Branch:($reset) ($branch)"
-    print $"($label)Path:($reset) ($path)"
     let action = if $kind == "worktree" {
-        "Enter opens/focuses"
+        "Enter: open and focus this worktree"
     } else {
-        "Enter creates and focuses"
+        "Enter: create and focus an auto-named worktree from this project"
     }
-    print $"($label)Herdr:($reset) ($action)"
+    print $"($label)($action)($reset)"
     print ""
 
     let git_status = (^git -C $path status --short | complete)
@@ -343,7 +408,7 @@ def __worktree-preview [kind: string, path: string, branch: string] {
         }
     }
 
-    __preview-sessions $path $branch
+    __preview-sessions $path
 
     if $kind == "worktree" {
         print ""
@@ -367,75 +432,128 @@ def __tree-row [
     ] | str join (char tab)
 }
 
-def __new-worktree-branch [] {
-    loop {
-        let branch = input "New branch name: " | str trim
-        if ($branch | is-empty) {
-            print -e "Branch name cannot be empty."
+def __project-rows [] {
+    let reset = (ansi reset)
+    let project_color = (ansi cyan_bold)
+    let marker_color = (ansi dark_gray)
+    let branch_color = (ansi green_bold)
+    let path_color = (ansi dark_gray_dimmed)
+    mut rows = []
+
+    for project in (__project-dirs) {
+        let inventory = (__git-worktree-inventory $project)
+        if $inventory == null {
             continue
         }
-        if ($branch | str contains " ") {
-            print -e "Branch name cannot contain spaces."
-            continue
+
+        let project_display = $project | path basename
+        let display = $"($project_color)($project_display)($reset)"
+        $rows = (
+            $rows
+            | append (
+                (__tree-row
+                    "create"
+                    $project
+                    $project
+                    ""
+                    $display
+                )
+            )
+        )
+
+        let last_worktree_index = ($inventory.worktrees | length) - 1
+        for entry in ($inventory.worktrees | enumerate) {
+            let worktree = $entry.item
+            let branch_marker = if $entry.index == $last_worktree_index { "└─" } else { "├─" }
+            let display = [
+                $"($marker_color)($branch_marker)($reset)"
+                $"($branch_color)($worktree.branch)($reset)"
+                $"($path_color)(__relative-home $worktree.path)($reset)"
+            ] | str join "  "
+            $rows = (
+                $rows
+                | append (
+                    (__tree-row
+                        "worktree"
+                        $project
+                        $worktree.path
+                        $worktree.branch
+                        $display
+                    )
+                )
+            )
         }
-        return $branch
+    }
+
+    $rows
+}
+
+def __project-rows-output [] {
+    __project-rows | str join "\n"
+}
+
+def __close-worktree [kind: string, path: string] {
+    if $kind != "worktree" {
+        print -e "Only existing worktrees can be closed."
+        return
+    }
+
+    let git_status = (^git -C $path status --porcelain | complete)
+    if $git_status.exit_code != 0 {
+        print -e "Cannot inspect worktree status."
+        return
+    }
+    if ($git_status.stdout | str trim | is-not-empty) {
+        print -e "Cannot close a dirty worktree. Commit or clean it first."
+        return
+    }
+
+    let lookup = (^herdr worktree list --cwd $path | complete)
+    if $lookup.exit_code != 0 {
+        print -e "Cannot find the Herdr workspace for this worktree."
+        return
+    }
+    let payload = (
+        try {
+            $lookup.stdout | from json
+        } catch { null }
+    )
+    let worktree = (
+        try {
+            $payload.result.worktrees
+            | where path == $path
+            | first
+        } catch { null }
+    )
+    if $worktree == null {
+        print -e "Cannot find the selected worktree."
+        return
+    }
+    let workspace_id = (try { $worktree.open_workspace_id } catch { "" })
+    if ($workspace_id | is-empty) {
+        print -e "This worktree is not open in Herdr."
+        return
+    }
+
+    let answer = input $"Close worktree ($path)? [y/N] " | str trim | str lowercase
+    if $answer not-in ["y" "yes"] {
+        return
+    }
+
+    let removed = (^herdr worktree remove --workspace $workspace_id | complete)
+    if $removed.exit_code != 0 {
+        let reason = $removed.stderr | str trim
+        if ($reason | is-empty) {
+            print -e "Herdr could not close the worktree."
+        } else {
+            print -e $"Herdr could not close the worktree: ($reason)"
+        }
     }
 }
 
 export def --env open-project [default_project: string = ""] {
     try {
-        let reset = (ansi reset)
-        let project_color = (ansi cyan_bold)
-        let marker_color = (ansi dark_gray)
-        let branch_color = (ansi green_bold)
-        let path_color = (ansi dark_gray_dimmed)
-        mut rows = []
-
-        for project in (__project-dirs) {
-            let inventory = (__git-worktree-inventory $project)
-            if $inventory == null {
-                continue
-            }
-
-            let project_display = $project | path basename
-            let display = $"($project_color)($project_display)($reset)"
-            $rows = (
-                $rows
-                | append (
-                    (__tree-row
-                        "create"
-                        $project
-                        $project
-                        "<new branch>"
-                        $display
-                    )
-                )
-            )
-
-            let last_worktree_index = ($inventory.worktrees | length) - 1
-            for entry in ($inventory.worktrees | enumerate) {
-                let worktree = $entry.item
-                let branch_marker = if $entry.index == $last_worktree_index { "└─" } else { "├─" }
-                let display = [
-                    $"($marker_color)($branch_marker)($reset)"
-                    $"($branch_color)($worktree.branch)($reset)"
-                    $"($path_color)(__relative-home $worktree.path)($reset)"
-                ] | str join "  "
-                $rows = (
-                    $rows
-                    | append (
-                        (__tree-row
-                            "worktree"
-                            $project
-                            $worktree.path
-                            $worktree.branch
-                            $display
-                        )
-                    )
-                )
-            }
-        }
-
+        let rows = (__project-rows)
         if ($rows | is-empty) {
             print "No Git projects found."
             return
@@ -443,6 +561,9 @@ export def --env open-project [default_project: string = ""] {
 
         let delimiter = (char tab)
         let preview = "FZF_KIND={1} FZF_PATH={3} FZF_BRANCH={4} nu -c 'source ~/.config/nushell/scripts/project.nu; __worktree-preview $env.FZF_KIND $env.FZF_PATH $env.FZF_BRANCH'"
+        let close = "FZF_KIND={1} FZF_PATH={3} nu -c 'source ~/.config/nushell/scripts/project.nu; __close-worktree $env.FZF_KIND $env.FZF_PATH'"
+        let reload = "nu -c 'source ~/.config/nushell/scripts/core.nu; source ~/.config/nushell/scripts/project.nu; __project-rows-output'"
+        let close_binding = "ctrl-x:execute(" + $close + ")+reload(" + $reload + ")"
         mut fzf_args = [
             "--ansi"
             "--delimiter" $delimiter
@@ -450,11 +571,10 @@ export def --env open-project [default_project: string = ""] {
             "--no-sort"
             "--layout" "reverse-list"
             "--prompt" "worktree> "
-            "--header"
-            "Enter open/focus  •  select a project to create a worktree  •  Esc cancel"
-            "--header-first"
+            "--footer" "Enter open/create  •  Ctrl-X close  •  Esc cancel"
+            "--bind" $close_binding
             "--color"
-            "fg:-1,bg:-1,fg+:-1,bg+:-1,hl:cyan,hl+:cyan,pointer:magenta,prompt:cyan,header:yellow,marker:green"
+            "fg:-1,bg:-1,fg+:-1,bg+:-1,hl:cyan,hl+:cyan,pointer:magenta,prompt:cyan,footer:yellow,marker:green"
             "--preview" $preview
             "--preview-window" "right:45%"
             "--preview-label" " details "
@@ -488,8 +608,7 @@ export def --env open-project [default_project: string = ""] {
             return
         }
 
-        let branch = (__new-worktree-branch)
-        ^herdr worktree create --cwd $project --branch $branch --focus | ignore
+        ^herdr worktree create --cwd $project --focus | ignore
     } catch {
         print "No project directory found."
     }
