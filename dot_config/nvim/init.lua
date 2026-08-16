@@ -140,14 +140,32 @@ local function is_macos_dark()
     :match("Dark") ~= nil
 end
 
-if is_macos_dark() then
-  require("gruber-darker").setup()
-else
-  vim.opt.background = "light"
-  vim.cmd.colorscheme("retrobox")
+local function apply_theme(is_dark)
+  vim.opt.background = is_dark and "dark" or "light"
+  vim.cmd.colorscheme(is_dark and "gruber-darker" or "retrobox")
+  vim.api.nvim_set_hl(0, "YankHighlight", { bg = "#ffff00", fg = "#000000" })
 end
 
-vim.api.nvim_set_hl(0, "YankHighlight", { bg = "#ffff00", fg = "#000000" })
+local function style_tabline()
+  local active_tabline = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
+  active_tabline.bold = true
+  vim.api.nvim_set_hl(0, "MiniTablineCurrent", active_tabline)
+  vim.api.nvim_set_hl(0, "MiniTablineModifiedCurrent", active_tabline)
+  for _, group in ipairs({
+    "MiniTablineVisible",
+    "MiniTablineHidden",
+    "MiniTablineFill",
+    "MiniTablineTabpagesection",
+    "MiniTablineTrunc",
+  }) do
+    vim.api.nvim_set_hl(0, group, { link = "StatusLineNC" })
+  end
+  vim.api.nvim_set_hl(0, "MiniTablineModifiedVisible", { link = "StatusLine" })
+  vim.api.nvim_set_hl(0, "MiniTablineModifiedHidden", { link = "StatusLine" })
+end
+
+local is_dark = is_macos_dark()
+apply_theme(is_dark)
 
 -- Plugins
 local function install_fff_binary()
@@ -181,8 +199,17 @@ vim.pack.add({
   "https://github.com/selimacerbas/markdown-preview.nvim",
   "https://github.com/folke/which-key.nvim",
   "https://github.com/jake-stewart/multicursor.nvim",
+  "https://github.com/nvim-mini/mini.nvim",
 })
 install_fff_binary()
+require("mini.icons").setup()
+require("mini.files").setup({
+  mappings = {
+    close = "<Esc>",
+  },
+})
+require("mini.tabline").setup({})
+style_tabline()
 require("which-key").setup({
   preset = "classic",
   win = {
@@ -196,8 +223,26 @@ require("which-key").add({
   { "<leader>m", group = "markdown" },
 })
 
-require("markdown_preview").setup({
-  default_theme = is_macos_dark() and "dark" or "light",
+local markdown_preview = require("markdown_preview")
+markdown_preview.setup({
+  default_theme = is_dark and "dark" or "light",
+})
+
+vim.api.nvim_create_autocmd("FocusGained", {
+  group = user_group,
+  callback = function()
+    local next_is_dark = is_macos_dark()
+    if next_is_dark == is_dark then
+      return
+    end
+
+    is_dark = next_is_dark
+    apply_theme(is_dark)
+    markdown_preview.setup({
+      default_theme = is_dark and "dark" or "light",
+    })
+    style_tabline()
+  end,
 })
 
 -- Git signs
@@ -226,90 +271,6 @@ require("gitsigns").setup({
     vim.keymap.set("n", "do", gitsigns.preview_hunk, git_opts("Preview hunk"))
   end,
 })
-
--- Features: floating terminals
-local function current_dir()
-  local path = vim.api.nvim_buf_get_name(0)
-  if path == "" then
-    return vim.uv.cwd()
-  end
-
-  local stat = vim.uv.fs_stat(path)
-  if stat and stat.type == "directory" then
-    return path
-  end
-
-  return vim.fs.dirname(path)
-end
-
-local function open_float_term(command, opts)
-  opts = opts or {}
-
-  local width = math.floor(vim.o.columns * 0.9)
-  local height = math.floor(vim.o.lines * 0.85)
-  local buf = vim.api.nvim_create_buf(false, true)
-  local win = vim.api.nvim_open_win(buf, true, {
-    relative = "editor",
-    width = width,
-    height = height,
-    col = math.floor((vim.o.columns - width) / 2),
-    row = math.floor((vim.o.lines - height) / 2),
-    border = "rounded",
-    style = "minimal",
-  })
-
-  local function close()
-    if vim.api.nvim_win_is_valid(win) then
-      vim.api.nvim_win_close(win, true)
-    end
-    if vim.api.nvim_buf_is_valid(buf) then
-      vim.api.nvim_buf_delete(buf, { force = true })
-    end
-  end
-
-  vim.keymap.set("t", "<Esc>", close, { buffer = buf, desc = "Close terminal", silent = true })
-
-  vim.fn.jobstart(command, {
-    term = true,
-    cwd = opts.cwd,
-    on_exit = function(_, code)
-      vim.schedule(function()
-        close()
-        if opts.on_exit then
-          opts.on_exit(code)
-        end
-      end)
-    end,
-  })
-  vim.cmd.startinsert()
-end
-
--- Features: files
-local function open_yazi()
-  local chooser = vim.fn.tempname()
-  local start = vim.api.nvim_buf_get_name(0)
-  if start == "" then
-    start = current_dir()
-  end
-
-  open_float_term({ "yazi", "--chooser-file", chooser, start }, {
-    cwd = current_dir(),
-    on_exit = function()
-      local file = io.open(chooser, "r")
-      if not file then
-        return
-      end
-
-      local selection = file:read("*l")
-      file:close()
-      os.remove(chooser)
-
-      if selection and selection ~= "" then
-        vim.cmd.edit(vim.fn.fnameescape(selection))
-      end
-    end,
-  })
-end
 
 -- Features: buffers
 local function listed_buffers()
@@ -487,7 +448,9 @@ end, key_opts("Live grep"))
 map({ "n", "x" }, "<leader>fw", function()
   require("fff").live_grep_under_cursor()
 end, key_opts("Grep word"))
-map({ "n", "v" }, "<leader>e", open_yazi, key_opts("File explorer"))
+map({ "n", "v" }, "<leader>e", function()
+  require("mini.files").open()
+end, key_opts("File explorer"))
 
 -- Keymaps: markdown
 map("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", key_opts("Markdown preview"))
