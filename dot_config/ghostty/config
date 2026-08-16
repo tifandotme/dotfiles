@@ -7,7 +7,7 @@ copy-on-select = true
 
 macos-option-as-alt = true
 
-theme = light:Gruvbox Light Hard,dark:IR Black
+theme = light:Gruvbox Light,dark:IR Black
 
 custom-shader = shaders/cursors/cursor_warp.glsl
 custom-shader-animation = always
