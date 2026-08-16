@@ -33,12 +33,6 @@ function optionalRunOutput(command: string, args: string[]) {
   }
 }
 
-function homeBin(command: string) {
-  const home = process.env.HOME;
-
-  return home ? join(home, ".local", "bin", command) : command;
-}
-
 function sourceRoot() {
   return run("chezmoi", ["source-path"], { quiet: true });
 }
@@ -93,7 +87,6 @@ function updateSourceFiles(isDark: boolean) {
   const gitConfig = join(root, "dot_config", "git", "config.tmpl");
   const glowConfig = join(root, "dot_config", "glow", "glow.yml.tmpl");
   const piSettings = join(root, "dot_config", "pi", "private_settings.json");
-  const piCodePreviews = join(root, "dot_config", "pi", "private_code-previews.json");
   const claudeSettings = join(root, "dot_config", "claude", "private_settings.json");
   const herdrConfig = join(root, "dot_config", "herdr", "config.toml.tmpl");
 
@@ -107,10 +100,6 @@ function updateSourceFiles(isDark: boolean) {
   const settings = readJsonObject(piSettings);
   settings.theme = isDark ? "dark" : "light";
   writeJson(piSettings, settings);
-
-  const codePreviews = readJsonObject(piCodePreviews);
-  codePreviews.shikiTheme = isDark ? "github-dark-default" : "github-light-default";
-  writeJson(piCodePreviews, codePreviews);
 
   const claude = readJsonObject(claudeSettings);
   claude.theme = isDark ? "dark" : "light";
@@ -136,14 +125,13 @@ function applyAppearance() {
     join(home, ".config", "git", "config"),
     join(home, ".config", "glow", "glow.yml"),
     join(home, ".config", "pi", "settings.json"),
-    join(home, ".config", "pi", "code-previews.json"),
     join(home, ".config", "claude", "settings.json"),
     join(home, ".config", "herdr", "config.toml"),
   ]);
 }
 
 function reloadIdlePiAgents() {
-  const list = optionalRunOutput(homeBin("herdr"), ["agent", "list"]);
+  const list = optionalRunOutput("herdr", ["agent", "list"]);
 
   if (!list) {
     return 0;
@@ -179,7 +167,7 @@ function reloadIdlePiAgents() {
       continue;
     }
 
-    optionalRun(homeBin("herdr"), ["pane", "run", piAgent.pane_id, "/reload"]);
+    optionalRun("herdr", ["pane", "run", piAgent.pane_id, "/reload"]);
     reloaded += 1;
   }
 
@@ -196,7 +184,7 @@ function main() {
   updateSourceFiles(isDark);
   applyAppearance();
   setMacAppearance(isDark);
-  optionalRun(homeBin("herdr"), ["server", "reload-config"]);
+  optionalRun("herdr", ["server", "reload-config"]);
   const reloadedPiAgents = reloadIdlePiAgents();
 
   console.log(`Appearance set to ${isDark ? "dark" : "light"}${reloadedAgentMessage(reloadedPiAgents)}`);
