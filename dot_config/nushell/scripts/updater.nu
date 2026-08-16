@@ -91,6 +91,11 @@ export def start [] {
         print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)Claude Code(ansi reset)"
         claude update
     }
+
+    if (which nvim | is-not-empty) {
+        print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)vim.pack(ansi reset) packages"
+        ^nvim --headless -c 'lua vim.pack.update(nil, { force = true })' -c 'qa!'
+    }
 }
 
 # Clean caches and uninstall unused packages (do this rarely)
@@ -103,6 +108,7 @@ export def clean [] {
         pnpm store prune
     }
     if (which brew | is-not-empty) {
+        brew cleanup --prune-prefix
         brew cleanup --prune=all
         brew autoremove
     }
