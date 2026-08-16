@@ -112,12 +112,7 @@ def --wrapped pi [...args] {
 
     let real_cwd = (^realpath (pwd) | str trim)
     let work_root = (^realpath ($env.HOME | path join "projects" "work") | str trim)
-    let pi_config_dir = (
-        $env
-        | get -o PI_CODING_AGENT_DIR
-        | default ($env.HOME | path join ".config" "pi")
-        | path expand
-    )
+    let pi_config_dir = $env.PI_CODING_AGENT_DIR | path expand
     let config_name = if (
         $real_cwd == $work_root
         or ($real_cwd | str starts-with $"($work_root)(char separator)")

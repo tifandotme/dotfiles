@@ -58,11 +58,6 @@ if git diff --cached --quiet --exit-code; then
 	fail "no staged changes"
 fi
 
-if [[ -z "${PI_CODING_AGENT_DIR:-}" ]]; then
-	xdg_config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
-	export PI_CODING_AGENT_DIR="$xdg_config_home/pi"
-fi
-
 diff_output="$(git diff --cached --no-ext-diff --unified=3 -- .)"
 [[ -n "$diff_output" ]] || fail "staged diff is empty"
 

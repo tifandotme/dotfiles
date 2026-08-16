@@ -157,4 +157,17 @@ local function fetch(_, job)
   return true
 end
 
-return { setup = setup, fetch = fetch }
+local function fetch_compact(self, job)
+  if ya.throttle then
+    fetch(self, job)
+    return ya.co(function()
+      for _, file in ipairs(job.files) do
+        coroutine.yield(file, { retry = true })
+      end
+    end)
+  else
+    return fetch(self, job)
+  end
+end
+
+return { setup = setup, fetch = fetch_compact }

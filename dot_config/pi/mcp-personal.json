@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "notion": {
+      "auth": "oauth",
+      "lifecycle": "lazy",
+      "url": "https://mcp.notion.com/mcp"
+    },
+    "posthog-personal": {
+      "auth": "oauth",
+      "lifecycle": "lazy",
+      "url": "https://mcp.posthog.com/mcp"
+    },
+    "tolaria": {
+      "args": [
+        "/Applications/Tolaria.app/Contents/Resources/mcp-server/index.js"
+      ],
+      "command": "/Users/tifan/.local/share/mise/shims/node",
+      "env": {
+        "WS_UI_PORT": "9711"
+      },
+      "type": "stdio"
+    }
+  }
+}

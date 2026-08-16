@@ -10,8 +10,7 @@
 
 _script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 _caffeinate_lib="$_script_dir/caffeinate_lib.sh"
-[ -f "$_caffeinate_lib" ] || _caffeinate_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/caffeinate_lib.sh"
-# shellcheck source=caffeinate_lib.sh
+# shellcheck disable=SC1090,SC1091
 . "$_caffeinate_lib"
 
 caffeinate_toggle

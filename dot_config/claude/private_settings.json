@@ -15,7 +15,7 @@
     "pr": "",
     "sessionUrl": false
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -37,7 +37,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "bunx -y ccstatusline@latest --config \"${XDG_CONFIG_HOME:-$HOME/.config}/ccstatusline/settings.json\"",
+    "command": "bunx -y ccstatusline@latest --config \"$XDG_CONFIG_HOME/ccstatusline/settings.json\"",
     "padding": 0
   },
   "enabledPlugins": {

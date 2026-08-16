@@ -6,7 +6,7 @@
 set -Eeuo pipefail
 
 app="$HOME/Applications/Neovim.app"
-script="${XDG_CONFIG_HOME:-$HOME/.config}/infat/nvim-finder.applescript"
+script="$XDG_CONFIG_HOME/infat/nvim-finder.applescript"
 rm -rf "$app"
 osacompile -o "$app" "$script"
 /usr/libexec/PlistBuddy -c 'Add :CFBundleIdentifier string com.tifan.nvim-finder' "$app/Contents/Info.plist"
@@ -17,5 +17,5 @@ codesign --force --deep --sign - "$app"
 cd "$HOME"
 
 # Infat uses NSWorkspace without linking AppKit.
-DYLD_INSERT_LIBRARIES=/System/Library/Frameworks/AppKit.framework/AppKit infat --config "${XDG_CONFIG_HOME:-$HOME/.config}/infat/config.toml"
+DYLD_INSERT_LIBRARIES=/System/Library/Frameworks/AppKit.framework/AppKit infat --config "$XDG_CONFIG_HOME/infat/config.toml"
 # {{- end }}

@@ -36,33 +36,19 @@ def __trust-claude-workspace [path: string] {
         print -e $"Claude config not found: ($config)"
         return false
     }
-
-    let settings = (try {
-        open $config
-    } catch {
-        print -e $"Cannot read Claude config: ($config)"
-        return false
-    })
-    let projects = (try { $settings.projects } catch { {} })
-    let trusted = (try { $projects | get ($workspace) | get hasTrustDialogAccepted } catch { false })
-    if $trusted == true {
+    let trusted = (^jq -e --arg workspace $workspace '.projects[$workspace].hasTrustDialogAccepted == true' $config | complete)
+    if $trusted.exit_code == 0 {
         return true
     }
 
-    let current_project = (try { $projects | get ($workspace) } catch { {} })
-    let updated_projects = ($projects | merge {
-        ($workspace): ($current_project | upsert hasTrustDialogAccepted true)
-    })
-    let updated_settings = ($settings | upsert projects $updated_projects)
     let temp = (try {
         ^mktemp $"($config).tmp.XXXXXX" | str trim
     } catch {
         print -e $"Cannot create temporary Claude config"
         return false
     })
-
     try {
-        $updated_settings | to json --indent 2 | save --force $temp
+        ^jq --arg workspace $workspace '.projects //= {} | .projects[$workspace].hasTrustDialogAccepted = true' $config | save --force $temp
         let mode = (^stat -f "%Lp" $config | str trim)
         ^chmod $mode $temp
         ^mv $temp $config
@@ -679,14 +665,8 @@ export def --env open-project [default_project: string = ""] {
             print -e "Herdr could not create the worktree."
             return
         }
-        let payload = (try {
-            $created.stdout | from json
-        } catch {
-            print -e "Herdr returned invalid worktree data."
-            return
-        })
         let created_path = (try {
-            $payload.result.worktree.path
+            $created.stdout | from json | get result.worktree.path
         } catch {
             print -e "Herdr did not return the new worktree path."
             return

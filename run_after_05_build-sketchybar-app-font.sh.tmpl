@@ -7,7 +7,7 @@ set -Eeuo pipefail
 repo="$HOME/.config/sketchybar/external/sketchybar-app-font"
 font_source="$repo/dist/sketchybar-app-font.ttf"
 font_target="$HOME/Library/Fonts/sketchybar-app-font.ttf"
-cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/chezmoi"
+cache_dir="$XDG_CACHE_HOME/chezmoi"
 revision_file="$cache_dir/sketchybar-app-font.revision"
 revision="$(git -C "$repo" rev-parse HEAD)"
 
