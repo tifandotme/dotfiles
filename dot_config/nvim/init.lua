@@ -207,14 +207,32 @@ require("mini.files").setup({
   mappings = {
     close = "<Esc>",
   },
+  options = {
+    permanent_delete = false,
+  },
+})
+vim.api.nvim_create_autocmd("User", {
+  group = user_group,
+  pattern = "MiniFilesBufferCreate",
+  callback = function(ev)
+    local buf = ev.data.buf_id
+    vim.keymap.set("n", "<Esc>", function()
+      if vim.v.hlsearch == 1 then
+        vim.cmd.nohlsearch()
+      else
+        require("mini.files").close()
+      end
+    end, { buffer = buf, desc = "Clear search or close explorer", nowait = true, silent = true })
+  end,
 })
 require("mini.tabline").setup({})
 style_tabline()
 require("which-key").setup({
-  preset = "classic",
-  win = {
-    width = math.huge,
-    height = { min = 4, max = 15 },
+  preset = "helix",
+  delay = 0,
+  triggers = {
+    { "<auto>", mode = "nxso" },
+    { "t", mode = "n" },
   },
 })
 require("which-key").add({
@@ -387,6 +405,11 @@ local function delete_other_buffers()
   end
 end
 
+local function open_file_for_rename()
+  local path = vim.api.nvim_buf_get_name(0)
+  require("mini.files").open(path ~= "" and path or nil)
+end
+
 -- Keymaps
 local map = vim.keymap.set
 local format_buffer
@@ -431,6 +454,11 @@ map("n", "<C-k>", "<C-w>k", key_opts("Window up"))
 map("n", "<C-l>", "<C-w>l", key_opts("Window right"))
 
 -- Keymaps: buffers
+-- t{char} mappings intentionally override native till-character motions.
+map("n", "tt", "<cmd>enew<cr>", key_opts("New buffer"))
+map("n", "tw", "<cmd>bdelete<cr>", key_opts("Delete buffer"))
+map("n", "tr", open_file_for_rename, key_opts("Rename file in explorer"))
+map("n", "to", delete_other_buffers, key_opts("Delete other buffers"))
 map("n", "<leader><leader>", pick_buffer, key_opts("Pick buffer"))
 map("n", "<A-Tab>", "<C-^>", key_opts("Alternate buffer"))
 map("n", "<Tab>", "<cmd>bnext<cr>", key_opts("Next buffer"))
