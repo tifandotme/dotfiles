@@ -18,19 +18,13 @@ vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.breakindent = true
 vim.opt.breakindentopt = "shift:2"
-vim.opt.textwidth = 0
-vim.opt.wrapmargin = 0
 vim.opt.scrolloff = 5
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.incsearch = true
 vim.opt.hlsearch = true
-vim.opt.showmode = true
-vim.opt.showcmd = true
 vim.opt.showmatch = true
-vim.opt.laststatus = 2
 vim.opt.swapfile = false
-vim.opt.backup = false
 vim.opt.undofile = true
 vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "80,100"
@@ -219,6 +213,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 vim.opt.completeopt = { "menuone", "noinsert", "popup" }
 local starter = require("mini.starter")
+local fff = require("fff")
 local actions = starter.sections.builtin_actions()
 table.insert(actions, 2, {
   name = "File explorer",
@@ -229,9 +224,7 @@ table.insert(actions, 2, {
 })
 table.insert(actions, 3, {
   name = "Find files",
-  action = function()
-    require("fff").find_files()
-  end,
+  action = fff.find_files,
   section = "Builtin actions",
 })
 starter.setup({
@@ -239,29 +232,6 @@ starter.setup({
     actions,
     starter.sections.recent_files(5, true, true),
   },
-})
-vim.api.nvim_create_autocmd("BufDelete", {
-  group = user_group,
-  callback = function()
-    if vim.fn.argc() > 0 or #vim.fn.getbufinfo({ buflisted = 1 }) ~= 1 then
-      return
-    end
-
-    vim.schedule(function()
-      local buf = vim.api.nvim_get_current_buf()
-      local first_line = vim.api.nvim_buf_get_lines(buf, 0, 1, true)[1]
-      if
-        vim.bo[buf].buftype ~= ""
-        or vim.bo[buf].filetype ~= ""
-        or vim.api.nvim_buf_get_name(buf) ~= ""
-        or vim.api.nvim_buf_line_count(buf) ~= 1
-        or first_line ~= ""
-      then
-        return
-      end
-      starter.open(buf)
-    end)
-  end,
 })
 require("mini.files").setup({
   mappings = {
@@ -477,24 +447,24 @@ map("n", "<leader>o", outline_symbols, key_opts("Find symbols in current file"))
 map("n", "<leader>h", function()
   require("mini.pick").builtin.help()
 end, key_opts("Search help"))
-map("n", "<leader>ff", function()
-  require("fff").find_files()
-end, key_opts("Find files"))
-map("n", "<leader>fg", function()
-  require("fff").live_grep()
-end, key_opts("Live grep"))
+map("n", "<leader>ff", fff.find_files, key_opts("Find files"))
+map("n", "<leader>fg", fff.live_grep, key_opts("Live grep"))
 map("n", "<leader>fz", function()
-  require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } })
+  fff.live_grep({ grep = { modes = { "fuzzy", "plain" } } })
 end, key_opts("Fuzzy grep"))
-map({ "n", "x" }, "<leader>fw", function()
-  require("fff").live_grep_under_cursor()
-end, key_opts("Search current word / selection"))
-map("n", "<D-p>", function()
-  require("fff").find_files()
-end, key_opts("Find files"))
-map({ "n", "x" }, "<D-S-f>", function()
-  require("fff").live_grep_under_cursor()
-end, key_opts("Search current word / selection"))
+map(
+  { "n", "x" },
+  "<leader>fw",
+  fff.live_grep_under_cursor,
+  key_opts("Search current word / selection")
+)
+map("n", "<D-p>", fff.find_files, key_opts("Find files"))
+map(
+  { "n", "x" },
+  "<D-S-f>",
+  fff.live_grep_under_cursor,
+  key_opts("Search current word / selection")
+)
 map({ "n", "v" }, "<leader>e", function()
   require("mini.files").open()
 end, key_opts("File explorer"))
