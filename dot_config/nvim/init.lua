@@ -1,10 +1,10 @@
--- Leaders
+-- Bootstrap
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 local user_group = vim.api.nvim_create_augroup("user-config", { clear = true })
 
--- Options
+-- Editor options
 vim.opt.termguicolors = true
 vim.opt.mouse = "a"
 vim.opt.number = true
@@ -30,6 +30,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "80,100"
 vim.opt.listchars = { space = "·", tab = "→ ", trail = "·", nbsp = "␣" }
 
+-- Statusline
 -- Cache Git status briefly; `*` means the repo has uncommitted changes.
 local git_status_cache = { root = nil, value = "", expires = 0 }
 
@@ -71,6 +72,7 @@ end
 
 vim.opt.statusline = " %f%m%r %= %{v:lua.statusline_git()}%y %l:%c %P "
 
+-- Autocommands
 local visual_modes = { v = true, V = true, [string.char(22)] = true }
 vim.api.nvim_create_autocmd("ModeChanged", {
   group = user_group,
@@ -122,7 +124,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Theme
+-- Appearance
 local function is_macos_dark()
   if vim.fn.has("macunix") ~= 1 then
     return false
@@ -194,6 +196,8 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.nvim",
 })
 install_fff_binary()
+
+-- Plugin configuration
 require("mini.icons").setup()
 require("mini.pick").setup({})
 require("mini.extra").setup({})
@@ -346,10 +350,10 @@ require("gitsigns").setup({
   end,
 })
 
--- Features: buffers
+-- Feature modules
 local buffers = require("buffers")
 
--- Keymaps
+-- Keymap helpers
 local map = vim.keymap.set
 local formatting = require("formatting")
 local map_multistep = require("mini.keymap").map_multistep
@@ -391,7 +395,8 @@ if not vim.g.multicursor_nvim_configured then
   vim.g.multicursor_nvim_configured = true
 end
 
--- Keymaps: general
+-- Keymaps
+-- General
 map("i", "jj", "<Esc>", key_opts("Exit insert mode"))
 map("i", "<C-n>", function()
   return move_completion(1, "\14")
@@ -424,7 +429,7 @@ map("n", "<C-j>", "<C-w>j", key_opts("Window down"))
 map("n", "<C-k>", "<C-w>k", key_opts("Window up"))
 map("n", "<C-l>", "<C-w>l", key_opts("Window right"))
 
--- Keymaps: buffers
+-- Buffers
 -- t{char} mappings intentionally override native till-character motions.
 map("n", "tt", "<cmd>enew<cr>", key_opts("New buffer"))
 map("n", "tw", "<cmd>confirm bdelete<cr>", key_opts("Delete buffer"))
@@ -437,7 +442,7 @@ map("n", "<A-Tab>", "<C-^>", key_opts("Alternate buffer"))
 map("n", "<Tab>", "<cmd>bnext<cr>", key_opts("Next buffer"))
 map("n", "<S-Tab>", "<cmd>bprevious<cr>", key_opts("Previous buffer"))
 
--- Keymaps: files
+-- Files
 local function outline_symbols()
   require("mini.extra").pickers.lsp({ scope = "document_symbol" })
 end
@@ -469,13 +474,13 @@ map({ "n", "v" }, "<leader>e", function()
   require("mini.files").open()
 end, key_opts("File explorer"))
 
--- Keymaps: markdown
+-- Markdown
 map("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", key_opts("Markdown preview"))
 map("n", "<leader>mr", "<cmd>MarkdownPreviewRefresh<cr>", key_opts("Refresh markdown preview"))
 map("n", "<leader>ms", "<cmd>MarkdownPreviewStop<cr>", key_opts("Stop markdown preview"))
 map("n", "<leader>mm", require("mini.map").toggle, key_opts("Toggle minimap"))
 
--- Keymaps: LSP
+-- LSP
 map("n", "<leader>p", function()
   formatting.format_buffer(0)
 end, key_opts("Format file"))
@@ -488,6 +493,6 @@ map("n", "[d", function()
   vim.diagnostic.jump({ count = -1, float = true })
 end, key_opts("Previous diagnostic"))
 
--- Diagnostics and LSP
+-- Language tooling
 require("lsp").setup(user_group)
 require("formatting").setup(user_group)
