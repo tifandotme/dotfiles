@@ -212,6 +212,13 @@ require("mini.completion").setup({
     signature = 50,
   },
 })
+vim.api.nvim_create_autocmd("FileType", {
+  group = user_group,
+  pattern = "fff_input",
+  callback = function(ev)
+    vim.b[ev.buf].minicompletion_disable = true
+  end,
+})
 vim.opt.completeopt = { "menuone", "noinsert", "popup" }
 local starter = require("mini.starter")
 local actions = starter.sections.builtin_actions()
@@ -295,7 +302,7 @@ if not vim.g.which_key_nvim_configured then
     },
   })
   require("which-key").add({
-    { "<leader>t", group = "buffers" },
+    { "t", group = "buffers" },
     { "<leader>f", group = "files" },
     { "<leader>m", group = "markdown" },
   })
@@ -458,9 +465,18 @@ end, key_opts("Find files"))
 map("n", "<leader>fg", function()
   require("fff").live_grep()
 end, key_opts("Live grep"))
+map("n", "<leader>fz", function()
+  require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } })
+end, key_opts("Fuzzy grep"))
 map({ "n", "x" }, "<leader>fw", function()
   require("fff").live_grep_under_cursor()
-end, key_opts("Grep word"))
+end, key_opts("Search current word / selection"))
+map("n", "<D-p>", function()
+  require("fff").find_files()
+end, key_opts("Find files"))
+map({ "n", "x" }, "<D-S-f>", function()
+  require("fff").live_grep_under_cursor()
+end, key_opts("Search current word / selection"))
 map({ "n", "v" }, "<leader>e", function()
   require("mini.files").open()
 end, key_opts("File explorer"))
