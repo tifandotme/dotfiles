@@ -4,7 +4,7 @@ run = "stylua ."
 [tasks.check]
 run = [
   "stylua --check .",
-  "luac -p init.lua lua/gruber-darker.lua",
+  "luac -p init.lua colors/gruber-darker.lua lua/buffers.lua lua/formatting.lua lua/lsp.lua",
   "lua-language-server --check . --checklevel Warning",
   "nvim --headless '+lua print(\"nvim-ok\")' +qa",
 ]

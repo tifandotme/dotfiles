@@ -203,6 +203,52 @@ vim.pack.add({
 })
 install_fff_binary()
 require("mini.icons").setup()
+require("mini.completion").setup()
+local starter = require("mini.starter")
+local actions = starter.sections.builtin_actions()
+table.insert(actions, 2, {
+  name = "File explorer",
+  action = function()
+    require("mini.files").open()
+  end,
+  section = "Builtin actions",
+})
+table.insert(actions, 3, {
+  name = "Find files",
+  action = function()
+    require("fff").find_files()
+  end,
+  section = "Builtin actions",
+})
+starter.setup({
+  items = {
+    actions,
+    starter.sections.recent_files(5, false, true),
+  },
+})
+vim.api.nvim_create_autocmd("BufDelete", {
+  group = user_group,
+  callback = function()
+    if vim.fn.argc() > 0 or #vim.fn.getbufinfo({ buflisted = 1 }) ~= 1 then
+      return
+    end
+
+    vim.schedule(function()
+      local buf = vim.api.nvim_get_current_buf()
+      local first_line = vim.api.nvim_buf_get_lines(buf, 0, 1, true)[1]
+      if
+        vim.bo[buf].buftype ~= ""
+        or vim.bo[buf].filetype ~= ""
+        or vim.api.nvim_buf_get_name(buf) ~= ""
+        or vim.api.nvim_buf_line_count(buf) ~= 1
+        or first_line ~= ""
+      then
+        return
+      end
+      starter.open(buf)
+    end)
+  end,
+})
 require("mini.files").setup({
   mappings = {
     close = "<Esc>",
@@ -227,6 +273,9 @@ vim.api.nvim_create_autocmd("User", {
 })
 require("mini.tabline").setup({})
 style_tabline()
+vim.api.nvim_create_user_command("ColorsTweak", function()
+  require("mini.colors").interactive()
+end, {})
 require("which-key").setup({
   preset = "helix",
   delay = 0,
@@ -291,128 +340,11 @@ require("gitsigns").setup({
 })
 
 -- Features: buffers
-local function listed_buffers()
-  return vim.tbl_filter(function(buf)
-    return vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buflisted
-  end, vim.api.nvim_list_bufs())
-end
-
-local function listed_file_buffers()
-  return vim.tbl_filter(function(buf)
-    local name = vim.api.nvim_buf_get_name(buf)
-    return name ~= "" and vim.fn.filereadable(name) == 1
-  end, listed_buffers())
-end
-
-local function fff_buffer_item(buf)
-  local path = vim.api.nvim_buf_get_name(buf)
-  local display_path = vim.fn.fnamemodify(path, ":~:.")
-  local stat = vim.uv.fs_stat(path) or {}
-
-  return {
-    bufnr = buf,
-    path = path,
-    relative_path = display_path:sub(1, 1) == "~" and path or display_path,
-    name = vim.fn.fnamemodify(path, ":t"),
-    directory = vim.fn.fnamemodify(display_path, ":h"),
-    extension = vim.fn.fnamemodify(path, ":e"),
-    size = stat.size or 0,
-    modified = stat.mtime and stat.mtime.sec or 0,
-  }
-end
-
-local function set_buffer_for_action(buf, action)
-  if action == "split" then
-    vim.cmd.split()
-  elseif action == "vsplit" then
-    vim.cmd.vsplit()
-  elseif action == "tab" then
-    vim.cmd.tabnew()
-  end
-  vim.api.nvim_set_current_buf(buf)
-end
-
-local function pick_buffer()
-  local ok, picker_ui = pcall(require, "fff.picker_ui.picker_ui")
-  if not ok then
-    vim.notify("Failed to load FFF picker UI: " .. picker_ui, vim.log.levels.ERROR)
-    return
-  end
-  if picker_ui.state.active then
-    return
-  end
-
-  -- FFF has no public custom-source API, so the buffer picker temporarily
-  -- replaces these internals and restores them when it closes.
-  local file_picker = require("fff.file_picker")
-  local original = {
-    search = file_picker.search_files_paginated,
-    metadata = file_picker.get_search_metadata,
-    score = file_picker.get_file_score,
-    close = picker_ui.close,
-  }
-  local last_total = 0
-
-  local function restore()
-    file_picker.search_files_paginated = original.search
-    file_picker.get_search_metadata = original.metadata
-    file_picker.get_file_score = original.score
-    picker_ui.close = original.close
-  end
-
-  file_picker.search_files_paginated = function(query, _, _, _, page_index, page_size)
-    local items = vim.tbl_map(fff_buffer_item, listed_file_buffers())
-    if query and query ~= "" then
-      items = vim.fn.matchfuzzypos(items, query, { key = "relative_path" })[1]
-    end
-
-    last_total = #items
-    page_index = page_index or 0
-    page_size = page_size or #items
-    local start = page_index * page_size + 1
-    return vim.list_slice(items, start, start + page_size - 1)
-  end
-
-  file_picker.get_search_metadata = function()
-    return { total_matched = last_total, total_files = last_total }
-  end
-  file_picker.get_file_score = function()
-    return nil
-  end
-  picker_ui.close = function(...)
-    restore()
-    return original.close(...)
-  end
-
-  local opened = picker_ui.open({
-    title = "Buffers",
-    prompt = "Buffers> ",
-    on_submit = function(item, ctx)
-      set_buffer_for_action(item.bufnr, ctx.action)
-    end,
-  })
-  if not opened and not picker_ui.state.active then
-    restore()
-  end
-end
-
-local function delete_other_buffers()
-  local current = vim.api.nvim_get_current_buf()
-  for _, buf in ipairs(listed_buffers()) do
-    if buf ~= current then
-      vim.api.nvim_buf_delete(buf, {})
-    end
-  end
-end
-
-local function open_file_for_rename()
-  local path = vim.api.nvim_buf_get_name(0)
-  require("mini.files").open(path ~= "" and path or nil)
-end
+local buffers = require("buffers")
 
 -- Keymaps
 local map = vim.keymap.set
-local format_buffer
+local formatting = require("formatting")
 
 local function key_opts(desc)
   return { desc = desc, silent = true }
@@ -429,7 +361,6 @@ end)
 
 -- Keymaps: general
 map("i", "jj", "<Esc>", key_opts("Exit insert mode"))
-map("i", "<C-Space>", "<C-x><C-o>", key_opts("Complete"))
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", key_opts("Clear search highlight"))
 map("n", "<leader>w", "<cmd>write<cr>", key_opts("Write file"))
 map("n", "<leader>r", "<cmd>source ~/.config/nvim/init.lua<cr>", key_opts("Reload config"))
@@ -457,14 +388,18 @@ map("n", "<C-l>", "<C-w>l", key_opts("Window right"))
 -- t{char} mappings intentionally override native till-character motions.
 map("n", "tt", "<cmd>enew<cr>", key_opts("New buffer"))
 map("n", "tw", "<cmd>bdelete<cr>", key_opts("Delete buffer"))
-map("n", "tr", open_file_for_rename, key_opts("Rename file in explorer"))
-map("n", "to", delete_other_buffers, key_opts("Delete other buffers"))
-map("n", "<leader><leader>", pick_buffer, key_opts("Pick buffer"))
+map("n", "tr", buffers.open_file_for_rename, key_opts("Rename file in explorer"))
+map("n", "to", buffers.delete_other_buffers, key_opts("Delete other buffers"))
+map("n", "<leader><leader>", buffers.pick_buffer, key_opts("Pick buffer"))
 map("n", "<A-Tab>", "<C-^>", key_opts("Alternate buffer"))
 map("n", "<Tab>", "<cmd>bnext<cr>", key_opts("Next buffer"))
 map("n", "<S-Tab>", "<cmd>bprevious<cr>", key_opts("Previous buffer"))
-map("n", "<leader>bd", "<cmd>bdelete<cr>", key_opts("Delete buffer"))
-map("n", "<leader>bo", delete_other_buffers, key_opts("Delete other buffers"))
+map("n", "<leader>bd", function()
+  if vim.bo.filetype ~= "ministarter" then
+    vim.cmd.bdelete()
+  end
+end, key_opts("Delete buffer"))
+map("n", "<leader>bo", buffers.delete_other_buffers, key_opts("Delete other buffers"))
 
 -- Keymaps: files
 map("n", "<leader>ff", function()
@@ -487,7 +422,7 @@ map("n", "<leader>ms", "<cmd>MarkdownPreviewStop<cr>", key_opts("Stop markdown p
 
 -- Keymaps: LSP
 map("n", "<leader>p", function()
-  format_buffer(0)
+  formatting.format_buffer(0)
 end, key_opts("Format file"))
 map("n", "<leader>k", vim.lsp.buf.hover, key_opts("Hover"))
 map("n", "gd", vim.lsp.buf.definition, key_opts("Go to definition"))
@@ -498,242 +433,6 @@ map("n", "[d", function()
   vim.diagnostic.jump({ count = -1, float = true })
 end, key_opts("Previous diagnostic"))
 
--- Diagnostics
-vim.diagnostic.config({
-  virtual_text = false,
-  signs = true,
-  underline = true,
-  update_in_insert = false,
-  severity_sort = true,
-})
-
--- LSP
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-vim.api.nvim_create_user_command("LspClients", function()
-  vim.print(vim.lsp.get_clients({ bufnr = 0 }))
-end, {})
-
-vim.api.nvim_create_user_command("LspFormatters", function()
-  vim.print(vim.tbl_map(function(client)
-    return {
-      name = client.name,
-      format = client:supports_method("textDocument/formatting", 0),
-    }
-  end, vim.lsp.get_clients({ bufnr = 0 })))
-end, {})
-
-vim.api.nvim_create_user_command("LspRestartBuffer", function()
-  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
-    client:stop(true)
-  end
-  vim.cmd.edit()
-end, {})
-
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = user_group,
-  callback = function(ev)
-    local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    if not client then
-      return
-    end
-
-    if client:supports_method("textDocument/completion") then
-      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = false })
-    end
-  end,
-})
-
-local function format_with_command(bufnr, command)
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  local input = table.concat(lines, "\n")
-  if vim.bo[bufnr].endofline then
-    input = input .. "\n"
-  end
-
-  local result = vim.system(command, { stdin = input, text = true }):wait()
-  if result.code ~= 0 then
-    vim.notify(result.stderr, vim.log.levels.ERROR)
-    return
-  end
-
-  local output = vim.split(result.stdout, "\n", { plain = true })
-  if output[#output] == "" then
-    table.remove(output)
-  end
-  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, output)
-end
-
-local command_formatters = {
-  bash = function(_)
-    return { "shfmt", "-ln", "bash" }
-  end,
-  bats = function(_)
-    return { "shfmt", "-ln", "bats" }
-  end,
-  markdown = function(path)
-    return { "oxfmt", "--stdin-filepath", path:gsub("%.tmpl$", "") }
-  end,
-  mksh = function(_)
-    return { "shfmt", "-ln", "mksh" }
-  end,
-  nu = function(_)
-    return { "nufmt", "--stdin" }
-  end,
-  sh = function(_)
-    return { "shfmt" }
-  end,
-  svg = function(_)
-    return { "superhtml", "fmt", "--stdin" }
-  end,
-  zsh = function(_)
-    return { "shfmt", "-ln", "zsh" }
-  end,
-}
-
-local formatters_by_filetype = {
-  css = "oxfmt",
-  graphql = "oxfmt",
-  handlebars = "oxfmt",
-  htm = "superhtml",
-  html = "superhtml",
-  javascript = "oxfmt",
-  javascriptreact = "oxfmt",
-  json = "oxfmt",
-  json5 = "oxfmt",
-  jsonc = "oxfmt",
-  less = "oxfmt",
-  lua = "stylua",
-  luau = "stylua",
-  scss = "oxfmt",
-  shtml = "superhtml",
-  toml = "tombi",
-  typescript = "oxfmt",
-  typescriptreact = "oxfmt",
-  vue = "oxfmt",
-  xml = "superhtml",
-  yaml = "oxfmt",
-}
-
-local template_commands = {
-  oxfmt = function(path)
-    return { "oxfmt", "--stdin-filepath", path }
-  end,
-  tombi = function(path)
-    return { "tombi", "format", "--stdin-filename", path, "-" }
-  end,
-}
-
-function format_buffer(bufnr)
-  bufnr = bufnr == 0 and vim.api.nvim_get_current_buf() or bufnr
-  local path = vim.api.nvim_buf_get_name(bufnr)
-  local filetype = vim.bo[bufnr].filetype
-  local command = command_formatters[filetype]
-  if command then
-    format_with_command(bufnr, command(path))
-    return
-  end
-
-  local formatter = formatters_by_filetype[filetype]
-  if not formatter then
-    vim.lsp.buf.format({ bufnr = bufnr, timeout_ms = 1000 })
-    return
-  end
-
-  if path:match("%.tmpl$") then
-    local command = template_commands[formatter]
-    if command then
-      format_with_command(bufnr, command(path:gsub("%.tmpl$", "")))
-      return
-    end
-  end
-
-  vim.lsp.buf.format({
-    bufnr = bufnr,
-    timeout_ms = 1000,
-    filter = function(client)
-      return client.name == formatter
-    end,
-  })
-end
-
--- format on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = user_group,
-  callback = function(ev)
-    if vim.bo[ev.buf].filetype == "markdown" then
-      return
-    end
-
-    format_buffer(ev.buf)
-  end,
-})
-
--- oxfmt only starts in Oxfmt-configured or package.json workspaces by default.
--- Fall back so it also formats this repo's standalone JSON files.
-vim.lsp.config("oxfmt", {
-  root_dir = function(bufnr, on_dir)
-    local path = vim.api.nvim_buf_get_name(bufnr)
-    on_dir(vim.fs.root(path, ".git") or vim.fs.dirname(path))
-  end,
-})
-
-vim.lsp.config("superhtml", {
-  cmd = { "superhtml", "lsp" },
-  filetypes = { "html", "htm", "shtml", "xml" },
-  root_markers = { ".git" },
-})
-
-vim.lsp.config("stylua", {
-  cmd = { "stylua", "--lsp" },
-  filetypes = { "lua", "luau" },
-  root_markers = { ".stylua.toml", "stylua.toml", ".git" },
-})
-
-vim.lsp.config("lua_ls", {
-  settings = {
-    Lua = {
-      runtime = { version = "LuaJIT" },
-      diagnostics = { globals = { "vim" } },
-      workspace = { library = vim.api.nvim_get_runtime_file("", true) },
-    },
-  },
-})
-
-vim.lsp.config("vtsls", {
-  settings = {
-    vtsls = {
-      tsserver = {
-        globalPlugins = {
-          {
-            name = "@effect/language-service",
-            location = vim.fn.expand("~/.local/share/bun/install/global/node_modules"),
-            enableForWorkspaceTypeScriptVersions = true,
-          },
-        },
-      },
-    },
-  },
-})
-
-vim.lsp.config("tinymist", {
-  settings = {
-    formatterPrintWidth = 80,
-    formatterIndentSize = 2,
-  },
-})
-
-vim.lsp.enable({
-  "bashls",
-  "vtsls",
-  "oxfmt",
-  "oxlint",
-  "superhtml",
-  "gopls",
-  "jsonls",
-  "stylua",
-  "tombi",
-  "tinymist",
-  "lua_ls",
-  "nushell",
-  "yamlls",
-})
+-- Diagnostics and LSP
+require("lsp").setup(user_group)
+require("formatting").setup(user_group)
