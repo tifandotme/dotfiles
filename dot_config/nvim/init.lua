@@ -192,12 +192,10 @@ vim.api.nvim_create_autocmd("PackChanged", {
 
 vim.pack.add({
   "https://github.com/neovim/nvim-lspconfig",
-  "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/dmtrKovalenko/fff.nvim",
   "https://github.com/lewis6991/gitsigns.nvim",
   "https://github.com/selimacerbas/live-server.nvim",
   "https://github.com/selimacerbas/markdown-preview.nvim",
-  "https://github.com/folke/which-key.nvim",
   "https://github.com/jake-stewart/multicursor.nvim",
   "https://github.com/nvim-mini/mini.nvim",
 })
@@ -288,25 +286,45 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 require("mini.tabline").setup({})
+require("mini.map").setup({})
 style_tabline()
 vim.api.nvim_create_user_command("ColorsTweak", function()
   require("mini.colors").interactive()
 end, {})
-if not vim.g.which_key_nvim_configured then
-  require("which-key").setup({
-    preset = "helix",
-    delay = 0,
+if not vim.g.mini_clue_configured then
+  local miniclue = require("mini.clue")
+  miniclue.setup({
     triggers = {
-      { "<auto>", mode = "nxso" },
-      { "t", mode = "n" },
+      { mode = { "n", "x" }, keys = "<Leader>" },
+      { mode = "n", keys = "t" },
+      { mode = { "n", "x" }, keys = "[" },
+      { mode = { "n", "x" }, keys = "]" },
+      { mode = "i", keys = "<C-x>" },
+      { mode = { "n", "x" }, keys = "g" },
+      { mode = { "n", "x" }, keys = "'" },
+      { mode = { "n", "x" }, keys = "`" },
+      { mode = { "n", "x" }, keys = '"' },
+      { mode = { "i", "c" }, keys = "<C-r>" },
+      { mode = "n", keys = "<C-w>" },
+      { mode = { "n", "x" }, keys = "z" },
+    },
+    clues = {
+      miniclue.gen_clues.square_brackets(),
+      miniclue.gen_clues.builtin_completion(),
+      miniclue.gen_clues.g(),
+      miniclue.gen_clues.marks(),
+      miniclue.gen_clues.registers(),
+      miniclue.gen_clues.windows(),
+      miniclue.gen_clues.z(),
+      { mode = "n", keys = "t", desc = "+Buffers" },
+      { mode = { "n", "x" }, keys = "<Leader>f", desc = "+Files" },
+      { mode = "n", keys = "<Leader>m", desc = "+Markdown" },
+    },
+    window = {
+      delay = 0,
     },
   })
-  require("which-key").add({
-    { "t", group = "buffers" },
-    { "<leader>f", group = "files" },
-    { "<leader>m", group = "markdown" },
-  })
-  vim.g.which_key_nvim_configured = true
+  vim.g.mini_clue_configured = true
 end
 
 local markdown_preview = require("markdown_preview")
@@ -485,6 +503,7 @@ end, key_opts("File explorer"))
 map("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", key_opts("Markdown preview"))
 map("n", "<leader>mr", "<cmd>MarkdownPreviewRefresh<cr>", key_opts("Refresh markdown preview"))
 map("n", "<leader>ms", "<cmd>MarkdownPreviewStop<cr>", key_opts("Stop markdown preview"))
+map("n", "<leader>mm", require("mini.map").toggle, key_opts("Toggle minimap"))
 
 -- Keymaps: LSP
 map("n", "<leader>p", function()
