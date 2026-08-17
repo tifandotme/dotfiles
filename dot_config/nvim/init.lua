@@ -1,10 +1,10 @@
--- Bootstrap
+-- --------------------------------- BOOTSTRAP ---------------------------------
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 local user_group = vim.api.nvim_create_augroup("user-config", { clear = true })
 
--- Editor options
+-- ------------------------------ EDITOR OPTIONS -------------------------------
 vim.opt.termguicolors = true
 vim.opt.mouse = "a"
 vim.opt.number = true
@@ -30,7 +30,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "80,100"
 vim.opt.listchars = { space = "·", tab = "→ ", trail = "·", nbsp = "␣" }
 
--- Statusline
+-- -------------------------------- STATUSLINE ---------------------------------
 -- Cache Git status briefly; `*` means the repo has uncommitted changes.
 local git_status_cache = { root = nil, value = "", expires = 0 }
 
@@ -72,7 +72,7 @@ end
 
 vim.opt.statusline = " %f%m%r %= %{v:lua.statusline_git()}%y %l:%c %P "
 
--- Autocommands
+-- ------------------------------- AUTOCOMMANDS --------------------------------
 local visual_modes = { v = true, V = true, [string.char(22)] = true }
 vim.api.nvim_create_autocmd("ModeChanged", {
   group = user_group,
@@ -124,7 +124,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Appearance
+-- -------------------------------- APPEARANCE ---------------------------------
 local function is_macos_dark()
   if vim.fn.has("macunix") ~= 1 then
     return false
@@ -163,7 +163,7 @@ end
 local is_dark = is_macos_dark()
 apply_theme(is_dark)
 
--- Plugins
+-- ---------------------------------- PLUGINS ----------------------------------
 local function install_fff_binary()
   local ok, download = pcall(require, "fff.download")
   if ok and not vim.uv.fs_stat(download.get_binary_path()) then
@@ -197,7 +197,7 @@ vim.pack.add({
 })
 install_fff_binary()
 
--- Plugin configuration
+-- --------------------------- PLUGIN CONFIGURATION ----------------------------
 require("mini.icons").setup()
 require("mini.pick").setup({})
 require("mini.extra").setup({})
@@ -323,7 +323,7 @@ vim.api.nvim_create_autocmd("FocusGained", {
   end,
 })
 
--- Git signs
+-- --------------------------------- GIT SIGNS ---------------------------------
 require("gitsigns").setup({
   on_attach = function(bufnr)
     local gitsigns = require("gitsigns")
@@ -350,7 +350,7 @@ require("gitsigns").setup({
   end,
 })
 
--- Feature modules
+-- ------------------------------ FEATURE MODULES ------------------------------
 local buffers = require("buffers")
 
 -- Keymap helpers
@@ -493,6 +493,6 @@ map("n", "[d", function()
   vim.diagnostic.jump({ count = -1, float = true })
 end, key_opts("Previous diagnostic"))
 
--- Language tooling
+-- ----------------------------- LANGUAGE TOOLING ------------------------------
 require("lsp").setup(user_group)
 require("formatting").setup(user_group)
