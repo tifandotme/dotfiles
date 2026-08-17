@@ -204,6 +204,7 @@ vim.pack.add({
 install_fff_binary()
 require("mini.icons").setup()
 require("mini.completion").setup()
+vim.opt.completeopt = { "menuone", "noinsert", "popup" }
 local starter = require("mini.starter")
 local actions = starter.sections.builtin_actions()
 table.insert(actions, 2, {
@@ -345,9 +346,31 @@ local buffers = require("buffers")
 -- Keymaps
 local map = vim.keymap.set
 local formatting = require("formatting")
+local map_multistep = require("mini.keymap").map_multistep
 
 local function key_opts(desc)
   return { desc = desc, silent = true }
+end
+
+local function move_completion(delta, fallback)
+  if vim.fn.pumvisible() ~= 1 then
+    return fallback
+  end
+
+  local info = vim.fn.complete_info()
+  local count = #info.items
+  if count == 0 then
+    return fallback
+  end
+
+  local item = info.selected + delta
+  if item < 0 then
+    item = count - 1
+  elseif item >= count then
+    item = 0
+  end
+  vim.api.nvim_select_popupmenu_item(item, false, false, {})
+  return ""
 end
 
 local multicursor = require("multicursor-nvim")
@@ -361,6 +384,14 @@ end)
 
 -- Keymaps: general
 map("i", "jj", "<Esc>", key_opts("Exit insert mode"))
+map("i", "<C-n>", function()
+  return move_completion(1, "\14")
+end, { expr = true, replace_keycodes = true, desc = "Next completion", silent = true })
+map("i", "<C-p>", function()
+  return move_completion(-1, "\16")
+end, { expr = true, replace_keycodes = true, desc = "Previous completion", silent = true })
+map_multistep("i", "<Tab>", { "pmenu_accept" })
+map_multistep("i", "<CR>", { "pmenu_accept" })
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", key_opts("Clear search highlight"))
 map("n", "<leader>w", "<cmd>write<cr>", key_opts("Write file"))
 map("n", "<leader>r", "<cmd>source ~/.config/nvim/init.lua<cr>", key_opts("Reload config"))
@@ -387,19 +418,13 @@ map("n", "<C-l>", "<C-w>l", key_opts("Window right"))
 -- Keymaps: buffers
 -- t{char} mappings intentionally override native till-character motions.
 map("n", "tt", "<cmd>enew<cr>", key_opts("New buffer"))
-map("n", "tw", "<cmd>bdelete<cr>", key_opts("Delete buffer"))
+map("n", "tw", "<cmd>confirm bdelete<cr>", key_opts("Delete buffer"))
 map("n", "tr", buffers.open_file_for_rename, key_opts("Rename file in explorer"))
 map("n", "to", buffers.delete_other_buffers, key_opts("Delete other buffers"))
 map("n", "<leader><leader>", buffers.pick_buffer, key_opts("Pick buffer"))
 map("n", "<A-Tab>", "<C-^>", key_opts("Alternate buffer"))
 map("n", "<Tab>", "<cmd>bnext<cr>", key_opts("Next buffer"))
 map("n", "<S-Tab>", "<cmd>bprevious<cr>", key_opts("Previous buffer"))
-map("n", "<leader>bd", function()
-  if vim.bo.filetype ~= "ministarter" then
-    vim.cmd.bdelete()
-  end
-end, key_opts("Delete buffer"))
-map("n", "<leader>bo", buffers.delete_other_buffers, key_opts("Delete other buffers"))
 
 -- Keymaps: files
 map("n", "<leader>ff", function()

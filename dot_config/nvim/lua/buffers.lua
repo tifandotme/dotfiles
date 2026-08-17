@@ -107,7 +107,7 @@ local function delete_other_buffers()
   local current = vim.api.nvim_get_current_buf()
   for _, buf in ipairs(listed_buffers()) do
     if buf ~= current then
-      vim.api.nvim_buf_delete(buf, {})
+      vim.cmd(("confirm bdelete %d"):format(buf))
     end
   end
 end

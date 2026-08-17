@@ -14,6 +14,6 @@ After changing Lua files under `dot_config/nvim/`, run:
 | Format Lua       | `stylua dot_config/nvim`                                                    |
 | Check formatting | `stylua --check dot_config/nvim`                                            |
 | Static analysis  | `lua-language-server --check dot_config/nvim --checklevel Warning`          |
-| Syntax check     | `luac -p dot_config/nvim/init.lua dot_config/nvim/colors/gruber-darker.lua` |
+| Syntax check     | `luac -p dot_config/nvim/init.lua dot_config/nvim/colors/gruber-darker.lua dot_config/nvim/lua/buffers.lua dot_config/nvim/lua/formatting.lua dot_config/nvim/lua/lsp.lua` |
 | Smoke test       | `nvim --headless '+lua print("nvim-ok")' +qa`                               |
 | Chezmoi dry run  | `chezmoi apply --dry-run --force`                                           |
