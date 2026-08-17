@@ -203,6 +203,8 @@ vim.pack.add({
 })
 install_fff_binary()
 require("mini.icons").setup()
+require("mini.pick").setup({})
+require("mini.extra").setup({})
 require("mini.completion").setup({
   delay = {
     completion = 0,
@@ -230,7 +232,7 @@ table.insert(actions, 3, {
 starter.setup({
   items = {
     actions,
-    starter.sections.recent_files(5, false, true),
+    starter.sections.recent_files(5, true, true),
   },
 })
 vim.api.nvim_create_autocmd("BufDelete", {
@@ -283,19 +285,22 @@ style_tabline()
 vim.api.nvim_create_user_command("ColorsTweak", function()
   require("mini.colors").interactive()
 end, {})
-require("which-key").setup({
-  preset = "helix",
-  delay = 0,
-  triggers = {
-    { "<auto>", mode = "nxso" },
-    { "t", mode = "n" },
-  },
-})
-require("which-key").add({
-  { "<leader>b", group = "buffers" },
-  { "<leader>f", group = "files" },
-  { "<leader>m", group = "markdown" },
-})
+if not vim.g.which_key_nvim_configured then
+  require("which-key").setup({
+    preset = "helix",
+    delay = 0,
+    triggers = {
+      { "<auto>", mode = "nxso" },
+      { "t", mode = "n" },
+    },
+  })
+  require("which-key").add({
+    { "<leader>t", group = "buffers" },
+    { "<leader>f", group = "files" },
+    { "<leader>m", group = "markdown" },
+  })
+  vim.g.which_key_nvim_configured = true
+end
 
 local markdown_preview = require("markdown_preview")
 markdown_preview.setup({
@@ -380,13 +385,16 @@ local function move_completion(delta, fallback)
 end
 
 local multicursor = require("multicursor-nvim")
-multicursor.setup()
-map({ "n", "x" }, "<C-n>", function()
-  multicursor.matchAddCursor(1)
-end, key_opts("Add next matching cursor"))
-multicursor.addKeymapLayer(function(layer_map)
-  layer_map({ "n", "x" }, "<Esc>", multicursor.clearCursors)
-end)
+if not vim.g.multicursor_nvim_configured then
+  multicursor.setup()
+  map({ "n", "x" }, "<C-n>", function()
+    multicursor.matchAddCursor(1)
+  end, key_opts("Add next matching cursor"))
+  multicursor.addKeymapLayer(function(layer_map)
+    layer_map({ "n", "x" }, "<Esc>", multicursor.clearCursors)
+  end)
+  vim.g.multicursor_nvim_configured = true
+end
 
 -- Keymaps: general
 map("i", "jj", "<Esc>", key_opts("Exit insert mode"))
@@ -427,12 +435,23 @@ map("n", "tt", "<cmd>enew<cr>", key_opts("New buffer"))
 map("n", "tw", "<cmd>confirm bdelete<cr>", key_opts("Delete buffer"))
 map("n", "tr", buffers.open_file_for_rename, key_opts("Rename file in explorer"))
 map("n", "to", buffers.delete_other_buffers, key_opts("Delete other buffers"))
-map("n", "<leader><leader>", buffers.pick_buffer, key_opts("Pick buffer"))
+map("n", "<leader><leader>", function()
+  require("mini.pick").builtin.buffers()
+end, key_opts("Pick buffer"))
 map("n", "<A-Tab>", "<C-^>", key_opts("Alternate buffer"))
 map("n", "<Tab>", "<cmd>bnext<cr>", key_opts("Next buffer"))
 map("n", "<S-Tab>", "<cmd>bprevious<cr>", key_opts("Previous buffer"))
 
 -- Keymaps: files
+local function outline_symbols()
+  require("mini.extra").pickers.lsp({ scope = "document_symbol" })
+end
+
+map("n", "<D-S-o>", outline_symbols, key_opts("Find symbols in current file"))
+map("n", "<leader>o", outline_symbols, key_opts("Find symbols in current file"))
+map("n", "<leader>h", function()
+  require("mini.pick").builtin.help()
+end, key_opts("Search help"))
 map("n", "<leader>ff", function()
   require("fff").find_files()
 end, key_opts("Find files"))
