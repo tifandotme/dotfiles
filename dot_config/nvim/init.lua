@@ -203,7 +203,13 @@ vim.pack.add({
 })
 install_fff_binary()
 require("mini.icons").setup()
-require("mini.completion").setup()
+require("mini.completion").setup({
+  delay = {
+    completion = 0,
+    info = 100,
+    signature = 50,
+  },
+})
 vim.opt.completeopt = { "menuone", "noinsert", "popup" }
 local starter = require("mini.starter")
 local actions = starter.sections.builtin_actions()
