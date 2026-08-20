@@ -37,10 +37,10 @@ export def start [] {
         cargo install --git https://github.com/nushell/nufmt --locked
     }
 
-    # if (which gh | is-not-empty) {
-    #   print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)gh(ansi reset) extensions"
-    #   gh extension upgrade --all
-    # }
+    if (which gh | is-not-empty) {
+        print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)gh(ansi reset) extensions"
+        gh extension upgrade --all
+    }
 
     if (which ya | is-not-empty) {
         print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)yazi(ansi reset) packages"

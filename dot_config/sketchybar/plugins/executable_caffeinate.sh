@@ -1,12 +1,9 @@
 #!/bin/bash
 
-# Set CONFIG_DIR with fallback if not already set
-CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
 # shellcheck disable=SC1091
 source "$HOME/.config/theme/palette.sh"
 
-_caffeinate_lib="${XDG_CONFIG_HOME:-$HOME/.config}/raycast/scripts/caffeinate_lib.sh"
-[ -f "$_caffeinate_lib" ] || _caffeinate_lib="$CONFIG_DIR/../raycast/scripts/caffeinate_lib.sh"
+_caffeinate_lib="$CONFIG_DIR/../raycast/scripts/caffeinate_lib.sh"
 # shellcheck source=../../raycast/scripts/caffeinate_lib.sh
 # shellcheck disable=SC1091
 . "$_caffeinate_lib"

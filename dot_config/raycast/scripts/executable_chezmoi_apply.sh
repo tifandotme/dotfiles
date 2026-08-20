@@ -8,7 +8,7 @@
 # Optional parameters:
 # @raycast.icon 🏠
 
-if chezmoi apply; then
+if /opt/homebrew/bin/chezmoi apply; then
   echo "Chezmoi applied successfully"
 else
   echo "Chezmoi apply failed"

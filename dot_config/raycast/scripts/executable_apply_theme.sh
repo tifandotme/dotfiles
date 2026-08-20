@@ -9,4 +9,4 @@
 # @raycast.icon 🎨
 # @raycast.argument1 { "type": "text", "placeholder": "Optional hex color", "optional": true }
 
-exec bun "$HOME/.config/theme/apply-theme.ts" "$@"
+exec /opt/homebrew/bin/bun "$HOME/.config/theme/apply-theme.ts" "$@"

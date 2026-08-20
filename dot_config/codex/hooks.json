@@ -44,9 +44,9 @@
       {
         "hooks": [
           {
-            "type": "command",
             "command": "bash -lc 'exec \"$HOME/.local/bin/plannotator\"'",
-            "timeout": 345600
+            "timeout": 345600,
+            "type": "command"
           }
         ]
       }
@@ -64,3 +64,4 @@
     ]
   }
 }
+

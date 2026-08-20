@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 caffeinate_pid() {
-  pgrep -f "caffeinate -id" | head -1
+  /usr/bin/pgrep -f "caffeinate -id" | /usr/bin/head -1
 }
 
 caffeinate_start() {
-  nohup caffeinate -id </dev/null >/dev/null 2>&1 &
+  /usr/bin/nohup /usr/bin/caffeinate -id </dev/null >/dev/null 2>&1 &
   disown
 }
 

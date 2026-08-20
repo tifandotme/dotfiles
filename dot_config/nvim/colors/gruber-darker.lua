@@ -1,3 +1,4 @@
+-- ---------------------------------- PALETTE ----------------------------------
 local c = {
   bg0 = "#101010",
   bg1 = "#181818",
@@ -18,10 +19,12 @@ local c = {
   purple = "#9e95c7",
 }
 
+-- ---------------------------------- HELPERS ----------------------------------
 local function hi(group, opts)
   vim.api.nvim_set_hl(0, group, opts)
 end
 
+-- ----------------------------------- SETUP -----------------------------------
 vim.cmd("highlight clear")
 if vim.fn.exists("syntax_on") == 1 then
   vim.cmd("syntax reset")
@@ -30,6 +33,7 @@ end
 vim.g.colors_name = "gruber-darker"
 vim.o.termguicolors = true
 
+-- ------------------------------- UI HIGHLIGHTS -------------------------------
 hi("Normal", { fg = c.fg1, bg = c.bg1 })
 hi("NormalFloat", { fg = c.fg1, bg = c.bg2 })
 hi("FloatBorder", { fg = c.bg4, bg = c.bg2 })
@@ -51,6 +55,7 @@ hi("Directory", { fg = c.blue })
 hi("NonText", { fg = c.fg3 })
 hi("SpecialKey", { fg = c.fg3 })
 
+-- ----------------------------- SYNTAX HIGHLIGHTS -----------------------------
 hi("Comment", { fg = c.orange })
 hi("Constant", { fg = c.cyan, bold = true })
 hi("String", { fg = c.green, italic = true })
@@ -76,6 +81,7 @@ hi("Underlined", { fg = c.green, underline = true })
 hi("Error", { fg = c.red })
 hi("Todo", { fg = c.yellow, bg = c.bg2, bold = true })
 
+-- -------------------------------- DIAGNOSTICS --------------------------------
 hi("DiagnosticError", { fg = c.red })
 hi("DiagnosticWarn", { fg = c.yellow_dim })
 hi("DiagnosticInfo", { fg = c.cyan })
@@ -85,6 +91,7 @@ hi("DiagnosticUnderlineWarn", { sp = c.yellow_dim, undercurl = true })
 hi("DiagnosticUnderlineInfo", { sp = c.cyan, undercurl = true })
 hi("DiagnosticUnderlineHint", { sp = c.fg2, undercurl = true })
 
+-- --------------------------- TREESITTER HIGHLIGHTS ---------------------------
 hi("@comment", { link = "Comment" })
 hi("@string", { link = "String" })
 hi("@string.escape", { fg = c.green, italic = true })
@@ -107,6 +114,7 @@ hi("@markup.italic", { fg = c.blue })
 hi("@markup.link", { fg = c.green, italic = true })
 hi("@markup.link.url", { fg = c.purple })
 
+-- ------------------------------ TERMINAL COLORS ------------------------------
 vim.g.terminal_color_0 = "#000000"
 vim.g.terminal_color_1 = "#ff6c60"
 vim.g.terminal_color_2 = "#a8ff60"

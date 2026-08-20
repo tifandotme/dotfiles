@@ -105,7 +105,7 @@ $env.config = {
         {
             name: fzf_file_menu
             only_buffer_difference: true
-            marker: "# "
+            marker: $"(ansi green_bold)FILES > (ansi reset) "
             type: {layout: list, page_size: 20}
             style: {
                 text: "green"
@@ -122,7 +122,7 @@ $env.config = {
         {
             name: fzf_dir_menu
             only_buffer_difference: true
-            marker: "# "
+            marker: $"(ansi green_bold)DIRS > (ansi reset) "
             type: {layout: list, page_size: 20}
             style: {
                 text: "green"

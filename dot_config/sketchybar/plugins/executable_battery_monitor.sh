@@ -3,7 +3,6 @@
 # Battery monitor script that detects battery changes and calls battery.sh
 # This avoids duplicating the display logic
 
-CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
 # shellcheck disable=SC1091
 source "$HOME/.config/theme/palette.sh"
 

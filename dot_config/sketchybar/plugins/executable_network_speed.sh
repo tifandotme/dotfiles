@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-NAME="${NAME:-network_speed}"
 STATE_FILE="${TMPDIR:-/tmp}/sketchybar_network_speed_${NAME}"
 
 # shellcheck disable=SC1091

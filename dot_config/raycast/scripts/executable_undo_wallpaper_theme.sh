@@ -8,4 +8,4 @@
 # Optional parameters:
 # @raycast.icon ↩️
 
-exec bun "$HOME/.config/theme/apply-theme.ts" --undo
+exec /opt/homebrew/bin/bun "$HOME/.config/theme/apply-theme.ts" --undo

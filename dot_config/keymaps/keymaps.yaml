@@ -70,8 +70,6 @@ keymaps:
         description: Open fzf directory menu
       - key: ctrl+r
         description: Open fzf history menu
-      - key: ctrl+b
-        description: Open project
       # Editing
       - key: alt+enter
         description: Insert newline
@@ -84,6 +82,11 @@ keymaps:
       - key: i
         description: Enter vi insert mode
         mode: vi_normal
+
+  - program: herdr
+    bindings:
+      - key: cmd+b
+        description: Open project
 
   - program: claude-code
     bindings:
