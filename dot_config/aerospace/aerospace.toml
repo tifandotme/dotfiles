@@ -74,14 +74,14 @@ alt-shift-0 = "balance-sizes"
 # alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 cmd-backtick = "workspace 0_misc"
 cmd-1 = "workspace 1_personal"
-cmd-2 = "workspace 2_work"  # web/electron dev server, android emulator
-cmd-3 = "workspace 3_editor"
+cmd-2 = "workspace 2_work"  # Helium Work profile
+cmd-3 = "workspace 3_dev"
 cmd-4 = "workspace 4_terminal"
 cmd-5 = "workspace 5_notes"
 # corne (conflict, comment for now)
 # ctrl-a = 'workspace 1_personal'
 # ctrl-s = 'workspace 2_work' # Electron/Android Studio development, or else
-# ctrl-d = 'workspace 3_editor'
+# ctrl-d = 'workspace 3_dev'
 # ctrl-f = 'workspace 4_terminal'
 # ctrl-g = 'workspace 5_notes'
 # alt-w = [
@@ -91,13 +91,13 @@ cmd-5 = "workspace 5_notes"
 cmd-shift-backtick = ["move-node-to-workspace 0_misc", "workspace 0_misc"]
 cmd-shift-1 = ["move-node-to-workspace 1_personal", "workspace 1_personal"]
 cmd-shift-2 = ["move-node-to-workspace 2_work", "workspace 2_work"]
-cmd-shift-3 = ["move-node-to-workspace 3_editor", "workspace 3_editor"]
+cmd-shift-3 = ["move-node-to-workspace 3_dev", "workspace 3_dev"]
 cmd-shift-4 = ["move-node-to-workspace 4_terminal", "workspace 4_terminal"]
 cmd-shift-5 = ["move-node-to-workspace 5_notes", "workspace 5_notes"]
 # corne (nah, confict)
 # ctrl-shift-a = ['move-node-to-workspace 1_personal', 'workspace 1_personal']
 # ctrl-shift-s = ['move-node-to-workspace 2_projects', 'workspace 2_projects']
-# ctrl-shift-d = ['move-node-to-workspace 3_editor', 'workspace 3_editor']
+# ctrl-shift-d = ['move-node-to-workspace 3_dev', 'workspace 3_dev']
 # ctrl-shift-f = ['move-node-to-workspace 4_terminal', 'workspace 4_terminal']
 # ctrl-shift-g = ['move-node-to-workspace 5_notes', 'workspace 5_notes']
 # Change modes
@@ -144,51 +144,44 @@ enter = ["mode main", "exec-and-forget sketchybar --trigger hide_message"]
 if.app-id = "net.imput.helium"
 run = ["move-node-to-workspace 1_personal", "layout tiling"]
 
-[[on-window-detected]]
-if.app-id = "com.apple.Safari"
-run = "move-node-to-workspace 1_personal"
-
-[[on-window-detected]]
-if.app-id = "org.chromium.Chromium"
-run = "move-node-to-workspace 1_personal"
-
-[[on-window-detected]]
-if.app-id = "org.mozilla.firefox"
-run = "move-node-to-workspace 1_personal"
-
 # Move to 2_work workspace
 [[on-window-detected]]
+if.app-id = "net.imput.helium.work"
+run = ["move-node-to-workspace 2_work", "layout tiling"]
+
+# Move to 3_dev workspace
+[[on-window-detected]]
 if.app-id = "com.github.Electron"
-run = "move-node-to-workspace 2_work"
-
-[[on-window-detected]]
-if.app-id = "com.utmapp.UTM"
-run = "move-node-to-workspace 2_work"
-
-[[on-window-detected]]
-if.app-id = "com.postmanlabs.mac"
-run = "move-node-to-workspace 2_work"
+run = "move-node-to-workspace 3_dev"
 
 [[on-window-detected]]
 if.app-id = "net.imput.helium.debug"
-run = ["move-node-to-workspace 2_work", "layout tiling"]
+run = ["move-node-to-workspace 3_dev", "layout tiling"]
 
-# Move to 3_editor workspace
 [[on-window-detected]]
 if.app-id = "com.microsoft.VSCode"
-run = "move-node-to-workspace 3_editor"
+run = "move-node-to-workspace 3_dev"
 
 [[on-window-detected]]
 if.app-id = "dev.zed.Zed"
-run = "move-node-to-workspace 3_editor"
+run = "move-node-to-workspace 3_dev"
 
 [[on-window-detected]]
 if.app-id = "com.todesktop.230313mzl4w4u92"  # Cursor
-run = "move-node-to-workspace 3_editor"
+run = "move-node-to-workspace 3_dev"
+
+# Database clients
+[[on-window-detected]]
+if.app-id = "org.jkiss.dbeaver.core.product"
+run = "move-node-to-workspace 3_dev"
 
 [[on-window-detected]]
-if.app-id = "com.anthropic.claudefordesktop"
-run = "move-node-to-workspace 3_editor"
+if.app-id = "org.RedisLabs.RedisInsight-V2"
+run = "move-node-to-workspace 3_dev"
+
+[[on-window-detected]]
+if.app-id = "com.tinyapp.TablePlus"
+run = "move-node-to-workspace 3_dev"
 
 # Move to 4_terminal workspace
 [[on-window-detected]]
@@ -209,13 +202,22 @@ if.app-id = "club.refactoring.tolaria"
 run = "move-node-to-workspace 5_notes"
 
 # Move to 0_misc workspace
-# Messaging
+# AI assistants
 [[on-window-detected]]
-if.app-id = "net.whatsapp.WhatsApp"
+if.app-id = "com.anthropic.claudefordesktop"
 run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
-if.app-id = "ru.keepcoder.Telegram"
+if.app-id = "com.openai.codex"  # ChatGPT
+run = "move-node-to-workspace 0_misc"
+
+[[on-window-detected]]
+if.app-id = "com.google.GeminiMacOS"
+run = "move-node-to-workspace 0_misc"
+
+# Messaging
+[[on-window-detected]]
+if.app-id = "net.whatsapp.WhatsApp"
 run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
@@ -223,16 +225,8 @@ if.app-id = "com.hnc.Discord"
 run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
-if.app-id = "app.legcord.Legcord"
-run = "move-node-to-workspace 0_misc"
-
-[[on-window-detected]]
-if.app-id = "com.apple.Safari.WebApp.2ADBBBBB-FD36-42E8-8053-EC3A72FBAC90"
-run = "move-node-to-workspace 0_misc"
-
-[[on-window-detected]]
 if.app-id = "com.colliderli.iina"
-run = "move-node-to-workspace 0_misc"
+run = ["move-node-to-workspace 0_misc", "layout floating"]
 
 [[on-window-detected]]
 if.app-id = "com.tinyspeck.slackmacgap"
@@ -254,26 +248,18 @@ run = "move-node-to-workspace 0_misc"
 if.app-id = "com.apple.Music"
 run = "move-node-to-workspace 0_misc"
 
+[[on-window-detected]]
+if.app-id = "org.m0k.transmission"
+run = "move-node-to-workspace 0_misc"
+
 # Productivity
 [[on-window-detected]]
 if.app-id = "notion.id"
 run = "move-node-to-workspace 0_misc"
 
-[[on-window-detected]]
-if.app-id = "com.clickup.desktop-app"
-run = "move-node-to-workspace 0_misc"
-
-[[on-window-detected]]
-if.app-id = "com.tinyspeck.slackmacgap"
-run = "move-node-to-workspace 0_misc"
-
-[[on-window-detected]]
-if.app-id = "com.apple.Safari.WebApp.792C0494-7180-49DF-BB30-AA6B7C4EFDFB"  # Actual.app
-run = "move-node-to-workspace 0_misc"
-
 # Windows that should float
 [[on-window-detected]]
-if.app-id = "org.localsend.localsendApp"
+if.app-id = "com.pais.handy"
 run = "layout floating"
 
 [[on-window-detected]]
@@ -282,10 +268,6 @@ run = "layout floating"
 
 [[on-window-detected]]
 if.app-id = "net.mullvad.vpn"
-run = "layout floating"
-
-[[on-window-detected]]
-if.app-id = "com.colliderli.iina"
 run = "layout floating"
 
 [[on-window-detected]]

@@ -51,6 +51,7 @@
       }
     }
   },
+  "outputStyle": "Concise",
   "feedbackSurveyRate": 0,
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
@@ -68,7 +69,7 @@
   "preferredNotifChannel": "ghostty",
   "autoCompactEnabled": false,
   "terminalProgressBarEnabled": false,
-  "remoteControlAtStartup": true,
+  "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": false,

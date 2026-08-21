@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
-# UV tools hash: # {{ list "tavily-cli" "openai-whisper" | join "\n" | sha256sum }}
-
 if command -v uv &>/dev/null; then
 	desired_uv_tools=(
 		# {{ if eq .chezmoi.os "darwin" -}}

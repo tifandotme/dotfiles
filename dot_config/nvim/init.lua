@@ -199,6 +199,7 @@ install_fff_binary()
 
 -- --------------------------- PLUGIN CONFIGURATION ----------------------------
 require("mini.icons").setup()
+require("mini.surround").setup({})
 require("mini.pick").setup({})
 require("mini.extra").setup({})
 require("mini.completion").setup({
@@ -260,7 +261,24 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 require("mini.tabline").setup({})
-require("mini.map").setup({})
+local minmap = require("mini.map")
+minmap.setup({
+  integrations = {
+    minmap.gen_integration.builtin_search(),
+    minmap.gen_integration.diagnostic(),
+    minmap.gen_integration.gitsigns(),
+  },
+})
+local function style_minimap()
+  local normal_float = vim.api.nvim_get_hl(0, { name = "NormalFloat", link = false })
+  local muted = vim.api.nvim_get_hl(0, { name = "SpecialKey", link = false })
+  vim.api.nvim_set_hl(0, "MiniMapNormal", {
+    fg = muted.fg or normal_float.fg,
+    bg = normal_float.bg,
+  })
+end
+
+style_minimap()
 style_tabline()
 vim.api.nvim_create_user_command("ColorsTweak", function()
   require("mini.colors").interactive()
@@ -296,30 +314,66 @@ if not vim.g.mini_clue_configured then
     },
     window = {
       delay = 0,
+      config = {
+        width = 50,
+      },
     },
   })
   vim.g.mini_clue_configured = true
 end
+
+local function style_miniclue_next_key()
+  if not is_dark then
+    local key_color = "#3c3836"
+    vim.api.nvim_set_hl(0, "MiniClueNextKey", { fg = key_color, bold = true })
+    vim.api.nvim_set_hl(0, "MiniClueSeparator", { fg = key_color })
+  end
+end
+
+style_miniclue_next_key()
 
 local markdown_preview = require("markdown_preview")
 markdown_preview.setup({
   default_theme = is_dark and "dark" or "light",
 })
 
+local function refresh_theme()
+  local next_is_dark = is_macos_dark()
+  if next_is_dark == is_dark then
+    return
+  end
+
+  is_dark = next_is_dark
+  apply_theme(is_dark)
+  markdown_preview.setup({
+    default_theme = is_dark and "dark" or "light",
+  })
+  style_tabline()
+  style_minimap()
+  style_miniclue_next_key()
+end
+
 vim.api.nvim_create_autocmd("FocusGained", {
   group = user_group,
-  callback = function()
-    local next_is_dark = is_macos_dark()
-    if next_is_dark == is_dark then
-      return
-    end
+  callback = refresh_theme,
+})
 
-    is_dark = next_is_dark
-    apply_theme(is_dark)
-    markdown_preview.setup({
-      default_theme = is_dark and "dark" or "light",
-    })
-    style_tabline()
+local appearance_watcher = vim.uv.new_fs_event()
+appearance_watcher:start(
+  vim.fn.expand("~/.config/theme"),
+  {},
+  vim.schedule_wrap(function(err, filename)
+    if not err and filename == "appearance.changed" then
+      refresh_theme()
+    end
+  end)
+)
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  group = user_group,
+  callback = function()
+    appearance_watcher:stop()
+    appearance_watcher:close()
   end,
 })
 
