@@ -145,7 +145,9 @@ end
 local function style_tabline()
   local active_tabline = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
   active_tabline.bold = true
+  ---@diagnostic disable-next-line: param-type-mismatch
   vim.api.nvim_set_hl(0, "MiniTablineCurrent", active_tabline)
+  ---@diagnostic disable-next-line: param-type-mismatch
   vim.api.nvim_set_hl(0, "MiniTablineModifiedCurrent", active_tabline)
   for _, group in ipairs({
     "MiniTablineVisible",
@@ -378,23 +380,25 @@ vim.api.nvim_create_autocmd("FocusGained", {
 })
 
 local appearance_watcher = vim.uv.new_fs_event()
-appearance_watcher:start(
-  vim.fn.expand("~/.config/theme"),
-  {},
-  vim.schedule_wrap(function(err, filename)
-    if not err and filename == "appearance.changed" then
-      refresh_theme()
-    end
-  end)
-)
+if appearance_watcher then
+  appearance_watcher:start(
+    vim.fn.expand("~/.config/theme"),
+    {},
+    vim.schedule_wrap(function(err, filename)
+      if not err and filename == "appearance.changed" then
+        refresh_theme()
+      end
+    end)
+  )
 
-vim.api.nvim_create_autocmd("VimLeavePre", {
-  group = user_group,
-  callback = function()
-    appearance_watcher:stop()
-    appearance_watcher:close()
-  end,
-})
+  vim.api.nvim_create_autocmd("VimLeavePre", {
+    group = user_group,
+    callback = function()
+      appearance_watcher:stop()
+      appearance_watcher:close()
+    end,
+  })
+end
 
 -- ------------------------------ FEATURE MODULES ------------------------------
 local buffers = require("buffers")

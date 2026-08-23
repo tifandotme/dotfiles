@@ -53,12 +53,15 @@ function M.setup(user_group)
     root_markers = { ".stylua.toml", "stylua.toml", ".git" },
   })
 
+  local runtime_library = vim.tbl_filter(function(path)
+    return path ~= vim.fn.stdpath("config")
+  end, vim.api.nvim_get_runtime_file("", true))
   vim.lsp.config("lua_ls", {
     settings = {
       Lua = {
         runtime = { version = "LuaJIT" },
         diagnostics = { globals = { "vim" } },
-        workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+        workspace = { library = runtime_library },
       },
     },
   })
