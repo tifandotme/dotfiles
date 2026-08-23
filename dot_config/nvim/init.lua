@@ -198,6 +198,7 @@ install_fff_binary()
 
 -- --------------------------- PLUGIN CONFIGURATION ----------------------------
 require("mini.icons").setup()
+require("mini.ai").setup()
 require("mini.surround").setup({})
 require("mini.pick").setup({})
 require("mini.extra").setup({})
@@ -277,6 +278,7 @@ minidiff.setup({
 })
 require("mini.bracketed").setup({
   comment = { suffix = "/" },
+  conflict = { suffix = "" },
 })
 local minmap = require("mini.map")
 minmap.setup({
@@ -405,6 +407,20 @@ local map_multistep = require("mini.keymap").map_multistep
 local function key_opts(desc)
   return { desc = desc, silent = true }
 end
+
+local function select_syntax_node(target)
+  if vim.fn.mode() == "n" then
+    vim.cmd.normal({ "v", bang = true })
+  end
+  vim.treesitter.select(target, vim.v.count1)
+end
+
+map({ "n", "x" }, "[x", function()
+  select_syntax_node("parent")
+end, key_opts("Select larger syntax node"))
+map("x", "]x", function()
+  select_syntax_node("child")
+end, key_opts("Select smaller syntax node"))
 
 map("n", "<leader>hs", function()
   return minidiff.operator("apply") .. "ih"
