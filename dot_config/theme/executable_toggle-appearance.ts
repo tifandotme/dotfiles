@@ -112,13 +112,7 @@ function updateSourceFiles(isDark: boolean) {
   );
 }
 
-function applyAppearance() {
-  const home = process.env.HOME;
-
-  if (!home) {
-    throw new Error("HOME is not set");
-  }
-
+function applyAppearance(home: string) {
   run("chezmoi", [
     "apply",
     "--force",
@@ -179,11 +173,18 @@ function reloadedAgentMessage(count: number) {
 }
 
 function main() {
+  const home = process.env.HOME;
+
+  if (!home) {
+    throw new Error("HOME is not set");
+  }
+
   const isDark = !getMacAppearance();
 
   updateSourceFiles(isDark);
-  applyAppearance();
+  applyAppearance(home);
   setMacAppearance(isDark);
+  writeFileSync(join(home, ".config", "theme", "appearance.changed"), `${Date.now()}\n`);
   optionalRun("herdr", ["server", "reload-config"]);
   const reloadedPiAgents = reloadIdlePiAgents();
 

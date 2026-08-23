@@ -234,8 +234,8 @@ table.insert(actions, 3, {
 })
 starter.setup({
   items = {
-    actions,
     starter.sections.recent_files(5, true, true),
+    actions,
   },
 })
 require("mini.files").setup({
