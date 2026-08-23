@@ -400,7 +400,7 @@ require("gitsigns").setup({
       end
     end, git_opts("Previous hunk"))
     vim.keymap.set("n", "dp", gitsigns.reset_hunk, git_opts("Reset hunk"))
-    vim.keymap.set("n", "do", gitsigns.preview_hunk, git_opts("Preview hunk"))
+    vim.keymap.set("n", "do", gitsigns.preview_hunk_inline, git_opts("Preview hunk"))
   end,
 })
 
