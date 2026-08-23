@@ -398,6 +398,7 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 
 -- ------------------------------ FEATURE MODULES ------------------------------
 local buffers = require("buffers")
+require("keymaps").setup()
 
 -- Keymap helpers
 local map = vim.keymap.set
