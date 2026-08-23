@@ -189,7 +189,6 @@ vim.api.nvim_create_autocmd("PackChanged", {
 vim.pack.add({
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/dmtrKovalenko/fff.nvim",
-  "https://github.com/lewis6991/gitsigns.nvim",
   "https://github.com/selimacerbas/live-server.nvim",
   "https://github.com/selimacerbas/markdown-preview.nvim",
   "https://github.com/jake-stewart/multicursor.nvim",
@@ -219,23 +218,23 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.opt.completeopt = { "menuone", "noinsert", "popup" }
 local starter = require("mini.starter")
 local fff = require("fff")
-local actions = starter.sections.builtin_actions()
-table.insert(actions, 2, {
-  name = "File explorer",
-  action = function()
-    require("mini.files").open()
-  end,
-  section = "Builtin actions",
-})
-table.insert(actions, 3, {
-  name = "Find files",
-  action = fff.find_files,
-  section = "Builtin actions",
-})
+-- local actions = starter.sections.builtin_actions()
+-- table.insert(actions, 2, {
+--   name = "File explorer",
+--   action = function()
+--     require("mini.files").open()
+--   end,
+--   section = "Builtin actions",
+-- })
+-- table.insert(actions, 3, {
+--   name = "Find files",
+--   action = fff.find_files,
+--   section = "Builtin actions",
+-- })
 starter.setup({
   items = {
-    starter.sections.recent_files(5, true, true),
-    actions,
+    starter.sections.recent_files(5, true, false),
+    -- actions,
   },
 })
 require("mini.files").setup({
@@ -261,12 +260,30 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 require("mini.tabline").setup({})
+local minidiff = require("mini.diff")
+minidiff.setup({
+  view = {
+    style = "sign",
+  },
+  mappings = {
+    apply = "",
+    reset = "",
+    textobject = "ih",
+    goto_first = "[C",
+    goto_prev = "[c",
+    goto_next = "]c",
+    goto_last = "]C",
+  },
+})
+require("mini.bracketed").setup({
+  comment = { suffix = "/" },
+})
 local minmap = require("mini.map")
 minmap.setup({
   integrations = {
     minmap.gen_integration.builtin_search(),
     minmap.gen_integration.diagnostic(),
-    minmap.gen_integration.gitsigns(),
+    minmap.gen_integration.diff(),
   },
 })
 local function style_minimap()
@@ -377,33 +394,6 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
   end,
 })
 
--- --------------------------------- GIT SIGNS ---------------------------------
-require("gitsigns").setup({
-  on_attach = function(bufnr)
-    local gitsigns = require("gitsigns")
-    local function git_opts(desc)
-      return { buffer = bufnr, desc = desc, silent = true }
-    end
-
-    vim.keymap.set("n", "]c", function()
-      if vim.wo.diff then
-        vim.cmd.normal({ "]c", bang = true })
-      else
-        gitsigns.nav_hunk("next")
-      end
-    end, git_opts("Next hunk"))
-    vim.keymap.set("n", "[c", function()
-      if vim.wo.diff then
-        vim.cmd.normal({ "[c", bang = true })
-      else
-        gitsigns.nav_hunk("prev")
-      end
-    end, git_opts("Previous hunk"))
-    vim.keymap.set("n", "dp", gitsigns.reset_hunk, git_opts("Reset hunk"))
-    vim.keymap.set("n", "do", gitsigns.preview_hunk_inline, git_opts("Preview hunk"))
-  end,
-})
-
 -- ------------------------------ FEATURE MODULES ------------------------------
 local buffers = require("buffers")
 
@@ -415,6 +405,20 @@ local map_multistep = require("mini.keymap").map_multistep
 local function key_opts(desc)
   return { desc = desc, silent = true }
 end
+
+map("n", "<leader>hs", function()
+  return minidiff.operator("apply") .. "ih"
+end, { expr = true, remap = true, desc = "Stage hunk", silent = true })
+map("x", "<leader>hs", function()
+  return minidiff.operator("apply")
+end, { expr = true, remap = true, desc = "Stage selected hunks", silent = true })
+map("n", "dp", function()
+  return minidiff.operator("reset") .. "ih"
+end, { expr = true, remap = true, desc = "Reset hunk", silent = true })
+map("x", "dp", function()
+  return minidiff.operator("reset")
+end, { expr = true, remap = true, desc = "Reset selected hunks", silent = true })
+map("n", "do", minidiff.toggle_overlay, key_opts("Toggle diff overlay"))
 
 local function move_completion(delta, fallback)
   if vim.fn.pumvisible() ~= 1 then
@@ -465,7 +469,7 @@ map("n", "<leader>w", "<cmd>write<cr>", key_opts("Write file"))
 map("n", "<leader>r", "<cmd>source ~/.config/nvim/init.lua<cr>", key_opts("Reload config"))
 map("n", "<leader>c", "gcc", { remap = true, desc = "Toggle comment", silent = true })
 map("x", "<leader>c", "gc", { remap = true, desc = "Toggle comments", silent = true })
-map("n", "U", "<C-r>", key_opts("Redo"))
+map("n", "U", "<C-r><cmd>lua MiniBracketed.register_undo_state()<cr>", key_opts("Redo"))
 map({ "n", "v" }, "gh", "0", key_opts("Line start"))
 map({ "n", "v" }, "gl", "$", key_opts("Line end"))
 map("n", "ge", "G", key_opts("File end"))
@@ -540,13 +544,6 @@ map("n", "<leader>p", function()
 end, key_opts("Format file"))
 map("n", "<leader>k", vim.lsp.buf.hover, key_opts("Hover"))
 map("n", "gd", vim.lsp.buf.definition, key_opts("Go to definition"))
-map("n", "]d", function()
-  vim.diagnostic.jump({ count = 1, float = true })
-end, key_opts("Next diagnostic"))
-map("n", "[d", function()
-  vim.diagnostic.jump({ count = -1, float = true })
-end, key_opts("Previous diagnostic"))
-
 -- ----------------------------- LANGUAGE TOOLING ------------------------------
 require("lsp").setup(user_group)
 require("formatting").setup(user_group)
