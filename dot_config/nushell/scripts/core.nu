@@ -146,8 +146,6 @@ def --wrapped pi [...args] {
         ["--mcp-config" $mcp_config] ++ $args
     }
 
-    # pi-code-previews: avoid read/grep tool conflicts with pi-fff.
-    # with-env {CODE_PREVIEW_TOOLS: "bash,write,edit,find,ls"} {
     run-external (__external pi) ...$pi_args
 }
 
