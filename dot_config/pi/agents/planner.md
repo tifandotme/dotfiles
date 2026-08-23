@@ -1,4 +1,4 @@
 ---
-name: worker
+name: planner
 disable-model-invocation: true
 ---
