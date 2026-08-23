@@ -62,13 +62,13 @@ def --wrapped nvim [...args] {
     }
 }
 
-alias v = nvim
+alias vim = nvim
 
-def --wrapped vg [...args] {
+def --wrapped nvimg [...args] {
     let git_root_result = git rev-parse --show-toplevel | complete
 
     if $git_root_result.exit_code != 0 {
-        print -e "vg: not inside a git repository"
+        print -e "nvimg: not inside a git repository"
         return
     }
 
@@ -83,8 +83,10 @@ def --wrapped vg [...args] {
     }
 }
 
+alias vimg = nvimg
+
 def --wrapped t [...args] {
-    herdr-wrap --tab "tuxedo" {
+    herdr-wrap "tuxedo" {
         ^tuxedo ...$args
     }
 }

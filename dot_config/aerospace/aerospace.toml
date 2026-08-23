@@ -155,7 +155,7 @@ if.app-id = "com.github.Electron"
 run = "move-node-to-workspace 3_dev"
 
 [[on-window-detected]]
-if.app-id = "net.imput.helium.debug"
+if.app-id = "net.imput.helium.foragents"
 run = ["move-node-to-workspace 3_dev", "layout tiling"]
 
 [[on-window-detected]]
@@ -202,6 +202,11 @@ if.app-id = "club.refactoring.tolaria"
 run = "move-node-to-workspace 5_notes"
 
 # Move to 0_misc workspace
+# Anonymous browser
+[[on-window-detected]]
+if.app-id = "net.imput.helium.extra"
+run = ["move-node-to-workspace 0_misc", "layout tiling"]
+
 # AI assistants
 [[on-window-detected]]
 if.app-id = "com.anthropic.claudefordesktop"
@@ -230,7 +235,7 @@ run = ["move-node-to-workspace 0_misc", "layout floating"]
 
 [[on-window-detected]]
 if.app-id = "com.tinyspeck.slackmacgap"
-run = "move-node-to-workspace 0_misc"
+run = "move-node-to-workspace 2_work"
 
 # Document viewers
 # [[on-window-detected]]

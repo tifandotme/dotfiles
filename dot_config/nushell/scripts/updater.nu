@@ -96,6 +96,26 @@ export def start [] {
         print $"\n(ansi green_bold)==>(ansi reset) Updating (ansi green)vim.pack(ansi reset) packages"
         ^nvim --headless -c 'lua vim.pack.update(nil, { force = true })' -c 'qa!'
     }
+
+    if ($nu.os-info.name == "macos") and (which setup-helium | is-not-empty) {
+        for instance in [agents work extra] {
+            print $"\n(ansi green_bold)==>(ansi reset) Syncing (ansi green)Helium ($instance)(ansi reset)"
+            let result = do { ^setup-helium $instance } | complete
+            let output = $result.stdout | str trim
+            let error = $result.stderr | str trim
+
+            if $output != "" {
+                print $output
+            }
+            if $result.exit_code != 0 {
+                if $error == "" {
+                    print $"(ansi yellow)↷(ansi reset) Skipping Helium ($instance)"
+                } else {
+                    print $"(ansi yellow)↷(ansi reset) Skipping Helium ($instance): ($error)"
+                }
+            }
+        }
+    }
 }
 
 # Clean caches and uninstall unused packages (do this rarely)

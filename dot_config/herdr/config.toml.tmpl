@@ -47,6 +47,14 @@ height = "90%"
 description = "open worktree picker"
 
 [[keys.command]]
+key = "super+shift+c"
+type = "popup"
+command = "nu -c 'source ~/.config/nushell/scripts/chezmoi.nu; chezmoi-apply-popup'"
+width = "90%"
+height = "90%"
+description = "apply chezmoi changes"
+
+[[keys.command]]
 key = "prefix+l"
 type = "popup"
 command = "lazygit"

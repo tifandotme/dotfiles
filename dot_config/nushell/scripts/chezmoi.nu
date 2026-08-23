@@ -85,6 +85,16 @@ export def --env --wrapped main [...args: string] {
     ^chezmoi ...$args
 }
 
+export def chezmoi-apply-popup [] {
+    try {
+        ^chezmoi apply
+    } finally {
+        print ""
+        print "Press any key to close..."
+        input listen --types [key] | ignore
+    }
+}
+
 # Open lazygit in chezmoi source directory
 export def "lzg" [] {
     lazygit -p (chezmoi source-path)
