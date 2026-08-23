@@ -43,10 +43,13 @@ export def --env herdr-wrap [label: string, command: closure] {
         do $command
     } finally {
         if ($env.HERDR_PANE_ID? | is-not-empty) {
-            if ($previous_pane_label | is-empty) {
-                ^herdr pane rename $env.HERDR_PANE_ID --clear | ignore
-            } else {
-                ^herdr pane rename $env.HERDR_PANE_ID $previous_pane_label | ignore
+            let current_pane_label = (__herdr_current_pane_label)
+            if $current_pane_label == $label {
+                if ($previous_pane_label | is-empty) {
+                    ^herdr pane rename $env.HERDR_PANE_ID --clear | ignore
+                } else {
+                    ^herdr pane rename $env.HERDR_PANE_ID $previous_pane_label | ignore
+                }
             }
             if $use_tab_label {
                 let current_tab_state = (__herdr_current_tab_state)

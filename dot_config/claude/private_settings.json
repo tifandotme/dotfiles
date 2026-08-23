@@ -23,12 +23,24 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-agent-state.sh' session",
+            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-agent-state.sh\" session",
             "timeout": 10
           },
           {
             "type": "command",
-            "command": "bash '/Users/tifan/.config/claude/hooks/herdr-title-watch.sh'",
+            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-title-sync.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-title-sync.sh\"",
             "timeout": 10
           }
         ]

@@ -146,11 +146,23 @@ def --wrapped pi [...args] {
         ["--mcp-config" $mcp_config] ++ $args
     }
 
-    run-external (__external pi) ...$pi_args
+    let pi_label = ([
+        (pwd | path basename)
+        " (pi)"
+    ] | str join)
+    herdr-wrap $pi_label {
+        run-external (__external pi) ...$pi_args
+    }
 }
 
 def --wrapped claude [...args] {
-    run-external (__external claude) ...(["--dangerously-skip-permissions", "--no-chrome"] ++ $args)
+    let claude_label = ([
+        (pwd | path basename)
+        " (claude)"
+    ] | str join)
+    herdr-wrap $claude_label {
+        run-external (__external claude) ...(["--dangerously-skip-permissions", "--no-chrome"] ++ $args)
+    }
 }
 
 def --wrapped cliproxyapi [...args] {
