@@ -1,7 +1,8 @@
 [processes]
 default_memory_value = true
 default_sort = "mem"
-process_command = true
+process_command = false
+default_grouped = true
 
 [memory_graph]
 cache_memory = true

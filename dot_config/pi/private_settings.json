@@ -39,7 +39,7 @@
   },
   "enabledModels": [
     "openai-codex/gpt-5.6-luna:xhigh",
-    "openai-codex/gpt-5.6-sol:high",
+    "openai-codex/gpt-5.6-sol:medium",
     "claude-bridge/claude-sonnet-5:medium",
     "claude-bridge/claude-opus-5:medium"
   ],
