@@ -4,6 +4,7 @@ description: Researches external sources, codebases, dependencies, and technical
 model: openai-codex/gpt-5.6-luna
 thinking: xhigh
 tools: read, bash
+skills: exploring-repo, find-docs
 deny-tools: claude
 session-mode: lineage-only
 spawning: false
