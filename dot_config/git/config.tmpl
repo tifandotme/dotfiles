@@ -26,10 +26,21 @@
 	insteadOf = https://github.com/
 
 {{ if eq .chezmoi.os "darwin" -}}
+[maintenance]
+	repo = /Users/tifan/projects/work/aquasense-app
+	repo = /Users/tifan/projects/work/aquasense-service
+	repo = /Users/tifan/projects/work/backoffice-windmill
+	repo = /Users/tifan/projects/work/gcp-terraform
+	repo = /Users/tifan/projects/work/core-service
+	repo = /Users/tifan/projects/personal/tifan.me
+	repo = /Users/tifan/projects/personal/actual
+	repo = /Users/tifan/projects/personal/box
+	repo = /Users/tifan/projects/personal/hevy-cli
+	repo = /Users/tifan/projects/personal/resume
+	repo = {{ .chezmoi.sourceDir }}
+
 [includeIf "gitdir:~/projects/work/"]
 	path = ~/projects/work/.gitconfig
-[includeIf "gitdir:~/projects/personal/"]
-	path = ~/projects/personal/.gitconfig
 
 [core]
 	whitespace = error
