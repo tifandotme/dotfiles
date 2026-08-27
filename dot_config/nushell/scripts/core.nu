@@ -186,27 +186,23 @@ def --wrapped claudex [...args] {
 alias _codex = ^codex
 def --wrapped codex [...args] { _codex --dangerously-bypass-approvals-and-sandbox ...$args }
 
-alias _cursor-gui = ^cursor
-def --wrapped cursor-gui [...args] {
-    let cursor_config_dir = $env.HOME | path join ".cursor"
-    with-env {CURSOR_CONFIG_DIR: $cursor_config_dir} {
-    _cursor-gui --chat ...$args
-  }
-}
-
-alias _cursor-agent = ^cursor-agent
-def --wrapped cursor [...args] {
-    let cursor_config_dir = $env.HOME | path join ".cursor"
-    with-env {CURSOR_CONFIG_DIR: $cursor_config_dir} {
-    _cursor-agent --yolo ...$args
-  }
-}
-
 alias _btm = btm
+
+def --wrapped btm [...args] {
+    herdr-wrap "btm" {
+        _btm ...$args
+    }
+}
 
 alias tf = trafilatura
 
 alias _amp = amp
+def --wrapped amp [...args] {
+    let amp_label = ([(pwd | path basename) " (amp)"] | str join)
+    herdr-wrap $amp_label {
+        _amp ...$args
+    }
+}
 
 alias _rg = rg
 alias rg = rg --smart-case --glob '!{.git/*,out/*,**/node_modules/**}' --max-columns-preview

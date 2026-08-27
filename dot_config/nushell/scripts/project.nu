@@ -117,13 +117,12 @@ def __format-session-time [value] {
     } catch { "unknown" }
 }
 
-def __preview-sessions [path: string] {
-    let reset = (ansi reset)
-    let label = (ansi cyan_bold)
-    let pi_color = (ansi --escape {fg: "#7dd3fc", attr: b})
-    let claude_color = (ansi --escape {fg: "#d97757", attr: b})
-    let named_color = (ansi yellow_bold)
-    let muted = (ansi dark_gray_dimmed)
+def __session-file-info [...paths] {
+    try { _ls ...$paths } catch { ls ...$paths }
+}
+
+def __session-inventory [path: string] {
+    let max_sessions = 10
     let branch_result = (^git -C $path branch --show-current | complete)
     let session_branch = if $branch_result.exit_code != 0 {
         "(unknown)"
@@ -131,7 +130,6 @@ def __preview-sessions [path: string] {
         let branch = $branch_result.stdout | str trim
         if ($branch | is-empty) { "(detached)" } else { $branch }
     }
-    let max_sessions = 10
     let sessions_root = $env.PI_AGENT_DIR | path expand
     let claude_root = $env.CLAUDE_CONFIG_DIR | path expand
     let pi_path_key = $path | str replace --all "/" "-"
@@ -145,7 +143,7 @@ def __preview-sessions [path: string] {
     if ($pi_files | is-not-empty) {
         for info in (
             try {
-                ls ...$pi_files
+                __session-file-info ...$pi_files
                 | sort-by modified
                 | reverse
                 | first $max_sessions
@@ -176,19 +174,17 @@ def __preview-sessions [path: string] {
             )
             let title = (try { $title_entry.name } catch { "Untitled session" })
             let title = if ($title | is-empty) { "Untitled session" } else { $title }
-            let title = if $title == "Untitled session" {
-                $title
-            } else {
-                $"($named_color)($title)($reset)"
-            }
-            let session = {
-                agent: "Pi"
-                title: $title
-                last_active: (__format-session-time $info.modified)
-                sort_key: $info.modified
-                branch: $session_branch
-            }
-            $sessions = ($sessions | append $session)
+            $sessions = (
+                $sessions
+                | append {
+                    agent: "Pi",
+                    target: $info.name
+                    title: $title
+                    last_active: (__format-session-time $info.modified)
+                    sort_key: $info.modified
+                    branch: $session_branch
+                }
+            )
         }
     }
 
@@ -197,7 +193,7 @@ def __preview-sessions [path: string] {
     if ($claude_files | is-not-empty) {
         for info in (
             try {
-                ls ...$claude_files
+                __session-file-info ...$claude_files
                 | sort-by modified
                 | reverse
                 | first $max_sessions
@@ -225,23 +221,42 @@ def __preview-sessions [path: string] {
             )
             let title = (try { $title_record.customTitle } catch { "Untitled session" })
             let title = if ($title | is-empty) { "Untitled session" } else { $title }
-            let title = if $title == "Untitled session" {
-                $title
-            } else {
-                $"($named_color)($title)($reset)"
-            }
             let recorded_branch = (try { $cwd_record.gitBranch } catch { "" })
             let session_branch = if ($recorded_branch | is-empty) { $session_branch } else { $recorded_branch }
-            let session = {
-                agent: "Claude"
-                title: $title
-                last_active: (__format-session-time $info.modified)
-                sort_key: $info.modified
-                branch: $session_branch
+            let session_id = (
+                try { $info.name | path parse | get stem } catch { "" }
+            )
+            if ($session_id | is-empty) {
+                continue
             }
-            $sessions = ($sessions | append $session)
+            $sessions = (
+                $sessions
+                | append {
+                    agent: "Claude",
+                    target: $session_id
+                    title: $title
+                    last_active: (__format-session-time $info.modified)
+                    sort_key: $info.modified
+                    branch: $session_branch
+                }
+            )
         }
     }
+
+    {sessions: $sessions, pi_capped: $pi_capped, claude_capped: $claude_capped}
+}
+
+def __preview-sessions [path: string] {
+    let reset = (ansi reset)
+    let label = (ansi cyan_bold)
+    let pi_color = (ansi --escape {fg: "#7dd3fc", attr: b})
+    let claude_color = (ansi --escape {fg: "#d97757", attr: b})
+    let named_color = (ansi yellow_bold)
+    let muted = (ansi dark_gray_dimmed)
+    let inventory = (__session-inventory $path)
+    let sessions = $inventory.sessions
+    let pi_capped = $inventory.pi_capped
+    let claude_capped = $inventory.claude_capped
 
     print ""
     if ($sessions | is-empty) {
@@ -265,10 +280,16 @@ def __preview-sessions [path: string] {
         $"Claude ($claude_count)"
     }
     print $"($label)Sessions:($reset) ($session_count) shown"
+    print $"($muted)Ctrl-R: choose a session to resume($reset)"
     if ($pi_sessions | is-not-empty) {
         print $"  ($pi_color)($pi_header)($reset)"
         for session in $pi_sessions {
-            print $"    ($session.title)"
+            let title = if $session.title == "Untitled session" {
+                $session.title
+            } else {
+                $"($named_color)($session.title)($reset)"
+            }
+            print $"    ($title)"
             print $"      ($session.last_active) • ($session.branch)"
         }
     }
@@ -278,9 +299,84 @@ def __preview-sessions [path: string] {
         }
         print $"  ($claude_color)($claude_header)($reset)"
         for session in $claude_sessions {
-            print $"    ($session.title)"
+            let title = if $session.title == "Untitled session" {
+                $session.title
+            } else {
+                $"($named_color)($session.title)($reset)"
+            }
+            print $"    ($title)"
             print $"      ($session.last_active) • ($session.branch)"
         }
+    }
+}
+
+def __session-row [session] {
+    let reset = (ansi reset)
+    let pi_color = (ansi --escape {fg: "#7dd3fc", attr: b})
+    let claude_color = (ansi --escape {fg: "#d97757", attr: b})
+    let named_color = (ansi yellow_bold)
+    let agent_color = if $session.agent == "Pi" { $pi_color } else { $claude_color }
+    let title = if $session.title == "Untitled session" {
+        $session.title
+    } else {
+        $"($named_color)($session.title)($reset)"
+    }
+    let display = [
+        $"($agent_color)($session.agent)($reset)"
+        $title
+        $session.last_active
+        $session.branch
+    ] | str join "  "
+    [
+        $session.agent
+        $session.target
+        $session.title
+        $session.last_active
+        $session.branch
+        $display
+    ] | str join (char tab)
+}
+
+def __session-picker [path: string] {
+    let sessions = (
+        (__session-inventory $path).sessions
+        | sort-by sort_key
+        | reverse
+    )
+    if ($sessions | is-empty) {
+        return null
+    }
+
+    let rows = $sessions | each {|session| __session-row $session } | str join "\n"
+    let result = (
+        $rows
+        | ^fzf
+            --ansi
+            --delimiter (char tab)
+            --with-nth "6"
+            --no-sort
+            --layout reverse-list
+            --prompt "resume> "
+            --header $"Resume session in (__relative-home $path)"
+            --footer "Enter resume  •  Esc back"
+            --color "fg:-1,bg:-1,fg+:-1,bg+:-1,hl:cyan,hl+:cyan,pointer:magenta,prompt:cyan,footer:yellow,marker:green"
+        | complete
+    )
+    if $result.exit_code != 0 {
+        return null
+    }
+    let selected = $result.stdout | str trim
+    if ($selected | is-empty) {
+        return null
+    }
+
+    let fields = $selected | split row (char tab)
+    {
+        agent: $fields.0
+        target: $fields.1
+        title: $fields.2
+        last_active: $fields.3
+        branch: $fields.4
     }
 }
 
@@ -499,7 +595,7 @@ def __worktree-notice [header: string] {
     __worktree-dialog $header ["Back"] | ignore
 }
 
-def __close-worktree [kind: string, path: string] {
+def __close-worktree [kind: string, project: string, path: string] {
     if $kind != "worktree" {
         __worktree-notice "Only existing worktrees can be closed."
         return
@@ -541,13 +637,23 @@ def __close-worktree [kind: string, path: string] {
         return
     }
     let workspace_id = (try { $worktree.open_workspace_id } catch { "" })
-    if ($workspace_id | is-empty) {
-        __worktree-notice "This worktree is not open in Herdr."
-        return
-    }
 
     let choice = (__worktree-dialog "Close worktree?" ["No" "Yes"])
     if $choice != "Yes" {
+        return
+    }
+
+    if ($workspace_id | is-empty) {
+        let removed = (^git -C $project worktree remove $path | complete)
+        if $removed.exit_code != 0 {
+            let reason = $removed.stderr | str trim
+            let header = if ($reason | is-empty) {
+                "Git could not close the worktree."
+            } else {
+                $"Git could not close the worktree:\n($reason)"
+            }
+            __worktree-notice $header
+        }
         return
     }
 
@@ -563,67 +669,250 @@ def __close-worktree [kind: string, path: string] {
     }
 }
 
+def __find-session-agent [session] {
+    let lookup = (^herdr agent list | complete)
+    if $lookup.exit_code != 0 {
+        let reason = $lookup.stderr | str trim
+        return {
+            error: (
+                if ($reason | is-empty) { "Cannot inspect running Herdr agents." } else { $reason }
+            )
+            match: null
+        }
+    }
+
+    let payload = (
+        try {
+            $lookup.stdout | from json
+        } catch { null }
+    )
+    let agent_name = $session.agent | str lowercase
+    let match = (
+        try {
+            $payload.result.agents
+            | where {|agent| ((try { $agent.agent } catch { "" }) == $agent_name) and ((try { $agent.agent_session.value } catch { "" }) == $session.target) }
+            | first
+        } catch { null }
+    )
+    {error: "", match: $match}
+}
+
+def __focus-session-agent [agent] {
+    let pane_id = (try { $agent.pane_id } catch { "" })
+    if ($pane_id | is-empty) {
+        print -e "The existing session has no Herdr pane."
+        return
+    }
+
+    let focused = (^herdr agent focus $pane_id | complete)
+    if $focused.exit_code != 0 {
+        let reason = $focused.stderr | str trim
+        if ($reason | is-empty) {
+            print -e "Herdr could not focus the existing session."
+        } else {
+            print -e $reason
+        }
+    }
+}
+
+def __start-session [pane_id: string, session] {
+    let kind = $session.agent | str lowercase
+    let suffix = $session.target | hash sha256 | str substring 0..8
+    let name = $"resume-($kind)-($suffix)"
+    let args = if $kind == "pi" {
+        ["--session" $session.target]
+    } else {
+        ["--resume" $session.target]
+    }
+    let started = (^herdr agent start $name --kind $kind --pane $pane_id -- ...$args | complete)
+    if $started.exit_code == 0 {
+        return true
+    }
+
+    let reason = $started.stderr | str trim
+    if ($reason | is-empty) {
+        print -e $"Herdr could not start ($session.agent) session."
+    } else {
+        print -e $reason
+    }
+    false
+}
+
+def __existing-workspace-id [project: string, path: string] {
+    let lookup = (^herdr worktree list --cwd $project | complete)
+    if $lookup.exit_code != 0 {
+        return ""
+    }
+    let payload = (
+        try {
+            $lookup.stdout | from json
+        } catch { null }
+    )
+    try {
+        $payload.result.worktrees
+        | where path == $path
+        | get open_workspace_id
+        | first
+        | default ""
+    } catch { "" }
+}
+
+def __resume-session [project: string, path: string] {
+    let session = (__session-picker $path)
+    if $session == null {
+        return false
+    }
+
+    let existing = (__find-session-agent $session)
+    if ($existing.error | is-not-empty) {
+        print -e $existing.error
+        return true
+    }
+    if $existing.match != null {
+        __focus-session-agent $existing.match
+        return true
+    }
+
+    let workspace_id = (__existing-workspace-id $project $path)
+    if ($workspace_id | is-not-empty) {
+        let tab = (
+            ^herdr tab create --workspace $workspace_id --cwd $path --label $session.title --focus
+            | complete
+        )
+        if $tab.exit_code != 0 {
+            let reason = $tab.stderr | str trim
+            print -e (
+                if ($reason | is-empty) { "Herdr could not create a resume tab." } else { $reason }
+            )
+            return true
+        }
+        let pane_id = (
+            try { $tab.stdout | from json | get result.root_pane.pane_id } catch { "" }
+        )
+        if ($pane_id | is-empty) {
+            print -e "Herdr did not return the new tab pane."
+            return true
+        }
+        __start-session $pane_id $session | ignore
+        return true
+    }
+
+    let opened = if $path == $project {
+        ^herdr workspace create --cwd $path --focus | complete
+    } else {
+        ^herdr worktree open --cwd $project --path $path --focus | complete
+    }
+    if $opened.exit_code != 0 {
+        let reason = $opened.stderr | str trim
+        print -e (
+            if ($reason | is-empty) { "Herdr could not open the project workspace." } else { $reason }
+        )
+        return true
+    }
+    let pane_id = (
+        try { $opened.stdout | from json | get result.root_pane.pane_id } catch { "" }
+    )
+    if ($pane_id | is-empty) {
+        print -e "Herdr did not return the opened workspace pane."
+        return true
+    }
+    __start-session $pane_id $session | ignore
+    true
+}
+
 export def --env open-project [default_project: string = ""] {
     try {
-        let rows = (__project-rows)
-        if ($rows | is-empty) {
-            print "No Git projects found."
-            return
-        }
-
         let delimiter = (char tab)
         let preview = "env PWD=\"$HOME\" FZF_KIND={1} FZF_PATH={3} FZF_BRANCH={4} nu -c 'source ~/.config/nushell/scripts/project.nu; __worktree-preview $env.FZF_KIND $env.FZF_PATH $env.FZF_BRANCH'"
-        let close = "env PWD=\"$HOME\" FZF_KIND={1} FZF_PATH={3} nu -c 'source ~/.config/nushell/scripts/project.nu; __close-worktree $env.FZF_KIND $env.FZF_PATH'"
+        let close = "env PWD=\"$HOME\" FZF_KIND={1} FZF_PROJECT={2} FZF_PATH={3} nu -c 'source ~/.config/nushell/scripts/project.nu; __close-worktree $env.FZF_KIND $env.FZF_PROJECT $env.FZF_PATH'"
         let reload = "env PWD=\"$HOME\" nu -c 'source ~/.config/nushell/scripts/core.nu; source ~/.config/nushell/scripts/project.nu; __project-rows-output'"
         let close_binding = "ctrl-x:execute(" + $close + ")+reload(" + $reload + ")"
-        mut fzf_args = [
-            "--ansi"
-            "--delimiter" $delimiter
-            "--with-nth" "5"
-            "--no-sort"
-            "--layout" "reverse-list"
-            "--prompt" "worktree> "
-            "--footer" "Enter open/create  •  Ctrl-X close  •  Esc cancel"
-            "--bind" $close_binding
-            "--color"
-            "fg:-1,bg:-1,fg+:-1,bg+:-1,hl:cyan,hl+:cyan,pointer:magenta,prompt:cyan,footer:yellow,marker:green"
-            "--preview" $preview
-            "--preview-window" "right:45%"
-            "--preview-label" " details "
-        ]
-        if ($default_project | is-not-empty) {
-            $fzf_args = ($fzf_args | append $"--query=($default_project)")
-        }
 
-        let selected = (
-            $rows
-            | str join "\n"
-            | ^fzf ...$fzf_args
-            | str trim
-        )
-        if ($selected | is-empty) {
+        loop {
+            let rows = (__project-rows)
+            if ($rows | is-empty) {
+                print "No Git projects found."
+                return
+            }
+
+            mut fzf_args = [
+                "--ansi"
+                "--delimiter" $delimiter
+                "--expect" "ctrl-r"
+                "--with-nth" "5"
+                "--no-sort"
+                "--layout" "reverse-list"
+                "--prompt" "worktree> "
+                "--footer"
+                "Enter open/create  •  Ctrl-R resume  •  Ctrl-X close  •  Esc cancel"
+                "--bind" $close_binding
+                "--color"
+                "fg:-1,bg:-1,fg+:-1,bg+:-1,hl:cyan,hl+:cyan,pointer:magenta,prompt:cyan,footer:yellow,marker:green"
+                "--preview" $preview
+                "--preview-window" "right:45%"
+                "--preview-label" " details "
+            ]
+            if ($default_project | is-not-empty) {
+                $fzf_args = ($fzf_args | append $"--query=($default_project)")
+            }
+
+            let fzf_result = (
+                $rows
+                | str join "\n"
+                | ^fzf ...$fzf_args
+                | complete
+            )
+            let output = $fzf_result.stdout
+            if ($output | is-empty) {
+                return
+            }
+            let output_lines = $output | lines
+            if ($output_lines | is-empty) {
+                return
+            }
+
+            let action = if ($output_lines | length) > 1 {
+                $output_lines | first
+            } else {
+                ""
+            }
+            let selected = if ($output_lines | length) > 1 {
+                $output_lines | skip 1 | str join "\n" | str trim
+            } else {
+                $output_lines | first | str trim
+            }
+            if ($selected | is-empty) {
+                return
+            }
+
+            let fields = $selected | split row $delimiter
+            let kind = $fields.0
+            let project = $fields.1
+            let path = $fields.2
+
+            if ($env.HERDR_ENV? | default "") != "1" {
+                print -e "Worktree actions require a Herdr-managed pane."
+                return
+            }
+
+            if $action == "ctrl-r" {
+                if (__resume-session $project $path) {
+                    return
+                }
+                continue
+            }
+
+            # The Claude wrapper suppresses trust prompts. For new repositories,
+            # manually set projects[<root>].hasTrustDialogAccepted=true in
+            # ~/.config/claude/.claude.json; trust repository roots, not worktrees.
+            if $kind == "worktree" {
+                ^herdr worktree open --cwd $project --path $path --focus | ignore
+                return
+            }
+
+            ^herdr worktree create --cwd $project --focus | ignore
             return
         }
-
-        let fields = $selected | split row $delimiter
-        let kind = $fields.0
-        let project = $fields.1
-        let path = $fields.2
-
-        if ($env.HERDR_ENV? | default "") != "1" {
-            print -e "Worktree actions require a Herdr-managed pane."
-            return
-        }
-
-        # The Claude wrapper suppresses trust prompts. For new repositories,
-        # manually set projects[<root>].hasTrustDialogAccepted=true in
-        # ~/.config/claude/.claude.json; trust repository roots, not worktrees.
-        if $kind == "worktree" {
-            ^herdr worktree open --cwd $project --path $path --focus | ignore
-            return
-        }
-
-        ^herdr worktree create --cwd $project --focus | ignore
     } catch {
         print "No project directory found."
     }
