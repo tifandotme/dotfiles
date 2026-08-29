@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+command -v herdr >/dev/null 2>&1 || exit 0
+
+plugins=(
+	"$HOME/.local/share/herdr-plugins/tab-spinner"
+)
+
+for plugin in "${plugins[@]}"; do
+	[[ -f "$plugin/herdr-plugin.toml" ]] || continue
+	if ! herdr plugin link "$plugin" --enabled >/dev/null; then
+		printf 'warning: could not link Herdr plugin: %s\n' "$plugin" >&2
+	fi
+
+done

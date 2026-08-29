@@ -1,0 +1,6 @@
+{
+  "models": [
+    "openai-codex/gpt-5.6-luna"
+  ],
+  "tpsEnabled": true
+}

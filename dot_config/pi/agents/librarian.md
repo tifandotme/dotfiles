@@ -2,7 +2,7 @@
 name: librarian
 description: Researches external sources, codebases, dependencies, and technical documentation
 model: openai-codex/gpt-5.6-luna
-thinking: xhigh
+thinking: high
 tools: read, bash
 skills: exploring-repo, find-docs
 deny-tools: claude

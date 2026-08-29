@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+readonly APP_PATH="${HELIUM_AGENTS_APP_PATH:-$HOME/Applications/Helium for Agents.app}"
+readonly CDP_PORT="${AGENT_BROWSER_PORT:-9222}"
+
+fail() {
+	printf '%s\n' "$1" >&2
+	exit 1
+}
+
+main() {
+	[[ "$#" -eq 0 ]] || fail 'Usage: run-helium'
+	[[ "$CDP_PORT" =~ ^[0-9]+$ ]] || fail "Invalid CDP port: $CDP_PORT"
+
+	setup-helium agents
+	/usr/bin/open "$APP_PATH"
+
+	local deadline=$((SECONDS + 30))
+	while ! /usr/bin/curl -fs --max-time 1 "http://127.0.0.1:$CDP_PORT/json/version" >/dev/null 2>&1; do
+		if ((SECONDS >= deadline)); then
+			fail "Helium for Agents did not become ready on port $CDP_PORT: $APP_PATH"
+		fi
+		/bin/sleep 0.25
+	done
+
+	printf 'Helium for Agents is ready on port %s\n' "$CDP_PORT"
+}
+
+main "$@"

@@ -1,0 +1,10 @@
+id = "agent-activity"
+name = "Tab Spinner"
+version = "0.1.0"
+min_herdr_version = "0.8.2"
+description = "Show agent activity in Herdr tab titles."
+platforms = ["linux", "macos", "windows"]
+
+[[events]]
+on = "pane.agent_status_changed"
+command = ["bun", "run", "src/index.ts"]

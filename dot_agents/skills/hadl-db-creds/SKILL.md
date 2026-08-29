@@ -41,3 +41,5 @@ mise run tunnels
 ```
 
 Use `sslmode=require` for `psql` connections through these tunnels. Do not paste passwords, access tokens, or sensitive query results into chat unless the user explicitly asks.
+
+These credentials reach live production data. Read freely; before any statement or admin API call that changes a production row, state the exact change and the rows it touches, then wait for the user to confirm. This holds even when the change looks like a cleanup that follows from a finding you just reported: the user asked for the finding, not for the write.

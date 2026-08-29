@@ -1,33 +1,19 @@
 #!/usr/bin/env bun
 /** Compare rendered chezmoi state for the main Mac and the box VPS. */
 
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { basename, join } from "node:path";
 
-interface Machine {
-  name: string;
-  os: string;
-  hostname: string;
-}
-
 const machines = [
-  { name: "main", os: "darwin", hostname: "main" },
-  { name: "box", os: "linux", hostname: "box" },
-] as const satisfies readonly Machine[];
+  { os: "darwin", hostname: "main" },
+  { os: "linux", hostname: "box" },
+] as const;
+type Machine = (typeof machines)[number];
 
 function overrideData(machine: Machine) {
   return JSON.stringify({ chezmoi: { os: machine.os, hostname: machine.hostname } });
-}
-
-function run(command: string, args: string[]) {
-  const result = spawnSync(command, args, { stdio: ["ignore", "pipe", "pipe"] });
-  if (result.error) throw result.error;
-  if (result.status !== 0) {
-    throw new Error(result.stderr?.toString().trim() || `${command} exited with ${result.status}`);
-  }
-  return result.stdout ?? Buffer.alloc(0);
 }
 
 function runDelta(args: string[], directory: string) {
@@ -43,7 +29,7 @@ function runDelta(args: string[], directory: string) {
 }
 
 function managed(machine: Machine) {
-  return run("chezmoi", ["--override-data", overrideData(machine), "managed", "--include", "files"])
+  return execFileSync("chezmoi", ["--override-data", overrideData(machine), "managed", "--include", "files"])
     .toString()
     .trim()
     .split("\n")
@@ -51,13 +37,13 @@ function managed(machine: Machine) {
 }
 
 function render(machine: Machine, target: string) {
-  return run("chezmoi", ["--override-data", overrideData(machine), "cat", join(homedir(), target)]);
+  return execFileSync("chezmoi", ["--override-data", overrideData(machine), "cat", join(homedir(), target)]);
 }
 
-function withTempDir<T>(run: (directory: string) => T) {
+function withTempDir(run: (directory: string) => void) {
   const directory = mkdtempSync(join(tmpdir(), "machine-map-"));
   try {
-    return run(directory);
+    run(directory);
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
