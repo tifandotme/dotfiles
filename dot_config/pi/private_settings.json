@@ -3,7 +3,7 @@
   "defaultModel": "gpt-5.6-luna",
   "defaultThinkingLevel": "xhigh",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.84.2",
+  "lastChangelogVersion": "0.84.4",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
@@ -13,6 +13,7 @@
   "treeFilterMode": "user-only",
   "packages": [
     "../../projects/personal/pi-extensions/packages/pi-copy-response",
+    "../../projects/personal/pi-extensions/packages/pi-fast-mode",
     "../../projects/personal/pi-extensions/packages/pi-handoff",
     "../../projects/personal/pi-extensions/packages/pi-preferred-thinking",
     "../../projects/personal/pi-extensions/packages/pi-recap",

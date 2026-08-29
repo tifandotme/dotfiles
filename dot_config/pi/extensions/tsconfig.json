@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "typeRoots": ["../../../../bun/install/global/node_modules/@types"],
+    "paths": {
+      "@earendil-works/*": [
+        "../../../../bun/install/global/node_modules/@earendil-works/*"
+      ]
+    }
+  },
+  "include": ["*.ts"]
+}

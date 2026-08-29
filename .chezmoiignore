@@ -6,6 +6,7 @@ key.txt.age
 scripts/
 
 **/node_modules
+.config/pi/extensions/tsconfig.json
 .gitignore
 AGENTS.md
 CLAUDE.md

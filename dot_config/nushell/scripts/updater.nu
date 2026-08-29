@@ -118,48 +118,95 @@ export def start [] {
     }
 }
 
+def clean-step [label: string, action: closure] {
+    let result = try {
+        do $action | complete
+    } catch {|error| {exit_code: 1, stdout: "", stderr: $error.msg} }
+
+    let stdout = $result.stdout | str trim
+    if $stdout != "" {
+        print $stdout
+    }
+
+    if $result.exit_code != 0 {
+        let detail = $result.stderr | str trim
+        let suffix = if $detail == "" { "" } else { $": ($detail)" }
+        print $"(ansi yellow)↷(ansi reset) Skipping ($label)($suffix)"
+    }
+}
+
 # Clean caches and uninstall unused packages (do this rarely)
 export def clean [] {
     if (which mise | is-not-empty) {
-        mise prune -y
-        mise cache clear -y
+        clean-step "mise unused versions" { ^mise prune -y }
+        clean-step "mise cache" { ^mise cache clear -y }
     }
     if (which pnpm | is-not-empty) {
-        pnpm store prune
+        clean-step "pnpm store" { ^pnpm store prune }
     }
     if (which brew | is-not-empty) {
-        brew cleanup --prune-prefix
-        brew cleanup --prune=all
-        brew autoremove
+        clean-step "Homebrew cleanup" { ^brew cleanup --prune-prefix }
+        clean-step "Homebrew old versions" { ^brew cleanup --prune=all }
+        clean-step "Homebrew unused dependencies" { ^brew autoremove }
     }
     if (which bun | is-not-empty) {
-        bun pm -g cache rm
+        clean-step "Bun cache" { ^bun pm -g cache rm }
     }
     if (which npm | is-not-empty) {
-        npm cache clean --force
+        clean-step "npm cache" { ^npm cache clean --force }
     }
     if (which uv | is-not-empty) {
-        uv cache clean
+        clean-step "uv cache" { ^uv cache clean }
     }
     if (which go | is-not-empty) {
-        go clean -cache
-        go clean -modcache
+        clean-step "Go build cache" { ^go clean -cache }
+        clean-step "Go module cache" { ^go clean -modcache }
+    }
+    if (which rustup | is-not-empty) {
+        let listed = try {
+            ^rustup toolchain list | complete
+        } catch {|error| {exit_code: 1, stdout: "", stderr: $error.msg} }
+
+        if $listed.exit_code != 0 {
+            let detail = $listed.stderr | str trim
+            print $"(ansi yellow)↷(ansi reset) Skipping Rust toolchain cleanup: ($detail)"
+        } else {
+            # Keep active/default toolchains and leave named/nightly toolchains alone.
+            let toolchains = (
+                $listed.stdout
+                | lines
+                | parse --regex "^(?<name>\\S+)(?:\\s+\\((?<status>.*)\\))?$"
+            )
+            let removable = (
+                $toolchains
+                | where status == null
+                | where name =~ "^[0-9]+\\.[0-9]+\\.[0-9]+"
+                | get name
+            )
+
+            for toolchain in $removable {
+                clean-step $"Rust toolchain ($toolchain)" {
+                    ^rustup toolchain uninstall $toolchain
+                }
+            }
+        }
     }
     if (which docker | is-not-empty) {
-        let docker_info = docker info | complete
+        let docker_info = try {
+            ^docker info | complete
+        } catch {|error| {exit_code: 1, stdout: "", stderr: $error.msg} }
 
+        # Volumes may contain databases; prune them explicitly when needed.
         if $docker_info.exit_code == 0 {
-            docker container prune -f
-            docker network prune -f
-            docker image prune -a -f
-            docker volume prune -f
-            docker builder prune -f
-            docker buildx prune -f
+            clean-step "Docker stopped containers" { ^docker container prune -f }
+            clean-step "Docker unused networks" { ^docker network prune -f }
+            clean-step "Docker unused images" { ^docker image prune -a -f }
+            clean-step "Docker build cache" { ^docker builder prune -f }
         } else {
-            print $"(ansi yellow)↷(ansi reset) Skipping docker cleanup; Docker/Colima is not running"
+            print $"(ansi yellow)↷(ansi reset) Skipping Docker cleanup; Docker/Colima is not running"
         }
     }
     if (which mo | is-not-empty) {
-        mo clean
+        clean-step "Mole cleanup" { ^mo clean }
     }
 }
