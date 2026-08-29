@@ -9,7 +9,7 @@
   "npmCommand": [
     "bun"
   ],
-  "theme": "dark",
+  "theme": "light/dark",
   "treeFilterMode": "user-only",
   "packages": [
     "../../projects/personal/pi-extensions/packages/pi-copy-response",
