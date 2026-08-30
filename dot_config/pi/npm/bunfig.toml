@@ -1,2 +1,4 @@
+# Temporary workaround for Pi extension dependency resolution with Bun isolated installs.
+# Remove when Pi PR #8112 is released: https://github.com/earendil-works/pi/pull/8112
 [install]
 linker = "hoisted"

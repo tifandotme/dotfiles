@@ -42,7 +42,6 @@
   {
     "context": "Editor && vim_mode == insert",
     "bindings": {
-      "cmd-\\": "copilot::Suggest",
       "j j": ["workspace::SendKeystrokes", "escape"]
     }
   },

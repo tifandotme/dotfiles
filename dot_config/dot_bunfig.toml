@@ -1,0 +1,5 @@
+env = false
+
+[install]
+linker = "isolated"
+globalStore = true
