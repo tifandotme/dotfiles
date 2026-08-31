@@ -4,7 +4,11 @@
 onboarding = false
 
 [terminal]
+# {{ if eq .chezmoi.os "linux" -}}
+default_shell = "/home/linuxbrew/.linuxbrew/bin/nu"
+# {{ else -}}
 default_shell = "nu"
+# {{- end }}
 
 [keys]
 prefix = "ctrl+e"
