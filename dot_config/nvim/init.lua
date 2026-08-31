@@ -73,14 +73,6 @@ end
 vim.opt.statusline = " %f%m%r %= %{v:lua.statusline_git()}%y %l:%c %P "
 
 -- ------------------------------- AUTOCOMMANDS --------------------------------
-local visual_modes = { v = true, V = true, [string.char(22)] = true }
-vim.api.nvim_create_autocmd("ModeChanged", {
-  group = user_group,
-  callback = function()
-    vim.opt_local.list = visual_modes[vim.fn.mode()] or false
-  end,
-})
-
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = user_group,
   callback = function()
@@ -142,6 +134,11 @@ local function apply_theme(is_dark)
   vim.api.nvim_set_hl(0, "YankHighlight", { bg = "#ffff00", fg = "#000000" })
 end
 
+local function style_trailspace()
+  local error_hl = vim.api.nvim_get_hl(0, { name = "Error", link = false })
+  vim.api.nvim_set_hl(0, "MiniTrailspace", { bg = error_hl.fg })
+end
+
 local function style_tabline()
   local active_tabline = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
   active_tabline.bold = true
@@ -201,6 +198,8 @@ install_fff_binary()
 -- --------------------------- PLUGIN CONFIGURATION ----------------------------
 require("mini.icons").setup()
 require("mini.ai").setup()
+require("mini.trailspace").setup()
+style_trailspace()
 require("mini.surround").setup({})
 require("mini.pick").setup({})
 require("mini.extra").setup({})
@@ -366,6 +365,7 @@ local function refresh_theme()
 
   is_dark = next_is_dark
   apply_theme(is_dark)
+  style_trailspace()
   markdown_preview.setup({
     default_theme = is_dark and "dark" or "light",
   })
