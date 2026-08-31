@@ -498,7 +498,9 @@ map_multistep("i", "<Tab>", { "pmenu_accept" })
 map_multistep("i", "<CR>", { "pmenu_accept" })
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", key_opts("Clear search highlight"))
 map("n", "<leader>w", "<cmd>write<cr>", key_opts("Write file"))
-map("n", "<leader>r", "<cmd>source ~/.config/nvim/init.lua<cr>", key_opts("Reload config"))
+-- Do not add a config-reload mapping. Re-sourcing this file is not idempotent:
+-- it can corrupt plugin state and overwrite mini.starter's window options.
+-- Restart Neovim after changing this file.
 map("n", "<leader>c", "gcc", { remap = true, desc = "Toggle comment", silent = true })
 map("x", "<leader>c", "gc", { remap = true, desc = "Toggle comments", silent = true })
 map("n", "U", "<C-r><cmd>lua MiniBracketed.register_undo_state()<cr>", key_opts("Redo"))
