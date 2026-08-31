@@ -7,18 +7,31 @@ local user_group = vim.api.nvim_create_augroup("user-config", { clear = true })
 -- ------------------------------ EDITOR OPTIONS -------------------------------
 vim.opt.termguicolors = true
 vim.opt.mouse = "a"
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.cursorline = true
+local is_starter = vim.bo.filetype == "ministarter"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.expandtab = false
-vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.breakindent = true
 vim.opt.breakindentopt = "list:-1"
 vim.opt.scrolloff = 5
+
+if is_starter then
+  vim.opt_local.colorcolumn = ""
+  vim.opt_local.cursorline = false
+  vim.opt_local.number = false
+  vim.opt_local.relativenumber = false
+  vim.opt_local.signcolumn = "no"
+  vim.opt_local.wrap = false
+else
+  vim.opt.number = true
+  vim.opt.relativenumber = true
+  vim.opt.cursorline = true
+  vim.opt.signcolumn = "yes"
+  vim.opt.colorcolumn = "80,100"
+  vim.opt.wrap = true
+end
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.incsearch = true
@@ -26,8 +39,6 @@ vim.opt.hlsearch = true
 vim.opt.showmatch = true
 vim.opt.swapfile = false
 vim.opt.undofile = true
-vim.opt.signcolumn = "yes"
-vim.opt.colorcolumn = "80,100"
 vim.opt.listchars = { space = "·", tab = "→ ", trail = "·", nbsp = "␣" }
 
 -- -------------------------------- STATUSLINE ---------------------------------
