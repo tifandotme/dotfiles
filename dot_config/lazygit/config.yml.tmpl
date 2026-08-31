@@ -50,21 +50,6 @@ customCommands:
             value: "pi-cmsg-commit"
     output: "log"
     loadingText: "Generating commit message..."
-  - key: "G"
-    context: "localBranches,commits"
-    description: "Create PR"
-    command: "pr-create --generator {{ .Form.prGenerator }}"
-    prompts:
-      - type: "menu"
-        title: "Generate with"
-        key: "prGenerator"
-        options:
-          - name: "Claude"
-            value: "claude"
-          - name: "Pi"
-            value: "pi"
-    output: "log"
-    loadingText: "Creating PR..."
   - key: "Y"
     context: global
     description: "Open repository in browser"
