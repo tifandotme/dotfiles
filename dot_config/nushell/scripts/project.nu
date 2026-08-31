@@ -54,7 +54,11 @@ def __git-worktree-inventory [project: string] {
 
     {
         project: $project
-        worktrees: ($worktrees | where path != $project)
+        worktrees: (
+            $worktrees
+            | where path != $project
+            | where {|worktree| $worktree.path | path exists }
+        )
     }
 }
 

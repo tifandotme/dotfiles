@@ -207,4 +207,12 @@ def --wrapped amp [...args] {
 alias _rg = rg
 alias rg = rg --smart-case --glob '!{.git/*,out/*,**/node_modules/**}' --max-columns-preview
 
-alias gdu = gdu-go
+def --wrapped gdu-go [...args] {
+    let gdu_dir = if ($args | is-empty) {
+        pwd
+    } else { $args.0 | path expand }
+    let gdu_label = ([$gdu_dir " (gdu-go)"] | str join)
+    herdr-wrap $gdu_label {
+        run-external (__external gdu-go) ...$args
+    }
+}
