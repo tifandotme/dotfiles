@@ -1,7 +1,5 @@
 # Chezmoi Dotfiles
 
-At the start of each agent conversation in this repository, run `backlog instructions overview` once. Do not repeat it for follow-up turns. When recording or editing an ADR, use `domain-modelling`'s format, not Backlog.md.
-
 macOS-first dotfiles, chezmoi + age encryption. Shell: Nushell. Two machines:
 
 - main macOS: primary, full desktop/dev env.
