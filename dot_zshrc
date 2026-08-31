@@ -6,5 +6,5 @@
 [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
 if command -v nu >/dev/null 2>&1; then
-  exec nu
+	exec nu
 fi

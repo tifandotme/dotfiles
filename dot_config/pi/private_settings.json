@@ -29,7 +29,6 @@
     "npm:pi-subdir-context",
     "npm:@ff-labs/pi-fff@nightly",
     "git:github.com/DietrichGebert/ponytail",
-    "npm:@plannotator/pi-extension",
     "npm:pi-herdr-subagents",
     "npm:pi-claude-bridge",
     "npm:pi-clarify"

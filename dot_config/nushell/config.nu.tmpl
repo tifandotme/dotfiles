@@ -87,9 +87,16 @@ $env.config = {
             event: {send: menu, name: fzf_file_menu}
         }
         {
-            name: fzf_dir_menu
+            name: open_editor
             modifier: control
             keycode: char_g
+            mode: [emacs vi_normal vi_insert]
+            event: {send: openeditor}
+        }
+        {
+            name: fzf_dir_menu
+            modifier: control
+            keycode: char_o
             mode: [emacs vi_normal vi_insert]
             event: {send: menu, name: fzf_dir_menu}
         }

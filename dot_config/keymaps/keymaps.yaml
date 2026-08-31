@@ -4,8 +4,6 @@ keymaps:
       # Main mode - Window focus
       - key: alt+shift+h/j/k/l
         description: Focus left/down/up/right
-      - key: alt+shift+f
-        description: Fullscreen (no outer gaps)
       # Main mode - Layout
       - key: alt+enter
         description: Toggle floating/tiling
@@ -66,11 +64,13 @@ keymaps:
       # Menus
       - key: ctrl+t
         description: Open fzf file menu
-      - key: ctrl+g
+      - key: ctrl+o
         description: Open fzf directory menu
       - key: ctrl+r
         description: Open fzf history menu
       # Editing
+      - key: ctrl+g
+        description: Open current command in editor
       - key: alt+enter
         description: Insert newline
       - key: ctrl+l

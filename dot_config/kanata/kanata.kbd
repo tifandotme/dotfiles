@@ -1,5 +1,7 @@
-(defsrc caps)
+(defsrc
+  caps fn lctl
+)
 
 (deflayer base
-  (tap-hold 200 200 esc caps)
+  (tap-hold 200 200 esc caps) lctl fn
 )
