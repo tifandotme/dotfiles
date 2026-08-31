@@ -13,7 +13,7 @@ launchctl setenv CLAUDE_CONFIG_DIR '{{ .chezmoi.homeDir }}/.config/claude'
 launchctl setenv CODEX_HOME '{{ .chezmoi.homeDir }}/.config/codex'
 launchctl setenv CODEX_SQLITE_HOME '{{ .chezmoi.homeDir }}/.local/state/codex'
 launchctl setenv PI_AGENT_DIR '{{ .chezmoi.homeDir }}/.config/pi/sessions'
-launchctl setenv PATH '/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin'</string>
+launchctl setenv PATH '{{ .chezmoi.homeDir }}/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin'</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
