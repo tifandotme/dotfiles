@@ -40,6 +40,7 @@ split-divider-color = #000000
 
 # -------------- MODIFIED
 # keybind = super+r=reload_config
+keybind = super+ctrl+f=unbind
 
 # Herdr owns tabs/splits/panes. Disable Ghostty's native layout shortcuts so
 # accidental Command-W/D doesn't close or split the underlying terminal surface.
