@@ -94,13 +94,3 @@ export def chezmoi-apply-popup [] {
         input listen --types [key] | ignore
     }
 }
-
-# Open lazygit in chezmoi source directory
-export def "lzg" [] {
-    lazygit -p (chezmoi source-path)
-}
-
-# Open zed in chezmoi source directory
-export def "zed" [] {
-    ^zed (chezmoi source-path)
-}
