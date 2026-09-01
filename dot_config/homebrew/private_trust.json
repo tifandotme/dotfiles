@@ -1,6 +1,7 @@
 {
   "trustedtaps": [
     "ampcode/tap",
+    "basecamp/tap",
     "dmtrkovalenko/fff",
     "felixkratz/formulae",
     "gromgit/brewtils",
@@ -9,7 +10,6 @@
     "nikitabobko/tap",
     "oven-sh/bun",
     "philocalyst/tap",
-    "teamookla/speedtest",
     "webstonehq/tap"
   ]
 }
