@@ -32,6 +32,8 @@ Library/LaunchAgents/**
 .config/gcloud
 .config/ghostty
 .config/infat
+.config/finicky
+.config/kanata
 .config/sketchybar
 .config/borders
 .config/raycast
