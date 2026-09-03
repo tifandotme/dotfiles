@@ -10,11 +10,28 @@ export def get-app-id [app_name: string] {
 }
 
 export def --wrapped ssh [...args] {
-    with-env {TERM: "xterm-256color"} { ^ssh ...$args }
+    herdr-wrap $"> ($args | last | default remote)" {
+        with-env {TERM: "xterm-256color"} { ^ssh ...$args }
+    }
 }
 
 export def --wrapped sshs [...args] {
-    with-env {TERM: "xterm-256color"} { ^sshs ...$args }
+    let template = "nu -c \"source ~/.config/nushell/scripts/utils.nu; herdr-wrap '> {{#if user}}{{{user}}}@{{/if}}{{{destination}}}' { ^ssh '{{{name}}}' }\""
+    let sshs_args = if ($env.HERDR_PANE_ID? | is-empty) {
+        $args
+    } else {
+        $args ++ ["--template" $template]
+    }
+
+    herdr-wrap "> sshs" {
+        with-env {TERM: "xterm-256color"} { ^sshs ...$sshs_args }
+    }
+}
+
+export def --wrapped mosh [...args] {
+    herdr-wrap $"> ($args | last | default remote)" {
+        with-env {TERM: "xterm-256color"} { ^mosh ...$args }
+    }
 }
 
 export def --env yazi [...args] {
