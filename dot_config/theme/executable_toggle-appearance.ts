@@ -4,8 +4,6 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-type JsonObject = Record<string, unknown>;
-
 function run(command: string, args: string[], options: { quiet?: boolean } = {}) {
   try {
     return execFileSync(command, args, {
@@ -27,20 +25,6 @@ function optionalRun(command: string, args: string[]) {
 
 function sourceRoot() {
   return run("chezmoi", ["source-path"], { quiet: true });
-}
-
-function readJsonObject(path: string) {
-  const parsed: unknown = JSON.parse(readFileSync(path, "utf8"));
-
-  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-    throw new Error(`Expected JSON object: ${path}`);
-  }
-
-  return parsed as JsonObject;
-}
-
-function writeJson(path: string, value: JsonObject) {
-  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
 }
 
 function replaceRequired(path: string, pattern: RegExp, replacement: string) {
@@ -78,19 +62,18 @@ function updateSourceFiles(isDark: boolean) {
   const root = sourceRoot();
   const gitConfig = join(root, "dot_config", "git", "config.tmpl");
   const glowConfig = join(root, "dot_config", "glow", "glow.yml.tmpl");
-  const claudeSettings = join(root, "dot_config", "claude", "private_settings.json");
   const herdrConfig = join(root, "dot_config", "herdr", "config.toml.tmpl");
 
-  replaceRequired(gitConfig, /(\[delta\]\n\s*light = )(true|false)/, `$1${isDark ? "false" : "true"}`);
+  replaceRequired(
+    gitConfig,
+    /(\[delta\]\n\s*light = )(true|false)/,
+    `$1${isDark ? "false" : "true"}`,
+  );
   replaceRequired(
     glowConfig,
     /^style:.*$/m,
     isDark ? 'style: "{{ .chezmoi.homeDir }}/.config/glow/gruber-darker.json"' : "style: light",
   );
-
-  const claude = readJsonObject(claudeSettings);
-  claude.theme = isDark ? "dark" : "light";
-  writeJson(claudeSettings, claude);
 
   replaceRequired(
     herdrConfig,
@@ -105,7 +88,6 @@ function applyAppearance(home: string) {
     "--force",
     join(home, ".config", "git", "config"),
     join(home, ".config", "glow", "glow.yml"),
-    join(home, ".config", "claude", "settings.json"),
     join(home, ".config", "herdr", "config.toml"),
   ]);
 }
