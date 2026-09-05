@@ -86,6 +86,8 @@ brew "cliproxyapi" # Expose Codex and other model providers through compatible A
 brew "models"      # TUI/CLI for browsing AI models, benchmarks, and coding agents
 brew "herdr"       # Agent multiplexer that lives in your terminal
 # {{ if $isDarwin -}}
+cask "devin-cli" # Coding agent with Devin Cloud integration
+brew "fx-agent"  # Tiny, open, embeddable, native coding agent
 cask "openusage" # AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
 # {{- end }}
 brew "rtk" # CLI proxy to minimize LLM token consumption
@@ -139,10 +141,10 @@ brew "skopeo"     # Work with remote container image registries
 # DATABASES
 # =============================================================================
 
-brew "leveldb"       # Key-value storage library with ordered mapping
+brew "leveldb"      # Key-value storage library with ordered mapping
 brew "mysql-client" # MySQL client CLI without the server
-brew "libpq"         # PostgreSQL client tools
-brew "redis"         # Persistent key-value database
+brew "libpq"        # PostgreSQL client tools
+brew "redis"        # Persistent key-value database
 
 # =============================================================================
 # CLOUD & CLI TOOLS
@@ -160,12 +162,12 @@ brew "googleworkspace-cli"
 # =============================================================================
 
 # Network utilities
-brew "bandwhich"                         # Terminal bandwidth utilization tool
-brew "gping"                             # Ping, but with a graph
-brew "mosh"                              # Remote terminal application
-brew "oha"                               # HTTP load generator and benchmark tool
+brew "bandwhich"    # Terminal bandwidth utilization tool
+brew "gping"        # Ping, but with a graph
+brew "mosh"         # Remote terminal application
+brew "oha"          # HTTP load generator and benchmark tool
 brew "speedtest-go" # Go CLI for testing internet speed
-brew "rustscan"                          # Modern Day Portscanner
+brew "rustscan"     # Modern Day Portscanner
 
 # {{ if $isDarwin -}}
 # Android tools
@@ -287,12 +289,12 @@ cask "whatsapp" # Native desktop client for WhatsApp
 # PRODUCTIVITY & NOTES
 # =============================================================================
 
-cask "anki"          # Memory training application
-cask "slack"         # Team communication and collaboration software
-cask "google-drive"  # Client for Google Drive storage
-cask "chatgpt"       # OpenAI's official desktop app
-cask "obsidian"      # Knowledge base for Markdown files
-cask "tolaria"       # Markdown knowledgebase manager
+cask "anki"         # Memory training application
+cask "slack"        # Team communication and collaboration software
+cask "google-drive" # Client for Google Drive storage
+cask "chatgpt"      # OpenAI's official desktop app
+cask "obsidian"     # Knowledge base for Markdown files
+cask "tolaria"      # Markdown knowledgebase manager
 
 # =============================================================================
 # MEDIA & ENTERTAINMENT
@@ -311,8 +313,8 @@ cask "bitwarden"    # Desktop password and login vault
 cask "crystalfetch" # UI for creating Windows installer ISO
 cask "handy"        # Speech to text application
 cask "keycastr"     # Open-source keystroke visualiser
-cask "notunes" # Prevent iTunes/Apple Music from launching
-cask "raycast" # Control your tools with a few keystrokes
+cask "notunes"      # Prevent iTunes/Apple Music from launching
+cask "raycast"      # Control your tools with a few keystrokes
 
 # Remote desktop
 cask "rustdesk" # Open source virtual/remote desktop application
@@ -323,7 +325,7 @@ cask "android-platform-tools"   # Android SDK Platform-Tools
 cask "openmtp"                  # Android file transfer
 
 # Virtualization
-cask "temurin" # Eclipse Temurin Java Development Kit
+cask "temurin"       # Eclipse Temurin Java Development Kit
 cask "wireshark-app" # Network protocol analyzer
 
 # {{ end -}}

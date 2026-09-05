@@ -4,11 +4,7 @@
 onboarding = false
 
 [terminal]
-# {{ if eq .chezmoi.os "linux" -}}
-default_shell = "/home/linuxbrew/.linuxbrew/bin/nu"
-# {{ else -}}
-default_shell = "nu"
-# {{- end }}
+default_shell = "# {{ .chezmoi.homeDir }}/.local/bin/nu-login"
 
 [keys]
 prefix = "ctrl+e"
@@ -42,7 +38,7 @@ edit_scrollback = "prefix+e"
 [[keys.command]]
 key = "super+b"
 type = "popup"
-command = "nu -c 'source ~/.config/nushell/scripts/core.nu; source ~/.config/nushell/scripts/project.nu; open-project'"
+command = "# {{ .chezmoi.homeDir }}/.local/bin/nu-login -c 'source ~/.config/nushell/scripts/core.nu; source ~/.config/nushell/scripts/project.nu; open-project'"
 width = "90%"
 height = "90%"
 description = "open worktree picker"
@@ -50,7 +46,7 @@ description = "open worktree picker"
 [[keys.command]]
 key = "super+shift+c"
 type = "popup"
-command = "nu -c 'source ~/.config/nushell/scripts/chezmoi.nu; chezmoi-apply-popup'"
+command = "# {{ .chezmoi.homeDir }}/.local/bin/nu-login -c 'source ~/.config/nushell/scripts/chezmoi.nu; chezmoi-apply-popup'"
 width = "90%"
 height = "90%"
 description = "apply chezmoi changes"
@@ -97,3 +93,6 @@ accent = "{{ $palette.accent }}"
 [experimental]
 kitty_graphics = true
 pane_history = true
+
+[worktrees]
+directory = "~/projects/work/.worktrees"

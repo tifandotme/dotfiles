@@ -2,9 +2,6 @@
 # shellcheck source=/dev/null
 [ -f "$HOME/.secrets" ] && . "$HOME/.secrets"
 
-# shellcheck source=/dev/null
-[ -f "$HOME/.profile" ] && . "$HOME/.profile"
-
 if command -v nu >/dev/null 2>&1; then
 	exec nu
 fi

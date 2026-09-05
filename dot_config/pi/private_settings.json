@@ -3,7 +3,7 @@
   "defaultModel": "gpt-5.6-luna",
   "defaultThinkingLevel": "xhigh",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.84.4",
+  "lastChangelogVersion": "0.85.0",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
@@ -40,7 +40,8 @@
   "enabledModels": [
     "openai-codex/gpt-5.6-luna:xhigh",
     "openai-codex/gpt-5.6-sol:medium",
-    "claude-bridge/claude-sonnet-5:medium",
+    "openai-codex/gpt-6-astra:medium",
+    "claude-bridge/claude-sonnet-5:high",
     "claude-bridge/claude-opus-5:medium"
   ],
   "compaction": {

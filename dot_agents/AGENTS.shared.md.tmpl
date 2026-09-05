@@ -3,19 +3,49 @@
 {{ output "gh" "api" "-H" "Accept: application/vnd.github.raw" "repos/upstash/context7/contents/rules/context7-cli.md" "--cache" "168h" -}}
 <!-- context7 -->
 
-- Write in ASD-STE100 Simplified Technical English.
+## Task tracking
+
+- Determine repository ownership from `git remote get-url origin` before tracking work. If the remote is unavailable or ownership is unclear, ask before creating or updating a task.
+- For repositories owned by `hadl-labs`, or work that the user explicitly identifies as company-related, use that repository's Backlog. Do not create or update personal Linear issues.
+- For all other repositories, use the personal Linear workspace `Tifan` in Pi and Claude Code. Treat local `.backlog/` directories as read-only migration archives.
+- For a named personal Linear issue, read it before work, set it to `In Progress` when work starts, record meaningful progress or blockers, then add a final summary and set it to `Done` after verification.
+- For new non-trivial personal work, search Linear before creating an issue. Use `Backlog` for unstarted work and `Todo` for selected ready work.
+- Apply exactly one personal repository label, `repo:<repository>`, derived from the Git remote repository name. Add it to new issues and correct it only when repository ownership is wrong.
+- Put the Linear issue identifier in branch, commit, and PR names when relevant.
+- If personal Linear MCP is unavailable, report that task tracking could not be updated. If a company Backlog is unavailable, report that instead of switching systems.
+
+# Repository context
+
 - Before working in a project area, find and read applicable `CONTEXT.md` files. Use their ubiquitous language consistently.
-- X/Twitter: use `bird` instead of browser automation.
+
+## Writing and documentation
+
+- Write in ASD-STE100 Simplified Technical English.
+- Docs: when editing markdown for agents or contributors, keep runnable shell commands and concrete repo paths first; omit redundant meta commentary.
+- Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.
+- Human-facing prose: for new files meant for humans to read, load `writing-clearly-and-concisely` first and `humanizer` last; do not use em dashes.
+
+## Git and GitHub
+
 - Git commits: use Conventional Commits only (`fix`, `feat`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`, `revert`). Keep headers under 72 chars, lowercase subject, no period, prefer header-only.
-- GitHub: use `gh` for github.com operations such as issues, PRs, actions, secrets, releases, and repo metadata; never use web search or built-in fetch tools for GitHub content. Do not write PR comments without user approval. 
-- GitHub workflows: when touching GitHub Actions workflows, run `actions-up -y` first to update `uses:` action version references non-interactively, then continue with any needed authoring, validation, or debugging.
+- GitHub: use `gh` for github.com operations such as issues, PRs, actions, secrets, releases, and repo metadata; never use web search or built-in fetch tools for GitHub content. Do not write PR comments without user approval.
+- When preparing or creating a pull request, always invoke `/show-me` to draft the PR description and use its output as the PR body. Keep the repository PR template, required sections, and user approval gate.
+
+## Browser, web, and cloud tools
+
+- X/Twitter: use `bird` instead of browser automation.
 - Browser use: load `agent-browser` first. For web browser work outside Electron, connect to the existing Helium for Agents browser with `agent-browser --session helium connect 9222`; use `--session helium` in later commands. If the connection fails, run `run-helium`, then retry the connection. For Electron work, follow the project `AGENTS.md` and use its project-specific CDP port; do not connect to Helium.
 - Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. Account mappings: `personal` → `ifan.anvity@gmail.com`, `work` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`.
 - Web: for URL search, extraction, or crawling, load relevant Tavily skills first, then use Tavily commands; never use built-in web tools unless Tavily fails.
 - JS tooling: for any CLI tool shipped as an npm package, use `bunx` instead of `npx`.
+
+## Shell and code quality
+
 - Shell scripts: after modifying one, run `shfmt -w -ln <bash|posix|mksh|bats|zsh> <path-to-script>` with its dialect. Run `shellcheck <path-to-script>` for Bash or POSIX-compatible scripts, `bash -n <path-to-script>` for Bash, and `zsh -n <path-to-script>` for Zsh. Prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
 - Code cleanup: after a fix changes direction, audit for speculative or now-dead code from earlier attempts. Remove unused helpers/imports/types before final checks, then rerun the relevant typecheck/lint/format commands.
-- Docs: when editing markdown for agents or contributors, keep runnable shell commands and concrete repo paths first; omit redundant meta commentary.
-- Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.
-- Human-facing prose: for new files meant for humans to read, load `writing-clearly-and-concisely` first and `humanizer` last; do not use em dashes.
-- Code comments: never leave tombstone comments (e.g. `# foo removed — reason`). Let the commit message carry removal rationale; deleted code needs no in-file trace.
+- Code comments: never leave tombstone comments (e.g. `# foo removed — reason`) or incident history: what an earlier version did, what broke, how it was found, who found it, ticket and PR numbers for the fix. Say what the code does and why it is this way now. Git blame and the commit message carry the story for anyone who wants it.
+- UI: Don't add narrative copy.
+
+## Worktrees
+
+- Herdr-managed worktrees: when `HERDR_ENV=1`, use `herdr worktree create`, `herdr worktree open`, and `herdr worktree remove`; do not use raw `git worktree add` or `git worktree remove`, or delete worktree directories manually. Pass an explicit absolute `--path` for new worktrees: use `~/projects/work/.worktrees` for work repositories and `~/projects/personal/.worktrees` for personal repositories. If a worktree was deleted manually, run `git worktree prune` to remove stale Git metadata.

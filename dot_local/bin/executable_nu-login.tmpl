@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
+
+# shellcheck source=/dev/null
+if [ -f "$HOME/.secrets" ]; then
+	. "$HOME/.secrets"
+fi
+
+# shellcheck source=/dev/null
+if [ -f "$HOME/.profile" ]; then
+	. "$HOME/.profile"
+fi
+
+# shellcheck disable=SC2093
+# {{ if eq .chezmoi.os "linux" -}}
+exec /home/linuxbrew/.linuxbrew/bin/nu "$@"
+# {{ else -}}
+exec /opt/homebrew/bin/nu "$@"
+# {{- end }}

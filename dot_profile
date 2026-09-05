@@ -4,6 +4,14 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+
+# shellcheck source=/dev/null
+if [ -f "$XDG_CONFIG_HOME/user-dirs.dirs" ]; then
+	set -a
+	. "$XDG_CONFIG_HOME/user-dirs.dirs"
+	set +a
+fi
+
 export CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$XDG_CONFIG_HOME/claude}"
 export CODEX_HOME="${CODEX_HOME:-$XDG_CONFIG_HOME/codex}"
 export CODEX_SQLITE_HOME="${CODEX_SQLITE_HOME:-$XDG_STATE_HOME/codex}"
@@ -29,10 +37,20 @@ export HOMEBREW_NO_ENV_HINTS="${HOMEBREW_NO_ENV_HINTS:-true}"
 export HOMEBREW_NO_ANALYTICS="${HOMEBREW_NO_ANALYTICS:-true}"
 
 for _dir in "$HOME/.local/bin" "$BUN_INSTALL/bin" "$XDG_DATA_HOME/mise/shims" "$HOME/.cargo/bin"; do
-  case ":$PATH:" in
-    *":$_dir:"*) ;;
-    *) PATH="$_dir:$PATH" ;;
-  esac
+	case ":$PATH:" in
+	*":$_dir:"*) ;;
+	*) PATH="$_dir:$PATH" ;;
+	esac
 done
 unset _dir
+# Keep personal command wrappers ahead of package-manager binaries.
+_personal_bin="$HOME/.local/bin"
+PATH="$_personal_bin:$(printf '%s' "$PATH" | awk -v dir="$_personal_bin" -F: '{
+  for (i = 1; i <= NF; i++)
+    if ($i != dir && $i != "") {
+      if (out != "") out = out ":"
+      out = out $i
+    }
+} END { printf "%s", out }')"
+unset _personal_bin
 export PATH

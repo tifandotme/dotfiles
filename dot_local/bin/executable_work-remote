@@ -1,0 +1,13 @@
+#!/usr/bin/env nu
+
+const work_remote_module = "~/.config/nushell/scripts/work_remote.nu"
+source $work_remote_module
+
+# Queue or execute remote work. Use `help` for command and subcommand help.
+def main [
+    command?: string # list, run, or help.
+    ...args: string # Command arguments.
+    --yes(-y) # Skip confirmation for run.
+] {
+    work-remote-main $command ...$args --yes=$yes
+}

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+work_remote="${WORK_REMOTE_BIN:-$HOME/.local/bin/work-remote}"
+if [[ ! -x "$work_remote" ]]; then
+	printf '%s\n' "work-remote is missing: $work_remote" >&2
+	exit 1
+fi
+
+common_dir=""
+if ! common_dir="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"; then
+	printf '%s\n' 'Cannot identify the repository for the work-remote hook.' >&2
+	exit 1
+fi
+
+original_hook="$(git config --local --get work-remote.originalHook 2>/dev/null || true)"
+if [[ -z "$original_hook" ]]; then
+	original_hook="$common_dir/hooks/pre-push"
+fi
+
+tmp="$(mktemp)"
+trap 'rm -f "$tmp"' EXIT
+cat >"$tmp"
+
+set +e
+"$work_remote" hook-pre-push "$@" <"$tmp"
+status=$?
+set -e
+if ((status != 0)); then
+	exit "$status"
+fi
+
+if [[ -x "$original_hook" && "$original_hook" != "$0" ]]; then
+	exec "$original_hook" "$@" <"$tmp"
+fi

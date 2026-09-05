@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+work_remote="${WORK_REMOTE_BIN:-$HOME/.local/bin/work-remote}"
+if [[ ! -x "$work_remote" ]]; then
+	printf '%s\n' "work-remote is missing: $work_remote" >&2
+	exit 1
+fi
+
+set +e
+"$work_remote" queue-pr-from-gh -- "$@"
+status=$?
+set -e
+if ((status != 75)); then
+	exit "$status"
+fi
+
+set +e
+"$work_remote" guard-gh -- "$@"
+status=$?
+set -e
+if ((status != 0)); then
+	exit "$status"
+fi
+
+shim_path="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)/gh"
+path_entries=()
+IFS=: read -r -a path_entries <<<"${PATH:-}"
+real_gh=''
+for entry in "${path_entries[@]}"; do
+	[[ -n "$entry" ]] || entry='.'
+	candidate="$entry/gh"
+	if [[ -x "$candidate" && ! "$candidate" -ef "$shim_path" ]]; then
+		real_gh="$candidate"
+		break
+	fi
+done
+
+if [[ -z "$real_gh" ]]; then
+	printf '%s\n' 'Cannot find the real gh executable behind the work-remote shim.' >&2
+	exit 127
+fi
+
+exec "$real_gh" "$@"
