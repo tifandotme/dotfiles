@@ -130,7 +130,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- -------------------------------- APPEARANCE ---------------------------------
 local function is_macos_dark()
   if vim.fn.has("macunix") ~= 1 then
-    return false
+    return true
   end
 
   return vim
