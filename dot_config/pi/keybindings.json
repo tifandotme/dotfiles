@@ -15,5 +15,6 @@
   "tui.input.submit": ["enter"],
   "app.message.followUp": ["ctrl+enter"],
   "app.models.save": ["ctrl+shift+s"],
+  "app.thinking.save": ["ctrl+shift+s"],
   "app.session.toggleSort": ["ctrl+shift+s"]
 }
