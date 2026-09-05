@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
+set -Eeuo pipefail
+
+if command -v bun >/dev/null 2>&1; then
+	bun_global_bin="$(bun pm bin -g)"
+
+	for bin in "$bun_global_bin"/*; do
+		if [[ -L "$bin" && ! -x "$bin" ]]; then
+			printf '%s\n' 'Repairing broken Bun global binaries'
+			# ponytail: rebuild all Bun globals for one broken shim; map package bins if this becomes slow.
+			bun install --cwd "$bun_global_bin/../install/global" --frozen-lockfile
+			break
+		fi
+	done
+fi

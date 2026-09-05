@@ -36,7 +36,9 @@ export LESS="${LESS:--I}"
 export HOMEBREW_NO_ENV_HINTS="${HOMEBREW_NO_ENV_HINTS:-true}"
 export HOMEBREW_NO_ANALYTICS="${HOMEBREW_NO_ANALYTICS:-true}"
 
-for _dir in "$HOME/.local/bin" "$BUN_INSTALL/bin" "$XDG_DATA_HOME/mise/shims" "$HOME/.cargo/bin"; do
+# Temporary fallback for Bun issue https://github.com/oven-sh/bun/issues/30450.
+# Remove this path when the issue is resolved.
+for _dir in "$HOME/.local/bin" "$BUN_INSTALL/bin" "$BUN_INSTALL/install/global/node_modules/.bin" "$XDG_DATA_HOME/mise/shims" "$HOME/.cargo/bin"; do
 	case ":$PATH:" in
 	*":$_dir:"*) ;;
 	*) PATH="$_dir:$PATH" ;;
