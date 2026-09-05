@@ -206,6 +206,15 @@ export def clean [] {
             print $"(ansi yellow)↷(ansi reset) Skipping Docker cleanup; Docker/Colima is not running"
         }
     }
+    if $nu.os-info.name == "linux" {
+        let trash = ($nu.home-dir | path join ".local" "share" "Trash")
+        if ($trash | path exists) {
+            clean-step "Linux Trash" { ^sudo -n find $trash -mindepth 2 -delete }
+        }
+        if (which journalctl | is-not-empty) {
+            clean-step "User journal" { ^journalctl --user --vacuum-size=200M }
+        }
+    }
     if (which mo | is-not-empty) {
         clean-step "Mole cleanup" { ^mo clean }
     }
