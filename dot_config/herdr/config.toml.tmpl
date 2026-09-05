@@ -16,7 +16,7 @@ new_workspace = "super+n"
 rename_workspace = "super+shift+r"
 close_workspace = "super+x"
 close_tab = "super+shift+w"
-new_tab = ""
+new_tab = "super+t"
 rename_tab = "super+r"
 split_vertical = "prefix+|"
 split_horizontal = "prefix+-"
@@ -38,12 +38,6 @@ focus_pane_down = "alt+j"
 focus_pane_up = "alt+k"
 focus_pane_right = "alt+l"
 edit_scrollback = "prefix+e"
-
-[[keys.command]]
-key = "super+t"
-type = "shell"
-command = 'herdr tab create --cwd "${HERDR_ACTIVE_PANE_CWD:-$PWD}" --focus'
-description = "new tab in focused pane cwd"
 
 [[keys.command]]
 key = "super+b"
