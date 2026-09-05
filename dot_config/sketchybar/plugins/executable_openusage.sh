@@ -42,7 +42,7 @@ else
 	color="$FOREGROUND"
 fi
 
-printf -v label '%.0f%%(%+.0f)' "$used" "$delta"
+printf -v label '%.0f%%/%.0f%%' "$used" "$pace"
 sketchybar --set "$NAME" \
 	icon.color="$ACCENT" \
 	label.color="$color" \
