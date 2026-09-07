@@ -71,11 +71,12 @@ def __git-worktree-inventory [project: string] {
         $worktrees = ($worktrees | append $current)
     }
 
+    let repository = (try { $worktrees | first | get path } catch { $project })
     {
-        project: $project
+        project: $repository
         worktrees: (
             $worktrees
-            | where path != $project
+            | where path != $repository
             | where {|worktree| $worktree.path | path exists }
         )
     }
@@ -271,6 +272,7 @@ def __project-rows [] {
     let branch_color = (ansi green_bold)
     let path_color = (ansi dark_gray_dimmed)
     mut rows = []
+    mut seen_repositories = []
 
     for project in (__project-dirs) {
         let inventory = (__git-worktree-inventory $project)
@@ -278,15 +280,21 @@ def __project-rows [] {
             continue
         }
 
-        let project_display = $project | path basename
+        let repository = $inventory.project
+        if $repository in $seen_repositories {
+            continue
+        }
+        $seen_repositories = ($seen_repositories | append $repository)
+
+        let project_display = $repository | path basename
         let display = $"($project_color)($project_display)($reset)"
         $rows = (
             $rows
             | append (
                 (__tree-row
                     "create"
-                    $project
-                    $project
+                    $repository
+                    $repository
                     ""
                     $display
                 )
@@ -307,7 +315,7 @@ def __project-rows [] {
                 | append (
                     (__tree-row
                         "worktree"
-                        $project
+                        $repository
                         $worktree.path
                         $worktree.branch
                         $display

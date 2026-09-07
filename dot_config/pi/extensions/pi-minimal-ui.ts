@@ -68,7 +68,7 @@ class FixedThinkingEditor extends CustomEditor {
     keybindings: KeybindingsManager,
     private readonly ctx: ExtensionContext,
   ) {
-    super(tui, theme, keybindings)
+    super(tui, theme, keybindings, { embedWorkingStatus: true })
   }
 
   override render(width: number): string[] {
