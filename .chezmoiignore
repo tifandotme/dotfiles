@@ -46,6 +46,7 @@ Library/LaunchAgents/**
 
 # {{ if ne .chezmoi.hostname "box" -}}
 
+openclaw-state/**
 .bashrc
 .bash_profile
 .inputrc
