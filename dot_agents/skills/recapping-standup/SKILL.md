@@ -22,6 +22,14 @@ gh search prs --author=@me --updated=<start>..<end> --json repository,title,url,
 
 Merged PRs are the record of what shipped. Open and draft PRs are work in progress, and their timestamps go stale — before reporting one as active work, check that it really moved inside the window.
 
+For every PR returned, fetch its description before writing any bullet:
+
+```sh
+gh pr view <url> --json body
+```
+
+The title names the change; the body carries the defect, the symptom, and the reasoning a title can't hold. Write from the body, not the title.
+
 Slack, via `slack_search_public_and_private`, `sort: timestamp`, `include_context: false`:
 
 - one day: `from:me on:YYYY-MM-DD`
