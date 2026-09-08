@@ -69,7 +69,9 @@
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
-    "verbs": ["Working"]
+    "verbs": [
+      "Working"
+    ]
   },
   "effortLevel": "medium",
   "modelSettings": {
@@ -82,9 +84,9 @@
   },
   "awaySummaryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "theme": "dark",
+  "theme": "auto",
   "editorMode": "normal",
-  "verbose": true,
+  "verbose": false,
   "preferredNotifChannel": "ghostty",
   "autoCompactEnabled": false,
   "terminalProgressBarEnabled": false,
