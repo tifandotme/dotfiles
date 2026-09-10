@@ -88,6 +88,17 @@ assert_not_running() {
 	fi
 }
 
+reset_screen_capture_permission() {
+	local bundle_id="$1"
+
+	if ! /usr/bin/tccutil reset ScreenCapture "$bundle_id" >/dev/null 2>&1; then
+		printf 'Warning: could not reset Screen Recording permission for %s\n' "$bundle_id" >&2
+		return
+	fi
+
+	printf 'Reset Screen Recording permission for %s; re-enable it in System Settings\n' "$bundle_id"
+}
+
 create_instance() {
 	local app_path="$1"
 	local app_name="$2"
@@ -158,6 +169,7 @@ LAUNCHER
 	chmod +x "$original_executable"
 
 	codesign --force --deep --sign - "$app_path" >/dev/null
+	reset_screen_capture_permission "$bundle_id"
 	printf 'Created %s\n' "$app_path"
 }
 

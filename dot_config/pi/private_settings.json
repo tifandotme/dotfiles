@@ -3,7 +3,7 @@
   "defaultModel": "gpt-5.6-luna",
   "defaultThinkingLevel": "xhigh",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.85.0",
+  "lastChangelogVersion": "0.85.1",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
@@ -31,7 +31,8 @@
     "git:github.com/DietrichGebert/ponytail",
     "npm:pi-herdr-subagents",
     "npm:pi-claude-bridge",
-    "npm:pi-clarify"
+    "npm:pi-clarify",
+    "npm:pi-claude-code-ui"
   ],
   "enableSkillCommands": false,
   "terminal": {
