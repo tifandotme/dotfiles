@@ -191,13 +191,13 @@ export def clean [] {
             }
         }
     }
-    if (which docker | is-not-empty) {
+    if (which docker | is-not-empty) and (($env.HOSTNAME? | default "") != "box") {
         let docker_info = try {
             ^docker info | complete
         } catch {|error| {exit_code: 1, stdout: "", stderr: $error.msg} }
 
-        # Volumes may contain databases; prune them explicitly when needed.
         if $docker_info.exit_code == 0 {
+            # Volumes may contain databases; prune them explicitly when needed.
             clean-step "Docker stopped containers" { ^docker container prune -f }
             clean-step "Docker unused networks" { ^docker network prune -f }
             clean-step "Docker unused images" { ^docker image prune -a -f }
