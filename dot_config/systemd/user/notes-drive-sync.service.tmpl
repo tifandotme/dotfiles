@@ -4,4 +4,4 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/rclone bisync gdrive: %h/projects/personal/notes --config=%h/.config/rclone/rclone.conf --exclude=/.git/** --exclude=/.DS_Store --exclude=/.tmp.drivedownload/** --exclude=/.tmp.driveupload/** --resilient --recover --max-lock=2m
+ExecStart=/home/linuxbrew/.linuxbrew/bin/rclone bisync gdrive: %h/projects/personal/notes --config=%h/.config/rclone/rclone.conf --exclude=/.git/** --exclude=/.DS_Store --exclude=/.tmp.drivedownload/** --exclude=/.tmp.driveupload/** --resilient --recover --max-lock=2m
