@@ -155,7 +155,91 @@ def --wrapped pi [...args] {
     }
 }
 
+def __claude-sync-mcp-policy [] {
+    let config = $env.XDG_CONFIG_HOME | path join "claude" ".claude.json"
+    if not ($config | path exists) {
+        error make {msg: $"Claude config not found: ($config)"}
+    }
+
+    let git_root = (^git rev-parse --show-toplevel | complete)
+    let project = if $git_root.exit_code == 0 {
+        $git_root.stdout | str trim
+    } else {
+        ^realpath (pwd) | str trim
+    }
+    let allowed = [
+        "betterstack"
+        "fff"
+        "claude.ai Gmail"
+        "claude.ai Google Calendar"
+        "claude.ai Google Drive"
+        "claude.ai Linear"
+        "claude.ai PostHog"
+        "claude.ai Slack"
+    ]
+    let blocked = [
+        "claude.ai Asana"
+        "claude.ai Atlassian"
+        "claude.ai Attio"
+        "claude.ai Box"
+        "claude.ai Canva"
+        "claude.ai Coda MCP"
+        "claude.ai Figma"
+        "claude.ai Gamma"
+        "claude.ai Granola"
+        "claude.ai HubSpot"
+        "claude.ai Intercom"
+        "claude.ai Jibble"
+        "claude.ai Lovable"
+        "claude.ai monday.com"
+        "claude.ai Notion"
+        "claude.ai Trello"
+        "claude.ai Whimsical"
+    ]
+    let lock = $"($config).lock"
+    let temporary = $"($config).tmp-(random uuid)"
+
+    # ponytail: one global lock; separate locks per project if parallel launches matter
+    try {
+        mkdir $lock
+    } catch {
+        error make {msg: $"Another Claude MCP policy update owns the lock: ($lock)"}
+    }
+    try {
+        let data = open --raw $config | from json
+        let projects = (try { $data.projects } catch { {} })
+        let state = (try { $projects | get $project } catch { {} })
+        let configured = (try { $state.mcpServers | columns } catch { [] })
+        let extra_blocked = $configured | where {|name|
+            not ($allowed | any {|allowed_name| $allowed_name == $name})
+        }
+        let disabled = (
+            (try { $state.disabledMcpServers } catch { [] })
+            | append $blocked
+            | append $extra_blocked
+            | uniq
+            | where {|name|
+                not ($allowed | any {|allowed_name| $allowed_name == $name})
+            }
+            | sort
+        )
+        let next_state = $state | upsert disabledMcpServers $disabled
+        let next_data = $data | upsert projects ($projects | upsert $project $next_state)
+        if $next_data != $data {
+            $next_data | to json --indent 2 | save --force $temporary
+            ^chmod 600 $temporary
+            mv -f $temporary $config
+        }
+    } catch {|error|
+        error make {msg: $"Cannot update Claude MCP state: ($error.msg)"}
+    } finally {
+        if ($temporary | path exists) { rm -f $temporary }
+        if ($lock | path exists) { rm -f $lock }
+    }
+}
+
 def --wrapped claude [...args] {
+    __claude-sync-mcp-policy
     let claude_label = ([
         (pwd | path basename)
         " (claude)"
