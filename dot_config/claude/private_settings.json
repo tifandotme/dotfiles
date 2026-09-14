@@ -76,10 +76,13 @@
   "effortLevel": "medium",
   "modelSettings": {
     "claude-sonnet-5": {
-      "effortLevel": "high"
+      "effortLevel": "medium"
     },
     "claude-opus-5": {
       "effortLevel": "medium"
+    },
+    "gpt-5.6-luna(high)": {
+      "effortLevel": "xhigh"
     }
   },
   "awaySummaryEnabled": true,
@@ -90,7 +93,7 @@
   "preferredNotifChannel": "ghostty",
   "autoCompactEnabled": false,
   "terminalProgressBarEnabled": false,
-  "remoteControlAtStartup": false,
+  "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": false,
