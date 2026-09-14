@@ -26,6 +26,16 @@ Use record timestamps, not file mtimes. Use user messages, assistant final respo
 
 Summarize meaningful outcomes, not every command. Each bullet must answer what happened and why it mattered. Combine overlapping Pi and Claude work into one bullet. Include a blocker only when it changes the next step.
 
+## Link Linear issues
+
+When a session contains a Linear issue ID or URL, link the existing issue in the journal bullet:
+
+```md
+- [TIF-66](https://linear.app/tifan/issue/TIF-66/...): updated Hevy OpenAPI coverage so agents can use the full CLI.
+```
+
+Preserve an existing URL. Use the loaded Linear MCP server only to resolve an ID to its existing URL. If no Linear server is available, leave the ID as plain text. Never create, update, comment on, or otherwise modify Linear issues. Do not import unrelated Linear activity, comments, descriptions, or status history.
+
 ## Classify entries
 
 - Claude Code sessions are Work.
