@@ -1,0 +1,16 @@
+{
+  "vaults": [
+    {
+      "label": "notes",
+      "path": "/Users/tifan/projects/personal/notes",
+      "alias": null,
+      "shortLabel": null,
+      "color": null,
+      "icon": null,
+      "mounted": true
+    }
+  ],
+  "active_vault": "/Users/tifan/projects/personal/notes",
+  "default_workspace_path": "/Users/tifan/projects/personal/notes",
+  "hidden_defaults": []
+}
