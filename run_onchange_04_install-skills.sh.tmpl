@@ -1,0 +1,159 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+
+set -Eeuo pipefail
+
+skills_dir="$HOME/.agents/skills"
+
+desired_skills=()
+
+install_repo_skills() {
+	local repo="$1"
+	shift
+	local skill_name
+	local missing_skills=()
+
+	desired_skills+=("$@")
+	for skill_name in "$@"; do
+		[[ -f "$skills_dir/$skill_name/SKILL.md" ]] || missing_skills+=("$skill_name")
+	done
+
+	if ((${#missing_skills[@]} == 0)); then
+		return
+	fi
+
+	printf 'Installing skills from %s\n' "$repo"
+	skills add "$repo" --agent claude-code codex --skill "${missing_skills[@]}" --global --yes --full-depth
+}
+
+if ! command -v skills >/dev/null 2>&1; then
+	printf '%s\n' 'Skipping global skills: skills CLI is not installed'
+	exit 0
+fi
+
+if ! command -v chezmoi >/dev/null 2>&1; then
+	printf '%s\n' 'Global skills require chezmoi to protect authored skills' >&2
+	exit 1
+fi
+
+# Skills are grouped by their source repository.
+install_repo_skills "https://github.com/basecamp/fizzy-cli.git" \
+	fizzy
+install_repo_skills "https://github.com/blader/humanizer.git" \
+	humanizer
+install_repo_skills "https://github.com/cursor/plugins.git#main" \
+	thermo-nuclear-code-quality-review
+install_repo_skills "https://github.com/github/gh-stack.git" \
+	gh-stack
+install_repo_skills "https://github.com/hadl-labs/agent-skills.git" \
+	hadl-trello
+install_repo_skills "https://github.com/herdrdev/herdr.git" \
+	herdr
+install_repo_skills "https://github.com/humanlayer/skills.git" \
+	show-me
+install_repo_skills "https://github.com/jakubkrehel/make-interfaces-feel-better.git" \
+	make-interfaces-feel-better
+install_repo_skills "https://github.com/jakubkrehel/skills.git" \
+	better-accessibility \
+	better-colors \
+	better-interface \
+	better-layout \
+	better-typography \
+	better-ui \
+	better-writing
+install_repo_skills "https://github.com/mattpocock/skills.git" \
+	code-review \
+	codebase-design \
+	diagnosing-bugs \
+	domain-modeling \
+	grill-me \
+	grill-with-docs \
+	grilling \
+	handoff \
+	implement \
+	improve-codebase-architecture \
+	prototype \
+	research \
+	resolving-merge-conflicts \
+	tdd \
+	teach \
+	to-spec \
+	to-tickets \
+	triage \
+	wait-what \
+	wayfinder \
+	writing-for-agents
+install_repo_skills "https://github.com/nushell/nu_scripts.git" \
+	nushell
+install_repo_skills "https://github.com/openai/skills.git" \
+	define-goal
+install_repo_skills "https://github.com/pbakaus/impeccable.git" \
+	impeccable
+install_repo_skills "https://github.com/plannotator/effective-html.git" \
+	design-artifact \
+	html \
+	html-diagram \
+	html-plan \
+	html-prototype \
+	html-wireframe
+install_repo_skills "https://github.com/s1dashu/ip-as-logo-skill.git" \
+	ip-as-logo
+install_repo_skills "https://github.com/tavily-ai/skills.git" \
+	tavily-cli \
+	tavily-crawl \
+	tavily-extract \
+	tavily-map \
+	tavily-research \
+	tavily-search
+install_repo_skills "https://github.com/tifandotme/hevy-cli.git" \
+	hevy-cli
+install_repo_skills "https://github.com/upstash/context7.git" \
+	find-docs
+install_repo_skills "https://github.com/vercel-labs/agent-browser.git" \
+	agent-browser
+install_repo_skills "https://github.com/warpdotdev/common-skills.git" \
+	skill-doctor
+install_repo_skills "https://github.com/wshobson/agents.git" \
+	bash-defensive-patterns
+
+protected_skills=()
+while IFS= read -r skill_name; do
+	[[ -n "$skill_name" ]] && protected_skills+=("$skill_name")
+done < <(
+	chezmoi managed |
+		awk -F/ '$1 == ".agents" && $2 == "skills" && NF == 3 { print $3 }' |
+		sort -u
+)
+
+contains_skill() {
+	local needle="$1"
+	shift
+	local skill_name
+
+	for skill_name in "$@"; do
+		[[ "$skill_name" == "$needle" ]] && return 0
+	done
+	return 1
+}
+
+stale_skills=()
+shopt -s nullglob
+for skill_path in "$skills_dir"/*; do
+	[[ -d "$skill_path" ]] || continue
+
+	skill_name=${skill_path##*/}
+	if contains_skill "$skill_name" "${desired_skills[@]}"; then
+		continue
+	fi
+	if contains_skill "$skill_name" "${protected_skills[@]}"; then
+		continue
+	fi
+
+	stale_skills+=("$skill_name")
+done
+
+if ((${#stale_skills[@]} > 0)); then
+	printf 'Removing stale global skills: %s\n' "${stale_skills[*]}"
+	skills remove --global "${stale_skills[@]}" --yes
+fi
