@@ -234,7 +234,7 @@ run = ["move-node-to-workspace 0_misc", "layout floating"]
 
 [[on-window-detected]]
 if.app-id = "com.tinyspeck.slackmacgap"
-run = "move-node-to-workspace 2_work"
+run = "move-node-to-workspace 0_misc"
 
 # Document viewers
 # [[on-window-detected]]
