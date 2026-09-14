@@ -4,6 +4,7 @@ macOS-first dotfiles, chezmoi + age encryption. Shell: Nushell. Two machines:
 
 - main macOS: primary, full desktop/dev env.
 - Ubuntu VPS `box`: secondary, headless/server.
+- `box` context: read `~/projects/personal/box/CONTEXT.md` when work concerns the `box` VPS. Read `~/projects/personal/box/AGENTS.md` before changing that repository.
 
 30+ tools: terminal emulators, editors, window mgmt, status bars, dev tooling. Scoped `AGENTS.md` files provide nearest-area instructions.
 

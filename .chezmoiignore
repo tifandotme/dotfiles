@@ -26,7 +26,6 @@ personal/
 Library/LaunchAgents/**
 .cache/sketchybar
 .config/aerospace
-.config/claude/settings.json
 .config/codex/config.toml
 .config/codex/hooks.json
 .config/gcloud
@@ -40,7 +39,6 @@ Library/LaunchAgents/**
 .config/keymaps
 .config/colima
 .config/zed
-.config/spotify-player
 
 # {{- end -}}
 
