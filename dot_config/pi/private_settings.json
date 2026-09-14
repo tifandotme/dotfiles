@@ -32,7 +32,7 @@
     "npm:pi-herdr-subagents",
     "npm:pi-claude-bridge",
     "npm:pi-clarify",
-    "npm:pi-claude-code-ui"
+    "npm:@pi-kaush/pi-tool-call-markers"
   ],
   "enableSkillCommands": false,
   "terminal": {
@@ -55,3 +55,4 @@
   },
   "showCacheMissNotices": true
 }
+
