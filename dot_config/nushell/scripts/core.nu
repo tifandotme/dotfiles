@@ -93,6 +93,52 @@ def --wrapped t [...args] {
 
 alias g = git
 
+def __helium_session_token [] {
+    let db = (
+        $nu.home-dir
+        | path join "Library" "Application Support" "net.imput.helium" "Profile 1" "Cookies"
+    )
+    if not ($db | path exists) {
+        error make {msg: $"Helium cookie database not found: ($db)"}
+    }
+
+    let key = (
+        ^security find-generic-password -a Helium -s "Helium Storage Key" -w
+        | str trim
+    )
+    let derived_key = (
+        $key
+        | encode utf-8
+        | ^python3 -c 'import hashlib,sys; print(hashlib.pbkdf2_hmac("sha1",sys.stdin.buffer.read(),b"saltysalt",1003,16).hex())'
+        | str trim
+    )
+    let encrypted = (
+        ^sqlite3 $db
+            "select hex(encrypted_value) from cookies where host_key=\"github.com\" and name=\"user_session\" order by last_update_utc desc limit 1"
+        | str trim
+    )
+    if ($encrypted | is-empty) {
+        error make {msg: "Helium has no github.com user_session cookie"}
+    }
+
+    $encrypted
+    | decode hex
+    | ^tail -c +4
+    | ^openssl enc -d -aes-128-cbc -K $derived_key -iv 20202020202020202020202020202020 -nopad
+    | ^python3 -c 'import sys; d=sys.stdin.buffer.read(); p=d[-1] if d else 0; value=d[32:-p] if 1 <= p <= 16 and d[-p:] == bytes([p]) * p else b""; assert value and all(32 <= c < 127 for c in value), "invalid Helium cookie"; sys.stdout.buffer.write(value)'
+    | str trim
+}
+
+def --wrapped gh [...args: string] {
+    if $args == ["image" "extract-token"] {
+        let token = (__helium_session_token)
+        print -e "Extracted session token from Helium main"
+        return $token
+    }
+
+    ^gh ...$args
+}
+
 alias b = bun
 alias npx = bunx
 

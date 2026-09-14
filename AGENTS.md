@@ -66,6 +66,7 @@ macos-only-value
 
 ### Chezmoi Workflow
 
+- This repository is the chezmoi source for the macOS machine and the Ubuntu VPS `box`.
 - Edit managed configuration through chezmoi source files under this repo, then run `chezmoi apply` or `chezmoi apply --dry-run` as appropriate.
 - Do not create runtime symlinks to source files. Let chezmoi manage target files.
 - Before editing a nested area, read the nearest scoped `AGENTS.md`; it overrides or extends this root guidance.

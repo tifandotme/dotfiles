@@ -237,12 +237,12 @@ if.app-id = "com.tinyspeck.slackmacgap"
 run = "move-node-to-workspace 0_misc"
 
 # Document viewers
-# [[on-window-detected]]
-# if.app-id = 'com.apple.Preview'
-# run = 'move-node-to-workspace 5_rest'
-# [[on-window-detected]]
-# if.app-id = 'com.apple.iBooksX'
-# run = 'move-node-to-workspace 5_rest'
+[[on-window-detected]]
+if.app-id = "com.apple.Preview"
+run = "move-node-to-workspace 0_misc"
+[[on-window-detected]]
+if.app-id = "com.apple.iBooksX"
+run = "move-node-to-workspace 0_misc"
 # Music
 [[on-window-detected]]
 if.app-id = "com.spotify.client"
