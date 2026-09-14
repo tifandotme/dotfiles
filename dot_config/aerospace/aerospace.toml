@@ -229,20 +229,23 @@ if.app-id = "com.hnc.Discord"
 run = "move-node-to-workspace 0_misc"
 
 [[on-window-detected]]
-if.app-id = "com.colliderli.iina"
-run = ["move-node-to-workspace 0_misc", "layout floating"]
-
-[[on-window-detected]]
 if.app-id = "com.tinyspeck.slackmacgap"
 run = "move-node-to-workspace 0_misc"
+
+# Media
+[[on-window-detected]]
+if.app-id = "com.colliderli.iina"
+run = ["move-node-to-workspace 0_misc", "layout floating"]
 
 # Document viewers
 [[on-window-detected]]
 if.app-id = "com.apple.Preview"
 run = "move-node-to-workspace 0_misc"
+
 [[on-window-detected]]
 if.app-id = "com.apple.iBooksX"
 run = "move-node-to-workspace 0_misc"
+
 # Music
 [[on-window-detected]]
 if.app-id = "com.spotify.client"
@@ -252,6 +255,7 @@ run = "move-node-to-workspace 0_misc"
 if.app-id = "com.apple.Music"
 run = "move-node-to-workspace 0_misc"
 
+# Downloads
 [[on-window-detected]]
 if.app-id = "org.m0k.transmission"
 run = "move-node-to-workspace 0_misc"
