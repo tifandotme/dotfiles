@@ -16,7 +16,7 @@
   "note_width_mode": "normal",
   "sidebar_type_pluralization_enabled": true,
   "initial_h1_auto_rename_enabled": true,
-  "ai_features_enabled": true,
+  "ai_features_enabled": false,
   "default_ai_agent": "pi",
   "default_ai_target": "agent:pi",
   "ai_model_providers": null,
