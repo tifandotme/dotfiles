@@ -1,5 +1,9 @@
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 
+# {{ if eq .chezmoi.hostname "box" }}
+.agents/skills/hadl-db-creds
+# {{ end }}
+
 README.md
 key.txt.age
 .mise.toml
