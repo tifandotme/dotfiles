@@ -32,6 +32,9 @@ outer.bottom = 7
 outer.left = 7
 outer.right = 7
 
+[workspace-to-monitor-force-assignment]
+6_aux = "secondary"
+
 # All possible keys:
 # - Letters.        a, b, c, ..., z
 # - Numbers.        0, 1, 2, ..., 9
@@ -77,6 +80,7 @@ cmd-2 = "workspace 2_work"  # Helium Work profile
 cmd-3 = "workspace 3_dev"
 cmd-4 = "workspace 4_terminal"
 cmd-5 = "workspace 5_notes"
+cmd-6 = "workspace 6_aux"
 # corne (conflict, comment for now)
 # ctrl-a = 'workspace 1_personal'
 # ctrl-s = 'workspace 2_work' # Electron/Android Studio development, or else
@@ -93,6 +97,7 @@ cmd-shift-2 = ["move-node-to-workspace 2_work", "workspace 2_work"]
 cmd-shift-3 = ["move-node-to-workspace 3_dev", "workspace 3_dev"]
 cmd-shift-4 = ["move-node-to-workspace 4_terminal", "workspace 4_terminal"]
 cmd-shift-5 = ["move-node-to-workspace 5_notes", "workspace 5_notes"]
+cmd-shift-6 = ["move-node-to-workspace 6_aux", "workspace 6_aux"]
 # corne (nah, confict)
 # ctrl-shift-a = ['move-node-to-workspace 1_personal', 'workspace 1_personal']
 # ctrl-shift-s = ['move-node-to-workspace 2_projects', 'workspace 2_projects']
