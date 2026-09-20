@@ -240,6 +240,11 @@ sketchybar --add item openusage_spacer right \
 	padding_right=0 \
 	width=5
 
+sketchybar --add item linear_issues right \
+	--set linear_issues \
+	update_freq=300 \
+	script="$PLUGIN_DIR/linear_issues.sh"
+
 sketchybar --add item herdr_agents right \
 	--set herdr_agents \
 	update_freq=5 \
