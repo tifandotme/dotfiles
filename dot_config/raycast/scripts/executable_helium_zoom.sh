@@ -250,4 +250,7 @@ done
 if ((${#running_instances[@]} > 0)); then
 	reopen_running_instances
 	restart_required=false
+	printf 'Zoom to %s%% (Helium restarted)\n' "$target_percent"
+else
+	printf 'Zoom to %s%%\n' "$target_percent"
 fi
