@@ -13,6 +13,12 @@ export default {
       browser: "net.imput.helium.work",
     },
     {
+      match: (url) =>
+        url.hostname === "linear.app" &&
+        (url.pathname === "/hadl" || url.pathname.startsWith("/hadl/")),
+      browser: "net.imput.helium.work",
+    },
+    {
       match: (url) => url.hostname === "hadlworkspace.slack.com",
       browser: "net.imput.helium.work",
     },
