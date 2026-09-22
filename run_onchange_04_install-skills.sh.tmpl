@@ -5,6 +5,7 @@
 set -Eeuo pipefail
 
 skills_dir="$HOME/.agents/skills"
+claude_skills_dir="${XDG_CONFIG_HOME:-$HOME/.config}/claude/skills"
 
 desired_skills=()
 
@@ -16,7 +17,7 @@ install_repo_skills() {
 
 	desired_skills+=("$@")
 	for skill_name in "$@"; do
-		[[ -f "$skills_dir/$skill_name/SKILL.md" ]] || missing_skills+=("$skill_name")
+		[[ -f "$skills_dir/$skill_name/SKILL.md" && -f "$claude_skills_dir/$skill_name/SKILL.md" ]] || missing_skills+=("$skill_name")
 	done
 
 	if ((${#missing_skills[@]} == 0)); then
