@@ -470,7 +470,14 @@ def enqueue-push [args: list<string>] {
     }
 }
 
-def queue-pr-task [repo_root: string, repo_slug: string, branch: string, base: string, title: string, body: string] {
+def queue-pr-task [
+    repo_root: string
+    repo_slug: string
+    branch: string
+    base: string
+    title: string
+    body: string
+] {
     let remote = "origin"
     let local_ref = $'refs/heads/($branch)'
     let remote_ref = $local_ref
@@ -586,7 +593,14 @@ def queue-pr-from-gh [args: list<string>] {
         exit 75
     }
     let parsed = parse-gh-pr-create $args
-    queue-pr-task $repo_root $parsed.repo $parsed.head $parsed.base $parsed.title $parsed.body
+    (queue-pr-task
+        $repo_root
+        $parsed.repo
+        $parsed.head
+        $parsed.base
+        $parsed.title
+        $parsed.body
+    )
 }
 
 def hook-pre-push [args: list<string>] {
@@ -758,7 +772,9 @@ def work-remote-main [command?: string, --yes(-y), ...args: string] {
             } else { $args }
             run-tasks $run_args
         }
-        "queue-pr-from-gh" => { queue-pr-from-gh $args | ignore }
+        "queue-pr-from-gh" => {
+            queue-pr-from-gh $args | ignore
+        }
         "enqueue-push" => {
             enqueue-push $args | ignore
         }

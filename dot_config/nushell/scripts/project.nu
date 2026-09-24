@@ -71,7 +71,11 @@ def __git-worktree-inventory [project: string] {
         $worktrees = ($worktrees | append $current)
     }
 
-    let repository = (try { $worktrees | first | get path } catch { $project })
+    let repository = (
+        try {
+            $worktrees | first | get path
+        } catch { $project }
+    )
     {
         project: $repository
         worktrees: (

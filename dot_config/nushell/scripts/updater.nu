@@ -197,6 +197,7 @@ export def clean [] {
         } catch {|error| {exit_code: 1, stdout: "", stderr: $error.msg} }
 
         if $docker_info.exit_code == 0 {
+
             # Volumes may contain databases; prune them explicitly when needed.
             clean-step "Docker stopped containers" { ^docker container prune -f }
             clean-step "Docker unused networks" { ^docker network prune -f }
@@ -207,7 +208,7 @@ export def clean [] {
         }
     }
     if $nu.os-info.name == "linux" {
-        let trash = ($nu.home-dir | path join ".local" "share" "Trash")
+        let trash = $nu.home-dir | path join ".local" "share" "Trash"
         if ($trash | path exists) {
             clean-step "Linux Trash" { ^sudo -n find $trash -mindepth 2 -delete }
         }

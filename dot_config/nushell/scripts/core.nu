@@ -254,8 +254,16 @@ def __claude-sync-mcp-policy [] {
     try {
         let data = open --raw $config | from json
         let projects = (try { $data.projects } catch { {} })
-        let state = (try { $projects | get $project } catch { {} })
-        let configured = (try { $state.mcpServers | columns } catch { [] })
+        let state = (
+            try {
+                $projects | get $project
+            } catch { {} }
+        )
+        let configured = (
+            try {
+                $state.mcpServers | columns
+            } catch { [] }
+        )
         let extra_blocked = $configured | where {|name|
             not ($allowed | any {|allowed_name| $allowed_name == $name})
         }
@@ -276,9 +284,7 @@ def __claude-sync-mcp-policy [] {
             ^chmod 600 $temporary
             mv -f $temporary $config
         }
-    } catch {|error|
-        error make {msg: $"Cannot update Claude MCP state: ($error.msg)"}
-    } finally {
+    } catch {|error| error make {msg: $"Cannot update Claude MCP state: ($error.msg)"} } finally {
         if ($temporary | path exists) { rm -f $temporary }
         if ($lock | path exists) { rm -f $lock }
     }
@@ -304,9 +310,9 @@ def --wrapped claudex [...args] {
     let proxy_env = [
         [ANTHROPIC_BASE_URL "http://127.0.0.1:8317"]
         [ANTHROPIC_AUTH_TOKEN "sk-dummy"]
-        [ANTHROPIC_DEFAULT_OPUS_MODEL "gpt-5.6-sol(medium)"]
-        [ANTHROPIC_DEFAULT_SONNET_MODEL "gpt-5.6-terra(high)"]
-        [ANTHROPIC_DEFAULT_HAIKU_MODEL "gpt-5.6-luna(high)"]
+        [ANTHROPIC_DEFAULT_OPUS_MODEL "gpt-6-astra(medium)"]
+        [ANTHROPIC_DEFAULT_SONNET_MODEL "gpt-6-sol(medium)"]
+        [ANTHROPIC_DEFAULT_HAIKU_MODEL "gpt-6-luna(high)"]
     ] | into record
     with-env $proxy_env {
         claude ...$args
@@ -328,7 +334,10 @@ alias tf = trafilatura
 
 alias _amp = amp
 def --wrapped amp [...args] {
-    let amp_label = ([(pwd | path basename) " (amp)"] | str join)
+    let amp_label = ([
+        (pwd | path basename)
+        " (amp)"
+    ] | str join)
     herdr-wrap $amp_label {
         _amp ...$args
     }
@@ -340,8 +349,10 @@ alias rg = rg --smart-case --glob '!{.git/*,out/*,**/node_modules/**}' --max-col
 def --wrapped gdu-go [...args] {
     let gdu_dir = if ($args | is-empty) {
         pwd
-    } else { $args.0 | path expand }
-    let gdu_label = ([$gdu_dir " (gdu-go)"] | str join)
+    } else {
+        $args.0 | path expand
+    }
+    let gdu_label = [$gdu_dir " (gdu-go)"] | str join
     herdr-wrap $gdu_label {
         run-external (__external gdu-go) ...$args
     }
