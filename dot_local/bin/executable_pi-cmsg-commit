@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test|revert'
-model='openai-codex/gpt-5.6-luna'
+model='openai-codex/gpt-6-luna'
 max_attempts=3
 script_name='pi-cmsg-commit'
 tmpdir=''
