@@ -1,7 +1,7 @@
 ---
 name: oracle
 description: Human-triggered second opinion for difficult debugging, architecture, security, concurrency, and consequential technical decisions
-model: openai-codex/gpt-5.6-sol
+model: openai-codex/gpt-6-astra
 thinking: high
 tools: read, bash
 deny-tools: claude
