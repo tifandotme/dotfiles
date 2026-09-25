@@ -6,13 +6,19 @@
 ## Task tracking
 
 - Determine repository ownership from `git remote get-url origin` before tracking work. If the remote is unavailable or ownership is unclear, ask before creating or updating a task.
-- For repositories owned by `hadl-labs`, or work that the user explicitly identifies as company-related, use that repository's Backlog. Do not create or update personal Linear issues.
+- For repositories owned by `hadl-labs`, or work that the user explicitly identifies as company-related, use the company Linear workspace (team `Hadl`, `HAD-` issues). Do not create or update personal Linear issues. Follow the repository's own instructions for ADRs and docs.
 - For all other repositories, use the personal Linear workspace `Tifan` in Pi and Claude Code. Treat local `.backlog/` directories as read-only migration archives.
 - For a named personal Linear issue, read it before work, set it to `In Progress` when work starts, record meaningful progress or blockers, then add a final summary and set it to `Done` after verification.
 - For new non-trivial personal work, search Linear before creating an issue. Use `Backlog` for unstarted work and `Todo` for selected ready work.
 - Apply exactly one personal repository label, `repo:<repository>`, derived from the Git remote repository name. Add it to new issues and correct it only when repository ownership is wrong.
 - Put the Linear issue identifier in branch, commit, and PR names when relevant.
-- If personal Linear MCP is unavailable, report that task tracking could not be updated. If a company Backlog is unavailable, report that instead of switching systems.
+- If personal Linear MCP is unavailable, report that task tracking could not be updated. If company Linear is unavailable, report that instead of switching workspaces.
+
+## Specs and PRDs
+
+- Write a PRD for an initiative that spans many issues and has open scope or value. Put it in a Linear project document. User stories and success metrics go in the PRD.
+- Write a spec for one issue with a settled design. Put it in the issue description.
+- When a third-party skill (for example `to-spec` or `to-prd`) publishes to a company Linear team, fill the team's issue template (read it with `get_template`) instead of the skill's template. Map Problem Statement → Current Condition, Solution → What we want to achieve, Implementation Decisions → Architecture/Approach, Testing Decisions → Testing, Further Notes → Related Links. Turn user stories into Definition of Done acceptance criteria. Keep file paths in Relevant Repos/Files. Do not apply triage labels that the team does not have.
 
 ## Completion
 
