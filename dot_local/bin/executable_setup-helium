@@ -78,6 +78,8 @@ instance_is_current() {
 		grep -Fq -- '--remote-debugging-address=127.0.0.1' "$executable" || return 1
 		grep -Fq -- '--remote-debugging-port=' "$executable" || return 1
 	fi
+
+	codesign --verify --deep --strict "$app_path" >/dev/null 2>&1 || return 1
 }
 
 assert_not_running() {
@@ -168,6 +170,7 @@ LAUNCHER
 	fi
 	chmod +x "$original_executable"
 
+	xattr -dr com.apple.FinderInfo "$app_path"
 	codesign --force --deep --sign - "$app_path" >/dev/null
 	reset_screen_capture_permission "$bundle_id"
 	printf 'Created %s\n' "$app_path"
