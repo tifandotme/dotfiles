@@ -86,33 +86,6 @@ sketchybar --add item front_app left \
 	script="$PLUGIN_DIR/front_app.sh" \
 	--subscribe front_app front_app_switched
 
-# --------------- CENTER
-
-# IF USING SHITTY SPOTIFY ELECTRON APP, KEEPING THIS ARCHIVED
-# warning, this shit caused:
-# - spotify to be opened when reloading sketchybar config and after system boot up
-# - a glitch (workspace change back and forth) when cmd-q -ing spotify (sometimes)
-# sketchybar --add event spotify_update "com.spotify.client.PlaybackStateChanged"
-# sketchybar --add item spotify center \
-#   --set spotify \
-#   "${GHOST[@]}" \
-#   icon="􀑪" \
-#   script="$PLUGIN_DIR/spotify.sh" \
-#   --subscribe spotify spotify_update
-
-# SPOTIFY-PLAYER TUI
-# sketchybar --add item spotify center \
-#	--set spotify \
-#	label.max_chars=40 \
-#	label.scroll_duration=300 \
-#	scroll_texts=on \
-#	"${GHOST[@]}" \
-#	label.shadow.drawing=off \
-#	icon="􀑪" \
-#	drawing=off \
-#	update_freq=5 \
-#	script="$PLUGIN_DIR/spotify.sh"
-
 # --------------- RIGHT
 
 sketchybar --add item calendar right \
@@ -126,23 +99,11 @@ sketchybar --add item battery right \
 	script="$PLUGIN_DIR/battery.sh" \
 	--subscribe battery system_woke power_source_change
 
-# sketchybar --add item system right \
-#	--set system \
-#	icon="􀴽" \
-#	icon.padding_right=0 \
-#	update_freq=5 \
-#	script="$PLUGIN_DIR/system.sh"
-
 # Start smart battery monitor in background
 exec "$PLUGIN_DIR/battery_monitor.sh" smart-monitor &
 
 # Start caffeinate monitor in background
 exec "$PLUGIN_DIR/caffeinate_monitor.sh" smart-monitor &
-
-# sketchybar --add item volume right \
-#   --set volume \
-#   script="$PLUGIN_DIR/volume.sh" \
-#   --subscribe volume volume_change
 
 sketchybar --add item wifi right \
 	--set wifi \
@@ -217,20 +178,6 @@ sketchybar --add bracket codex_usage codex_session codex_weekly \
 	background.corner_radius=99 \
 	background.height=20
 
-# sketchybar --add item network_speed right \
-#   --set network_speed \
-#   icon="􀴽" \
-#   icon.padding_right=0 \
-#   update_freq=1 \
-#   script="$PLUGIN_DIR/network_speed.sh"
-
-# sketchybar --add item vpn right \
-#   --set vpn \
-#   update_freq=5 \
-#   click_script="open -a 'Mullvad VPN'" \
-#   script="$PLUGIN_DIR/vpn.sh" \
-#   --subscribe vpn wifi_change front_app_switched
-
 sketchybar --add item openusage_spacer right \
 	--set openusage_spacer \
 	background.drawing=off \
@@ -256,12 +203,6 @@ sketchybar --add item slack right \
 	click_script="open -a 'Slack'" \
 	script="$PLUGIN_DIR/slack.sh" \
 	--subscribe slack system_woke
-
-# sketchybar --add item theme_toggle right \
-#   --set theme_toggle \
-#   icon="􀡊" \
-#   icon.padding_right=0 \
-#   click_script="$PLUGIN_DIR/toggle_appearance.sh"
 
 sketchybar --add event caffeinate_toggle
 sketchybar --add item caffeinate right \
