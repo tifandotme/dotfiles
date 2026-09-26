@@ -319,6 +319,16 @@ def --wrapped claudex [...args] {
     }
 }
 
+alias _dotenvx = dotenvx
+def --wrapped dotenvx [...args] {
+    with-env {
+        DOTENVX_NO_ARMOR: "true"
+        DOTENVX_NO_1PASSWORD: "true"
+    } {
+        _dotenvx ...$args
+    }
+}
+
 alias _codex = ^codex
 def --wrapped codex [...args] { _codex --dangerously-bypass-approvals-and-sandbox ...$args }
 
@@ -339,7 +349,9 @@ def --wrapped amp [...args] {
         " (amp)"
     ] | str join)
     herdr-wrap $amp_label {
-        _amp ...$args
+        with-env { AMP_REMOTE_CONTROL_TERMINAL: "1" } {
+            _amp ...$args
+        }
     }
 }
 

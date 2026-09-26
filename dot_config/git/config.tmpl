@@ -24,6 +24,9 @@
 	prune = true
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[credential "https://ampcode.com/"]
+	helper =
+	helper = !amp git-credential-helper
 
 {{ if eq .chezmoi.os "darwin" -}}
 [maintenance]

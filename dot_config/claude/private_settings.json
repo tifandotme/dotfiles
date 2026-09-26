@@ -13,7 +13,7 @@
   "attribution": {
     "commit": "",
     "pr": "",
-    "sessionUrl": false
+    "sessionUrl": true
   },
   "model": "opus",
   "hooks": {
