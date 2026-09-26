@@ -9,7 +9,6 @@
     "jnsahaj/lumen",
     "nikitabobko/tap",
     "oven-sh/bun",
-    "philocalyst/tap",
-    "webstonehq/tap"
+    "philocalyst/tap"
   ]
 }
