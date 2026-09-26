@@ -1,6 +1,6 @@
 # ~/.\*
 
-Dotfiles for exactly two machines:
+A chezmoi-managed setup for exactly two machines:
 
 - a main macOS machine
 - an Ubuntu VPS named `box`
