@@ -85,12 +85,6 @@ def --wrapped nvimg [...args] {
 
 alias vimg = nvimg
 
-def --wrapped t [...args] {
-    herdr-wrap "tuxedo" {
-        ^tuxedo ...$args
-    }
-}
-
 alias g = git
 
 def __helium_session_token [] {
