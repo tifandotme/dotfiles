@@ -62,4 +62,6 @@
 
 ## Worktrees
 
-- Herdr-managed worktrees: when `HERDR_ENV=1`, use `herdr worktree create`, `herdr worktree open`, and `herdr worktree remove`; do not use raw `git worktree add` or `git worktree remove`, or delete worktree directories manually. Pass an explicit absolute `--path` for new worktrees: use `~/projects/work/.worktrees` for work repositories and `~/projects/personal/.worktrees` for personal repositories. If a worktree was deleted manually, run `git worktree prune` to remove stale Git metadata.
+- When running in Herdr, prefer `herdr worktree` for a separate write-owning task that needs its own checkout. Let native subagents share their parent checkout. Remove a worktree with the tool that created it.
+- For a new worktree, pass an absolute `--path`: `~/projects/work/.worktrees/<repo>/<name>` for work repositories, `~/projects/personal/.worktrees/<repo>/<name>` for personal repositories. Do not use agent-native worktrees such as `.claude/worktrees/`.
+- Keep one writing agent per worktree at a time. To move a task to a different agent, stop the first session, then start the next session in the same worktree.
