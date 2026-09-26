@@ -14,10 +14,6 @@ scripts/
 .gitignore
 AGENTS.md
 CLAUDE.md
-.config/nushell/AGENTS.md
-.config/nushell/CLAUDE.md
-.config/sketchybar/AGENTS.md
-.config/sketchybar/CLAUDE.md
 .agents/AGENTS.content*
 .agents/AGENTS.shared*
 

@@ -28,9 +28,9 @@ brew "raycast"
 # {{- end }}
 
 # Applies only to the Ubuntu VPS named box:
-# {{ if eq .chezmoi.hostname "box" -}}
-brew "fail2ban"
-# {{- end }}
+{{ if eq .chezmoi.hostname "box" -}}
+server_role = "headless"
+{{ end -}}
 ```
 
 Many templates use comment-safe chezmoi delimiters:
@@ -82,7 +82,7 @@ macos-only-value
 
 ### Pi Configuration
 
-- Nushell sets `PI_CODING_AGENT_DIR` in `dot_config/nushell/env.nu` to `$XDG_CONFIG_HOME/pi`.
+- Nushell sets `PI_CODING_AGENT_DIR` in `dot_config/nushell/env.nu.tmpl` to `$XDG_CONFIG_HOME/pi`.
 - Treat `~/.config/pi` as canonical Pi agent config dir.
 - Don't write Pi config/agents/extensions/settings to `~/.pi/agent` unless asked or `PI_CODING_AGENT_DIR` unset.
 
@@ -97,14 +97,14 @@ Neovim config for a minimal terminal IDE.
 
 After changing Lua files under `dot_config/nvim/`, run:
 
-| Task             | Command                                                                                                                                                                    |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Format Lua       | `stylua dot_config/nvim`                                                                                                                                                   |
-| Check formatting | `stylua --check dot_config/nvim`                                                                                                                                           |
-| Static analysis  | `lua-language-server --check dot_config/nvim --checklevel Warning`                                                                                                         |
-| Syntax check     | `luac -p dot_config/nvim/init.lua dot_config/nvim/colors/gruber-darker.lua dot_config/nvim/lua/buffers.lua dot_config/nvim/lua/formatting.lua dot_config/nvim/lua/lsp.lua` |
-| Smoke test       | `nvim --headless '+lua print("nvim-ok")' +qa`                                                                                                                              |
-| Chezmoi dry run  | `chezmoi apply --dry-run --force`                                                                                                                                          |
+| Task             | Command                                                                                   |
+| ---------------- | ----------------------------------------------------------------------------------------- |
+| Format Lua       | `stylua dot_config/nvim`                                                                  |
+| Check formatting | `stylua --check dot_config/nvim`                                                          |
+| Static analysis  | `lua-language-server --check dot_config/nvim --checklevel Warning`                        |
+| Syntax check     | `luac -p dot_config/nvim/init.lua dot_config/nvim/colors/*.lua dot_config/nvim/lua/*.lua` |
+| Smoke test       | `nvim --headless '+lua print("nvim-ok")' +qa`                                             |
+| Chezmoi dry run  | `chezmoi apply --dry-run --force`                                                         |
 
 ## SketchyBar Configuration
 
@@ -114,7 +114,7 @@ Custom macOS status bar with plugin-based architecture. Main config: `dot_config
 
 ### Patterns and Conventions
 
-All plugins must use the `executable_` prefix in chezmoi:
+Executable plugin scripts must use the `executable_` prefix in chezmoi. Keep `symlink_` and `remove_` entries under their matching chezmoi prefixes:
 
 ```text
 plugins/executable_slack.sh  # Executable after chezmoi apply
@@ -181,28 +181,6 @@ To verify SketchyBar changes, run `chezmoi apply --dry-run ~/.config/sketchybar/
 
 ## Nushell Configuration
 
-### Package Identity
-
-Primary shell environment. `dot_config/nushell/config.nu` is the entry point. Domain-specific logic lives in `scripts/` as named modules sourced at startup.
-
-### Module Structure
-
-```text
-scripts/
-  core.nu      # Aliases and fundamental overrides (ls→eza, cat→bat, etc.)
-  git.nu       # Git helper commands
-  dev.nu       # Development workflow commands
-  chezmoi.nu   # Chezmoi helpers
-  cloud.nu     # GCP / cloud commands
-  docker.nu    # Docker helpers
-  media.nu     # Media processing (yt-dlp, ffmpeg wrappers)
-  project.nu   # Project navigation
-  system.nu    # System info / macOS commands
-  updater.nu   # Package update workflows
-  utils.nu     # General utilities
-  cert.nu      # Certificate helpers
-```
-
 ### Patterns and Conventions
 
 Put aliases in `scripts/core.nu`:
@@ -226,20 +204,12 @@ def --env activate [] {
 
 Use `def --env` when a command must modify `$env`.
 
-Put environment variables in `env.nu`, not `config.nu`:
+Put environment variables in `env.nu.tmpl`, not `config.nu.tmpl`:
 
 ```nushell
 $env.XDG_CONFIG_HOME = ($env.HOME | path join ".config")
 $env.PATH = ($env.PATH | prepend ($env.HOME | path join ".bun/bin"))
 ```
-
-### Key Files
-
-- Entry point: `dot_config/nushell/config.nu` (hooks, `$env.config`, sources all modules)
-- Environment setup: `dot_config/nushell/env.nu` (PATH, XDG dirs, tool environment variables)
-- Aliases: `dot_config/nushell/scripts/core.nu`
-- Git integration: `dot_config/nushell/scripts/git.nu`
-- Formatter notes: `dot_config/nushell/README.md` (topiary-nushell submodule status)
 
 ### Common Gotchas
 
@@ -247,7 +217,6 @@ $env.PATH = ($env.PATH | prepend ($env.HOME | path join ".bun/bin"))
 - Nushell aliases require `=`: `alias foo = bar`.
 - `$env.PATH` must be a list; use `prepend` or `append`, not string concatenation.
 - Chezmoi run scripts use Bash (`#!/usr/bin/env bash`), not Nushell.
-- Use `def --env` for commands that set environment variables.
 
 To verify Nushell changes, run `chezmoi apply --dry-run ~/.config/nushell/` and confirm there are no errors.
 
