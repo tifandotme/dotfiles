@@ -3,9 +3,22 @@
 set -Eeuo pipefail
 
 allowed_types='fix|feat|build|chore|ci|docs|style|refactor|perf|test|revert'
-model='haiku'
 max_attempts=3
-script_name='claude-cmsg-commit'
+script_name="${0##*/}"
+case "$script_name" in
+pi-cmsg-commit)
+	agent=pi
+	model='openai-codex/gpt-6-luna'
+	;;
+claude-cmsg-commit)
+	agent=claude
+	model='haiku'
+	;;
+*)
+	printf 'Run as pi-cmsg-commit or claude-cmsg-commit\n' >&2
+	exit 1
+	;;
+esac
 tmpdir=''
 prompt_file=''
 commit_msg_file=''
@@ -36,7 +49,7 @@ check_dependencies() {
 	local -a missing=()
 	local cmd=''
 
-	for cmd in git claude; do
+	for cmd in git "$agent"; do
 		if ! command -v "$cmd" >/dev/null 2>&1; then
 			missing+=("$cmd")
 		fi
@@ -116,17 +129,35 @@ EOF
 }
 
 generate_message() {
-	if ! raw_output="$(
-		claude \
-			--print \
-			--no-session-persistence \
-			--tools '' \
-			--disable-slash-commands \
-			--setting-sources '' \
-			--model "$model" \
-			<"$prompt_file"
-	)"; then
-		return 1
+	if [[ "$agent" == pi ]]; then
+		if ! raw_output="$(
+			pi \
+				--print \
+				--no-session \
+				--no-tools \
+				--no-context-files \
+				--no-skills \
+				--no-extensions \
+				--no-prompt-templates \
+				--model "$model" \
+				--thinking off \
+				@"$prompt_file" | sed -e 's/\x1b\[[0-9;]*m//g'
+		)"; then
+			return 1
+		fi
+	else
+		if ! raw_output="$(
+			claude \
+				--print \
+				--no-session-persistence \
+				--tools '' \
+				--disable-slash-commands \
+				--setting-sources '' \
+				--model "$model" \
+				<"$prompt_file"
+		)"; then
+			return 1
+		fi
 	fi
 }
 
@@ -152,7 +183,7 @@ normalize_and_validate() {
 	done
 
 	if ((${#lines[@]} == 0)); then
-		printf 'ERROR: claude returned an empty commit message\n'
+		printf 'ERROR: %s returned an empty commit message\n' "$agent"
 		return 1
 	fi
 
@@ -191,7 +222,7 @@ validation_output=''
 
 while ((attempt <= max_attempts)); do
 	build_prompt "$attempt" "$feedback" "$previous_output"
-	generate_message || fail "claude failed to generate a commit message with $model"
+	generate_message || fail "$agent failed to generate a commit message with $model"
 
 	trap - ERR
 	set +e

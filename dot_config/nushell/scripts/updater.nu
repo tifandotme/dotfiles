@@ -27,6 +27,11 @@ export def start [] {
     }
 
     # An interrupted Rust download can leave cargo without an active toolchain.
+    if (which uv | is-not-empty) {
+        print $"\n(ansi green_bold)==>(ansi reset) Upgrading (ansi green)uv(ansi reset) tools"
+        uv tool upgrade --all
+    }
+
     if (which rustup | is-not-empty) {
         print $"\n(ansi green_bold)==>(ansi reset) Checking (ansi green)Rust(ansi reset) toolchain"
         rustup check

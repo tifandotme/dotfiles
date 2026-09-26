@@ -9,7 +9,7 @@ set -Eeuo pipefail
 # Optional parameters:
 # @raycast.icon 🌐
 
-readonly HELIUM_ZOOM_LEVEL=1.5641537251458923
+readonly HELIUM_ZOOM_LEVEL=1.2239010857415449
 readonly AGENTS_CDP_PORT="${AGENT_BROWSER_PORT:-9222}"
 readonly CP=/bin/cp
 readonly CURL=/usr/bin/curl
@@ -107,7 +107,7 @@ write_preference() {
 	local temporary_path
 
 	current_level="$(profile_zoom_level "$path")"
-	if [[ "$target_percent" == 133 ]]; then
+	if [[ "$target_percent" == 125 ]]; then
 		target_level="$HELIUM_ZOOM_LEVEL"
 		if profile_is_zoomed_in "$current_level"; then
 			return 0
@@ -226,15 +226,15 @@ fi
 current_percent=100
 for path in "${preference_files[@]}"; do
 	if profile_is_zoomed_in "$(profile_zoom_level "$path")"; then
-		current_percent=133
+		current_percent=125
 		break
 	fi
 done
 
-if [[ "$current_percent" == 133 ]]; then
+if [[ "$current_percent" == 125 ]]; then
 	target_percent=100
 else
-	target_percent=133
+	target_percent=125
 fi
 
 collect_running_instances

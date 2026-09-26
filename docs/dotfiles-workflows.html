@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Workflows</title>
+		<style>
+			:root { color-scheme:dark; --bg:#000; --surface:#0a0a0a; --ink:#ededed; --muted:#a1a1a1; --line:#262626; --code:#111; --warning:#f0c674; }
+			* { box-sizing:border-box; }
+			body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.55 "Geist",sans-serif; }
+			:focus-visible { outline:2px solid #ededed; outline-offset:3px; }
+			code,kbd,.mono { font: .88em/1.45 "CommitMono Nerd Font","Commit Mono",ui-monospace,monospace; }
+			code,kbd { padding:.12em .35em; border-radius:4px; background:var(--code); overflow-wrap:anywhere; }
+			kbd { white-space:nowrap; }
+			header,main { max-width:1800px; margin:auto; padding-inline:clamp(16px,2.5vw,40px); }
+			header { padding-block:16px 8px; }
+			h1 { margin:0; font-size:clamp(1.4rem,2vw,2rem); line-height:1.15; letter-spacing:-.03em; }
+			main { columns:4; column-gap:12px; padding-top:48px; padding-bottom:48px; }
+			section { break-inside:avoid-column; }
+			.section-head { display:flex; align-items:baseline; gap:10px; margin:8px 0; padding-bottom:4px; border-bottom:1px solid var(--line); break-after:avoid-column; }
+			section:first-child .section-head { margin-top:0; }
+			h2 { margin:0; font-size:1.1rem; font-weight:600; white-space:nowrap; }
+			.section-head span { color:var(--muted); font-size:.75rem; }
+			.workflow { break-inside:avoid-column; margin-bottom:10px; padding:12px; border:1px solid var(--line); border-radius:8px; background:var(--surface); }
+			.workflow h3 { margin:0 0 6px; font-size:.95rem; line-height:1.3; letter-spacing:-.01em; }
+			.workflow p { max-width:72ch; margin:0; color:var(--muted); font-size:.88rem; }
+			.flow { display:grid; gap:5px; margin:9px 0; padding-inline-start:1.4rem; }
+			.flow li { padding-inline-start:3px; }
+			.flow li::marker { color:var(--muted); font: .8rem "CommitMono Nerd Font","Commit Mono",ui-monospace,monospace; }
+			.step { display:block; color:var(--ink); font-size:.88rem; }
+			.step strong { display:block; color:var(--muted); font: .75rem "CommitMono Nerd Font","Commit Mono",ui-monospace,monospace; }
+			.step small { display:block; color:var(--muted); font-size:.8rem; }
+			.note { margin-top:10px !important; padding:10px 12px; border:1px solid var(--line); border-radius:6px; background:var(--code); color:var(--ink) !important; }
+			.caution { color:var(--warning) !important; }
+			.caution code { background:#302819; }
+			.list { display:grid; gap:5px; margin:9px 0 0; padding:0; list-style:none; font-size:.88rem; }
+			.list li { padding-top:7px; border-top:1px solid var(--line); }
+			@media (min-width:1600px) { main { columns:5; } }
+			@media (max-width:1000px) { main { columns:3; } }
+			@media (max-width:750px) { main { columns:2; } }
+			@media (max-width:650px) { main { columns:1; } }
+		</style>
+	</head>
+	<body>
+		<main>
+			<section id="start"><div class="section-head"><h2>Start &amp; maintain</h2></div><div class="grid">
+				<article class="workflow"><h3>Update the machine</h3><p>The everyday entry is the Herdr project picker. Package updates are separate commands in Nushell.</p><ol class="flow"><li><span class="step"><strong>Herdr · ⌘ B</strong>Choose an existing worktree or project</span></li><li><span class="step"><strong>Optional, rarely</strong><code>updater clean</code><small>Prune caches and unused resources</small></span></li><li><span class="step"><strong>Update packages</strong><code>updater start</code><small>Run available package-manager updates</small></span></li></ol><p class="note caution"><code>updater clean</code>
+				is not required before <code>updater start</code>. It can remove caches, unused versions and Docker images; use it only when you want that cleanup. On <code>box</code>, Linux Trash and user journal cleanup are included.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/nushell/scripts/project.nu, dot_config/nushell/scripts/updater.nu --></article>
+				<article class="workflow"><h3>Change a managed dotfile</h3><ol class="flow"><li><span class="step"><strong>Edit source</strong><code>chezmoi edit &lt;file&gt;</code></span></li><li><span class="step"><strong>Preview</strong><code>chezmoi apply --dry-run</code></span></li><li><span class="step"><strong>Install</strong><code>chezmoi apply</code></span></li></ol><p>From Herdr, <kbd>⌘ ⇧ C</kbd>
+					opens an apply popup. Raycast also has “Chezmoi Apply”. Yazi offers <kbd>C</kbd>
+					then <kbd>p</kbd>
+					for the selected file.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/nushell/scripts/chezmoi.nu, dot_config/raycast/scripts/executable_chezmoi_apply.sh --></article>
+				<article class="workflow"><h3>Add or sync packages</h3><ol class="flow"><li><span class="step"><strong>Choose owner</strong>Brewfile / Bun install script / uv install script / mise config</span></li><li><span class="step"><strong>Edit declaration</strong>Change the source file</span></li><li><span class="step"><strong>Install</strong><code>chezmoi apply</code></span></li></ol><p>Nushell blocks manual <code>brew install</code>
+					and global <code>bun add</code>. Use <code>dot_Brewfile.tmpl</code>, <code>run_onchange_02_install-bun.sh.tmpl</code>, <code>run_onchange_03_install-uv-tools.sh.tmpl</code>
+					or <code>dot_config/mise/config.toml.tmpl</code>.</p><!-- Sources: dot_config/nushell/scripts/chezmoi.nu, dot_Brewfile.tmpl, run_onchange_02_install-bun.sh.tmpl, run_onchange_03_install-uv-tools.sh.tmpl, dot_config/mise/config.toml.tmpl --></article>
+				<article class="workflow"><h3>Bring target edits back to source</h3><ol class="flow"><li><span class="step"><strong>Re-add</strong><code>chezmoi sync</code><small>Runs <code>chezmoi re-add</code></small></span></li><li><span class="step"><strong>If diff remains</strong><code>chezmoi edit --apply &lt;file&gt;</code><small>Resolve templates first</small></span></li><li><span class="step"><strong>Run again</strong><code>chezmoi sync</code><small>Commits and pushes when clean</small></span></li></ol><p class="note caution"><code>chezmoi sync</code>
+				pushes the chezmoi repository. Review changes before running it.</p><!-- Sources: dot_config/nushell/scripts/chezmoi.nu --></article>
+				<article class="workflow"><h3>Set up a new machine</h3><ol class="flow"><li><span class="step"><strong>Prerequisites</strong>Install chezmoi; on macOS install Homebrew and Xcode tools</span></li><li><span class="step"><strong>Bootstrap</strong><code>chezmoi init --apply git@github.com:tifandotme/dotfiles.git</code></span></li><li><span class="step"><strong>Finish</strong>Unlock age key, then open a new terminal</span></li></ol><p>Applies macOS-only configuration on the main machine and host-specific configuration on the Ubuntu VPS <code>box</code>. SSH access is needed for external repositories.</p><!-- Sources: README.md, run_onchange_before_decrypt-private-key.sh.tmpl --></article>
+			</div></section>
+			<section id="navigate"><div class="section-head"><h2>Projects &amp; terminals</h2></div><div class="grid">
+				<article class="workflow"><h3>Open a project or worktree</h3><ol class="flow"><li><span class="step"><strong>Herdr · ⌘ B</strong>Open worktree picker</span></li><li><span class="step"><strong>Select</strong>Existing worktree → Herdr opens it; project → Herdr creates a worktree</span></li><li><span class="step"><strong>While browsing</strong><kbd>Enter</kbd>
+				open/create · <kbd>Ctrl X</kbd>
+				close clean worktree · <kbd>Esc</kbd>
+				cancel</span></li></ol><p class="note">Run <code>open-project</code>
+					in a Herdr-managed Nushell pane for the same picker. It previews branch/PR details and refuses to close dirty worktrees.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/nushell/scripts/project.nu --></article>
+				<article class="workflow"><h3>Arrange Herdr</h3><ul class="list"><li><kbd>⌘ T</kbd>
+				new tab · <kbd>⌘ W</kbd>
+				close pane</li><li><kbd>⌘ N</kbd>
+				new workspace · <kbd>⌘ X</kbd>
+				close workspace</li><li><kbd>⌘ [</kbd>
+				/ <kbd>⌘ ]</kbd>
+				previous / next tab</li><li><kbd>Alt H/J/K/L</kbd>
+				focus pane</li><li><kbd>Ctrl E</kbd>
+				then <kbd>|</kbd>
+				/ <kbd>-</kbd>
+				split vertical / horizontal</li><li><kbd>Ctrl E</kbd>
+				then <kbd>F</kbd>
+				zoom · <kbd>B</kbd>
+				sidebar · <kbd>L</kbd>
+				lazygit</li><li><kbd>⌘ R</kbd>
+				rename tab · <kbd>⌘ ⇧ R</kbd>
+				rename workspace</li><li><kbd>Alt [</kbd>
+				/ <kbd>Alt ]</kbd>
+				previous / next agent</li></ul><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/ghostty/config --></article>
+				<article class="workflow"><h3>Work in the shell</h3><ul class="list"><li><kbd>Ctrl T</kbd>
+				find file · <kbd>Ctrl O</kbd>
+				find directory</li><li><kbd>Ctrl R</kbd>
+				search history · <kbd>Ctrl H</kbd>
+				help</li><li><kbd>Ctrl G</kbd>
+				edit current command · <kbd>Alt Enter</kbd>
+				newline</li><li><code>commands</code>
+				list custom commands</li><li><code>y</code>
+				open Yazi; exit to change shell directory</li></ul><!-- Sources: dot_config/nushell/config.nu.tmpl, dot_config/nushell/scripts/utils.nu --></article>
+				<article class="workflow"><h3>Navigate and manage files in Yazi</h3><ul class="list"><li><kbd>g C</kbd>
+				chezmoi source · <kbd>g w</kbd>
+				work projects · <kbd>g p</kbd>
+				personal projects</li><li><kbd>g r</kbd>
+				Git root · <kbd>!</kbd>
+				shell here</li><li><kbd>C a</kbd>
+				add · <kbd>C t</kbd>
+				template · <kbd>C e</kbd>
+				encrypt</li><li><kbd>C p</kbd>
+				apply · <kbd>C r</kbd>
+				re-add · <kbd>C f</kbd>
+				forget</li><li><kbd>?</kbd>
+				help · <kbd>T</kbd>
+				toggle max preview</li></ul><!-- Sources: dot_config/yazi/keymap.toml.tmpl, dot_config/nushell/scripts/system.nu --></article>
+			</div></section>
+			<section id="desktop"><div class="section-head"><h2>Desktop</h2><span>macOS only</span></div><div class="grid">
+				<article class="workflow"><h3>Switch windows and spaces</h3><ol class="flow"><li><span class="step"><strong>AeroSpace</strong><kbd>⌘ 1–6</kbd>
+				switch workspace; <kbd>⌘ ⇧ 1–6</kbd>
+				move window and follow</span></li><li><span class="step"><strong>Arrange</strong><kbd>Alt Enter</kbd>
+				float/tile · <kbd>Alt .</kbd>
+				tiles · <kbd>Alt ,</kbd>
+				accordion</span></li><li><span class="step"><strong>Move mode</strong><kbd>⌘ ⇧ '</kbd>
+				then <kbd>H/J/K/L</kbd>
+				move · <kbd>Esc</kbd>
+				finish</span></li></ol><p>0 misc, 1 personal, 2 work, 3 dev, 4 terminal, 5 notes, 6 auxiliary. <kbd>⌘ `</kbd>
+					goes to misc. <kbd>⌘ ⇧ ;</kbd>
+					then <kbd>Esc</kbd>
+					reloads AeroSpace, SketchyBar and Borders.</p><!-- Sources: dot_config/aerospace/aerospace.toml --></article>
+				<article class="workflow"><h3>Change colors and appearance</h3><ol class="flow"><li><span class="step"><strong>Wallpaper color</strong>Raycast “Apply Theme” [optional hex] → palette + app reload</span></li><li><span class="step"><strong>Undo</strong>Raycast “Undo Wallpaper Theme”</span></li><li><span class="step"><strong>Light / dark</strong>Raycast “Toggle Appearance” → chezmoi source + apply</span></li></ol><p>Theme palette feeds Herdr, SketchyBar and Borders. Appearance switch updates Git delta, Glow and Herdr as well as macOS.</p><!-- Sources: dot_config/theme/executable_apply-theme.ts, dot_config/theme/executable_toggle-appearance.ts, dot_config/raycast/scripts/ --></article>
+				<article class="workflow"><h3>Use desktop utilities</h3><ul class="list"><li>Raycast “Toggle Caffeinate” keeps the Mac awake</li><li>Raycast “Toggle Helium Zoom” restarts Helium</li><li>SketchyBar shows workspaces, Herdr state, Slack, Linear, network, battery and usage</li><li>SketchyBar Wi-Fi item and Slack item have click actions</li></ul><!-- Sources: dot_config/raycast/scripts/, dot_config/sketchybar/executable_sketchybarrc --></article>
+			</div></section>
+			<section id="build"><div class="section-head"><h2>Development</h2></div><div class="grid">
+				<article class="workflow"><h3>Work with Git and remotes</h3><ol class="flow"><li><span class="step"><strong>Local</strong><code>lzg</code>
+				opens lazygit; <code>compare</code>
+				picks two files to diff</span></li><li><span class="step"><strong>Work repo on weekend</strong>Eligible pushes and PR creates enter <code>work-remote</code>
+				queue</span></li><li><span class="step"><strong>Weekday</strong><code>work-remote list</code>
+				→ <code>work-remote run</code>
+				→ type <code>RUN</code></span></li></ol><p class="note caution">The weekend guard applies to work repositories. Queue execution is disabled on Saturday and Sunday unless explicitly overridden; tasks are revalidated before remote changes.</p><!-- Sources: dot_config/nushell/scripts/work_remote.nu, dot_local/bin/executable_work-remote, dot_config/nushell/scripts/dev.nu --></article>
+				<article class="workflow"><h3>Launch coding agents</h3><ol class="flow"><li><span class="step"><strong>From project directory</strong><code>pi</code>
+				or <code>claude</code></span></li><li><span class="step"><strong>Automatic</strong>Pi selects work/personal MCP config by path; Claude syncs MCP policy</span></li><li><span class="step"><strong>In Herdr</strong>Pane/tab gets a temporary agent label</span></li></ol><p><code>claudex</code>
+				routes Claude through the local proxy. <code>nvimg</code>
+				opens Neovim at the Git root.</p><!-- Sources: dot_config/nushell/scripts/core.nu, dot_config/nushell/scripts/utils.nu --></article>
+				<article class="workflow"><h3>Containers and remote sessions</h3><ul class="list"><li><code>stop-all</code>
+				stops running Docker containers</li><li><code>stop-all --stop-colima</code>
+				also stops Colima</li><li><code>ssh</code>, <code>sshs</code>, <code>mosh</code>
+				label the Herdr tab/pane temporarily</li><li><code>lzd</code>
+				opens lazydocker with a temporary label</li></ul><!-- Sources: dot_config/nushell/scripts/docker.nu, dot_config/nushell/scripts/system.nu, dot_config/nushell/scripts/core.nu --></article>
+				<article class="workflow"><h3>Small tools worth remembering</h3><ul class="list"><li><code>youtube-download URL</code>
+				→ Downloads; <code>--audio</code>
+				or <code>--cwd</code>
+				changes output</li><li><code>open-book</code>
+				→ pick and open a local PDF or EPUB</li><li><code>prep-excalidraw</code>
+				→ shrink/convert images to WebP; removes originals after success</li><li><code>cert check DOMAIN</code>
+				→ TLS validity and days remaining</li><li><code>git rebase-release</code>
+				→ fetch upstream tags and rebase to latest release</li><li><code>gibo gibo-strip</code>
+				→ generate .gitignore without attribution header</li></ul><!-- Sources: dot_config/nushell/scripts/media.nu, dot_config/nushell/scripts/dev.nu, dot_config/nushell/scripts/cert.nu, dot_config/nushell/scripts/git.nu, dot_config/nushell/scripts/gibo.nu --></article>
+			</div></section>
+			<section id="reference"><div class="section-head"><h2>Where to look next</h2></div><div class="grid"><article class="workflow"><h3>When this map misses a command</h3><ol class="flow"><li><span class="step"><strong>Shell</strong><code>commands</code>
+			lists custom Nushell commands</span></li><li><span class="step"><strong>Herdr</strong><code>dot_config/herdr/config.toml.tmpl</code></span></li><li><span class="step"><strong>Configs</strong><code>dot_config/nushell/scripts/</code>
+			and <code>dot_config/raycast/scripts/</code></span></li></ol><p>This is an index of actionable routes, not an inventory of every alias or application setting. Follow the source path beneath a workflow for exact behavior.</p><!-- Sources: dot_config/nushell/scripts/utils.nu, dot_config/nushell/scripts/core.nu, dot_config/herdr/config.toml.tmpl --></article></div></section>
+		</main>
+	</body>
+</html>

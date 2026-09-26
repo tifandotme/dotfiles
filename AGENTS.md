@@ -62,7 +62,7 @@ macos-only-value
 - `dot_Brewfile.tmpl` — Homebrew packages; shared unguarded, machine-specific guarded
 - `run_onchange_02_install-bun.sh.tmpl` — Bun globals (declarative)
 - `run_onchange_03_install-uv-tools.sh.tmpl` — uv-managed Python tools
-- `dot_config/mise/config.toml` — runtime versions
+- `dot_config/mise/config.toml.tmpl` — runtime versions
 
 ### Chezmoi Workflow
 
@@ -70,6 +70,7 @@ macos-only-value
 - Edit managed configuration through chezmoi source files under this repo, then run `chezmoi apply` or `chezmoi apply --dry-run` as appropriate.
 - Do not create runtime symlinks to source files. Let chezmoi manage target files.
 - Before editing a nested area, read the nearest scoped `AGENTS.md`; it overrides or extends this root guidance.
+- For changes to user workflows or shortcuts, check `docs/dotfiles-workflows.html` and update affected cards. Verify steps against source files and keep each card's `<!-- Sources: ... -->` pointer current.
 
 ### GUI-launched Processes
 

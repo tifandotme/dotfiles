@@ -15,7 +15,7 @@
     "pr": "",
     "sessionUrl": false
   },
-  "model": "opus[1m]",
+  "model": "opus",
   "hooks": {
     "SessionStart": [
       {
@@ -99,11 +99,17 @@
     "claude-sonnet-5": {
       "effortLevel": "medium"
     },
-    "claude-opus-5": {
+    "claude-opus-5-5": {
       "effortLevel": "medium"
     },
     "gpt-6-luna(high)": {
       "effortLevel": "high"
+    },
+    "gpt-6-sol(medium)": {
+      "effortLevel": "medium"
+    },
+    "gpt-6-astra(medium)": {
+      "effortLevel": "medium"
     }
   },
   "awaySummaryEnabled": true,

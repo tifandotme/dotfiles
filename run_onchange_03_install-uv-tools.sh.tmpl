@@ -3,6 +3,7 @@
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 if command -v uv &>/dev/null; then
 	desired_uv_tools=(
+		"ruff"
 		# {{ if eq .chezmoi.os "darwin" -}}
 		"tavily-cli"
 		"openai-whisper"
