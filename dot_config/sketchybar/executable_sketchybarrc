@@ -86,6 +86,16 @@ sketchybar --add item front_app left \
 	script="$PLUGIN_DIR/front_app.sh" \
 	--subscribe front_app front_app_switched
 
+# --------------- CENTER
+
+sketchybar --add event spotify_update "com.spotify.client.PlaybackStateChanged"
+sketchybar --add item spotify center \
+	--set spotify \
+	"${GHOST[@]}" \
+	icon="􀑪" \
+	script="$PLUGIN_DIR/spotify.sh" \
+	--subscribe spotify spotify_update
+
 # --------------- RIGHT
 
 sketchybar --add item calendar right \
@@ -177,6 +187,20 @@ sketchybar --add bracket codex_usage codex_session codex_weekly \
 	background.color="${BACKGROUND}" \
 	background.corner_radius=99 \
 	background.height=20
+
+# sketchybar --add item network_speed right \
+#   --set network_speed \
+#   icon="􀴽" \
+#   icon.padding_right=0 \
+#   update_freq=1 \
+#   script="$PLUGIN_DIR/network_speed.sh"
+
+# sketchybar --add item vpn right \
+#   --set vpn \
+#   update_freq=5 \
+#   click_script="open -a 'Mullvad VPN'" \
+#   script="$PLUGIN_DIR/vpn.sh" \
+#   --subscribe vpn wifi_change front_app_switched
 
 sketchybar --add item openusage_spacer right \
 	--set openusage_spacer \

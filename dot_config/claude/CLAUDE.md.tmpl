@@ -1,5 +1,7 @@
-{{ includeTemplate "dot_agents/AGENTS.shared.md.tmpl" . -}}
+{{ includeTemplate "dot_agents/AGENTS.shared.md.tmpl" . }}
+## General
+
 - Explanations: use concise ASCII diagrams when they make layouts, flows, or relationships easier to understand.
-- For any file search or grep in the current git-indexed directory, use fff tools.
+- Code search: for any file search or grep inside the current git repo, use fff tools (`mcp__fff__grep`, `mcp__fff__multi_grep`, `mcp__fff__find_files`) instead of `rg`, `grep`, or `find` in Bash. Use Bash search for paths outside the repo or when fff is unavailable.
 
 @RTK.md

@@ -1,4 +1,4 @@
 {
-  "models": [],
-  "tpsEnabled": false
+  "enabled": false,
+  "tpsEnabled": true
 }

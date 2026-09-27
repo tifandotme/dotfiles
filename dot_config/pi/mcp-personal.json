@@ -4,7 +4,7 @@
     "approveTools": false,
     "scriptMode": true,
     "sampling": true,
-    "mcpFooterStatus": "compact"
+    "mcpFooterStatus": "off"
   },
   "mcpServers": {
     "context7": {
