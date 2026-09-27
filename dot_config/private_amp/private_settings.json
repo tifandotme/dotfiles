@@ -6,6 +6,10 @@
   "amp.skills.disableClaudeCodeSkills": true,
   "amp.dangerouslyAllowAll": true,
   "amp.gauge": "cost",
+  "amp.tools.disable": [
+    "builtin:read_web_page",
+    "builtin:web_search"
+  ],
 
   "amp.keymap": {
     "leader": "ctrl+x",

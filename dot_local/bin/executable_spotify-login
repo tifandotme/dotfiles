@@ -1,0 +1,175 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+CLIENT_ID="ad07638fe4104114b946ae56d85ed21b"
+REDIRECT_HOST="127.0.0.1"
+REDIRECT_PORT=8989
+REDIRECT_PATH="/login"
+REDIRECT_URI="http://$REDIRECT_HOST:$REDIRECT_PORT$REDIRECT_PATH"
+TOKEN_FILE="$HOME/.cache/sketchybar/spotify_token.json"
+
+cleanup() {
+	if [[ -n "${listener_pid:-}" ]] && kill -0 "$listener_pid" 2>/dev/null; then
+		kill "$listener_pid" 2>/dev/null || true
+		wait "$listener_pid" 2>/dev/null || true
+	fi
+	if [[ -n "${work_dir:-}" ]]; then
+		rm -rf -- "$work_dir"
+	fi
+}
+
+url_decode() {
+	local input="${1//+/ }"
+	local output=""
+	local prefix rest hex character
+
+	while [[ "$input" == *%* ]]; do
+		prefix="${input%%\%*}"
+		rest="${input#*%}"
+		hex="${rest:0:2}"
+		[[ "$hex" =~ ^[[:xdigit:]]{2}$ ]] || return 1
+		printf -v character '%b' "\\x$hex"
+		output+="$prefix$character"
+		input="${rest:2}"
+	done
+	printf '%s' "$output$input"
+}
+
+save_token() {
+	local response="$1"
+	local access_token refresh_token expires_in expires_at token_dir temporary_file
+
+	access_token="$(jq -er '.access_token | select(type == "string" and length > 0)' <<<"$response")"
+	refresh_token="$(jq -er '.refresh_token | select(type == "string" and length > 0)' <<<"$response")"
+	expires_in="$(jq -er '.expires_in | select(type == "number")' <<<"$response")"
+	[[ "$expires_in" =~ ^[0-9]+$ ]] || {
+		printf '%s\n' 'Spotify returned an invalid token expiry.' >&2
+		return 1
+	}
+	expires_at="$(date -u -v+"${expires_in}"S +%Y-%m-%dT%H:%M:%S.000000Z)"
+
+	token_dir="${TOKEN_FILE%/*}"
+	mkdir -p "$token_dir"
+	chmod 700 "$token_dir"
+	temporary_file="$(mktemp "$token_dir/.spotify-token.XXXXXX")"
+	if ! jq -n \
+		--arg access_token "$access_token" \
+		--arg refresh_token "$refresh_token" \
+		--arg expires_at "$expires_at" \
+		'{access_token: $access_token, refresh_token: $refresh_token, expires_at: $expires_at}' \
+		>"$temporary_file"; then
+		rm -f -- "$temporary_file"
+		return 1
+	fi
+	chmod 600 "$temporary_file"
+	mv -f -- "$temporary_file" "$TOKEN_FILE"
+}
+
+main() {
+	for command_name in curl jq nc openssl open; do
+		command -v "$command_name" >/dev/null 2>&1 || {
+			printf 'Required command not found: %s\n' "$command_name" >&2
+			exit 1
+		}
+	done
+
+	work_dir="$(mktemp -d "${TMPDIR:-/tmp}/spotify-login.XXXXXX")"
+	request_file="$work_dir/callback-request"
+	listener_pid=""
+	trap cleanup EXIT
+
+	verifier="$(openssl rand -base64 64 | tr '+/' '-_' | tr -d '=\n')"
+	challenge="$(printf '%s' "$verifier" | openssl dgst -sha256 -binary | openssl base64 -A | tr '+/' '-_' | tr -d '=')"
+	state="$(openssl rand -base64 32 | tr '+/' '-_' | tr -d '=\n')"
+	encoded_redirect_uri="$(jq -rn --arg uri "$REDIRECT_URI" '$uri | @uri')"
+	auth_url="https://accounts.spotify.com/authorize?client_id=$CLIENT_ID&response_type=code&redirect_uri=$encoded_redirect_uri&scope=user-read-currently-playing&code_challenge_method=S256&code_challenge=$challenge&state=$state"
+	response_body='Spotify authorization received. You can close this tab.'
+
+	{
+		printf 'HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\nConnection: close\r\nContent-Length: %s\r\n\r\n' "${#response_body}"
+		printf '%s' "$response_body"
+	} | nc -l -b lo0 "$REDIRECT_PORT" >"$request_file" &
+	listener_pid=$!
+
+	printf 'Opening Spotify authorization. Redirect URI: %s\n' "$REDIRECT_URI"
+	if ! open "$auth_url"; then
+		printf 'Open this URL to authorize Spotify:\n%s\n' "$auth_url"
+	fi
+
+	deadline=$((SECONDS + 300))
+	while kill -0 "$listener_pid" 2>/dev/null; do
+		if ((SECONDS >= deadline)); then
+			kill "$listener_pid" 2>/dev/null || true
+			wait "$listener_pid" 2>/dev/null || true
+			listener_pid=""
+			printf '%s\n' 'Timed out waiting for Spotify authorization.' >&2
+			exit 1
+		fi
+		sleep 1
+	done
+
+	if ! wait "$listener_pid"; then
+		listener_pid=""
+		printf '%s\n' 'Spotify callback listener failed.' >&2
+		exit 1
+	fi
+	listener_pid=""
+
+	[[ -s "$request_file" ]] || {
+		printf '%s\n' 'Spotify did not reach the local callback.' >&2
+		exit 1
+	}
+	IFS= read -r request_line <"$request_file"
+	request_line="${request_line%$'\r'}"
+	read -r method request_target _ <<<"$request_line"
+	[[ "$method" == GET && "$request_target" == "$REDIRECT_PATH"\?* ]] || {
+		printf '%s\n' 'Spotify returned an unexpected callback request.' >&2
+		exit 1
+	}
+
+	query="${request_target#*\?}"
+	IFS='&' read -r -a query_parameters <<<"$query"
+	authorization_code=""
+	callback_state=""
+	oauth_error=""
+	for parameter in "${query_parameters[@]}"; do
+		case "$parameter" in
+		code=*)
+			authorization_code="$(url_decode "${parameter#code=}")" || exit 1
+			;;
+		state=*)
+			callback_state="$(url_decode "${parameter#state=}")" || exit 1
+			;;
+		error=*)
+			oauth_error="$(url_decode "${parameter#error=}")" || exit 1
+			;;
+		esac
+	done
+
+	[[ "$callback_state" == "$state" ]] || {
+		printf '%s\n' 'Spotify callback state did not match.' >&2
+		exit 1
+	}
+	[[ -z "$oauth_error" ]] || {
+		printf 'Spotify authorization failed: %s\n' "$oauth_error" >&2
+		exit 1
+	}
+	[[ -n "$authorization_code" ]] || {
+		printf '%s\n' 'Spotify did not return an authorization code.' >&2
+		exit 1
+	}
+
+	token_response="$(curl --silent --show-error --fail --request POST 'https://accounts.spotify.com/api/token' \
+		--header 'Content-Type: application/x-www-form-urlencoded' \
+		--data-urlencode 'grant_type=authorization_code' \
+		--data-urlencode "code=$authorization_code" \
+		--data-urlencode "redirect_uri=$REDIRECT_URI" \
+		--data-urlencode "client_id=$CLIENT_ID" \
+		--data-urlencode "code_verifier=$verifier")"
+	save_token "$token_response"
+	printf 'Spotify token saved to %s\n' "$TOKEN_FILE"
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+	main "$@"
+fi

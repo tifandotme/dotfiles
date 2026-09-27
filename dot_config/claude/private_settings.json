@@ -16,6 +16,12 @@
     "sessionUrl": true
   },
   "model": "opus",
+  "permissions": {
+    "deny": [
+      "mcp__tavily__tavily_search",
+      "mcp__tavily__tavily_extract"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {

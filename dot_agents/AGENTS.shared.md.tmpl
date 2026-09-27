@@ -35,7 +35,6 @@
 - Browser use: load `agent-browser` first. For web browser work outside Electron, connect to the existing Helium for Agents browser with `agent-browser --session helium connect 9222`; use `--session helium` in later commands. If the connection fails, run `run-helium`, then retry the connection. For Electron work, follow the project `AGENTS.md` and use its project-specific CDP port; do not connect to Helium.
 - Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. Account mappings: `personal` → `ifan.anvity@gmail.com`, `work` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`.
 - Library docs: use Context7 for current docs. If it has no relevant results, check official docs or source; say it lacked coverage and name the source used.
-- Web: Prefer Tavily for general web research. Use another available tool when Tavily is unavailable or does not fit the task. For GitHub content and operations, use `gh` instead of web search or fetch tools.
 
 ## Shell and code quality
 
