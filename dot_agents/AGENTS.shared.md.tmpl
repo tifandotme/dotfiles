@@ -2,18 +2,11 @@
 
 {{ output "gh" "api" "-H" "Accept: application/vnd.github.raw" "repos/DietrichGebert/ponytail/contents/AGENTS.md?ref=e3ba2aa6f1e6f0bc4d69eb09c9f0d0a93af56156" "--cache" "168h" | replace "# Ponytail, lazy senior dev mode\n\n" "" | replace "(Yes, this file also applies to agents working on the ponytail repo itself. Especially to them.)" "" | trim }}
 
-## Task tracking
+## Linear
 
-- Identify if current work is non-trivial, if so ask the user if this needs to be tracked, unless current remote already have identifiable Linear issue.
-- Put the Linear issue identifier in branch, commit, and PR names when relevant.
+- For work likely to span sessions or require coordination, ask whether to track it unless a relevant Linear issue already exists, and include the issue identifier in branch, commit, and PR names when relevant.
 - Before Linear read/write, ensure current repository owner to Linear workspace map matched: `tifandotme` → `Tifan`; `hadl-labs` → `Hadl`. If the remote is missing or has another owner, ask the user.
-- For Hadl work, never move an issue status to Done yourself, it should be done manually by the user.
-
-## Specs and PRDs
-
-- Write a PRD for an initiative that spans many issues and has open scope or value. Put it in a Linear project document. User stories and success metrics go in the PRD.
-- Write a spec for one issue with a settled design. Put it in the issue description.
-- When a third-party skill (for example `to-spec` or `to-prd`) publishes Linear, fill the issue template (read it with `get_template`) instead of the skill's template. Map Problem Statement → Current Condition, Solution → What we want to achieve, Implementation Decisions → Architecture/Approach, Testing Decisions → Testing, Further Notes → Related Links. Turn user stories into Definition of Done acceptance criteria. Keep file paths in Relevant Repos/Files. Do not apply triage labels that the team does not have.
+- In Hadl workspace, never move an issue status to Done yourself, it should be done manually by the user.
 
 ## Completion
 
@@ -27,7 +20,7 @@
 
 ## Writing and documentation
 
-- Write in ASD-STE100 Simplified Technical English.
+- Apply ASD-STE100 to documentation when appropriate.
 - Docs: when editing markdown for agents or contributors, keep runnable shell commands and concrete repo paths first; omit redundant meta commentary.
 - Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.
 - Human-facing prose: for new files meant for humans to read, load `writing-clearly-and-concisely` first and `humanizer` last; do not use em dashes.
@@ -49,7 +42,7 @@
 - Shell scripts: after modifying one, run `shfmt -w -ln <bash|posix|mksh|bats|zsh> <path-to-script>` with its dialect. Run `shellcheck <path-to-script>` for Bash or POSIX-compatible scripts, `bash -n <path-to-script>` for Bash, and `zsh -n <path-to-script>` for Zsh. Prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
 - Code cleanup: after a fix changes direction, audit for speculative or now-dead code from earlier attempts. Remove unused helpers/imports/types before final checks, then rerun the relevant typecheck/lint/format commands.
 - Code comments: never leave tombstone comments (e.g. `# foo removed — reason`) or incident history: what an earlier version did, what broke, how it was found, who found it, ticket and PR numbers for the fix. Say what the code does and why it is this way now. Git blame and the commit message carry the story for anyone who wants it.
-- UI: Don't add narrative copy.
+- UI: Keep copy task-focused. Use clear guidance for empty states and errors; avoid decorative narrative.
 
 ## Worktrees
 

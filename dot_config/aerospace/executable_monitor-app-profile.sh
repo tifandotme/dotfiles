@@ -6,10 +6,12 @@ monitor_name="$($AEROSPACE list-monitors --focused --format '%{monitor-name}')"
 app_id="$($AEROSPACE list-windows --focused --format '%{app-bundle-id}')"
 
 case "$app_id:$monitor_name" in
-com.mitchellh.ghostty:H24G30Q) action=ghostty18 ;;
+com.mitchellh.ghostty:H24G30Q) action=ghostty17 ;;
 com.mitchellh.ghostty:*) action=ghostty14 ;;
 club.refactoring.tolaria:H24G30Q) action=tolaria130 ;;
 club.refactoring.tolaria:*) action=tolaria100 ;;
+com.tinyspeck.slackmacgap:H24G30Q) action=slack_zoom_in ;;
+com.tinyspeck.slackmacgap:*) action=slack_reset ;;
 *) exit 0 ;;
 esac
 
@@ -17,9 +19,9 @@ esac
 on run argv
   set profileAction to item 1 of argv
 
-  if profileAction is "ghostty18" or profileAction is "ghostty14" then
-    if profileAction is "ghostty18" then
-      set fontSize to "18"
+  if profileAction is "ghostty17" or profileAction is "ghostty14" then
+    if profileAction is "ghostty17" then
+      set fontSize to "17"
     else
       set fontSize to "14"
     end if
@@ -37,6 +39,16 @@ on run argv
           repeat 3 times
             keystroke "=" using {command down}
           end repeat
+        end if
+      end tell
+    end tell
+  else if profileAction is "slack_zoom_in" or profileAction is "slack_reset" then
+    tell application "System Events"
+      tell process "Slack"
+        keystroke "0" using {command down}
+        delay 0.2
+        if profileAction is "slack_zoom_in" then
+          keystroke "=" using {command down, shift down}
         end if
       end tell
     end tell

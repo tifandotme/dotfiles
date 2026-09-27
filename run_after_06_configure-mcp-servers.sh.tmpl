@@ -1,0 +1,150 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+warn() {
+	printf 'warning: %s\n' "$1" >&2
+}
+
+if ! command -v jq >/dev/null 2>&1; then
+	warn 'jq is not installed; skipping MCP server setup'
+	exit 0
+fi
+
+ensure_claude_mcp() {
+	local name="$1"
+	local transport="$2"
+	local endpoint="$3"
+	local config_dir="${CLAUDE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/claude}"
+	local config="$config_dir/.claude.json"
+	local command_path
+
+	if ! command -v claude >/dev/null 2>&1; then
+		return 0
+	fi
+
+	if [[ -f "$config" ]]; then
+		if ! jq -e 'type == "object"' "$config" >/dev/null 2>&1; then
+			warn "Claude config is not valid JSON; cannot check MCP server $name"
+			return 0
+		fi
+		if ! jq -e '(.mcpServers // {}) | type == "object"' "$config" >/dev/null 2>&1; then
+			warn "Claude MCP server list is invalid; cannot check MCP server $name"
+			return 0
+		fi
+		if jq -e --arg name "$name" '(.mcpServers // {}) | has($name)' "$config" >/dev/null; then
+			if [[ "$name" != betterstack ]] || jq -e --arg endpoint "$endpoint" \
+				'.mcpServers.betterstack | .type == "http" and .url == $endpoint and ((.headers // {}) | length == 0)' \
+				"$config" >/dev/null; then
+				return 0
+			fi
+			if ! claude mcp remove --scope user "$name"; then
+				warn "could not replace Claude MCP server $name"
+				return 0
+			fi
+		fi
+	fi
+
+	if [[ "$transport" == stdio ]]; then
+		if ! command_path="$(command -v "$endpoint")"; then
+			warn "cannot add Claude MCP server $name; $endpoint is not installed"
+			return 0
+		fi
+		if ! claude mcp add --scope user "$name" -- "$command_path"; then
+			warn "could not add Claude MCP server $name"
+		fi
+		return 0
+	fi
+
+	if ! claude mcp add --scope user --transport "$transport" "$name" "$endpoint"; then
+		warn "could not add Claude MCP server $name"
+	fi
+}
+
+prune_claude_mcps() {
+	local config_dir="${CLAUDE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/claude}"
+	local config="$config_dir/.claude.json"
+	local name
+
+	if ! command -v claude >/dev/null 2>&1 || [[ ! -f "$config" ]]; then
+		return 0
+	fi
+	if ! jq -e 'type == "object" and ((.mcpServers // {}) | type == "object")' \
+		"$config" >/dev/null 2>&1; then
+		warn 'Claude config is invalid; cannot remove unmanaged user MCP servers'
+		return 0
+	fi
+
+	while IFS= read -r name; do
+		case "$name" in
+		fff | betterstack | context7 | tavily) continue ;;
+		esac
+		if ! claude mcp remove --scope user "$name"; then
+			warn "could not remove unmanaged Claude user MCP server $name"
+		fi
+	done < <(jq -r '(.mcpServers // {}) | keys[]' "$config")
+}
+
+ensure_amp_mcp() {
+	local servers="$1"
+	local name="$2"
+	local url="$3"
+
+	if jq -e --arg name "$name" --arg url "$url" \
+		'.servers | any(.[]; .name == $name and .url == $url)' \
+		<<<"$servers" >/dev/null; then
+		return 0
+	fi
+	if jq -e --arg name "$name" '.servers | any(.[]; .name == $name)' \
+		<<<"$servers" >/dev/null; then
+		warn "Amp MCP server $name has a different URL; replacing it"
+		if ! amp mcp remote remove --personal --yes "$name"; then
+			warn "could not remove mismatched Amp personal MCP server $name"
+			return 0
+		fi
+	fi
+	if ! amp mcp remote add "$name" "$url" --auth oauth --personal; then
+		warn "could not add Amp personal MCP server $name"
+	fi
+}
+
+ensure_amp_mcps() {
+	local name
+	local servers
+
+	if ! command -v amp >/dev/null 2>&1; then
+		return 0
+	fi
+	if ! servers="$(amp mcp remote list --personal --json 2>/dev/null)"; then
+		warn 'could not list Amp personal MCP servers; skipping remote MCP setup'
+		return 0
+	fi
+	if ! jq -e 'try ((.servers | type) == "array" and (.servers | all(.[]; (.name | type) == "string" and (.url | type) == "string"))) catch false' \
+		<<<"$servers" >/dev/null 2>&1; then
+		warn 'Amp returned an invalid personal MCP server list; skipping remote MCP setup'
+		return 0
+	fi
+
+	while IFS= read -r name; do
+		[[ -z "$name" ]] && continue
+		if ! amp mcp remote remove --personal --yes "$name"; then
+			warn "could not remove unmanaged Amp personal MCP server $name"
+		fi
+	done < <(jq -r '
+		.servers[]
+		| select(.name != "posthog-personal" and .name != "linear-personal" and .name != "context7" and .name != "tavily")
+		| .name
+	' <<<"$servers")
+
+	ensure_amp_mcp "$servers" posthog-personal https://mcp.posthog.com/mcp
+	ensure_amp_mcp "$servers" linear-personal https://mcp.linear.app/mcp
+	ensure_amp_mcp "$servers" context7 https://mcp.context7.com/mcp/oauth
+	ensure_amp_mcp "$servers" tavily https://mcp.tavily.com/mcp/
+}
+
+prune_claude_mcps
+ensure_claude_mcp fff stdio fff-mcp
+ensure_claude_mcp betterstack http https://mcp.betterstack.com
+ensure_claude_mcp context7 http https://mcp.context7.com/mcp/oauth
+ensure_claude_mcp tavily http https://mcp.tavily.com/mcp/
+ensure_amp_mcps
