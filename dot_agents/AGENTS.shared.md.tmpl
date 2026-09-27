@@ -1,27 +1,19 @@
-## Context7
-
-{{ output "gh" "api" "-H" "Accept: application/vnd.github.raw" "repos/upstash/context7/contents/rules/context7-cli.md" "--cache" "168h" | replace "## Steps" "### Steps" | trim }}
-
 ## Ponytail
 
 {{ output "gh" "api" "-H" "Accept: application/vnd.github.raw" "repos/DietrichGebert/ponytail/contents/AGENTS.md?ref=e3ba2aa6f1e6f0bc4d69eb09c9f0d0a93af56156" "--cache" "168h" | replace "# Ponytail, lazy senior dev mode\n\n" "" | replace "(Yes, this file also applies to agents working on the ponytail repo itself. Especially to them.)" "" | trim }}
 
 ## Task tracking
 
-- Determine repository ownership from `git remote get-url origin` before tracking work. If the remote is unavailable or ownership is unclear, ask before creating or updating a task.
-- For repositories owned by `hadl-labs`, or work that the user explicitly identifies as company-related, use the company Linear workspace (team `Hadl`, `HAD-` issues). Do not create or update personal Linear issues. Follow the repository's own instructions for ADRs and docs.
-- For all other repositories, use the personal Linear workspace `Tifan` in Pi and Claude Code. Treat local `.backlog/` directories as read-only migration archives.
-- For a named personal Linear issue, read it before work, set it to `In Progress` when work starts, record meaningful progress or blockers, then add a final summary and set it to `Done` after verification.
-- For new non-trivial personal work, search Linear before creating an issue. Use `Backlog` for unstarted work and `Todo` for selected ready work.
-- Apply exactly one personal repository label, `repo:<repository>`, derived from the Git remote repository name. Add it to new issues and correct it only when repository ownership is wrong.
+- Identify if current work is non-trivial, if so ask the user if this needs to be tracked, unless current remote already have identifiable Linear issue.
 - Put the Linear issue identifier in branch, commit, and PR names when relevant.
-- If personal Linear MCP is unavailable, report that task tracking could not be updated. If company Linear is unavailable, report that instead of switching workspaces.
+- Before Linear read/write, ensure current repository owner to Linear workspace map matched: `tifandotme` → `Tifan`; `hadl-labs` → `Hadl`. If the remote is missing or has another owner, ask the user.
+- For Hadl work, never move an issue status to Done yourself, it should be done manually by the user.
 
 ## Specs and PRDs
 
 - Write a PRD for an initiative that spans many issues and has open scope or value. Put it in a Linear project document. User stories and success metrics go in the PRD.
 - Write a spec for one issue with a settled design. Put it in the issue description.
-- When a third-party skill (for example `to-spec` or `to-prd`) publishes to a company Linear team, fill the team's issue template (read it with `get_template`) instead of the skill's template. Map Problem Statement → Current Condition, Solution → What we want to achieve, Implementation Decisions → Architecture/Approach, Testing Decisions → Testing, Further Notes → Related Links. Turn user stories into Definition of Done acceptance criteria. Keep file paths in Relevant Repos/Files. Do not apply triage labels that the team does not have.
+- When a third-party skill (for example `to-spec` or `to-prd`) publishes Linear, fill the issue template (read it with `get_template`) instead of the skill's template. Map Problem Statement → Current Condition, Solution → What we want to achieve, Implementation Decisions → Architecture/Approach, Testing Decisions → Testing, Further Notes → Related Links. Turn user stories into Definition of Done acceptance criteria. Keep file paths in Relevant Repos/Files. Do not apply triage labels that the team does not have.
 
 ## Completion
 
@@ -43,15 +35,14 @@
 ## Git and GitHub
 
 - Git commits: use Conventional Commits only (`fix`, `feat`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`, `revert`). Keep headers under 72 chars, lowercase subject, no period, prefer header-only.
-- GitHub: use `gh` for github.com operations such as issues, PRs, actions, secrets, releases, and repo metadata; never use web search or built-in fetch tools for GitHub content. Do not write PR comments without user approval.
 
 ## Browser, web, and cloud tools
 
 - X/Twitter: use `bird` instead of browser automation.
 - Browser use: load `agent-browser` first. For web browser work outside Electron, connect to the existing Helium for Agents browser with `agent-browser --session helium connect 9222`; use `--session helium` in later commands. If the connection fails, run `run-helium`, then retry the connection. For Electron work, follow the project `AGENTS.md` and use its project-specific CDP port; do not connect to Helium.
 - Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. Account mappings: `personal` → `ifan.anvity@gmail.com`, `work` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`.
-- Web: for URL search, extraction, or crawling, load relevant Tavily skills first, then use Tavily commands; never use built-in web tools unless Tavily fails.
-- JS tooling: for any CLI tool shipped as an npm package, use `bunx` instead of `npx`.
+- Library docs: use Context7 for current docs. If it has no relevant results, check official docs or source; say it lacked coverage and name the source used.
+- Web: Prefer Tavily for general web research. Use another available tool when Tavily is unavailable or does not fit the task. For GitHub content and operations, use `gh` instead of web search or fetch tools.
 
 ## Shell and code quality
 
@@ -63,5 +54,5 @@
 ## Worktrees
 
 - When running in Herdr, prefer `herdr worktree` for a separate write-owning task that needs its own checkout. Let native subagents share their parent checkout. Remove a worktree with the tool that created it.
-- For a new worktree, pass an absolute `--path`: `~/projects/work/.worktrees/<repo>/<name>` for work repositories, `~/projects/personal/.worktrees/<repo>/<name>` for personal repositories. Do not use agent-native worktrees such as `.claude/worktrees/`.
+- For a new worktree, pass an absolute `--path`: `~/projects/work/.worktrees/<repo>/<name>` for work repositories, `~/projects/personal/.worktrees/<repo>/<name>` for personal repositories.
 - Keep one writing agent per worktree at a time. To move a task to a different agent, stop the first session, then start the next session in the same worktree.
