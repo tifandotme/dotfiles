@@ -5,7 +5,6 @@ if command -v uv &>/dev/null; then
 	desired_uv_tools=(
 		"ruff"
 		# {{ if eq .chezmoi.os "darwin" -}}
-		"tavily-cli"
 		"openai-whisper"
 		# {{ end -}}
 	)
