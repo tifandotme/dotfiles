@@ -17,12 +17,12 @@
       "lifecycle": "lazy",
       "url": "https://mcp.tavily.com/mcp/"
     },
-    "posthog-personal": {
+    "posthog-work": {
       "auth": "oauth",
       "lifecycle": "lazy",
       "url": "https://mcp.posthog.com/mcp"
     },
-    "linear-personal": {
+    "linear-work": {
       "auth": "oauth",
       "lifecycle": "lazy",
       "url": "https://mcp.linear.app/mcp",
@@ -36,10 +36,15 @@
       },
       "type": "stdio"
     },
-    "notion": {
+    "slack-work": {
+      "url": "https://mcp.slack.com/mcp",
       "auth": "oauth",
+      "oauth": {
+        "clientId": "1601185624273.8899143856786",
+        "redirectUri": "http://localhost:3118/callback"
+      },
       "lifecycle": "lazy",
-      "url": "https://mcp.notion.com/mcp"
+      "protocolVersion": "auto"
     }
   }
 }
