@@ -87,12 +87,11 @@ brew "models"      # TUI/CLI for browsing AI models, benchmarks, and coding agen
 brew "herdr"       # Agent multiplexer that lives in your terminal
 # {{ if $isDarwin -}}
 cask "devin-cli" # Coding agent with Devin Cloud integration
+cask "amp-app"   # Amp coding agent app
 brew "fx-agent"  # Tiny, open, embeddable, native coding agent
 cask "openusage" # AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
 # {{- end }}
 brew "rtk" # CLI proxy to minimize LLM token consumption
-tap "ampcode/tap", trusted: true
-brew "ampcode/tap/ampcode"
 tap "dmtrKovalenko/fff", trusted: true
 brew "dmtrKovalenko/fff/fff-mcp" # Fast file search MCP server for AI agents
 
