@@ -24,6 +24,7 @@ personal/
 .zprofile
 .zshrc
 Library/LaunchAgents/**
+07_setup-spotify.sh
 .cache/sketchybar
 .config/aerospace
 .config/codex/config.toml

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-{{ if eq .chezmoi.os "darwin" -}}
 token_file="$HOME/.cache/sketchybar/spotify_token.json"
 if [[ -f "$token_file" ]]; then
 	exit 0
@@ -15,4 +14,3 @@ fi
 if ! "$HOME/.local/bin/spotify-login"; then
 	printf '%s\n' 'Spotify setup did not complete; rerun chezmoi apply or ~/.local/bin/spotify-login later.' >&2
 fi
-{{ end -}}
