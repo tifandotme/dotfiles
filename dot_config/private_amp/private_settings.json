@@ -2,11 +2,9 @@
   "amp.terminal.theme": "terminal",
   "amp.git.commit.coauthor.enabled": false,
   "amp.git.commit.ampThread.enabled": true,
-
+  "amp.remoteThreadCreation.enabled": false,
   "amp.skills.disableClaudeCodeSkills": true,
-  "amp.mcpServers": {},
   "amp.dangerouslyAllowAll": true,
-  "amp.openai.speed": "standard",
   "amp.gauge": "cost",
 
   "amp.keymap": {
@@ -37,9 +35,8 @@
     "thread.switchToNextInSidebar": null,
     "thread.switchToPrevious": null,
     "thread.switchToPreviousInSidebar": "ctrl+alt+up",
-    "thread.toggleDetails": "ctrl+o",
+    "thread.toggleDetails": "ctrl+shift+o",
     "thread.toggleOutline": null,
     "thread.toggleSidebar": null
-  },
-  "amp.remoteThreadCreation.enabled": false
+  }
 }
