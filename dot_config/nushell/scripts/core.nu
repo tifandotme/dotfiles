@@ -290,8 +290,14 @@ def --wrapped claude [...args] {
         (pwd | path basename)
         " (claude)"
     ] | str join)
+    let first_arg = if ($args | is-empty) { "" } else { $args.0 }
+    let claude_args = if $first_arg == "remote-control" {
+        ["--dangerously-skip-permissions"] ++ $args
+    } else {
+        ["--dangerously-skip-permissions", "--no-chrome"] ++ $args
+    }
     herdr-wrap $claude_label {
-        run-external (__external claude) ...(["--dangerously-skip-permissions", "--no-chrome"] ++ $args)
+        run-external (__external claude) ...$claude_args
     }
 }
 
