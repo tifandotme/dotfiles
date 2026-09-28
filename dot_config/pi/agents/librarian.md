@@ -3,7 +3,7 @@ name: librarian
 description: Researches repositories and dependencies outside the current workspace, their history and issues, and technical documentation
 thinking: off
 tools: read, bash
-skills: exploring-repo, find-docs
+skills: exploring-repo
 deny-tools: claude
 session-mode: lineage-only
 spawning: false
