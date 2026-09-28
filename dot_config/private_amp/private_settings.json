@@ -42,5 +42,18 @@
     "thread.toggleDetails": "ctrl+shift+o",
     "thread.toggleOutline": null,
     "thread.toggleSidebar": null
-  }
+  },
+  "amp.workspaces": [
+    {
+      "path": "/Users/tifan/projects/personal/box",
+      "allowAllMcpServers": true
+    }
+  ],
+  "amp.mcpTrustedServers": [
+    {
+      "serverName": "n8n",
+      "specHash": "4d0f0da048736cd31f96ac052a5d5989e793fa690344752c01acb0f87d3af3bc",
+      "allow": true
+    }
+  ]
 }

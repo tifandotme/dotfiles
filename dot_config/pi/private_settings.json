@@ -14,6 +14,7 @@
   "packages": [
     "../../projects/personal/pi-extensions/packages/pi-copy-response",
     "../../projects/personal/pi-extensions/packages/pi-fast-mode",
+    "../../projects/personal/pi-extensions/packages/pi-amp-footer",
     "../../projects/personal/pi-extensions/packages/pi-btw",
     "../../projects/personal/pi-extensions/packages/pi-handoff",
     "../../projects/personal/pi-extensions/packages/pi-preferred-thinking",
