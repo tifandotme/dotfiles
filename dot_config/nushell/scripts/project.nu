@@ -496,9 +496,8 @@ export def --env open-project [default_project: string = ""] {
             return
         }
 
-        # The Claude wrapper suppresses trust prompts. For new repositories,
-        # manually set projects[<root>].hasTrustDialogAccepted=true in
-        # ~/.config/claude/.claude.json; trust repository roots, not worktrees.
+        # Run claude-trust once to trust a canonical repository root.
+        # Linked worktrees share that root's trust state.
         if $kind == "worktree" {
             ^herdr worktree open --cwd $project --path $path --focus | ignore
             return

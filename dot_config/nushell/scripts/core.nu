@@ -195,7 +195,7 @@ def --wrapped pi [...args] {
     }
 }
 
-def __claude-sync-mcp-policy [] {
+def __claude-sync-mcp-policy [trust_workspace: bool = false] {
     let config = $env.XDG_CONFIG_HOME | path join "claude" ".claude.json"
     if not ($config | path exists) {
         error make {msg: $"Claude config not found: ($config)"}
@@ -206,6 +206,38 @@ def __claude-sync-mcp-policy [] {
         $git_root.stdout | str trim
     } else {
         ^realpath (pwd) | str trim
+    }
+    let trust_project = if $trust_workspace and $git_root.exit_code == 0 {
+        let common_dir = (^git rev-parse --path-format=absolute --git-common-dir | complete)
+        if $common_dir.exit_code != 0 {
+            error make {msg: "Cannot resolve Claude trust root"}
+        }
+        ^realpath ($common_dir.stdout | str trim | path dirname) | str trim
+    } else {
+        ""
+    }
+    if $trust_workspace and ($trust_project | is-empty) {
+        error make {msg: "Run claude-trust inside a Git repository"}
+    }
+    if $trust_workspace {
+        let trusted = (try {
+            open --raw $config
+            | from json
+            | get projects
+            | get $trust_project
+            | get hasTrustDialogAccepted
+        } catch { false })
+        if not $trusted {
+            if not $nu.is-interactive {
+                error make {msg: "Run Claude interactively to trust this repository"}
+            }
+            print $'Trust Claude in ($trust_project)? This enables repository settings and hooks.'
+            print 'The Claude wrapper also skips tool permission prompts.'
+            let answer = (input "Type TRUST to continue: ")
+            if ($answer | str trim) != "TRUST" {
+                error make {msg: "Claude trust declined"}
+            }
+        }
     }
     let allowed = [
         "betterstack"
@@ -272,7 +304,15 @@ def __claude-sync-mcp-policy [] {
             | sort
         )
         let next_state = $state | upsert disabledMcpServers $disabled
-        let next_data = $data | upsert projects ($projects | upsert $project $next_state)
+        let project_data = $projects | upsert $project $next_state
+        let next_projects = if not $trust_workspace {
+            $project_data
+        } else {
+            let trust_state = (try { $project_data | get $trust_project } catch { {} })
+            $project_data
+            | upsert $trust_project ($trust_state | upsert hasTrustDialogAccepted true)
+        }
+        let next_data = $data | upsert projects $next_projects
         if $next_data != $data {
             $next_data | to json --indent 2 | save --force $temporary
             ^chmod 600 $temporary
@@ -282,6 +322,11 @@ def __claude-sync-mcp-policy [] {
         if ($temporary | path exists) { rm -f $temporary }
         if ($lock | path exists) { rm -f $lock }
     }
+}
+
+def claude-trust [] {
+    __claude-sync-mcp-policy true
+    print "Claude trusts this canonical repository root."
 }
 
 def --wrapped claude [...args] {
