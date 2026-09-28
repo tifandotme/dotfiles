@@ -291,7 +291,7 @@ def --wrapped claude [...args] {
         " (claude)"
     ] | str join)
     let first_arg = if ($args | is-empty) { "" } else { $args.0 }
-    let claude_args = if $first_arg == "remote-control" {
+    let claude_args = if $first_arg in ["remote-control", "rc"] {
         ["--dangerously-skip-permissions"] ++ $args
     } else {
         ["--dangerously-skip-permissions", "--no-chrome"] ++ $args

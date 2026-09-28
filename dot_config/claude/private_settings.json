@@ -87,7 +87,7 @@
   "disableArtifact": true,
   "statusLine": {
     "type": "command",
-    "command": "bunx -y ccstatusline@latest --config \"$XDG_CONFIG_HOME/ccstatusline/settings.json\"",
+    "command": "ccstatusline --config \"$XDG_CONFIG_HOME/ccstatusline/settings.json\"",
     "padding": 0
   },
   "outputStyle": "Concise",
