@@ -78,7 +78,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"Claude worktrees are disabled. Use herdr worktree create with an absolute --path under ~/projects/{work,personal}/.worktrees/<repo>/.\" >&2; exit 1"
+            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-worktree-create.sh\""
           }
         ]
       }

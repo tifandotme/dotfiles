@@ -1,20 +1,52 @@
 def __worktree-root [project: string] {
     let projects_dir = $env.XDG_PROJECTS_DIR
-    let personal_dir = $projects_dir | path join 'personal'
-    if $project == $personal_dir or ($project | str starts-with $"($personal_dir)/") {
-        return ($personal_dir | path join '.worktrees')
+    for group in ["work" "personal"] {
+        let root = $projects_dir | path join $group
+        if $project == $root or ($project | str starts-with $"($root)/") {
+            return $root
+        }
     }
-    $projects_dir | path join 'work' '.worktrees'
+    null
 }
 
-def __new-worktree-path [project: string] {
+def __new-worktree-path [project: string, branch: string] {
     let root = (__worktree-root $project)
-    let repo_root = $root | path join ($project | path basename)
-    if not ($repo_root | path exists) {
-        mkdir $repo_root | ignore
+    if $root == null {
+        return null
+    }
+    let branch_name = $branch | str replace --all "/" "-"
+    $root | path join $"(($project | path basename))-($branch_name)"
+}
+
+export def prune-worktrees [project: string = "."] {
+    let root_result = (^git -C $project rev-parse --show-toplevel | complete)
+    if $root_result.exit_code != 0 {
+        print -e "Run this inside a Git repository or pass its path."
+        return
+    }
+    let root = $root_result.stdout | str trim
+    let preview = (^git -C $root worktree prune --dry-run --verbose | complete)
+    if $preview.exit_code != 0 {
+        print -e ($preview.stderr | str trim)
+        return
+    }
+    if ($preview.stdout | str trim | is-empty) {
+        print "No stale worktree registrations to prune."
+        return
     }
 
-    ^mktemp -d ($repo_root | path join "worktree-XXXXXXXX") | str trim
+    print $preview.stdout
+    let choice = input "Prune these missing worktree registrations? [y/N] " | str trim | str lowercase
+    if $choice not-in ["y" "yes"] {
+        return
+    }
+
+    let result = (^git -C $root worktree prune --verbose | complete)
+    if $result.exit_code != 0 {
+        print -e ($result.stderr | str trim)
+    } else if ($result.stdout | str trim | is-not-empty) {
+        print $result.stdout
+    }
 }
 
 def __project-dirs [] {
@@ -229,7 +261,7 @@ def __worktree-preview [kind: string, path: string, branch: string] {
     let action = if $kind == "worktree" {
         "Enter: open and focus this worktree"
     } else {
-        "Enter: create and focus an auto-named worktree from this project"
+        "Enter: choose a branch and create its worktree"
     }
     print $"($label)($action)($reset)"
     print ""
@@ -379,6 +411,39 @@ def __close-worktree [kind: string, project: string, path: string] {
         return
     }
 
+    let ignored_status = (^git -C $path status --porcelain --ignored | complete)
+    if $ignored_status.exit_code != 0 {
+        __worktree-notice "Cannot inspect ignored files in this worktree."
+        return
+    }
+    if ($ignored_status.stdout | lines | any {|line| $line | str starts-with "!!" }) {
+        __worktree-notice "Cannot close a worktree with ignored files. Remove or move them first."
+        return
+    }
+
+    let branch_result = (^git -C $path branch --show-current | complete)
+    let branch = $branch_result.stdout | str trim
+    if $branch_result.exit_code != 0 or ($branch | is-empty) {
+        __worktree-notice "Cannot close a detached or unidentifiable worktree."
+        return
+    }
+
+    let default_branch_result = (
+        ^git -C $project symbolic-ref --quiet --short refs/remotes/origin/HEAD
+        | complete
+    )
+    let default_branch = $default_branch_result.stdout | str trim
+    if $default_branch_result.exit_code != 0 or ($default_branch | is-empty) {
+        __worktree-notice "Cannot confirm the default branch. Set origin/HEAD before cleanup."
+        return
+    }
+
+    let merged = (^git -C $project merge-base --is-ancestor $branch $default_branch | complete)
+    if $merged.exit_code != 0 {
+        __worktree-notice "Cannot close a branch that is not merged into the default branch."
+        return
+    }
+
     let lookup = (^herdr worktree list --cwd $path | complete)
     if $lookup.exit_code != 0 {
         __worktree-notice "Cannot find the Herdr workspace for this worktree."
@@ -496,15 +561,44 @@ export def --env open-project [default_project: string = ""] {
             return
         }
 
-        # Run claude-trust once to trust a canonical repository root.
-        # Linked worktrees share that root's trust state.
         if $kind == "worktree" {
+
+            # Linked worktrees share trust with the canonical repository root.
             ^herdr worktree open --cwd $project --path $path --focus | ignore
             return
         }
 
-        let path = (__new-worktree-path $project)
-        ^herdr worktree create --cwd $project --path $path --focus | ignore
+        let branch = input "New branch name: " | str trim
+        if ($branch | is-empty) {
+            print -e "A branch name is required."
+            return
+        }
+        let valid_branch = (^git -C $project check-ref-format --branch $branch | complete)
+        if $valid_branch.exit_code != 0 or ($valid_branch.stdout | str trim) != $branch {
+            print -e $"Invalid branch name: ($branch)"
+            return
+        }
+
+        let path = (__new-worktree-path $project $branch)
+        if $path == null {
+            print -e "Worktree creation only supports repositories under ~/projects/work or ~/projects/personal."
+            return
+        }
+        if ($path | path exists) {
+            print -e $"Worktree path already exists: ($path)"
+            return
+        }
+
+        let created = (
+            ^herdr worktree create --cwd $project --branch $branch --path $path --focus
+            | complete
+        )
+        if $created.exit_code != 0 {
+            let reason = $created.stderr | str trim
+            print -e (
+                if ($reason | is-empty) { "Herdr could not create the worktree." } else { $reason }
+            )
+        }
         return
     } catch {
         print "No project directory found."

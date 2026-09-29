@@ -46,5 +46,12 @@
 ## Worktrees
 
 - When running in Herdr, prefer `herdr worktree` for a separate write-owning task that needs its own checkout. Let native subagents share their parent checkout. Remove a worktree with the tool that created it.
-- For a new worktree, pass an absolute `--path`: `~/projects/work/.worktrees/<repo>/<name>` for work repositories, `~/projects/personal/.worktrees/<repo>/<name>` for personal repositories.
+- Put worktrees directly under their project group: `~/projects/{work|personal}/<repo-name>-<branch-name>`.
+- Replace `/` in branch names with `-` when forming the directory name. If the destination exists, stop and report the collision instead of choosing another path.
+- Pass the absolute destination with `--path` and the chosen branch with `--branch` to `herdr worktree create`. Herdr does not choose this path for the local workflow.
+- Keep session data in each harness's supported storage and resume mechanism. Do not move or edit session files to imitate migration.
+- The one-time migration script `scripts/migrate-worktrees.nu` previews legacy path moves by default. Run it with `--apply` only when the user asks to migrate. It stops when a worktree is dirty, locked, open in Herdr, or collides with another path.
+- Close active agent sessions and terminals in legacy worktrees before migration. After a move, use the harness's supported session picker or explicit session ID if automatic continuation does not find the conversation.
+- The project picker removes only clean worktrees merged into the default branch, and refuses worktrees containing ignored files.
+- Use `prune-worktrees` to review stale Git worktree registrations. Never prune as part of ordinary worktree removal.
 - Keep one writing agent per worktree at a time. To move a task to a different agent, stop the first session, then start the next session in the same worktree.
