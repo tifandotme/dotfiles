@@ -216,6 +216,10 @@ tap "gromgit/brewtils", trusted: true
 brew "gromgit/brewtils/taproom" # TUI for browsing Homebrew taps and formulae
 brew "asciinema"                # Record and share terminal sessions
 
+# {{ if $isServer -}}
+brew "trash-cli" # Move files to the trash from the command line
+# {{- end }}
+
 # {{ if $isDarwin -}}
 brew "batt" # Control battery charging on Apple Silicon MacBooks
 tap "philocalyst/tap", trusted: true
