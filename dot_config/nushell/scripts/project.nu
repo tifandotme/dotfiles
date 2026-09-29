@@ -1,7 +1,8 @@
 def __worktree-root [project: string] {
-    let projects_dir = $env.XDG_PROJECTS_DIR
+    let projects_dir = $env.XDG_PROJECTS_DIR | path expand --strict
+    let project = $project | path expand --strict
     for group in ["work" "personal"] {
-        let root = $projects_dir | path join $group
+        let root = $projects_dir | path join $group | path expand
         if $project == $root or ($project | str starts-with $"($root)/") {
             return $root
         }
@@ -584,7 +585,7 @@ export def --env open-project [default_project: string = ""] {
             print -e "Worktree creation only supports repositories under ~/projects/work or ~/projects/personal."
             return
         }
-        if ($path | path exists) {
+        if ($path | path type | is-not-empty) {
             print -e $"Worktree path already exists: ($path)"
             return
         }
