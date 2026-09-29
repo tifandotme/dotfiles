@@ -1,7 +1,8 @@
 ---
 name: librarian
 description: Researches repositories and dependencies outside the current workspace, their history and issues, and technical documentation
-thinking: off
+model: openai-codex/gpt-6-luna
+thinking: medium
 tools: read, bash
 skills: exploring-repo
 deny-tools: claude

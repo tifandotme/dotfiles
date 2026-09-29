@@ -177,6 +177,14 @@ run = "move-node-to-workspace 3_dev"
 if.app-id = "com.todesktop.230313mzl4w4u92"  # Cursor
 run = "move-node-to-workspace 3_dev"
 
+[[on-window-detected]]
+if.app-id = "com.ampcode.amp.macos"
+run = "move-node-to-workspace 3_dev"
+
+[[on-window-detected]]
+if.app-id = "com.anthropic.claudefordesktop"
+run = "move-node-to-workspace 3_dev"
+
 # Database clients
 [[on-window-detected]]
 if.app-id = "org.jkiss.dbeaver.core.product"
@@ -215,10 +223,6 @@ if.app-id = "net.imput.helium.extra"
 run = ["move-node-to-workspace 0_misc", "layout tiling"]
 
 # AI assistants
-[[on-window-detected]]
-if.app-id = "com.anthropic.claudefordesktop"
-run = "move-node-to-workspace 0_misc"
-
 [[on-window-detected]]
 if.app-id = "com.openai.codex"  # ChatGPT
 run = "move-node-to-workspace 0_misc"
