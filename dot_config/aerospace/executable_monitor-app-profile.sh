@@ -6,7 +6,7 @@ monitor_name="$($AEROSPACE list-monitors --focused --format '%{monitor-name}')"
 app_id="$($AEROSPACE list-windows --focused --format '%{app-bundle-id}')"
 
 case "$app_id:$monitor_name" in
-com.mitchellh.ghostty:H24G30Q) action=ghostty17 ;;
+com.mitchellh.ghostty:H24G30Q) action=ghostty15 ;;
 com.mitchellh.ghostty:*) action=ghostty14 ;;
 club.refactoring.tolaria:H24G30Q) action=tolaria130 ;;
 club.refactoring.tolaria:*) action=tolaria100 ;;
@@ -19,9 +19,9 @@ esac
 on run argv
   set profileAction to item 1 of argv
 
-  if profileAction is "ghostty17" or profileAction is "ghostty14" then
-    if profileAction is "ghostty17" then
-      set fontSize to "17"
+  if profileAction is "ghostty15" or profileAction is "ghostty14" then
+    if profileAction is "ghostty15" then
+      set fontSize to "15"
     else
       set fontSize to "14"
     end if
