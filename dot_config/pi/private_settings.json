@@ -3,7 +3,7 @@
   "defaultModel": "gpt-6-luna",
   "defaultThinkingLevel": "high",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.87.1",
+  "lastChangelogVersion": "0.99.1",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
@@ -38,10 +38,10 @@
   },
   "enabledModels": [
     "openai-codex/gpt-6-astra:medium",
-    "openai-codex/gpt-6-sol:medium",
+    "openai-codex/gpt-6.1-sol:medium",
     "openai-codex/gpt-6-luna:high",
     "claude-bridge/claude-opus-5-5:medium",
-    "claude-bridge/claude-sonnet-5:medium"
+    "claude-bridge/claude-sonnet-5-5:medium"
   ],
   "compaction": {
     "enabled": false
@@ -53,3 +53,4 @@
   },
   "showCacheMissNotices": true
 }
+
