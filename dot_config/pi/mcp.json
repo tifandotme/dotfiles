@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "context7": {
+      "url": "https://mcp.context7.com/mcp/oauth"
+    },
+    "tavily": {
+      "url": "https://mcp.tavily.com/mcp/"
+    },
+    "posthog-personal": {
+      "url": "https://mcp.posthog.com/mcp"
+    },
+    "linear-personal": {
+      "url": "https://mcp.linear.app/mcp"
+    },
+    "posthog-work": {
+      "url": "https://mcp.posthog.com/mcp"
+    },
+    "linear-work": {
+      "url": "https://mcp.linear.app/mcp"
+    },
+    "tolaria": {
+      "command": "/Users/tifan/.local/share/mise/shims/node",
+      "args": ["/Applications/Tolaria.app/Contents/Resources/mcp-server/index.js"],
+      "env": {
+        "WS_UI_PORT": "9711"
+      }
+    },
+    "notion": {
+      "url": "https://mcp.notion.com/mcp"
+    },
+    "slack-work": {
+      "url": "https://mcp.slack.com/mcp",
+      "oauth": {
+        "clientId": "1601185624273.8899143856786",
+        "callbackUrl": "http://localhost:3118/callback"
+      }
+    }
+  }
+}

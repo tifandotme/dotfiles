@@ -25,7 +25,6 @@
     "../../projects/personal/pi-extensions/packages/pi-mermaid-open",
     "npm:pi-add-dir",
     "npm:pi-rtk-optimizer",
-    "npm:pi-mcp-adapter",
     "npm:pi-subdir-context",
     "npm:@ff-labs/pi-fff@nightly",
     "npm:pi-herdr-subagents",
