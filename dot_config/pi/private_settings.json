@@ -28,7 +28,6 @@
     "npm:pi-subdir-context",
     "npm:@ff-labs/pi-fff@nightly",
     "npm:pi-herdr-subagents",
-    "npm:pi-claude-bridge",
     "npm:pi-clarify",
     "npm:@pi-kaush/pi-tool-call-markers"
   ],
@@ -39,9 +38,7 @@
   "enabledModels": [
     "openai-codex/gpt-6-astra:medium",
     "openai-codex/gpt-6.1-sol:medium",
-    "openai-codex/gpt-6-luna:high",
-    "claude-bridge/claude-opus-5-5:medium",
-    "claude-bridge/claude-sonnet-5-5:medium"
+    "openai-codex/gpt-6-luna:high"
   ],
   "compaction": {
     "enabled": false
