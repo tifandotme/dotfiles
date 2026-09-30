@@ -82,6 +82,16 @@
           }
         ]
       }
+    ],
+    "WorktreeRemove": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-worktree-remove.sh\""
+          }
+        ]
+      }
     ]
   },
   "disableArtifact": true,
