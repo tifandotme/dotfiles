@@ -18,6 +18,7 @@ ensure_claude_mcp() {
 	local config_dir="${CLAUDE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/claude}"
 	local config="$config_dir/.claude.json"
 	local command_path
+	local command_args=("${@:4}")
 
 	if ! command -v claude >/dev/null 2>&1; then
 		return 0
@@ -50,7 +51,11 @@ ensure_claude_mcp() {
 			warn "cannot add Claude MCP server $name; $endpoint is not installed"
 			return 0
 		fi
-		if ! claude mcp add --scope user "$name" -- "$command_path"; then
+		if [[ "$name" == tolaria ]]; then
+			if ! claude mcp add --scope user --env WS_UI_PORT=9711 "$name" -- "$command_path" "${command_args[@]}"; then
+				warn "could not add Claude MCP server $name"
+			fi
+		elif ! claude mcp add --scope user "$name" -- "$command_path"; then
 			warn "could not add Claude MCP server $name"
 		fi
 		return 0
@@ -77,7 +82,7 @@ prune_claude_mcps() {
 
 	while IFS= read -r name; do
 		case "$name" in
-		fff | betterstack | context7 | tavily) continue ;;
+		fff | tolaria | betterstack | context7 | tavily) continue ;;
 		esac
 		if ! claude mcp remove --scope user "$name"; then
 			warn "could not remove unmanaged Claude user MCP server $name"
@@ -144,6 +149,7 @@ ensure_amp_mcps() {
 
 prune_claude_mcps
 ensure_claude_mcp fff stdio fff-mcp
+ensure_claude_mcp tolaria stdio /Users/tifan/.local/share/mise/shims/node /Applications/Tolaria.app/Contents/Resources/mcp-server/index.js
 ensure_claude_mcp betterstack http https://mcp.betterstack.com
 ensure_claude_mcp context7 http https://mcp.context7.com/mcp/oauth
 ensure_claude_mcp tavily http https://mcp.tavily.com/mcp/
