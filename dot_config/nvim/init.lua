@@ -200,7 +200,7 @@ vim.pack.add({
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/dmtrKovalenko/fff.nvim",
   "https://github.com/selimacerbas/live-server.nvim",
-  "https://github.com/selimacerbas/markdown-preview.nvim",
+  "https://github.com/selimacerbas/mdkite.nvim",
   "https://github.com/jake-stewart/multicursor.nvim",
   "https://github.com/nvim-mini/mini.nvim",
 })
@@ -363,8 +363,8 @@ end
 
 style_miniclue_next_key()
 
-local markdown_preview = require("markdown_preview")
-markdown_preview.setup({
+local mdkite = require("mdkite")
+mdkite.setup({
   default_theme = is_dark and "dark" or "light",
 })
 
@@ -377,7 +377,7 @@ local function refresh_theme()
   is_dark = next_is_dark
   apply_theme(is_dark)
   style_trailspace()
-  markdown_preview.setup({
+  mdkite.setup({
     default_theme = is_dark and "dark" or "light",
   })
   style_tabline()

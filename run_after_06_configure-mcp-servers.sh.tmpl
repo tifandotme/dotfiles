@@ -52,7 +52,7 @@ ensure_claude_mcp() {
 			return 0
 		fi
 		if [[ "$name" == tolaria ]]; then
-			if ! claude mcp add --scope user --env WS_UI_PORT=9711 "$name" -- "$command_path" "${command_args[@]}"; then
+			if ! claude mcp add --scope user "$name" -e WS_UI_PORT=9711 -- "$command_path" "${command_args[@]}"; then
 				warn "could not add Claude MCP server $name"
 			fi
 		elif ! claude mcp add --scope user "$name" -- "$command_path"; then
