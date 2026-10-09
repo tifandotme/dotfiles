@@ -13,7 +13,7 @@
       "url": "https://mcp.linear.app/mcp"
     },
     "tolaria": {
-      "command": "/Users/tifan/.local/share/mise/shims/node",
+      "command": "{{ if eq .chezmoi.os "darwin" }}/Users/tifan/.local/share/mise/installs/node/lts/bin/node{{ else }}/home/eddies/.local/share/mise/installs/node/lts/bin/node{{ end }}",
       "args": ["/Applications/Tolaria.app/Contents/Resources/mcp-server/index.js"],
       "env": {
         "WS_UI_PORT": "9711"
