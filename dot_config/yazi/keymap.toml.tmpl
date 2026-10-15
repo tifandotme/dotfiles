@@ -18,9 +18,6 @@ prepend_keymap = [
   { on = ["'", ";"], run = "plugin custom-shell -- auto --interactive", desc = "custom-shell as default, interactive" },
   { on = ["'", ":"], run = "plugin custom-shell -- auto --interactive --block", desc = "custom-shell as default, interactive, block" },
   { on = ["'", "h"], run = "plugin custom-shell history", desc = "Show custom-shell history" },
-# {{ if eq .chezmoi.os "darwin" }}
-  { on = ["'", "z"], run = "plugin custom-shell -- custom nu 'zed $env.PWD'", desc = "Run Zed in current directory" },
-# {{ end }}
   # chezmoi (with notifications) - using 'C' prefix for "Chezmoi"
   { on = ["C", "a"], run = "plugin chezmoi-cmd -- add", desc = "chezmoi: add file to source state" },
   { on = ["C", "t"], run = "plugin chezmoi-cmd -- add --template", desc = "chezmoi: add as template" },

@@ -39,7 +39,6 @@ Library/LaunchAgents/**
 .config/raycast
 .config/keymaps
 .config/colima
-.config/zed
 
 # {{- end -}}
 

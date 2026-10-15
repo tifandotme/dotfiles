@@ -73,7 +73,6 @@ alt-shift-l = "focus right"
 alt-shift-minus = "resize smart -70"
 alt-shift-equal = "resize smart +70"
 alt-shift-0 = "balance-sizes"
-# zed edit prediction at cursor use alt-tab bro
 # alt-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 # alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
@@ -167,10 +166,6 @@ run = ["move-node-to-workspace 3_dev", "layout tiling"]
 
 [[on-window-detected]]
 if.app-id = "com.microsoft.VSCode"
-run = "move-node-to-workspace 3_dev"
-
-[[on-window-detected]]
-if.app-id = "dev.zed.Zed"
 run = "move-node-to-workspace 3_dev"
 
 [[on-window-detected]]
