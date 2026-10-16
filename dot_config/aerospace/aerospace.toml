@@ -216,6 +216,18 @@ if.app-id = "club.refactoring.tolaria"
 run = "move-node-to-workspace 5_notes"
 
 # Move to 0_misc workspace
+[[on-window-detected]]
+if.app-id = "com.mojang.minecraft"
+run = "move-node-to-workspace 0_misc"
+
+[[on-window-detected]]
+if.app-id = "com.mojang.minecraftlauncher"
+run = "move-node-to-workspace 0_misc"
+
+[[on-window-detected]]
+if.window-title-regex-substring = "Minecraft"
+run = "move-node-to-workspace 0_misc"
+
 # Anonymous browser
 [[on-window-detected]]
 if.app-id = "net.imput.helium.extra"

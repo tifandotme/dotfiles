@@ -12,13 +12,18 @@
     "linear": {
       "url": "https://mcp.linear.app/mcp"
     },
+    {{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.hostname "box") -}}
     "tolaria": {
-      "command": "{{ if eq .chezmoi.os "darwin" }}/Users/tifan/.local/share/mise/installs/node/lts/bin/node{{ else }}/home/eddies/.local/share/mise/installs/node/lts/bin/node{{ end }}",
-      "args": ["/Applications/Tolaria.app/Contents/Resources/mcp-server/index.js"],
+      "command": "{{ if eq .chezmoi.os "darwin" }}{{ .chezmoi.homeDir }}/.local/share/mise/shims/node{{ else }}node{{ end }}",
+      "args": ["{{ .chezmoi.homeDir }}/.local/share/tolaria-mcp/index.js"],
       "env": {
+        {{ if eq .chezmoi.hostname "box" -}}
+        "VAULT_PATH": "{{ .chezmoi.homeDir }}/projects/personal/notes",
+        {{ end -}}
         "WS_UI_PORT": "9711"
       }
     },
+    {{ end -}}
     "notion": {
       "url": "https://mcp.notion.com/mcp"
     }

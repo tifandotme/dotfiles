@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+tolaria_dir="$HOME/.local/share/tolaria-mcp"
+# {{ if eq .chezmoi.hostname "box" -}}
+vault_path="$HOME/projects/personal/notes"
+
+if [[ ! -d "$vault_path" ]]; then
+	printf 'Tolaria vault is missing: %s\n' "$vault_path" >&2
+	exit 1
+fi
+# {{ end -}}
+
+if ! command -v bun >/dev/null 2>&1; then
+	printf '%s\n' 'bun is required to install Tolaria MCP dependencies' >&2
+	exit 1
+fi
+
+cd "$tolaria_dir"
+# {{ if eq .chezmoi.os "darwin" -}}
+lock_hash="$(shasum -a 256 package-lock.json | awk '{print $1}')"
+# {{ else -}}
+lock_hash="$(sha256sum package-lock.json | awk '{print $1}')"
+# {{ end -}}
+installed_hash=""
+if [[ -f .chezmoi-package-lock-hash ]]; then
+	installed_hash="$(<.chezmoi-package-lock-hash)"
+fi
+
+if [[ ! -d node_modules || "$installed_hash" != "$lock_hash" ]]; then
+	if [[ "$installed_hash" != "$lock_hash" ]]; then
+		rm -f bun.lock bun.lockb
+	fi
+	bun install --no-save --production
+	printf '%s\n' "$lock_hash" >.chezmoi-package-lock-hash.tmp
+	mv .chezmoi-package-lock-hash.tmp .chezmoi-package-lock-hash
+fi

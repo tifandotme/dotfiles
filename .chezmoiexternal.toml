@@ -26,8 +26,12 @@ refreshPeriod = "168h"
 [".config/ghostty/shaders/cursors"."pull"]
 args = ["--rebase", "--autostash"]
 
-# {{- end -}}
+# {{ end -}}
 
-# {{ if eq .chezmoi.hostname "box" -}}
-
-# {{- end -}}
+# {{ $tolariaTag := output "gh" "api" "repos/refactoringhq/tolaria/releases/latest" "--jq" ".tag_name" "--cache" "168h" | trim -}}
+[".local/share/tolaria-mcp"]
+type = "archive"
+# {{ printf "url = \"https://github.com/refactoringhq/tolaria/archive/refs/tags/%s.tar.gz\"" $tolariaTag }}
+stripComponents = 2
+include = ["*/mcp-server/**"]
+refreshPeriod = "168h"

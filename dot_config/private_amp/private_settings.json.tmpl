@@ -43,6 +43,20 @@
     "thread.toggleOutline": null,
     "thread.toggleSidebar": null
   },
+  {{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.hostname "box") -}}
+  "amp.mcpServers": {
+    "tolaria": {
+      "command": "{{ if eq .chezmoi.os "darwin" }}{{ .chezmoi.homeDir }}/.local/share/mise/shims/node{{ else }}node{{ end }}",
+      "args": ["{{ .chezmoi.homeDir }}/.local/share/tolaria-mcp/index.js"],
+      "env": {
+        {{ if eq .chezmoi.hostname "box" -}}
+        "VAULT_PATH": "{{ .chezmoi.homeDir }}/projects/personal/notes",
+        {{ end -}}
+        "WS_UI_PORT": "9711"
+      }
+    }
+  },
+  {{ end -}}
   "amp.workspaces": [
     {
       "path": "/Users/tifan/projects/personal/box",

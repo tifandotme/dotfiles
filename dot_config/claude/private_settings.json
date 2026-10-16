@@ -8,6 +8,8 @@
     "CLAUDE_CODE_NO_FLICKER": "1",
     "DISABLE_FEEDBACK_COMMAND": "1",
     "CLAUDE_CODE_COORDINATOR_MODE": "0",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-5-5",
+    "CLAUDE_CODE_SUBAGENT_MODEL_FORCE": "1",
     "IS_DEMO": "1"
   },
   "attribution": {
@@ -19,7 +21,10 @@
   "permissions": {
     "deny": [
       "mcp__tavily__tavily_search",
-      "mcp__tavily__tavily_extract"
+      "mcp__tavily__tavily_extract",
+      "Agent(Plan)",
+      "Agent(claude)",
+      "Agent(statusline-setup)"
     ]
   },
   "hooks": {
@@ -94,7 +99,7 @@
       }
     ]
   },
-  "disableArtifact": true,
+  "enableArtifact": false,
   "statusLine": {
     "type": "command",
     "command": "ccstatusline --config \"$XDG_CONFIG_HOME/ccstatusline/settings.json\"",
@@ -111,7 +116,7 @@
   },
   "effortLevel": "medium",
   "modelSettings": {
-    "claude-sonnet-5": {
+    "claude-sonnet-5-5": {
       "effortLevel": "medium"
     },
     "claude-opus-5-5": {
@@ -133,7 +138,9 @@
   "editorMode": "normal",
   "verbose": false,
   "preferredNotifChannel": "ghostty",
-  "autoCompactEnabled": false,
+  "autoCompactEnabled": true,
+  "autoCompactWindow": 400000,
+  "idleCompaction": true,
   "terminalProgressBarEnabled": false,
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,

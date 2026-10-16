@@ -6,7 +6,14 @@
 
 - For work likely to span sessions or require coordination, ask whether to track it unless a relevant Linear issue already exists, and include the issue identifier in branch, commit, and PR names when relevant.
 - Before Linear read/write, confirm that the repository owner matches the Linear workspace: `tifandotme` → `Tifan`; `hadl-labs` → `Hadl`. If the remote is missing or has another owner, ask the user.
-- In the Hadl workspace, do not move issues to Done. The user must do that manually.
+- In the Hadl workspace, do not move issues to Done unless the user explicitly tells you to.
+
+## Hadl production
+
+- Applies to manual changes to production systems or data operated by Hadl (such as a deploy, restart, migration, config or secret change, or data write). Changes that ship through an approved PR and CI/CD need no announcement; the PR approval is the ack.
+- Before a manual change, draft an announcement for Slack #engineering (`C0AEV5BP35W`) in the user's voice and show it to the user. Post it only after the user confirms.
+- After posting, wait until any engineer replies in the thread, then do the action. Do not require a specific person. If nobody replies, ask the user instead of proceeding.
+- This does not apply to personal tools or infrastructure just because they work with `hadl-labs` repositories.
 
 ## Completion
 
@@ -32,7 +39,7 @@
 ## Browser, web, and cloud tools
 
 - X/Twitter: use `bird` instead of browser automation.
-- Browser use: load `agent-browser` first. For web browser work outside Electron, connect to the existing Helium for Agents browser with `agent-browser --session helium connect 9222`; use `--session helium` in later commands. If the connection fails, run `run-helium`, then retry the connection. For Electron work, follow the project `AGENTS.md` and use its project-specific CDP port; do not connect to Helium.
+- Browser use: load `agent-browser` first. For web browser work outside Electron, connect to the existing Helium for Agents browser with `agent-browser --session helium connect 9222`; use `--session helium` in later commands. If the connection fails, or any output shows `launched browser` (a fresh, signed-out profile), run `agent-browser --session helium close` and `run-helium`, then retry the connection. For Electron work, follow the project `AGENTS.md` and use its project-specific CDP port; do not connect to Helium.
 - Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. Account mappings: `personal` → `ifan.anvity@gmail.com`, `work` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`.
 - Library docs: use Context7 for current docs. If it has no relevant results, check official docs or source; say it lacked coverage and name the source used.
 
@@ -55,3 +62,4 @@
 - The project picker removes only clean worktrees merged into the default branch, and refuses worktrees containing ignored files.
 - Use `prune-worktrees` to review stale Git worktree registrations. Never prune as part of ordinary worktree removal.
 - Keep one writing agent per worktree at a time. To move a task to a different agent, stop the first session, then start the next session in the same worktree.
+- When a task spans more than one checkout, put the target in every git and gh command (`git -C <path>`, `gh --repo <owner/name>`); the shell's working directory can reset between calls.

@@ -50,6 +50,11 @@ brew "ffmpegthumbnailer" # Create thumbnails for video files
 # DEVELOPMENT - LANGUAGES & RUNTIMES
 # =============================================================================
 
+# Java
+# {{ if $isDarwin -}}
+brew "openjdk" # Latest JDK for macOS
+# {{- end }}
+
 # JavaScript/TypeScript
 tap "oven-sh/bun", trusted: true
 brew "oven-sh/bun/bun" # Fast JavaScript runtime, bundler, package manager
@@ -86,7 +91,6 @@ brew "cliproxyapi" # Expose Codex and other model providers through compatible A
 brew "models"      # TUI/CLI for browsing AI models, benchmarks, and coding agents
 brew "herdr"       # Agent multiplexer that lives in your terminal
 # {{ if $isDarwin -}}
-cask "devin-cli" # Coding agent with Devin Cloud integration
 cask "amp-app"   # Amp coding agent app
 brew "fx-agent"  # Tiny, open, embeddable, native coding agent
 cask "openusage" # AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
@@ -154,6 +158,9 @@ brew "swaks"   # SMTP command-line test tool
 # Google Workspace (installs `gws`; conflicts with the unrelated `gws` formula)
 brew "googleworkspace-cli"
 brew "rclone"
+
+# Workflow engine
+brew "temporal" # Temporal CLI for inspecting and resetting workflows
 
 # =============================================================================
 # SECURITY & NETWORKING
@@ -259,7 +266,6 @@ cask "redis-insight"     # GUI for Redis application development
 cask "tableplus"         # Native GUI tool for relational databases
 
 # Editors
-cask "zed" # Multiplayer code editor
 
 # Terminal emulator
 cask "ghostty" # Terminal emulator with GPU acceleration
@@ -306,6 +312,8 @@ cask "tolaria"      # Markdown knowledgebase manager
 
 cask "handbrake-app" # Open-source video transcoder
 cask "iina"          # Free and open-source media player
+cask "minecraft"    # Minecraft: Java Edition
+brew "fabric-installer" # Installer for Fabric for the vanilla launcher
 cask "spotify"       # Music streaming service
 cask "transmission"  # BitTorrent client
 
@@ -318,6 +326,7 @@ cask "crisp"        # Menu bar display manager for DDC brightness, HiDPI, preset
 cask "crystalfetch" # UI for creating Windows installer ISO
 cask "handy"        # Speech to text application
 cask "keycastr"     # Open-source keystroke visualiser
+cask "linearmouse"  # Customize mouse behavior
 cask "notunes"      # Prevent iTunes/Apple Music from launching
 cask "raycast"      # Control your tools with a few keystrokes
 

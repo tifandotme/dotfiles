@@ -58,11 +58,13 @@
 				<article class="workflow"><h3>Set up a new machine</h3><ol class="flow"><li><span class="step"><strong>Prerequisites</strong>Install chezmoi; on macOS install Homebrew and Xcode tools</span></li><li><span class="step"><strong>Bootstrap</strong><code>chezmoi init --apply git@github.com:tifandotme/dotfiles.git</code></span></li><li><span class="step"><strong>Finish</strong>Unlock age key, then open a new terminal</span></li></ol><p>Applies macOS-only configuration on the main machine and host-specific configuration on the Ubuntu VPS <code>box</code>. SSH access is needed for external repositories.</p><!-- Sources: README.md, run_onchange_before_decrypt-private-key.sh.tmpl --></article>
 			</div></section>
 			<section id="navigate"><div class="section-head"><h2>Projects &amp; terminals</h2></div><div class="grid">
-				<article class="workflow"><h3>Open a project or worktree</h3><ol class="flow"><li><span class="step"><strong>Herdr · ⌘ B</strong>Open worktree picker</span></li><li><span class="step"><strong>Select</strong>Existing worktree → Herdr opens it; project → Herdr creates a worktree</span></li><li><span class="step"><strong>While browsing</strong><kbd>Enter</kbd>
+				<article class="workflow"><h3>Open a project or worktree</h3><ol class="flow"><li><span class="step"><strong>Herdr · ⌘ B</strong>Open worktree picker</span></li><li><span class="step"><strong>Select</strong>Existing worktree → Herdr opens it; project → enter a branch name and Herdr creates the worktree</span></li><li><span class="step"><strong>Path</strong><code>~/projects/{work|personal}/&lt;repo&gt;-&lt;branch&gt;</code><small>Branch slashes become hyphens</small></span></li><li><span class="step"><strong>While browsing</strong><kbd>Enter</kbd>
 				open/create · <kbd>Ctrl X</kbd>
-				close clean worktree · <kbd>Esc</kbd>
+				close a clean, merged worktree with no ignored files · <kbd>Esc</kbd>
 				cancel</span></li></ol><p class="note">Run <code>open-project</code>
-					in a Herdr-managed Nushell pane for the same picker. It previews branch/PR details and refuses to close dirty worktrees.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/nushell/scripts/project.nu --></article>
+					in a Herdr-managed Nushell pane for the same picker. It previews branch/PR details. Cleanup refuses dirty or ignored files and branches that are not confirmed merged into the default branch. Run <code>nu (chezmoi source-path | path join "scripts" "migrate-worktrees.nu")</code>
+					to preview old worktree paths; add <code>--apply</code> to move them after review. Close active agent sessions first. Migration stops for dirty, locked, or Herdr-open worktrees and path conflicts. Use a harness session ID if automatic resume no longer finds a conversation. Run <code>prune-worktrees</code>
+					to review and prune missing worktree registrations.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/nushell/scripts/project.nu, scripts/migrate-worktrees.nu --></article>
 				<article class="workflow"><h3>Arrange Herdr</h3><ul class="list"><li><kbd>⌘ T</kbd>
 				new tab · <kbd>⌘ W</kbd>
 				close pane</li><li><kbd>⌘ N</kbd>
@@ -118,7 +120,7 @@
 				finish</span></li></ol><p>0 misc, 1 personal, 2 work, 3 dev, 4 terminal, 5 notes, 6 auxiliary. <kbd>⌘ `</kbd>
 					goes to misc. <kbd>⌘ ⇧ ;</kbd>
 					then <kbd>Esc</kbd>
-					reloads AeroSpace, SketchyBar and Borders.</p><!-- Sources: dot_config/aerospace/aerospace.toml --></article>
+					reloads AeroSpace and SketchyBar.</p><!-- Sources: dot_config/aerospace/aerospace.toml --></article>
 				<article class="workflow"><h3>Change colors and appearance</h3><ol class="flow"><li><span class="step"><strong>Wallpaper color</strong>Raycast “Apply Theme” [optional hex] → palette + app reload</span></li><li><span class="step"><strong>Undo</strong>Raycast “Undo Wallpaper Theme”</span></li><li><span class="step"><strong>Light / dark</strong>Raycast “Toggle Appearance” → chezmoi source + apply</span></li></ol><p>Theme palette feeds Herdr, SketchyBar and Borders. Appearance switch updates Git delta, Glow and Herdr as well as macOS.</p><!-- Sources: dot_config/theme/executable_apply-theme.ts, dot_config/theme/executable_toggle-appearance.ts, dot_config/raycast/scripts/ --></article>
 				<article class="workflow"><h3>Use desktop utilities</h3><ul class="list"><li>Raycast “Toggle Caffeinate” keeps the Mac awake</li><li>Raycast “Toggle Helium Zoom” restarts Helium</li><li>SketchyBar shows workspaces, Herdr state, Slack, Linear, network, battery and usage</li><li>SketchyBar Wi-Fi item and Slack item have click actions</li></ul><!-- Sources: dot_config/raycast/scripts/, dot_config/sketchybar/executable_sketchybarrc --></article>
 			</div></section>
@@ -130,9 +132,9 @@
 				→ <code>work-remote run</code>
 				→ type <code>RUN</code></span></li></ol><p class="note caution">The weekend guard applies to work repositories. Queue execution is disabled on Saturday and Sunday unless explicitly overridden; tasks are revalidated before remote changes.</p><!-- Sources: dot_config/nushell/scripts/work_remote.nu, dot_local/bin/executable_work-remote, dot_config/nushell/scripts/dev.nu --></article>
 				<article class="workflow"><h3>Launch coding agents</h3><ol class="flow"><li><span class="step"><strong>From project directory</strong><code>pi</code>
-				or <code>claude</code></span></li><li><span class="step"><strong>Automatic</strong>Pi selects work/personal MCP config by path; Claude syncs MCP policy</span></li><li><span class="step"><strong>In Herdr</strong>Pane/tab gets a temporary agent label</span></li></ol><p><code>claudex</code>
+				or <code>claude</code></span></li><li><span class="step"><strong>Automatic</strong>Managed MCP config; Tolaria uses the same local <code>index.js</code> on Mac and box</span></li><li><span class="step"><strong>In Herdr</strong>Pane/tab gets a temporary agent label</span></li></ol><p><code>claudex</code>
 				routes Claude through the local proxy. <code>nvimg</code>
-				opens Neovim at the Git root.</p><!-- Sources: dot_config/nushell/scripts/core.nu, dot_config/nushell/scripts/utils.nu --></article>
+				opens Neovim at the Git root.</p><!-- Sources: dot_config/nushell/scripts/core.nu, dot_config/nushell/scripts/utils.nu, dot_config/pi/mcp.json.tmpl, dot_config/private_amp/private_settings.json.tmpl, run_after_06_configure-mcp-servers.sh.tmpl --></article>
 				<article class="workflow"><h3>Containers and remote sessions</h3><ul class="list"><li><code>stop-all</code>
 				stops running Docker containers</li><li><code>stop-all --stop-colima</code>
 				also stops Colima</li><li><code>ssh</code>, <code>sshs</code>, <code>mosh</code>

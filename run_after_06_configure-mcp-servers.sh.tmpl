@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 
 set -Eeuo pipefail
 
@@ -24,6 +25,11 @@ ensure_claude_mcp() {
 		return 0
 	fi
 
+	if [[ "$name" == tolaria ]] && ! command_path="$(command -v "$endpoint")"; then
+		warn "cannot add Claude MCP server $name; $endpoint is not installed"
+		return 0
+	fi
+
 	if [[ -f "$config" ]]; then
 		if ! jq -e 'type == "object"' "$config" >/dev/null 2>&1; then
 			warn "Claude config is not valid JSON; cannot check MCP server $name"
@@ -34,7 +40,14 @@ ensure_claude_mcp() {
 			return 0
 		fi
 		if jq -e --arg name "$name" '(.mcpServers // {}) | has($name)' "$config" >/dev/null; then
-			if [[ "$name" != betterstack ]] || jq -e --arg endpoint "$endpoint" \
+			if [[ "$name" == tolaria ]]; then
+				if jq -e --arg command "$command_path" --arg arg "${command_args[0]}" \
+					--arg vault_path "${tolaria_vault_path:-}" \
+					'.mcpServers.tolaria | .command == $command and .args == [$arg] and .env.WS_UI_PORT == "9711" and (if $vault_path == "" then (.env.VAULT_PATH // "") == "" else .env.VAULT_PATH == $vault_path end)' \
+					"$config" >/dev/null; then
+					return 0
+				fi
+			elif [[ "$name" != betterstack ]] || jq -e --arg endpoint "$endpoint" \
 				'.mcpServers.betterstack | .type == "http" and .url == $endpoint and ((.headers // {}) | length == 0)' \
 				"$config" >/dev/null; then
 				return 0
@@ -47,12 +60,16 @@ ensure_claude_mcp() {
 	fi
 
 	if [[ "$transport" == stdio ]]; then
-		if ! command_path="$(command -v "$endpoint")"; then
+		if [[ "$name" != tolaria ]] && ! command_path="$(command -v "$endpoint")"; then
 			warn "cannot add Claude MCP server $name; $endpoint is not installed"
 			return 0
 		fi
 		if [[ "$name" == tolaria ]]; then
-			if ! claude mcp add --scope user "$name" -e WS_UI_PORT=9711 -- "$command_path" "${command_args[@]}"; then
+			local -a env_args=(-e WS_UI_PORT=9711)
+			if [[ -n "${tolaria_vault_path:-}" ]]; then
+				env_args+=(-e "VAULT_PATH=$tolaria_vault_path")
+			fi
+			if ! claude mcp add --scope user "$name" "${env_args[@]}" -- "$command_path" "${command_args[@]}"; then
 				warn "could not add Claude MCP server $name"
 			fi
 		elif ! claude mcp add --scope user "$name" -- "$command_path"; then
@@ -149,7 +166,17 @@ ensure_amp_mcps() {
 
 prune_claude_mcps
 ensure_claude_mcp fff stdio fff-mcp
-ensure_claude_mcp tolaria stdio /Users/tifan/.local/share/mise/shims/node /Applications/Tolaria.app/Contents/Resources/mcp-server/index.js
+# {{ if eq .chezmoi.os "darwin" -}}
+tolaria_node="$HOME/.local/share/mise/shims/node"
+tolaria_vault_path=
+# {{ else if eq .chezmoi.hostname "box" -}}
+tolaria_node=node
+tolaria_vault_path="$HOME/projects/personal/notes"
+# {{ end -}}
+tolaria_server="$HOME/.local/share/tolaria-mcp/index.js"
+# {{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.hostname "box") -}}
+ensure_claude_mcp tolaria stdio "$tolaria_node" "$tolaria_server"
+# {{ end -}}
 ensure_claude_mcp betterstack http https://mcp.betterstack.com
 ensure_claude_mcp context7 http https://mcp.context7.com/mcp/oauth
 ensure_claude_mcp tavily http https://mcp.tavily.com/mcp/

@@ -154,9 +154,6 @@ export def clean [] {
         clean-step "Homebrew old versions" { ^brew cleanup --prune=all }
         clean-step "Homebrew unused dependencies" { ^brew autoremove }
     }
-    if (which bun | is-not-empty) {
-        clean-step "Bun cache" { ^bun pm -g cache rm }
-    }
     if (which npm | is-not-empty) {
         clean-step "npm cache" { ^npm cache clean --force }
     }

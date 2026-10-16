@@ -13,11 +13,11 @@ mise run db-creds | jq -r 'keys[]'
 
 Pick the entry whose key, `database`, `label`, or `tunnel` matches the request. If more than one entry matches, ask. Treat `db-creds` as a black box. Do not inspect credential storage unless the command is broken.
 
-Run `psql` through `db-psql`. Put the psql arguments after `--`:
+Run `psql` through `db-psql`. Put the psql arguments after `--`. The task runs from the mise config root, so pass `-f` an absolute path:
 
 ```sh
 mise run db-psql aquasense_db_staging -- -Atc "select 1"
-mise run db-psql aquasense_db_production -- -f query.sql
+mise run db-psql aquasense_db_production -- -f "$PWD/query.sql"
 ```
 
 `db-psql` builds the connection with `sslmode=require` and gets the password from TablePlus or from a fresh gcloud access token. It gives the password to `psql` through `PGPASSWORD` and does not print it. Do not get the password yourself for `psql`.
