@@ -17,7 +17,6 @@
     "pr": "",
     "sessionUrl": true
   },
-  "model": "opus",
   "permissions": {
     "deny": [
       "mcp__tavily__tavily_search",
@@ -27,6 +26,7 @@
       "Agent(statusline-setup)"
     ]
   },
+  "model": "sonnet",
   "hooks": {
     "SessionStart": [
       {
@@ -132,6 +132,7 @@
       "effortLevel": "medium"
     }
   },
+  "autoCompactWindow": 400000,
   "awaySummaryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "theme": "auto",
@@ -139,7 +140,6 @@
   "verbose": false,
   "preferredNotifChannel": "ghostty",
   "autoCompactEnabled": true,
-  "autoCompactWindow": 400000,
   "idleCompaction": true,
   "terminalProgressBarEnabled": false,
   "remoteControlAtStartup": true,

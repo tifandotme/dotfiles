@@ -59,10 +59,12 @@ macos-only-value
 
 ### Package Management
 
-- `dot_Brewfile.tmpl` — Homebrew packages; shared unguarded, machine-specific guarded
-- `run_onchange_02_install-bun.sh.tmpl` — Bun globals (declarative)
-- `run_onchange_03_install-uv-tools.sh.tmpl` — uv-managed Python tools
-- `dot_config/mise/config.toml.tmpl` — runtime versions
+- Prefer a package manager declaration for each program:
+  - Homebrew packages and casks: `dot_Brewfile.tmpl`; shared entries are unguarded, machine-specific entries are guarded.
+  - Bun global packages: `run_onchange_02_install-bun.sh.tmpl`.
+  - Python CLI tools: `run_onchange_03_install-uv-tools.sh.tmpl`.
+  - Runtime and tool versions: `dot_config/mise/config.toml.tmpl`.
+- Use `run_after_05_install-cli-tools.sh.tmpl` only for standalone CLI tools without a suitable package-manager install. Prefer the tool's official installer, check whether the CLI already exists before installing, and account for how it updates itself.
 
 ### Chezmoi Workflow
 

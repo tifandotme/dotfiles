@@ -2,6 +2,7 @@
 
 set -Eeuo pipefail
 
+# Install standalone CLI tools from their official installers when missing.
 if ! command -v amp >/dev/null 2>&1; then
 	printf '%s\n' 'Installing Amp CLI'
 	curl -fsSL https://ampcode.com/install.sh | bash
