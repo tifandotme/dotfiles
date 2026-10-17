@@ -4,9 +4,6 @@
 if command -v uv &>/dev/null; then
 	desired_uv_tools=(
 		"ruff"
-		# {{ if eq .chezmoi.os "darwin" -}}
-		"openai-whisper"
-		# {{ end -}}
 	)
 
 	installed_tools=$(uv tool list 2>/dev/null | grep -E '^\w' | awk '{print $1}' | sort)
