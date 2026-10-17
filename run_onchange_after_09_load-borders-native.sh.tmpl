@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# LaunchAgent hash: # {{ include "Library/LaunchAgents/local.borders-native.plist.tmpl" | sha256sum }}
+# Installer hash: # {{ include "run_onchange_after_08_install-borders-native.sh.tmpl" | sha256sum }}
+
+set -Eeuo pipefail
+
+uid="$(/usr/bin/id -u)"
+readonly domain="gui/$uid"
+readonly service="$domain/local.borders-native"
+readonly plist="$HOME/Library/LaunchAgents/local.borders-native.plist"
+
+if /bin/launchctl print "$service" >/dev/null 2>&1; then
+	/bin/launchctl bootout "$service"
+	for _ in {1..50}; do
+		if ! /bin/launchctl print "$service" >/dev/null 2>&1; then
+			break
+		fi
+		sleep 0.1
+	done
+fi
+
+if /bin/launchctl print "$service" >/dev/null 2>&1; then
+	printf 'LaunchAgent did not unload: %s\n' "$service" >&2
+	exit 1
+fi
+
+/bin/launchctl bootstrap "$domain" "$plist"

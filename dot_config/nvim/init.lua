@@ -94,8 +94,10 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 vim.filetype.add({
   filename = {
     dot_bashrc = "bash",
+    ["dot_profile.tmpl"] = "sh",
     dot_zprofile = "zsh",
     dot_zshenv = "zsh",
+    ["dot_zshenv.tmpl"] = "zsh",
     dot_zshrc = "zsh",
   },
   pattern = {
@@ -108,7 +110,6 @@ vim.filetype.add({
     [".*%.lua%.tmpl"] = "lua",
     [".*%.md%.tmpl"] = "markdown",
     [".*%.mksh"] = "mksh",
-    [".*%.nu%.tmpl"] = "nu",
     [".*%.sh%.tmpl"] = "sh",
     [".*%.toml%.tmpl"] = "toml",
     [".*%.ts%.tmpl"] = "typescript",

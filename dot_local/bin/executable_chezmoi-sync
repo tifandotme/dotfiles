@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+chezmoi re-add
+if [[ -n $(chezmoi status) ]]; then
+	chezmoi diff
+	chezmoi status
+	printf '%s\n' 'Run chezmoi edit --apply <file> on each template first, then retry.' >&2
+	exit 1
+fi
+
+chezmoi git -- commit -am 'chore: update'
+chezmoi git push

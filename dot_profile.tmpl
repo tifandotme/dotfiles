@@ -1,9 +1,13 @@
 # shellcheck shell=sh
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 # Shared environment for login and interactive shells.
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+
+# shellcheck source=/dev/null
+[ ! -f "$HOME/.secrets" ] || . "$HOME/.secrets"
 
 # shellcheck source=/dev/null
 if [ -f "$XDG_CONFIG_HOME/user-dirs.dirs" ]; then
@@ -34,6 +38,34 @@ export EDITOR="${EDITOR:-nvim}"
 export LESS="${LESS:--I}"
 export HOMEBREW_NO_ENV_HINTS="${HOMEBREW_NO_ENV_HINTS:-true}"
 export HOMEBREW_NO_ANALYTICS="${HOMEBREW_NO_ANALYTICS:-true}"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
+
+# {{ if eq .chezmoi.os "darwin" -}}
+export HOMEBREW_PREFIX="/opt/homebrew"
+export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX"
+export ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
+export JAVA_HOME="${JAVA_HOME:-$HOMEBREW_PREFIX/opt/openjdk/libexec/openjdk.jdk/Contents/Home}"
+export LANG="${LANG:-en_US.UTF-8}"
+
+for _dir in "$ANDROID_HOME/emulator" "$ANDROID_HOME/platform-tools" "$HOMEBREW_PREFIX/opt/libpq/bin" "$HOME/.antigravity/antigravity/bin" "/Applications/Obsidian.app/Contents/MacOS"; do
+	case ":$PATH:" in
+	*":$_dir:"*) ;;
+	*) PATH="$_dir:$PATH" ;;
+	esac
+done
+# {{ else -}}
+export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew"
+# {{- end }}
+export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar"
+
+for _dir in "$HOMEBREW_PREFIX/sbin" "$HOMEBREW_PREFIX/bin"; do
+	case ":$PATH:" in
+	*":$_dir:"*) ;;
+	*) PATH="$_dir:$PATH" ;;
+	esac
+done
 
 # Temporary fallback for Bun issue https://github.com/oven-sh/bun/issues/30450.
 # Remove this path when the issue is resolved.
@@ -44,6 +76,7 @@ for _dir in "$HOME/.local/bin" "$BUN_INSTALL/bin" "$BUN_INSTALL/install/global/n
 	esac
 done
 unset _dir
+
 # Keep personal command wrappers ahead of package-manager binaries.
 _personal_bin="$HOME/.local/bin"
 PATH="$_personal_bin:$(printf '%s' "$PATH" | awk -v dir="$_personal_bin" -F: '{
@@ -55,3 +88,7 @@ PATH="$_personal_bin:$(printf '%s' "$PATH" | awk -v dir="$_personal_bin" -F: '{
 } END { printf "%s", out }')"
 unset _personal_bin
 export PATH
+
+# Vite+ bin (https://viteplus.dev)
+# shellcheck source=/dev/null
+[ ! -f "$XDG_CONFIG_HOME/vite-plus/env" ] || . "$XDG_CONFIG_HOME/vite-plus/env"

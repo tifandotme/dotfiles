@@ -1,5 +1,2 @@
-# shellcheck shell=sh
-
-if [ -x /opt/homebrew/bin/brew ]; then
-	eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+# Restore PATH order after macOS /etc/zprofile runs path_helper.
+[ ! -f "$HOME/.profile" ] || . "$HOME/.profile"

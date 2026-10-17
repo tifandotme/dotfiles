@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+# Install the upstream source at a pinned commit; do not vendor it in this repository.
+readonly repository="https://github.com/krashnakant/borders-native.git"
+readonly revision="b60077b143cb6503765b330c72bf2254507f5236"
+readonly install_prefix="$HOME/.local"
+uid="$(/usr/bin/id -u)"
+readonly launch_service="gui/$uid/local.borders-native"
+
+if /bin/launchctl print "$launch_service" >/dev/null 2>&1; then
+	/bin/launchctl bootout "$launch_service"
+fi
+
+temporary_directory="$(mktemp -d "${TMPDIR:-/tmp}/borders-native.XXXXXX")"
+trap 'rm -rf -- "$temporary_directory"' EXIT
+
+source_directory="$temporary_directory/source"
+/usr/bin/git init --quiet "$source_directory"
+/usr/bin/git -C "$source_directory" remote add origin "$repository"
+/usr/bin/git -C "$source_directory" fetch --quiet --depth=1 origin "$revision"
+/usr/bin/git -C "$source_directory" checkout --quiet --detach FETCH_HEAD
+
+actual_revision="$(/usr/bin/git -C "$source_directory" rev-parse HEAD)"
+if [[ "$actual_revision" != "$revision" ]]; then
+	printf 'Expected borders-native %s, got %s\n' "$revision" "$actual_revision" >&2
+	exit 1
+fi
+
+mkdir -p "$install_prefix/bin"
+/usr/bin/make -C "$source_directory" install "PREFIX=$install_prefix"

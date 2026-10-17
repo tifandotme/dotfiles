@@ -33,9 +33,6 @@ local command_formatters = {
   mksh = function(_)
     return { "shfmt", "-ln", "mksh" }
   end,
-  nu = function(_)
-    return { "nufmt", "--stdin" }
-  end,
   sh = function(_)
     return { "shfmt" }
   end,

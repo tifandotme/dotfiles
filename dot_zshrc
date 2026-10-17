@@ -1,7 +1,51 @@
-# shellcheck shell=sh
-# shellcheck source=/dev/null
-[ -f "$HOME/.secrets" ] && . "$HOME/.secrets"
+# Interactive Zsh only. Shared environment is loaded by .zshenv.
+mkdir -p "$XDG_STATE_HOME/zsh" "$XDG_CACHE_HOME/zsh"
+HISTFILE="$XDG_STATE_HOME/zsh/history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt SHARE_HISTORY HIST_IGNORE_DUPS
 
-if command -v nu >/dev/null 2>&1; then
-	exec nu
+bindkey -v
+
+zle-keymap-select() {
+	case $KEYMAP in
+		vicmd | viopp | visual) printf '\e[2 q' ;;
+		*) printf '\e[6 q' ;;
+	esac
+}
+zle-line-init() { printf '\e[6 q' }
+zle -N zle-keymap-select
+zle -N zle-line-init
+
+if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
+	fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
 fi
+
+autoload -Uz compinit
+compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
+
+source "$XDG_CONFIG_HOME/shell/interactive.sh"
+[[ ! -t 0 ]] || export GPG_TTY=$(tty)
+
+if command -v fzf >/dev/null; then
+	source <(fzf --zsh)
+fi
+bindkey -M viins '^P' up-line-or-history
+bindkey -M viins '^N' down-line-or-history
+command -v zoxide >/dev/null && eval "$(zoxide init zsh --cmd cd)"
+command -v mise >/dev/null && eval "$(mise activate zsh)"
+command -v starship >/dev/null && eval "$(starship init zsh)"
+
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M viins '^G' edit-command-line
+bindkey -M vicmd '^G' edit-command-line
+
+if [[ -r "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+	source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+	bindkey -M viins '^ ' autosuggest-accept
+fi
+
+# Syntax highlighting must follow all widget definitions.
+[[ ! -r "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] ||
+	source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

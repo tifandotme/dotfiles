@@ -4,7 +4,11 @@
 onboarding = false
 
 [terminal]
-default_shell = "# {{ .chezmoi.homeDir }}/.local/bin/nu-login"
+# {{ if eq .chezmoi.os "darwin" -}}
+default_shell = "/bin/zsh"
+# {{ else -}}
+default_shell = "/bin/bash"
+# {{- end }}
 
 [keys]
 prefix = "ctrl+e"
@@ -38,7 +42,7 @@ edit_scrollback = "prefix+e"
 [[keys.command]]
 key = "super+b"
 type = "popup"
-command = "# {{ .chezmoi.homeDir }}/.local/bin/nu-login -c 'source ~/.config/nushell/scripts/core.nu; source ~/.config/nushell/scripts/project.nu; open-project'"
+command = "# {{ .chezmoi.homeDir }}/.local/bin/open-project"
 width = "90%"
 height = "90%"
 description = "open worktree picker"
@@ -46,7 +50,7 @@ description = "open worktree picker"
 [[keys.command]]
 key = "super+shift+c"
 type = "popup"
-command = "# {{ .chezmoi.homeDir }}/.local/bin/nu-login -c 'source ~/.config/nushell/scripts/chezmoi.nu; chezmoi-apply-popup'"
+command = "# {{ .chezmoi.homeDir }}/.local/bin/chezmoi-apply-popup"
 width = "90%"
 height = "90%"
 description = "apply chezmoi changes"
@@ -88,7 +92,7 @@ delivery = "terminal"
 name = "terminal"
 
 [theme.custom]
-accent = "{{ $palette.accent }}"
+accent = "# {{ $palette.accent }}"
 
 [experimental]
 kitty_graphics = true

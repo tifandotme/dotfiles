@@ -44,17 +44,17 @@
 	<body>
 		<main>
 			<section id="start"><div class="section-head"><h2>Start &amp; maintain</h2></div><div class="grid">
-				<article class="workflow"><h3>Update the machine</h3><p>The everyday entry is the Herdr project picker. Package updates are separate commands in Nushell.</p><ol class="flow"><li><span class="step"><strong>Herdr · ⌘ B</strong>Choose an existing worktree or project</span></li><li><span class="step"><strong>Optional, rarely</strong><code>updater clean</code><small>Prune caches and unused resources</small></span></li><li><span class="step"><strong>Update packages</strong><code>updater start</code><small>Run available package-manager updates</small></span></li></ol><p class="note caution"><code>updater clean</code>
-				is not required before <code>updater start</code>. It can remove caches, unused versions and Docker images; use it only when you want that cleanup. On <code>box</code>, Linux Trash and user journal cleanup are included.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/nushell/scripts/project.nu, dot_config/nushell/scripts/updater.nu --></article>
+				<article class="workflow"><h3>Update the machine</h3><p>The everyday entry is the Herdr project picker. Package updates are separate shell commands.</p><ol class="flow"><li><span class="step"><strong>Herdr · ⌘ B</strong>Choose an existing worktree or project</span></li><li><span class="step"><strong>Optional, rarely</strong><code>updater clean</code><small>Prune caches and unused resources</small></span></li><li><span class="step"><strong>Update packages</strong><code>updater start</code><small>Run available package-manager updates</small></span></li></ol><p class="note caution"><code>updater clean</code>
+				is not required before <code>updater start</code>. It can remove caches, unused versions and Docker images; use it only when you want that cleanup. On <code>box</code>, Linux Trash and user journal cleanup are included.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_local/bin/executable_open-project, dot_local/bin/executable_updater --></article>
 				<article class="workflow"><h3>Change a managed dotfile</h3><ol class="flow"><li><span class="step"><strong>Edit source</strong><code>chezmoi edit &lt;file&gt;</code></span></li><li><span class="step"><strong>Preview</strong><code>chezmoi apply --dry-run</code></span></li><li><span class="step"><strong>Install</strong><code>chezmoi apply</code></span></li></ol><p>From Herdr, <kbd>⌘ ⇧ C</kbd>
 					opens an apply popup. Raycast also has “Chezmoi Apply”. Yazi offers <kbd>C</kbd>
 					then <kbd>p</kbd>
-					for the selected file.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/nushell/scripts/chezmoi.nu, dot_config/raycast/scripts/executable_chezmoi_apply.sh --></article>
-				<article class="workflow"><h3>Add or sync packages</h3><ol class="flow"><li><span class="step"><strong>Choose owner</strong>Homebrew / Bun / uv / mise / standalone CLI installer</span></li><li><span class="step"><strong>Edit declaration</strong>Change the source file</span></li><li><span class="step"><strong>Install</strong><code>chezmoi apply</code></span></li></ol><p>Nushell blocks manual <code>brew install</code>
+					for the selected file.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_local/bin/executable_chezmoi-apply-popup, dot_config/raycast/scripts/executable_chezmoi_apply.sh --></article>
+				<article class="workflow"><h3>Add or sync packages</h3><ol class="flow"><li><span class="step"><strong>Choose owner</strong>Homebrew / Bun / uv / mise / standalone CLI installer</span></li><li><span class="step"><strong>Edit declaration</strong>Change the source file</span></li><li><span class="step"><strong>Install</strong><code>chezmoi apply</code></span></li></ol><p>Shell wrappers block manual <code>brew install</code>
 					and global <code>bun add</code>. Use <code>dot_Brewfile.tmpl</code>, <code>run_onchange_02_install-bun.sh.tmpl</code>, <code>run_onchange_03_install-uv-tools.sh.tmpl</code>,
-					<code>dot_config/mise/config.toml.tmpl</code>, or <code>run_after_05_install-cli-tools.sh.tmpl</code> only when no package-manager install fits.</p><!-- Sources: dot_config/nushell/scripts/chezmoi.nu, dot_Brewfile.tmpl, run_onchange_02_install-bun.sh.tmpl, run_onchange_03_install-uv-tools.sh.tmpl, dot_config/mise/config.toml.tmpl, run_after_05_install-cli-tools.sh.tmpl --></article>
+					<code>dot_config/mise/config.toml.tmpl</code>, or <code>run_after_05_install-cli-tools.sh.tmpl</code> only when no package-manager install fits.</p><!-- Sources: dot_config/shell/interactive.sh, dot_Brewfile.tmpl, run_onchange_02_install-bun.sh.tmpl, run_onchange_03_install-uv-tools.sh.tmpl, dot_config/mise/config.toml.tmpl, run_after_05_install-cli-tools.sh.tmpl --></article>
 				<article class="workflow"><h3>Bring target edits back to source</h3><ol class="flow"><li><span class="step"><strong>Re-add</strong><code>chezmoi sync</code><small>Runs <code>chezmoi re-add</code></small></span></li><li><span class="step"><strong>If diff remains</strong><code>chezmoi edit --apply &lt;file&gt;</code><small>Resolve templates first</small></span></li><li><span class="step"><strong>Run again</strong><code>chezmoi sync</code><small>Commits and pushes when clean</small></span></li></ol><p class="note caution"><code>chezmoi sync</code>
-				pushes the chezmoi repository. Review changes before running it.</p><!-- Sources: dot_config/nushell/scripts/chezmoi.nu --></article>
+				pushes the chezmoi repository. Review changes before running it.</p><!-- Sources: dot_config/shell/interactive.sh, dot_local/bin/executable_chezmoi-sync --></article>
 				<article class="workflow"><h3>Set up a new machine</h3><ol class="flow"><li><span class="step"><strong>Prerequisites</strong>Install chezmoi; on macOS install Homebrew and Xcode tools</span></li><li><span class="step"><strong>Bootstrap</strong><code>chezmoi init --apply git@github.com:tifandotme/dotfiles.git</code></span></li><li><span class="step"><strong>Finish</strong>Unlock age key, then open a new terminal</span></li></ol><p>Applies macOS-only configuration on the main machine and host-specific configuration on the Ubuntu VPS <code>box</code>. SSH access is needed for external repositories.</p><!-- Sources: README.md, run_onchange_before_decrypt-private-key.sh.tmpl --></article>
 			</div></section>
 			<section id="navigate"><div class="section-head"><h2>Projects &amp; terminals</h2></div><div class="grid">
@@ -62,9 +62,8 @@
 				open/create · <kbd>Ctrl X</kbd>
 				close a clean, merged worktree with no ignored files · <kbd>Esc</kbd>
 				cancel</span></li></ol><p class="note">Run <code>open-project</code>
-					in a Herdr-managed Nushell pane for the same picker. It previews branch/PR details. Cleanup refuses dirty or ignored files and branches that are not confirmed merged into the default branch. Run <code>nu (chezmoi source-path | path join "scripts" "migrate-worktrees.nu")</code>
-					to preview old worktree paths; add <code>--apply</code> to move them after review. Close active agent sessions first. Migration stops for dirty, locked, or Herdr-open worktrees and path conflicts. Use a harness session ID if automatic resume no longer finds a conversation. Run <code>prune-worktrees</code>
-					to review and prune missing Git worktree registrations. It can also close stale Herdr workspaces for missing checkouts, which stops their agents; workspaces with working or blocked agents are skipped.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/nushell/scripts/project.nu, scripts/migrate-worktrees.nu --></article>
+					in a Herdr-managed pane for the same picker. It previews branch/PR details. Cleanup refuses dirty or ignored files and branches that are not confirmed merged into the default branch. Run <code>prune-worktrees</code>
+					to review and prune missing Git worktree registrations. It can also close stale Herdr workspaces for missing checkouts, which stops their agents; workspaces with working or blocked agents are skipped.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_local/bin/executable_open-project, dot_local/bin/executable_prune-worktrees --></article>
 				<article class="workflow"><h3>Arrange Herdr</h3><ul class="list"><li><kbd>⌘ T</kbd>
 				new tab · <kbd>⌘ W</kbd>
 				close pane</li><li><kbd>⌘ N</kbd>
@@ -85,14 +84,14 @@
 				/ <kbd>Alt ]</kbd>
 				previous / next agent</li></ul><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/ghostty/config --></article>
 				<article class="workflow"><h3>Work in the shell</h3><ul class="list"><li><kbd>Ctrl T</kbd>
-				find file · <kbd>Ctrl O</kbd>
+				find file · <kbd>Alt C</kbd>
 				find directory</li><li><kbd>Ctrl R</kbd>
-				search history · <kbd>Ctrl H</kbd>
-				help</li><li><kbd>Ctrl G</kbd>
-				edit current command · <kbd>Alt Enter</kbd>
-				newline</li><li><code>commands</code>
+				search history · <kbd>Tab</kbd>
+				complete commands and paths</li><li><kbd>Ctrl G</kbd> (Zsh)
+				edit current command</li><li><code>cd</code> / <code>cdi</code>
+				jump to a directory / choose interactively</li><li><code>commands</code>
 				list custom commands</li><li><code>y</code>
-				open Yazi; exit to change shell directory</li></ul><!-- Sources: dot_config/nushell/config.nu.tmpl, dot_config/nushell/scripts/utils.nu --></article>
+				open Yazi; exit to change shell directory</li></ul><!-- Sources: dot_zshrc, dot_bashrc, dot_config/shell/interactive.sh --></article>
 				<article class="workflow"><h3>Navigate and manage files in Yazi</h3><ul class="list"><li><kbd>g C</kbd>
 				chezmoi source · <kbd>g w</kbd>
 				work projects · <kbd>g p</kbd>
@@ -106,7 +105,7 @@
 				re-add · <kbd>C f</kbd>
 				forget</li><li><kbd>?</kbd>
 				help · <kbd>T</kbd>
-				toggle max preview</li></ul><!-- Sources: dot_config/yazi/keymap.toml.tmpl, dot_config/nushell/scripts/system.nu --></article>
+				toggle max preview</li></ul><!-- Sources: dot_config/yazi/keymap.toml.tmpl, dot_config/shell/interactive.sh --></article>
 			</div></section>
 			<section id="desktop"><div class="section-head"><h2>Desktop</h2><span>macOS only</span></div><div class="grid">
 				<article class="workflow"><h3>Switch windows and spaces</h3><ol class="flow"><li><span class="step"><strong>AeroSpace</strong><kbd>⌘ 1–6</kbd>
@@ -127,32 +126,28 @@
 			<section id="build"><div class="section-head"><h2>Development</h2></div><div class="grid">
 				<article class="workflow"><h3>Work with Git and remotes</h3><ol class="flow"><li><span class="step"><strong>Local</strong><code>lzg</code>
 				opens lazygit; <code>compare</code>
-				picks two files to diff</span></li><li><span class="step"><strong>Work repo on weekend</strong>Eligible pushes and PR creates enter <code>work-remote</code>
-				queue</span></li><li><span class="step"><strong>Weekday</strong><code>work-remote list</code>
-				→ <code>work-remote run</code>
-				→ type <code>RUN</code></span></li></ol><p class="note caution">The weekend guard applies to work repositories. Queue execution is disabled on Saturday and Sunday unless explicitly overridden; tasks are revalidated before remote changes.</p><!-- Sources: dot_config/nushell/scripts/work_remote.nu, dot_local/bin/executable_work-remote, dot_config/nushell/scripts/dev.nu --></article>
+				picks two files to diff</span></li><li><span class="step"><strong>Remote</strong><code>git push</code> and <code>gh pr create</code> run normally, any day</span></li></ol><!-- Sources: dot_config/shell/interactive.sh, dot_local/bin/executable_gh, dot_local/bin/executable_compare --></article>
 				<article class="workflow"><h3>Launch coding agents</h3><ol class="flow"><li><span class="step"><strong>From project directory</strong><code>pi</code>
 				or <code>claude</code></span></li><li><span class="step"><strong>Automatic</strong>Managed MCP config; Tolaria uses the same local <code>index.js</code> on Mac and box</span></li><li><span class="step"><strong>In Herdr</strong>Pane/tab gets a temporary agent label</span></li></ol><p><code>claudex</code>
 				routes Claude through the local proxy. <code>nvimg</code>
-				opens Neovim at the Git root.</p><!-- Sources: dot_config/nushell/scripts/core.nu, dot_config/nushell/scripts/utils.nu, dot_config/pi/mcp.json.tmpl, dot_config/private_amp/private_settings.json.tmpl, run_after_06_configure-mcp-servers.sh.tmpl --></article>
+				opens Neovim at the Git root.</p><!-- Sources: dot_config/shell/interactive.sh, dot_local/bin/executable_claude-policy, dot_config/pi/mcp.json.tmpl, dot_config/private_amp/private_settings.json.tmpl, run_after_06_configure-mcp-servers.sh.tmpl --></article>
 				<article class="workflow"><h3>Containers and remote sessions</h3><ul class="list"><li><code>stop-all</code>
 				stops running Docker containers</li><li><code>stop-all --stop-colima</code>
 				also stops Colima</li><li><code>ssh</code>, <code>sshs</code>, <code>mosh</code>
 				label the Herdr tab/pane temporarily</li><li><code>lzd</code>
-				opens lazydocker with a temporary label</li></ul><!-- Sources: dot_config/nushell/scripts/docker.nu, dot_config/nushell/scripts/system.nu, dot_config/nushell/scripts/core.nu --></article>
+				opens lazydocker with a temporary label</li></ul><!-- Sources: dot_local/bin/executable_stop-all, dot_config/shell/interactive.sh --></article>
 				<article class="workflow"><h3>Small tools worth remembering</h3><ul class="list"><li><code>youtube-download URL</code>
 				→ Downloads; <code>--audio</code>
 				or <code>--cwd</code>
 				changes output</li><li><code>open-book</code>
-				→ pick and open a local PDF or EPUB</li><li><code>prep-excalidraw</code>
-				→ shrink/convert images to WebP; removes originals after success</li><li><code>cert check DOMAIN</code>
+				→ pick and open a local PDF or EPUB</li><li><code>cert check DOMAIN</code>
 				→ TLS validity and days remaining</li><li><code>git rebase-release</code>
 				→ fetch upstream tags and rebase to latest release</li><li><code>gibo gibo-strip</code>
-				→ generate .gitignore without attribution header</li></ul><!-- Sources: dot_config/nushell/scripts/media.nu, dot_config/nushell/scripts/dev.nu, dot_config/nushell/scripts/cert.nu, dot_config/nushell/scripts/git.nu, dot_config/nushell/scripts/gibo.nu --></article>
+				→ generate .gitignore without attribution header</li></ul><!-- Sources: dot_local/bin/executable_youtube-download, dot_local/bin/executable_open-book, dot_local/bin/executable_cert, dot_config/shell/interactive.sh --></article>
 			</div></section>
 			<section id="reference"><div class="section-head"><h2>Where to look next</h2></div><div class="grid"><article class="workflow"><h3>When this map misses a command</h3><ol class="flow"><li><span class="step"><strong>Shell</strong><code>commands</code>
-			lists custom Nushell commands</span></li><li><span class="step"><strong>Herdr</strong><code>dot_config/herdr/config.toml.tmpl</code></span></li><li><span class="step"><strong>Configs</strong><code>dot_config/nushell/scripts/</code>
-			and <code>dot_config/raycast/scripts/</code></span></li></ol><p>This is an index of actionable routes, not an inventory of every alias or application setting. Follow the source path beneath a workflow for exact behavior.</p><!-- Sources: dot_config/nushell/scripts/utils.nu, dot_config/nushell/scripts/core.nu, dot_config/herdr/config.toml.tmpl --></article></div></section>
+			lists shared aliases and workflow entrypoints</span></li><li><span class="step"><strong>Herdr</strong><code>dot_config/herdr/config.toml.tmpl</code></span></li><li><span class="step"><strong>Configs</strong><code>dot_config/shell/interactive.sh</code>, <code>dot_local/bin/</code>
+			and <code>dot_config/raycast/scripts/</code></span></li></ol><p>This is an index of actionable routes, not an inventory of every alias or application setting. Follow the source path beneath a workflow for exact behavior.</p><!-- Sources: dot_config/shell/interactive.sh, dot_config/herdr/config.toml.tmpl --></article></div></section>
 		</main>
 	</body>
 </html>

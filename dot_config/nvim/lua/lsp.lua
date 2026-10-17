@@ -101,7 +101,6 @@ function M.setup(user_group)
     "tombi",
     "tinymist",
     "lua_ls",
-    "nushell",
     "yamlls",
   })
 end

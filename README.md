@@ -5,6 +5,12 @@ A chezmoi-managed setup for exactly two machines:
 - a main macOS machine
 - an Ubuntu VPS named `box`
 
+## Shells
+
+macOS uses system Zsh; `box` uses Bash. `.profile` owns shared exported environment. `.zshrc` and `.bashrc` source `~/.config/shell/interactive.sh` for aliases and functions. Standalone workflows live in `~/.local/bin`, using Bash or Bun.
+
+Starship supplies the prompt. Zsh uses native completion, vi editing, and two Homebrew plugins sourced directly: autosuggestions and syntax highlighting. Both shells use fzf's default Ctrl-R, Ctrl-T, and Alt-C bindings, plus zoxide's `cd` and `cdi`.
+
 ## Fresh machine setup
 
 On first apply, `chezmoi` prompts for the passphrase for [`key.txt.age`](./key.txt.age) and writes the decrypted key to `~/.config/chezmoi/key.txt` via [`run_onchange_before_decrypt-private-key.sh.tmpl`](./run_onchange_before_decrypt-private-key.sh.tmpl).

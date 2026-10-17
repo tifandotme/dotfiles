@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+destination=$HOME/Downloads
+format=(--format-sort 'res:720,codec:avc:m4a')
+args=()
+
+for arg in "$@"; do
+	case $arg in
+	--cwd) destination=$PWD ;;
+	--audio | -a) format=(-f 140) ;;
+	*) args+=("$arg") ;;
+	esac
+done
+
+printf 'Download starting, saving to %s\n' "$destination"
+exec yt-dlp --paths "$destination" "${format[@]}" "${args[@]}"

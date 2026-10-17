@@ -1,6 +1,6 @@
 # Chezmoi Dotfiles
 
-macOS-first dotfiles, chezmoi + age encryption. Shell: Nushell. Two machines:
+macOS-first dotfiles, chezmoi + age encryption. Shells: system Zsh on macOS, Bash on Ubuntu. Two machines:
 
 - main macOS: primary, full desktop/dev env.
 - Ubuntu VPS `box`: secondary, headless/server.
@@ -72,6 +72,7 @@ macos-only-value
 - Edit managed configuration through chezmoi source files under this repo, then run `chezmoi apply` or `chezmoi apply --dry-run` as appropriate.
 - Do not create runtime symlinks to source files. Let chezmoi manage target files.
 - Before editing a nested area, read the nearest scoped `AGENTS.md`; it overrides or extends this root guidance.
+- When adding, renaming, or converting a managed file to `.tmpl`, check the Neovim IDE setup: filetype detection in `dot_config/nvim/init.lua`, formatting in `dot_config/nvim/lua/formatting.lua`, and language servers in `dot_config/nvim/lua/lsp.lua`. Verify the source filename gets the intended filetype and that tools can handle its template directives.
 - For changes to user workflows or shortcuts, check `docs/dotfiles-workflows.html` and update affected cards. Verify steps against source files and keep each card's `<!-- Sources: ... -->` pointer current.
 
 ### GUI-launched Processes
@@ -84,7 +85,7 @@ macos-only-value
 
 ### Pi Configuration
 
-- Nushell sets `PI_CODING_AGENT_DIR` in `dot_config/nushell/env.nu.tmpl` to `$XDG_CONFIG_HOME/pi`.
+- `.profile` sets `PI_CODING_AGENT_DIR` to `$XDG_CONFIG_HOME/pi`.
 - Treat `~/.config/pi` as canonical Pi agent config dir.
 - Don't write Pi config/agents/extensions/settings to `~/.pi/agent` unless asked or `PI_CODING_AGENT_DIR` unset.
 
@@ -181,46 +182,14 @@ rg 'icon=' dot_config/sketchybar/executable_sketchybarrc
 
 To verify SketchyBar changes, run `chezmoi apply --dry-run ~/.config/sketchybar/` and confirm there are no errors.
 
-## Nushell Configuration
+## Shell Configuration
 
-### Patterns and Conventions
-
-Put aliases in `scripts/core.nu`:
-
-```nushell
-alias _cat = cat
-alias cat = bat --plain --theme=base16
-```
-
-Put custom commands in the relevant domain module:
-
-```nushell
-def gco [branch: string] {
-  git checkout $branch
-}
-
-def --env activate [] {
-  $env.VIRTUAL_ENV = (pwd)
-}
-```
-
-Use `def --env` when a command must modify `$env`.
-
-Put environment variables in `env.nu.tmpl`, not `config.nu.tmpl`:
-
-```nushell
-$env.XDG_CONFIG_HOME = ($env.HOME | path join ".config")
-$env.PATH = ($env.PATH | prepend ($env.HOME | path join ".bun/bin"))
-```
-
-### Common Gotchas
-
-- Nushell is not POSIX; use Nushell syntax in `.nu` files.
-- Nushell aliases require `=`: `alias foo = bar`.
-- `$env.PATH` must be a list; use `prepend` or `append`, not string concatenation.
-- Chezmoi run scripts use Bash (`#!/usr/bin/env bash`), not Nushell.
-
-To verify Nushell changes, run `chezmoi apply --dry-run ~/.config/nushell/` and confirm there are no errors.
+- Shared exported environment belongs in `dot_profile.tmpl`, sourced by `.zshenv` and Bash startup files. Keep it quiet for noninteractive agents and SSH.
+- Shared aliases and shell functions belong in `dot_config/shell/interactive.sh`. It is sourced by Bash and Zsh, not executed. Keep syntax compatible with both shells.
+- Keep Zsh completion and widgets in `dot_zshrc`, Bash hooks in `dot_bashrc`. Use official fzf bindings and `zoxide init --cmd cd` for `cd`/`cdi`.
+- Put standalone workflows in `dot_local/bin/executable_<command>`. Use Bash 3.2-compatible scripts for simple orchestration and the existing Bun runtime for structured state. Avoid Python.
+- Declare Zsh plugins in `dot_Brewfile.tmpl` and source them directly. No plugin manager is needed.
+- Run `bun scripts/test-prune-worktrees.ts` for picker safety checks. Render templates with `chezmoi execute-template`, run shell syntax checks and ShellCheck, then inspect a dry run before applying.
 
 ## Definition of Done
 

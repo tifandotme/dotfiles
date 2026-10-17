@@ -10,9 +10,11 @@
 # =============================================================================
 
 # Shells
-brew "fish"     # External completion backend for Nushell
-brew "nushell"  # Modern shell for the GitHub era
 brew "starship" # Cross-shell prompt for astronauts
+# {{ if $isDarwin -}}
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+# {{- end }}
 
 # Modern CLI replacements
 brew "bat"     # Cat clone with syntax highlighting and Git integration
@@ -58,7 +60,7 @@ brew "openjdk" # Latest JDK for macOS
 # JavaScript/TypeScript
 tap "oven-sh/bun", trusted: true
 brew "oven-sh/bun/bun" # Fast JavaScript runtime, bundler, package manager
-brew "vite-plus"      # Unified web development toolchain and vp CLI
+brew "vite-plus"       # Unified web development toolchain and vp CLI
 
 # Go
 brew "golangci-lint" # Fast linters runner for Go
@@ -92,9 +94,7 @@ brew "cliproxyapi" # Expose Codex and other model providers through compatible A
 brew "models"      # TUI/CLI for browsing AI models, benchmarks, and coding agents
 brew "herdr"       # Agent multiplexer that lives in your terminal
 # {{ if $isDarwin -}}
-cask "amp-app"   # Amp coding agent app
-brew "fx-agent"  # Tiny, open, embeddable, native coding agent
-cask "openusage" # AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
+cask "amp-app" # Amp coding agent app
 # {{- end }}
 brew "rtk" # CLI proxy to minimize LLM token consumption
 tap "dmtrKovalenko/fff", trusted: true
@@ -244,7 +244,6 @@ brew "slackdump"                # Export Slack data without admin privileges
 # =============================================================================
 
 tap "felixkratz/formulae", trusted: true
-brew "felixkratz/formulae/borders"    # Window border system for macOS
 brew "felixkratz/formulae/sketchybar" # Custom macOS statusbar
 
 # Fonts for UI customization
@@ -262,9 +261,8 @@ cask "aerospace" # i3-like tiling window manager
 # =============================================================================
 
 # Database clients
-cask "dbeaver-community" # Universal database tool and SQL client
-cask "redis-insight"     # GUI for Redis application development
-cask "tableplus"         # Native GUI tool for relational databases
+cask "redis-insight" # GUI for Redis application development
+cask "tableplus"     # Native GUI tool for relational databases
 
 # Editors
 
@@ -302,8 +300,6 @@ cask "anki"         # Memory training application
 cask "slack"        # Team communication and collaboration software
 cask "linear"       # Project management and issue tracking
 cask "google-drive" # Client for Google Drive storage
-cask "chatgpt"      # OpenAI's official desktop app
-cask "claude"       # Anthropic's official desktop app
 cask "obsidian"     # Knowledge base for Markdown files
 cask "tolaria"      # Markdown knowledgebase manager
 
@@ -311,25 +307,25 @@ cask "tolaria"      # Markdown knowledgebase manager
 # MEDIA & ENTERTAINMENT
 # =============================================================================
 
-cask "handbrake-app" # Open-source video transcoder
-cask "iina"          # Free and open-source media player
-cask "minecraft"    # Minecraft: Java Edition
+cask "handbrake-app"    # Open-source video transcoder
+cask "iina"             # Free and open-source media player
+cask "minecraft"        # Minecraft: Java Edition
 brew "fabric-installer" # Installer for Fabric for the vanilla launcher
-cask "spotify"       # Music streaming service
-cask "transmission"  # BitTorrent client
+cask "spotify"          # Music streaming service
+cask "transmission"     # BitTorrent client
 
 # =============================================================================
 # SYSTEM UTILITIES (GUI)
 # =============================================================================
 
-cask "bitwarden"    # Desktop password and login vault
-cask "crisp"        # Menu bar display manager for DDC brightness, HiDPI, presets, and virtual displays
-cask "crystalfetch" # UI for creating Windows installer ISO
-cask "handy"        # Speech to text application
-cask "keycastr"     # Open-source keystroke visualiser
-cask "linearmouse"  # Customize mouse behavior
-cask "notunes"      # Prevent iTunes/Apple Music from launching
-cask "raycast"      # Control your tools with a few keystrokes
+cask "bitwarden" # Desktop password and login vault
+cask "crisp"     # Menu bar display manager for DDC brightness, HiDPI, presets, and virtual displays
+# cask "crystalfetch" # UI for creating Windows installer ISO
+cask "handy"       # Speech to text application
+cask "keycastr"    # Open-source keystroke visualiser
+cask "linearmouse" # Customize mouse behavior
+cask "notunes"     # Prevent iTunes/Apple Music from launching
+cask "raycast"     # Control your tools with a few keystrokes
 
 # Remote desktop
 cask "rustdesk" # Open source virtual/remote desktop application

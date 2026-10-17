@@ -9,7 +9,9 @@ format = "in [$symbol]($style)"
 style = "bold yellow"
 
 [character]
-disabled = true
+success_symbol = "[>](bold green)"
+error_symbol = "[x](bold red)"
+vimcmd_symbol = "[<](bold green)"
 
 [git_commit]
 tag_symbol = " tag "

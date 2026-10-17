@@ -7,7 +7,7 @@
 - Delegation gate: when a user requests a subagent, announce it, dispatch it, and wait for its findings before assessing the delegated question or advancing dependent work. While it runs, limit work to unrelated tasks.
 - Delegation updates: before dispatching, briefly tell the user what is being delegated. After dispatching, say that you are waiting before assessing dependent work.
 - Handoff: read and use the subagent's reported findings before continuing. Do not duplicate the investigation. If verification is needed, check only the unresolved fact and explain why.
-- For watchers, dev servers, and background shells outside subagents, run them in separate Herdr pane or tab. Do not use detached background jobs for these tasks. Herdr panes run Nushell, so use Nushell syntax.
+- For watchers, dev servers, and background shells outside subagents, run them in separate Herdr pane or tab. Do not use detached background jobs for these tasks. Herdr panes run Zsh on macOS and Bash on Linux; use the matching shell syntax.
 
 # Outputs
 

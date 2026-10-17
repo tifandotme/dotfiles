@@ -10,7 +10,8 @@
 
 ## Hadl production
 
-- Applies to manual changes to production systems or data operated by Hadl (such as a deploy, restart, migration, config or secret change, or data write). Changes that ship through an approved PR and CI/CD need no announcement; the PR approval is the ack.
+- Applies to manual changes to production systems or data operated by Hadl (such as a deploy, restart, migration, config or secret change, or data write). Only a change that reaches production automatically when an approved PR merges needs no announcement; the PR approval is the ack.
+- A production deploy that someone triggers (a `workflow_dispatch` run, a tag pick, a rollout or restart workflow, a `kamal` command) is a manual change, even when it ships an approved PR through CI/CD.
 - Before a manual change, draft an announcement for Slack #engineering (`C0AEV5BP35W`) in the user's voice and show it to the user. Post it only after the user confirms.
 - After posting, wait until any engineer replies in the thread, then do the action. Do not require a specific person. If nobody replies, ask the user instead of proceeding.
 - This does not apply to personal tools or infrastructure just because they work with `hadl-labs` repositories.
@@ -32,6 +33,7 @@
 - Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.
 - Format prose with Markdown, not ANSI terminal escape sequences. Before saving prose through MCP tools, verify it contains no unintended control characters.
 - Human-facing prose: for new files meant for humans to read, load `writing-clearly-and-concisely` first and `humanizer` last; do not use em dashes.
+- Replies to review comments or other claims: before a draft agrees with a claim, verify it against the code, docs, source, or data, and tell the user how you checked. If you could not verify it, say so in the draft instead of agreeing.
 
 ## Git and GitHub
 
@@ -41,7 +43,7 @@
 
 - X/Twitter: use `bird` instead of browser automation.
 - Browser use: load `agent-browser` first. For web browser work outside Electron, connect to the existing Helium for Agents browser with `agent-browser --session helium connect 9222`; use `--session helium` in later commands. If the connection fails, or any output shows `launched browser` (a fresh, signed-out profile), run `agent-browser --session helium close` and `run-helium`, then retry the connection. For Electron work, follow the project `AGENTS.md` and use its project-specific CDP port; do not connect to Helium.
-- Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. Account mappings: `personal` → `ifan.anvity@gmail.com`, `work` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`.
+- Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. Account mappings: `personal` → `ifan.anvity@gmail.com`, `work` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`. If work gcloud reports `Reauthentication failed`, run `mise run gcloud-auth-check` from `~/projects/work`; it answers the reauth prompt from Keychain. Never ask for, read, or type the password yourself.
 - Library docs: use Context7 for current docs. If it has no relevant results, check official docs or source; say it lacked coverage and name the source used.
 
 ## Shell and code quality
@@ -54,13 +56,12 @@
 ## Worktrees
 
 - When running in Herdr, prefer `herdr worktree` for a separate write-owning task that needs its own checkout. Let native subagents share their parent checkout. Remove a worktree with the tool that created it.
+- When a task wraps up (its PR is merged, or the user closes it), clean up what you created for it: stop each agent session you started there, run `herdr worktree remove --workspace <id>` without `--force`, and delete the merged local branch. When the worktree is dirty or holds commits the merged PR lacks, stop and report instead.
 - Put worktrees directly under their project group: `~/projects/{work|personal}/<repo-name>-<branch-name>`.
 - Replace `/` in branch names with `-` when forming the directory name. If the destination exists, stop and report the collision instead of choosing another path.
 - Pass the absolute destination with `--path` and the chosen branch with `--branch` to `herdr worktree create`. Herdr does not choose this path for the local workflow.
 - Keep session data in each harness's supported storage and resume mechanism. Do not move or edit session files to imitate migration.
-- The one-time migration script `scripts/migrate-worktrees.nu` previews legacy path moves by default. Run it with `--apply` only when the user asks to migrate. It stops when a worktree is dirty, locked, open in Herdr, or collides with another path.
-- Close active agent sessions and terminals in legacy worktrees before migration. After a move, use the harness's supported session picker or explicit session ID if automatic continuation does not find the conversation.
 - The project picker removes only clean worktrees merged into the default branch, and refuses worktrees containing ignored files.
-- Use `prune-worktrees` to review stale Git worktree registrations. Never prune as part of ordinary worktree removal.
+- `prune-worktrees` repairs leftovers of a folder deleted outside Herdr: stale Git registrations and Herdr workspaces whose folder is gone. It is for repairs only, never part of task cleanup. Agents preview with `prune-worktrees [repo] </dev/null`; the user confirms in a terminal.
 - Keep one writing agent per worktree at a time. To move a task to a different agent, stop the first session, then start the next session in the same worktree.
 - When a task spans more than one checkout, put the target in every git and gh command (`git -C <path>`, `gh --repo <owner/name>`); the shell's working directory can reset between calls.

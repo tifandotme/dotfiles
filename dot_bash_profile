@@ -1,9 +1,5 @@
 # shellcheck shell=bash
 
-if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
-
 # shellcheck source=/dev/null
 [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 

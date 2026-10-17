@@ -1,5 +1,2 @@
 [init]
     defaultBranch = main
-
-[core]
-    hooksPath = ~/.config/git/hooks/work

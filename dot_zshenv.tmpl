@@ -1,7 +1,4 @@
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
-# {{ if eq .chezmoi.os "darwin" -}}
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
-# {{- end }}
 
 # .zshenv is the only file zsh always sources (login, interactive, or `zsh -c`),
 # so shared env (XDG_*, CLAUDE_CONFIG_DIR, PATH additions, etc.) lives here too.

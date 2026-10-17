@@ -19,6 +19,8 @@ CLAUDE.md
 
 # {{ if ne .chezmoi.os "darwin" -}}
 
+08_install-borders-native.sh
+09_load-borders-native.sh
 work/
 personal/
 .zprofile
@@ -35,7 +37,6 @@ Library/LaunchAgents/**
 .config/finicky
 .config/kanata
 .config/sketchybar
-.config/borders
 .config/raycast
 .config/keymaps
 .config/colima
