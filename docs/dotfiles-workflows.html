@@ -64,7 +64,7 @@
 				cancel</span></li></ol><p class="note">Run <code>open-project</code>
 					in a Herdr-managed Nushell pane for the same picker. It previews branch/PR details. Cleanup refuses dirty or ignored files and branches that are not confirmed merged into the default branch. Run <code>nu (chezmoi source-path | path join "scripts" "migrate-worktrees.nu")</code>
 					to preview old worktree paths; add <code>--apply</code> to move them after review. Close active agent sessions first. Migration stops for dirty, locked, or Herdr-open worktrees and path conflicts. Use a harness session ID if automatic resume no longer finds a conversation. Run <code>prune-worktrees</code>
-					to review and prune missing worktree registrations.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/nushell/scripts/project.nu, scripts/migrate-worktrees.nu --></article>
+					to review and prune missing Git worktree registrations. It can also close stale Herdr workspaces for missing checkouts, which stops their agents; workspaces with working or blocked agents are skipped.</p><!-- Sources: dot_config/herdr/config.toml.tmpl, dot_config/nushell/scripts/project.nu, scripts/migrate-worktrees.nu --></article>
 				<article class="workflow"><h3>Arrange Herdr</h3><ul class="list"><li><kbd>⌘ T</kbd>
 				new tab · <kbd>⌘ W</kbd>
 				close pane</li><li><kbd>⌘ N</kbd>
