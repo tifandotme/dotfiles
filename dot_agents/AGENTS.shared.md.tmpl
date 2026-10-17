@@ -5,7 +5,7 @@
 ## Linear
 
 - For work likely to span sessions or require coordination, ask whether to track it unless a relevant Linear issue already exists, and include the issue identifier in branch, commit, and PR names when relevant.
-- Before Linear read/write, confirm that the repository owner matches the Linear workspace: `tifandotme` → `Tifan`; `hadl-labs` → `Hadl`. If the remote is missing or has another owner, ask the user.
+- Before Linear read/write, confirm that the repository owner matches the Linear workspace: `tifandotme` → `Citra`; `hadl-labs` → `Hadl`. If the remote is missing or has another owner, ask the user.
 - In the Hadl workspace, do not move issues to Done unless the user explicitly tells you to.
 
 ## Hadl production
@@ -30,6 +30,7 @@
 - Apply ASD-STE100 to documentation when appropriate.
 - Docs: when editing markdown for agents or contributors, keep runnable shell commands and concrete repo paths first; omit redundant meta commentary.
 - Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.
+- Format prose with Markdown, not ANSI terminal escape sequences. Before saving prose through MCP tools, verify it contains no unintended control characters.
 - Human-facing prose: for new files meant for humans to read, load `writing-clearly-and-concisely` first and `humanizer` last; do not use em dashes.
 
 ## Git and GitHub

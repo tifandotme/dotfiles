@@ -12,6 +12,11 @@ PATH="$HOME/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 TOKEN_FILE="$HOME/.cache/sketchybar/spotify_token.json"
 CLIENT_ID="ad07638fe4104114b946ae56d85ed21b"
 
+if ! pgrep -x Spotify >/dev/null 2>&1; then
+	sketchybar --set "$NAME" drawing=off
+	exit 0
+fi
+
 if [[ ! -f "$TOKEN_FILE" ]]; then
 	sketchybar --set "$NAME" drawing=off
 	exit 0

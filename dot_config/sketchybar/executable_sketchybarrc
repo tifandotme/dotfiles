@@ -93,6 +93,7 @@ sketchybar --add item spotify center \
 	--set spotify \
 	"${GHOST[@]}" \
 	icon="􀑪" \
+	update_freq=5 \
 	script="$PLUGIN_DIR/spotify.sh" \
 	--subscribe spotify spotify_update
 
