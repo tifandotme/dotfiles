@@ -84,7 +84,7 @@ if [[ "$http_status" == "204" || -z "$info" || "$info" == "null" ]]; then
 elif [[ "$http_status" == "200" ]]; then
 	is_active="$(jq -r '.is_playing' <<<"$info")"
 	track="$(jq -r '.item.name' <<<"$info")"
-	artist="$(jq -r '.item.artists | map(.name) | join(", ")' <<<"$info")"
+	artist="$(jq -r '.item | if .type == "episode" then .show.name else .artists | map(.name) | join(", ") end' <<<"$info")"
 else
 	is_active=false
 	track=""
