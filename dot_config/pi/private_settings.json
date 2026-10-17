@@ -3,7 +3,7 @@
   "defaultModel": "gpt-6-luna",
   "defaultThinkingLevel": "high",
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.99.1",
+  "lastChangelogVersion": "1.3.0",
   "quietStartup": false,
   "enableInstallTelemetry": false,
   "npmCommand": [
@@ -50,4 +50,3 @@
   },
   "showCacheMissNotices": true
 }
-
