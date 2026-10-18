@@ -45,8 +45,6 @@ Library/LaunchAgents/**
 # {{ if ne .chezmoi.hostname "box" -}}
 
 openclaw-state/**
-.bashrc
-.bash_profile
 .inputrc
 .config/rclone/**
 .config/systemd/user/notes-drive-sync.*

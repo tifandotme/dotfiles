@@ -7,7 +7,7 @@ A chezmoi-managed setup for exactly two machines:
 
 ## Shells
 
-macOS and `box` use Zsh for interactive sessions. `box` keeps Bash installed for scripts and recovery. `.profile` owns shared exported environment. `.zshrc` and `.bashrc` source `~/.config/shell/interactive.sh` for aliases and functions. Standalone workflows live in `~/.local/bin`, using Bash or Bun.
+macOS and `box` use Zsh for interactive sessions. `box` keeps Bash installed for scripts and recovery. `.profile` owns shared exported environment, and `.zshrc` loads `~/.config/shell/interactive.sh` for aliases and functions. Standalone workflows live in `~/.local/bin`; Bash scripts still run through their shebangs.
 
 Starship supplies the prompt. Zsh uses native completion, vi editing, `zsh-autosuggestions`, and `zsh-syntax-highlighting`. Atuin owns Ctrl-R in Zsh and syncs encrypted history to the self-hosted service on `box`; autosuggestions use Atuin's local history. Fzf keeps Ctrl-T and Alt-C, and zoxide provides `cd` and `cdi`.
 
@@ -90,6 +90,6 @@ Use the HTTPS URL instead if you do not want to set up GitHub SSH for the main r
 
 On Ubuntu, `chezmoi` will skip the macOS-only files. Host-specific files for `box` still apply.
 
-After applying on `box`, test `/home/linuxbrew/.linuxbrew/bin/zsh`. Add that path to `/etc/shells` if it is missing, then run `chsh -s /home/linuxbrew/.linuxbrew/bin/zsh` and open a new SSH session. Keep `/bin/bash` installed for scripts and recovery.
+After Homebrew is available on `box`, apply installs Zsh from the Brewfile. The post-apply hook adds it to `/etc/shells` if needed and sets it as the login shell. It may prompt for `sudo` access to update `/etc/shells`. Open a new SSH session to start Zsh. Keep `/bin/bash` installed for scripts and recovery.
 
 Open a new terminal session after bootstrap so new tools and shell config are on your path.

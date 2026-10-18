@@ -184,9 +184,9 @@ To verify SketchyBar changes, run `chezmoi apply --dry-run ~/.config/sketchybar/
 
 ## Shell Configuration
 
-- Shared exported environment belongs in `dot_profile.tmpl`, sourced by `.zshenv` and Bash startup files. Keep it quiet for noninteractive agents and SSH.
-- Shared aliases and shell functions belong in `dot_config/shell/interactive.sh`. It is sourced by Bash and Zsh, not executed. Keep syntax compatible with both shells.
-- Keep Zsh completion and widgets in `dot_zshrc`, Bash hooks in `dot_bashrc`. Disable fzf's Ctrl-R binding when Atuin owns history search. Use `zoxide init --cmd cd` for `cd`/`cdi`.
+- Shared exported environment belongs in `dot_profile.tmpl`, sourced by `dot_zshenv.tmpl` and read by Bash login shells when no Bash-specific profile exists. Keep it quiet for noninteractive agents and SSH.
+- Shared aliases and shell functions belong in `dot_config/shell/interactive.sh`. Zsh sources it from `dot_zshrc`; keep syntax compatible with both shells.
+- Keep Zsh completion and widgets in `dot_zshrc`. Do not add Bash startup files; retain Bash for scripts and recovery. Disable fzf's Ctrl-R binding when Atuin owns history search. Use `zoxide init --cmd cd` for `cd`/`cdi`.
 - Put standalone workflows in `dot_local/bin/executable_<command>`. Use Bash 3.2-compatible scripts for simple orchestration and the existing Bun runtime for structured state. Avoid Python.
 - Declare Zsh and Atuin packages in `dot_Brewfile.tmpl` and source integrations directly. No plugin manager is needed.
 - Run `bun scripts/test-prune-worktrees.ts` for picker safety checks. Render templates with `chezmoi execute-template`, run shell syntax checks and ShellCheck, then inspect a dry run before applying.

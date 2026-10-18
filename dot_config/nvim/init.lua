@@ -93,7 +93,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 vim.filetype.add({
   filename = {
-    dot_bashrc = "bash",
     ["dot_profile.tmpl"] = "sh",
     dot_zprofile = "zsh",
     dot_zshenv = "zsh",
