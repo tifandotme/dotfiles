@@ -24,7 +24,6 @@ CLAUDE.md
 work/
 personal/
 .zprofile
-.zshrc
 Library/LaunchAgents/**
 07_setup-spotify.sh
 .cache/sketchybar
@@ -51,5 +50,6 @@ openclaw-state/**
 .inputrc
 .config/rclone/**
 .config/systemd/user/notes-drive-sync.*
+.local/share/box-agents
 
 # {{- end -}}

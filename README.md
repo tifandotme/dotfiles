@@ -7,9 +7,11 @@ A chezmoi-managed setup for exactly two machines:
 
 ## Shells
 
-macOS uses system Zsh; `box` uses Bash. `.profile` owns shared exported environment. `.zshrc` and `.bashrc` source `~/.config/shell/interactive.sh` for aliases and functions. Standalone workflows live in `~/.local/bin`, using Bash or Bun.
+macOS and `box` use Zsh for interactive sessions. `box` keeps Bash installed for scripts and recovery. `.profile` owns shared exported environment. `.zshrc` and `.bashrc` source `~/.config/shell/interactive.sh` for aliases and functions. Standalone workflows live in `~/.local/bin`, using Bash or Bun.
 
-Starship supplies the prompt. Zsh uses native completion, vi editing, and two Homebrew plugins sourced directly: autosuggestions and syntax highlighting. Both shells use fzf's default Ctrl-R, Ctrl-T, and Alt-C bindings, plus zoxide's `cd` and `cdi`.
+Starship supplies the prompt. Zsh uses native completion, vi editing, `zsh-autosuggestions`, and `zsh-syntax-highlighting`. Atuin owns Ctrl-R in Zsh and syncs encrypted history to the self-hosted service on `box`; autosuggestions use Atuin's local history. Fzf keeps Ctrl-T and Alt-C, and zoxide provides `cd` and `cdi`.
+
+After the Atuin server is deployed, register on the first machine with `atuin register -u <username> -e <email>`, then save the generated key from `atuin key` in a password manager. On the second machine, run `atuin login -u <username>` and `atuin sync`.
 
 ## Fresh machine setup
 
@@ -87,5 +89,7 @@ Use the HTTPS URL instead if you do not want to set up GitHub SSH for the main r
 ```
 
 On Ubuntu, `chezmoi` will skip the macOS-only files. Host-specific files for `box` still apply.
+
+After applying on `box`, test `/home/linuxbrew/.linuxbrew/bin/zsh`. Add that path to `/etc/shells` if it is missing, then run `chsh -s /home/linuxbrew/.linuxbrew/bin/zsh` and open a new SSH session. Keep `/bin/bash` installed for scripts and recovery.
 
 Open a new terminal session after bootstrap so new tools and shell config are on your path.

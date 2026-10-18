@@ -1,0 +1,4 @@
+sync_address = "https://atuin.tifan.me"
+
+[search]
+shells = "all"

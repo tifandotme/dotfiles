@@ -28,7 +28,7 @@ source "$XDG_CONFIG_HOME/shell/interactive.sh"
 [[ ! -t 0 ]] || export GPG_TTY=$(tty)
 
 if command -v fzf >/dev/null; then
-	source <(fzf --zsh)
+	FZF_CTRL_R_COMMAND= source <(fzf --zsh)
 fi
 bindkey -M viins '^P' up-line-or-history
 bindkey -M viins '^N' down-line-or-history
@@ -45,6 +45,8 @@ if [[ -r "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]
 	source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 	bindkey -M viins '^ ' autosuggest-accept
 fi
+
+command -v atuin >/dev/null && eval "$(atuin init zsh --disable-up-arrow)"
 
 # Syntax highlighting must follow all widget definitions.
 [[ ! -r "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] ||

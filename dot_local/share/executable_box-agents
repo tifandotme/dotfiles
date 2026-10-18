@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+claude_session=box-claude-rc
+amp_session=box-amp
+workdir="$HOME/.local/share/chezmoi"
+discover_dir="$HOME/projects/personal"
+
+usage() {
+	printf 'Usage: %s {start|stop}\n' "${0##*/}" >&2
+	exit 2
+}
+
+require_command() {
+	if ! command -v "$1" >/dev/null 2>&1; then
+		printf 'Missing required command: %s\n' "$1" >&2
+		exit 1
+	fi
+}
+
+start_session() {
+	local session=$1
+	local shell_command=$2
+
+	if tmux has-session -t "$session" 2>/dev/null; then
+		printf '%s is already running (attach with: tmux attach -t %s)\n' "$session" "$session"
+		return
+	fi
+
+	tmux new-session -d -s "$session" -c "$workdir" "$shell_command"
+	printf 'Started %s (attach with: tmux attach -t %s)\n' "$session" "$session"
+}
+
+stop_session() {
+	local session=$1
+
+	if tmux has-session -t "$session" 2>/dev/null; then
+		tmux kill-session -t "$session"
+		printf 'Stopped %s\n' "$session"
+	else
+		printf '%s is not running\n' "$session"
+	fi
+}
+
+case ${1:-} in
+start)
+	[[ $# -eq 1 ]] || usage
+	require_command tmux
+	require_command claude
+	require_command amp
+	[[ -d $workdir ]] || {
+		printf 'Missing directory: %s\n' "$workdir" >&2
+		exit 1
+	}
+	[[ -d $discover_dir ]] || {
+		printf 'Missing directory: %s\n' "$discover_dir" >&2
+		exit 1
+	}
+
+	# Keep the agents inside tmux so Herdr sees tmux instead of Claude or Amp.
+	start_session "$claude_session" \
+		'exec claude remote-control --permission-mode=bypassPermissions --spawn=worktree --no-chrome'
+	start_session "$amp_session" \
+		"exec amp --no-tui --runner-id=box --no-serve-cwd --discover-dirs=\"\$HOME/projects/personal\" --dir=\"\$HOME/.local/share/chezmoi\""
+	;;
+stop)
+	[[ $# -eq 1 ]] || usage
+	require_command tmux
+	stop_session "$claude_session"
+	stop_session "$amp_session"
+	;;
+*)
+	usage
+	;;
+esac
