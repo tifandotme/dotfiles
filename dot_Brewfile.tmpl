@@ -14,9 +14,9 @@ brew "starship" # Cross-shell prompt for astronauts
 brew "atuin"    # Search and sync shell history
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
+brew "tmux"
 # {{ if $isServer -}}
 brew "zsh"
-brew "tmux"
 # {{- end }}
 
 # Modern CLI replacements
@@ -97,7 +97,7 @@ brew "cliproxyapi" # Expose Codex and other model providers through compatible A
 brew "models"      # TUI/CLI for browsing AI models, benchmarks, and coding agents
 brew "herdr"       # Agent multiplexer that lives in your terminal
 # {{ if $isDarwin -}}
-cask "amp-app" # Amp coding agent app
+cask "amp-app"   # Amp coding agent app
 cask "openusage" # Menu bar usage tracker for AI coding subscriptions
 # {{- end }}
 brew "rtk" # CLI proxy to minimize LLM token consumption
