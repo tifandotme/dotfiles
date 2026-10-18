@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-claude_session=box-claude-rc
 amp_session=box-amp
-workdir="$HOME/.local/share/chezmoi"
+chezmoi_dir="$HOME/.local/share/chezmoi"
 discover_dir="$HOME/projects/personal"
+projects_dir="$HOME/projects/work"
 
 usage() {
 	printf 'Usage: %s {start|stop}\n' "${0##*/}" >&2
@@ -20,15 +20,25 @@ require_command() {
 
 start_session() {
 	local session=$1
-	local shell_command=$2
+	local cwd=$2
+	local shell_command=$3
 
 	if tmux has-session -t "$session" 2>/dev/null; then
 		printf '%s is already running (attach with: tmux attach -t %s)\n' "$session" "$session"
 		return
 	fi
 
-	tmux new-session -d -s "$session" -c "$workdir" "$shell_command"
+	tmux new-session -d -s "$session" -c "$cwd" "$shell_command"
 	printf 'Started %s (attach with: tmux attach -t %s)\n' "$session" "$session"
+}
+
+start_claude_session() {
+	local session=$1
+	local cwd=$2
+	local spawn_mode=$3
+
+	start_session "$session" "$cwd" \
+		"exec claude remote-control --permission-mode=bypassPermissions --spawn=$spawn_mode --capacity=10 --no-chrome"
 }
 
 stop_session() {
@@ -48,25 +58,42 @@ start)
 	require_command tmux
 	require_command claude
 	require_command amp
-	[[ -d $workdir ]] || {
-		printf 'Missing directory: %s\n' "$workdir" >&2
-		exit 1
-	}
-	[[ -d $discover_dir ]] || {
-		printf 'Missing directory: %s\n' "$discover_dir" >&2
-		exit 1
-	}
+	for dir in \
+		"$chezmoi_dir" \
+		"$discover_dir" \
+		"$projects_dir/aquasense-app" \
+		"$projects_dir/aquasense-service" \
+		"$projects_dir/backoffice-windmill" \
+		"$projects_dir/core-service" \
+		"$projects_dir/gcp-terraform" \
+		"$projects_dir/kamal-deploy"; do
+		[[ -d $dir ]] || {
+			printf 'Missing directory: %s\n' "$dir" >&2
+			exit 1
+		}
+	done
 
 	# Keep the agents inside tmux so Herdr sees tmux instead of Claude or Amp.
-	start_session "$claude_session" \
-		'exec claude remote-control --permission-mode=bypassPermissions --spawn=worktree --no-chrome'
-	start_session "$amp_session" \
+	start_claude_session box-claude-chezmoi "$chezmoi_dir" same-dir
+	start_claude_session box-claude-aquasense-app "$projects_dir/aquasense-app" worktree
+	start_claude_session box-claude-aquasense-service "$projects_dir/aquasense-service" worktree
+	start_claude_session box-claude-backoffice-windmill "$projects_dir/backoffice-windmill" worktree
+	start_claude_session box-claude-core-service "$projects_dir/core-service" worktree
+	start_claude_session box-claude-gcp-terraform "$projects_dir/gcp-terraform" worktree
+	start_claude_session box-claude-kamal-deploy "$projects_dir/kamal-deploy" worktree
+	start_session "$amp_session" "$chezmoi_dir" \
 		"exec amp --no-tui --runner-id=box --no-serve-cwd --discover-dirs=\"\$HOME/projects/personal\" --dir=\"\$HOME/.local/share/chezmoi\""
 	;;
 stop)
 	[[ $# -eq 1 ]] || usage
 	require_command tmux
-	stop_session "$claude_session"
+	stop_session box-claude-chezmoi
+	stop_session box-claude-aquasense-app
+	stop_session box-claude-aquasense-service
+	stop_session box-claude-backoffice-windmill
+	stop_session box-claude-core-service
+	stop_session box-claude-gcp-terraform
+	stop_session box-claude-kamal-deploy
 	stop_session "$amp_session"
 	;;
 *)
