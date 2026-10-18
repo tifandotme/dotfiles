@@ -31,7 +31,6 @@ start)
 	fi
 
 	available uv && step 'uv tools' uv tool upgrade --all
-	available rustup && step 'Rust toolchain' rustup check
 	available gh && step 'GitHub extensions' gh extension upgrade --all
 
 	if available ya; then
@@ -72,17 +71,6 @@ clean)
 	if available go; then
 		step 'Go build cache' go clean -cache
 		step 'Go module cache' go clean -modcache
-	fi
-
-	if available rustup; then
-		if toolchains=$(rustup toolchain list); then
-			while IFS= read -r toolchain; do
-				[[ $toolchain =~ ^[0-9]+\.[0-9]+\.[0-9]+[^[:space:]]*$ ]] || continue
-				step "Rust toolchain ($toolchain)" rustup toolchain uninstall "$toolchain"
-			done <<<"$toolchains"
-		else
-			printf '%s\n' 'Skipping Rust cleanup: cannot list toolchains.' >&2
-		fi
 	fi
 
 	if [[ $(hostname -s) != box ]] && available docker && docker info >/dev/null 2>&1; then
