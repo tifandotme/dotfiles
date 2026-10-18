@@ -38,7 +38,7 @@ start_claude_session() {
 	local spawn_mode=$3
 
 	start_session "$session" "$cwd" \
-		"exec claude remote-control --permission-mode=bypassPermissions --spawn=$spawn_mode --capacity=10 --no-chrome"
+		"exec claude remote-control --permission-mode=bypassPermissions --no-create-session-in-dir --spawn=$spawn_mode --capacity=10 --no-chrome"
 }
 
 stop_session() {
