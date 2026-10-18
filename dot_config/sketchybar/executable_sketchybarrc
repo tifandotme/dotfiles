@@ -212,20 +212,16 @@ sketchybar --add item openusage_spacer right \
 	padding_right=0 \
 	width=5
 
-sketchybar --add item linear_issues right \
-	--set linear_issues \
-	update_freq=300 \
-	script="$PLUGIN_DIR/linear_issues.sh"
-
-sketchybar --add item herdr_agents right \
-	--set herdr_agents \
-	update_freq=5 \
-	script="$PLUGIN_DIR/herdr.sh"
+sketchybar --add item linear_notifications right \
+	--set linear_notifications \
+	update_freq=60 \
+	click_script="/usr/bin/open -a Linear" \
+	script="$PLUGIN_DIR/linear_notifications.sh"
 
 sketchybar --add item slack right \
 	--set slack \
 	update_freq=5 \
-	click_script="open -a 'Slack'" \
+	click_script="/usr/bin/open -a Slack" \
 	script="$PLUGIN_DIR/slack.sh" \
 	--subscribe slack system_woke
 

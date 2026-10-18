@@ -154,7 +154,7 @@ ensure_amp_mcps() {
 		fi
 	done < <(jq -r '
 		.servers[]
-		| select(.name != "posthog-personal" and .name != "linear-personal" and .name != "context7" and .name != "tavily")
+		| select(.name != "posthog-personal" and .name != "linear-personal" and .name != "context7" and .name != "tavily" and .name != "cloudflare-api")
 		| .name
 	' <<<"$servers")
 
@@ -162,6 +162,7 @@ ensure_amp_mcps() {
 	ensure_amp_mcp "$servers" linear-personal https://mcp.linear.app/mcp
 	ensure_amp_mcp "$servers" context7 https://mcp.context7.com/mcp/oauth
 	ensure_amp_mcp "$servers" tavily https://mcp.tavily.com/mcp/
+	ensure_amp_mcp "$servers" cloudflare-api https://mcp.cloudflare.com/mcp
 }
 
 prune_claude_mcps
