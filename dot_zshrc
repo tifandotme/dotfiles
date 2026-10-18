@@ -9,11 +9,11 @@ bindkey -v
 
 zle-keymap-select() {
 	case $KEYMAP in
-		vicmd | viopp | visual) printf '\e[2 q' ;;
-		*) printf '\e[6 q' ;;
+	vicmd | viopp | visual) printf '\e[2 q' ;;
+	*) printf '\e[6 q' ;;
 	esac
 }
-zle-line-init() { printf '\e[6 q' }
+zle-line-init() { printf '\e[6 q'; }
 zle -N zle-keymap-select
 zle -N zle-line-init
 
