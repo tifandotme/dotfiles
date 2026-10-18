@@ -195,3 +195,17 @@ To verify SketchyBar changes, run `chezmoi apply --dry-run ~/.config/sketchybar/
 
 - `chezmoi apply --dry-run` shows expected changes with no errors
 - Template files render correctly: `chezmoi execute-template < file.tmpl`
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in Linear. Use Linear MCP in the Citra workspace and Citra (TIF) team; default new issues to Backlog. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the five default triage labels. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Read applicable agent instructions and ADRs; this repo does not use `CONTEXT.md`. See `docs/agents/domain.md`.
