@@ -3,6 +3,7 @@
 
 alias rm='rm -rf'
 alias grep='grep --color=auto'
+alias ..='cd ..'
 
 alias _ls='command ls'
 alias ls='eza --group-directories-first --classify=auto --sort=extension --oneline'
