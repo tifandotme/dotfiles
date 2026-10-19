@@ -243,8 +243,8 @@ fi`,
       extra: "keep",
       projects: {
         [home]: {
-          mcpServers: { fff: {}, unknown: {} },
-          disabledMcpServers: ["fff", "keep-disabled"],
+          mcpServers: { fff: {}, betterstack: {}, penpot: {}, unknown: {} },
+          disabledMcpServers: ["fff", "betterstack", "keep-disabled"],
         },
       },
     }),
@@ -253,8 +253,10 @@ fi`,
   const updated = JSON.parse(readFileSync(config, "utf8"));
   assert.equal(updated.extra, "keep");
   assert(updated.projects[home].disabledMcpServers.includes("unknown"));
+  assert(updated.projects[home].disabledMcpServers.includes("betterstack"));
   assert(updated.projects[home].disabledMcpServers.includes("keep-disabled"));
   assert(!updated.projects[home].disabledMcpServers.includes("fff"));
+  assert(!updated.projects[home].disabledMcpServers.includes("penpot"));
   assert.equal(updated.projects[home].hasTrustDialogAccepted, undefined);
   assert.equal(statSync(config).mode & 0o777, 0o600);
   const repo = join(home, "projects/work/repo space");

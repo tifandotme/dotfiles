@@ -12,6 +12,11 @@ if ! command -v jq >/dev/null 2>&1; then
 	exit 0
 fi
 
+if [[ -r "$HOME/.secrets" ]]; then
+	# shellcheck source=/dev/null
+	. "$HOME/.secrets"
+fi
+
 ensure_claude_mcp() {
 	local name="$1"
 	local transport="$2"
@@ -47,9 +52,10 @@ ensure_claude_mcp() {
 					"$config" >/dev/null; then
 					return 0
 				fi
-			elif [[ "$name" != betterstack ]] || jq -e --arg endpoint "$endpoint" \
-				'.mcpServers.betterstack | .type == "http" and .url == $endpoint and ((.headers // {}) | length == 0)' \
-				"$config" >/dev/null; then
+			elif [[ "$transport" != http || "$name" != penpot ]] ||
+				jq -e --arg name "$name" --arg endpoint "$endpoint" \
+					'.mcpServers[$name] | .type == "http" and .url == $endpoint and ((.headers // {}) | length == 0)' \
+					"$config" >/dev/null; then
 				return 0
 			fi
 			if ! claude mcp remove --scope user "$name"; then
@@ -99,7 +105,7 @@ prune_claude_mcps() {
 
 	while IFS= read -r name; do
 		case "$name" in
-		fff | tolaria | betterstack | context7 | tavily) continue ;;
+		fff | tolaria | context7 | tavily | penpot) continue ;;
 		esac
 		if ! claude mcp remove --scope user "$name"; then
 			warn "could not remove unmanaged Claude user MCP server $name"
@@ -179,7 +185,11 @@ tolaria_server="$HOME/.local/share/tolaria-mcp/index.js"
 # {{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.hostname "box") -}}
 ensure_claude_mcp tolaria stdio "$tolaria_node" "$tolaria_server"
 # {{ end -}}
-ensure_claude_mcp betterstack http https://mcp.betterstack.com
 ensure_claude_mcp context7 http https://mcp.context7.com/mcp/oauth
 ensure_claude_mcp tavily http https://mcp.tavily.com/mcp/
+if [[ -n "${PENPOT_MCP_URL:-}" ]]; then
+	ensure_claude_mcp penpot http "$PENPOT_MCP_URL"
+else
+	warn 'cannot add Claude MCP server penpot; PENPOT_MCP_URL is unset'
+fi
 ensure_amp_mcps

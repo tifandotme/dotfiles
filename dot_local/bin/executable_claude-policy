@@ -30,8 +30,8 @@ function main() {
   if (trust && !common) throw new Error("Run claude-trust inside a Git repository");
   const trustRoot = common ? dirname(resolve(common)) : "";
   const allowed = new Set([
-    "betterstack",
     "fff",
+    "penpot",
     ...["Gmail", "Google Calendar", "Google Drive", "Linear", "PostHog", "Slack"].map(
       (name) => `claude.ai ${name}`,
     ),
