@@ -55,6 +55,31 @@ try {
     PATH: process.env.PATH!,
   });
 
+  for (const [os, hostname, expectedShell] of [
+    ["darwin", "mac", "/bin/zsh"],
+    ["linux", "box", "/home/linuxbrew/.linuxbrew/bin/zsh"],
+    ["linux", "other", "/bin/bash"],
+  ] as const) {
+    const rendered = good(
+      [
+        "chezmoi",
+        "--source",
+        source,
+        "execute-template",
+        "--override-data",
+        JSON.stringify({ chezmoi: { os, hostname } }),
+        "--file",
+        join(source, "dot_config/herdr/config.toml.tmpl"),
+      ],
+      home,
+      { PATH: process.env.PATH! },
+    );
+    assert.equal(
+      rendered.split("\n").find((line) => line.startsWith("default_shell = ")),
+      `default_shell = "${expectedShell}"`,
+    );
+  }
+
   const boxData = JSON.stringify({ chezmoi: { os: "linux", hostname: "box" } });
   const boxHook = good(
     [
