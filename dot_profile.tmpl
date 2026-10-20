@@ -18,10 +18,18 @@ fi
 
 export ATUIN_SYNC_ADDRESS="https://atuin.tifan.me"
 
-export CLOUDSDK_ACTIVE_CONFIG_NAME="personal"
-
 export CLOUDSDK_PYTHON="$HOME/projects/work/.venv-gcloud/bin/python"
 export CLOUDSDK_PYTHON_SITEPACKAGES="1"
+
+# overriden by ~/projects/work/mise.toml
+export GOOGLE_WORKSPACE_CLI_CONFIG_DIR = "$XDG_CONFIG_HOME/gws"
+export GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE = "$XDG_CONFIG_HOME/gws/credentials.json"
+
+# overriden by ~/projects/work/mise.toml
+export CLOUDSDK_ACTIVE_CONFIG_NAME="personal"
+
+# overriden by ~/projects/work/mise.toml
+export GRAFANA_SERVER="https://prudentbunting943.grafana.net/"
 
 export CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$XDG_CONFIG_HOME/claude}"
 export CODEX_HOME="${CODEX_HOME:-$XDG_CONFIG_HOME/codex}"
