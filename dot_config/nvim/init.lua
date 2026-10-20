@@ -8,6 +8,9 @@ local user_group = vim.api.nvim_create_augroup("user-config", { clear = true })
 vim.opt.termguicolors = true
 vim.opt.mouse = "a"
 local is_starter = vim.bo.filetype == "ministarter"
+if vim.uv.os_gethostname() == "box" then
+  vim.g.clipboard = "osc52"
+end
 vim.opt.clipboard = "unnamedplus"
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
