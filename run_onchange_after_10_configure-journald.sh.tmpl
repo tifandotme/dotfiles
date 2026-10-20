@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
+# {{ if eq .chezmoi.hostname "box" -}}
+set -Eeuo pipefail
+
+temporary_file="$(mktemp)"
+trap 'rm -f "$temporary_file"' EXIT
+
+cat >"$temporary_file" <<'EOF'
+[Journal]
+SystemMaxUse=512M
+SystemKeepFree=10G
+EOF
+
+sudo -n install -D -o root -g root -m 0644 "$temporary_file" /etc/systemd/journald.conf.d/60-box-storage.conf
+sudo -n systemctl restart systemd-journald
+sudo -n journalctl --vacuum-size=512M
+# {{ end -}}
