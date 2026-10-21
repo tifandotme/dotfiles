@@ -16,6 +16,9 @@ if [ -f "$XDG_CONFIG_HOME/user-dirs.dirs" ]; then
 	set +a
 fi
 
+export GRAFANA_SERVER="https://citra.grafana.net"
+export GRAFANA_ORG_ID="1"
+
 export ATUIN_SYNC_ADDRESS="https://atuin.tifan.me"
 
 export CLOUDSDK_PYTHON="$HOME/projects/work/.venv-gcloud/bin/python"
