@@ -3,6 +3,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 local user_group = vim.api.nvim_create_augroup("user-config", { clear = true })
+local is_box = vim.uv.os_gethostname() == "box"
 
 -- ------------------------------ EDITOR OPTIONS -------------------------------
 vim.opt.termguicolors = true
@@ -199,14 +200,17 @@ vim.api.nvim_create_autocmd("PackChanged", {
   end,
 })
 
-vim.pack.add({
-  "https://github.com/neovim/nvim-lspconfig",
+local plugin_urls = {
   "https://github.com/dmtrKovalenko/fff.nvim",
   "https://github.com/selimacerbas/live-server.nvim",
   "https://github.com/selimacerbas/mdkite.nvim",
-  "https://github.com/jake-stewart/multicursor.nvim",
   "https://github.com/nvim-mini/mini.nvim",
-})
+}
+if not is_box then
+  table.insert(plugin_urls, 1, "https://github.com/neovim/nvim-lspconfig")
+  table.insert(plugin_urls, 5, "https://github.com/jake-stewart/multicursor.nvim")
+end
+vim.pack.add(plugin_urls)
 install_fff_binary()
 
 -- --------------------------- PLUGIN CONFIGURATION ----------------------------
@@ -214,24 +218,28 @@ require("mini.icons").setup()
 require("mini.ai").setup()
 require("mini.trailspace").setup()
 style_trailspace()
-require("mini.surround").setup({})
+if not is_box then
+  require("mini.surround").setup({})
+end
 require("mini.pick").setup({})
-require("mini.extra").setup({})
-require("mini.completion").setup({
-  delay = {
-    completion = 0,
-    info = 100,
-    signature = 50,
-  },
-})
-vim.api.nvim_create_autocmd("FileType", {
-  group = user_group,
-  pattern = "fff_input",
-  callback = function(ev)
-    vim.b[ev.buf].minicompletion_disable = true
-  end,
-})
-vim.opt.completeopt = { "menuone", "noinsert", "popup" }
+if not is_box then
+  require("mini.extra").setup({})
+  require("mini.completion").setup({
+    delay = {
+      completion = 0,
+      info = 100,
+      signature = 50,
+    },
+  })
+  vim.api.nvim_create_autocmd("FileType", {
+    group = user_group,
+    pattern = "fff_input",
+    callback = function(ev)
+      vim.b[ev.buf].minicompletion_disable = true
+    end,
+  })
+  vim.opt.completeopt = { "menuone", "noinsert", "popup" }
+end
 local starter = require("mini.starter")
 local fff = require("fff")
 -- local actions = starter.sections.builtin_actions()
@@ -295,14 +303,7 @@ require("mini.bracketed").setup({
   comment = { suffix = "/" },
   conflict = { suffix = "" },
 })
-local minmap = require("mini.map")
-minmap.setup({
-  integrations = {
-    minmap.gen_integration.builtin_search(),
-    minmap.gen_integration.diagnostic(),
-    minmap.gen_integration.diff(),
-  },
-})
+local minmap
 local function style_minimap()
   local normal_float = vim.api.nvim_get_hl(0, { name = "NormalFloat", link = false })
   local muted = vim.api.nvim_get_hl(0, { name = "SpecialKey", link = false })
@@ -312,7 +313,25 @@ local function style_minimap()
   })
 end
 
-style_minimap()
+local function setup_minimap()
+  if not minmap then
+    minmap = require("mini.map")
+    minmap.setup({
+      integrations = {
+        minmap.gen_integration.builtin_search(),
+        minmap.gen_integration.diagnostic(),
+        minmap.gen_integration.diff(),
+      },
+    })
+    style_minimap()
+  end
+
+  return minmap
+end
+
+if not is_box then
+  setup_minimap()
+end
 style_tabline()
 vim.api.nvim_create_user_command("ColorsTweak", function()
   require("mini.colors").interactive()
@@ -384,7 +403,9 @@ local function refresh_theme()
     default_theme = is_dark and "dark" or "light",
   })
   style_tabline()
-  style_minimap()
+  if minmap then
+    style_minimap()
+  end
   style_miniclue_next_key()
 end
 
@@ -420,8 +441,6 @@ require("keymaps").setup()
 
 -- Keymap helpers
 local map = vim.keymap.set
-local formatting = require("formatting")
-local map_multistep = require("mini.keymap").map_multistep
 
 local function key_opts(desc)
   return { desc = desc, silent = true }
@@ -455,50 +474,55 @@ map("x", "dp", function()
 end, { expr = true, remap = true, desc = "Reset selected hunks", silent = true })
 map("n", "do", minidiff.toggle_overlay, key_opts("Toggle diff overlay"))
 
-local function move_completion(delta, fallback)
-  if vim.fn.pumvisible() ~= 1 then
-    return fallback
+if not is_box then
+  local multicursor = require("multicursor-nvim")
+  if not vim.g.multicursor_nvim_configured then
+    multicursor.setup()
+    map({ "n", "x" }, "<C-n>", function()
+      multicursor.matchAddCursor(1)
+    end, key_opts("Add next matching cursor"))
+    multicursor.addKeymapLayer(function(layer_map)
+      layer_map({ "n", "x" }, "<Esc>", multicursor.clearCursors)
+    end)
+    vim.g.multicursor_nvim_configured = true
   end
-
-  local info = vim.fn.complete_info()
-  local count = #info.items
-  if count == 0 then
-    return fallback
-  end
-
-  local item = info.selected + delta
-  if item < 0 then
-    item = count - 1
-  elseif item >= count then
-    item = 0
-  end
-  vim.api.nvim_select_popupmenu_item(item, false, false, {})
-  return ""
-end
-
-local multicursor = require("multicursor-nvim")
-if not vim.g.multicursor_nvim_configured then
-  multicursor.setup()
-  map({ "n", "x" }, "<C-n>", function()
-    multicursor.matchAddCursor(1)
-  end, key_opts("Add next matching cursor"))
-  multicursor.addKeymapLayer(function(layer_map)
-    layer_map({ "n", "x" }, "<Esc>", multicursor.clearCursors)
-  end)
-  vim.g.multicursor_nvim_configured = true
 end
 
 -- Keymaps
 -- General
 map("i", "jj", "<Esc>", key_opts("Exit insert mode"))
-map("i", "<C-n>", function()
-  return move_completion(1, "\14")
-end, { expr = true, replace_keycodes = true, desc = "Next completion", silent = true })
-map("i", "<C-p>", function()
-  return move_completion(-1, "\16")
-end, { expr = true, replace_keycodes = true, desc = "Previous completion", silent = true })
-map_multistep("i", "<Tab>", { "pmenu_accept" })
-map_multistep("i", "<CR>", { "pmenu_accept" })
+if not is_box then
+  local function move_completion(delta, fallback)
+    if vim.fn.pumvisible() ~= 1 then
+      return fallback
+    end
+
+    local info = vim.fn.complete_info()
+    local count = #info.items
+    if count == 0 then
+      return fallback
+    end
+
+    local item = info.selected + delta
+    if item < 0 then
+      item = count - 1
+    elseif item >= count then
+      item = 0
+    end
+    vim.api.nvim_select_popupmenu_item(item, false, false, {})
+    return ""
+  end
+
+  map("i", "<C-n>", function()
+    return move_completion(1, "\14")
+  end, { expr = true, replace_keycodes = true, desc = "Next completion", silent = true })
+  map("i", "<C-p>", function()
+    return move_completion(-1, "\16")
+  end, { expr = true, replace_keycodes = true, desc = "Previous completion", silent = true })
+  local map_multistep = require("mini.keymap").map_multistep
+  map_multistep("i", "<Tab>", { "pmenu_accept" })
+  map_multistep("i", "<CR>", { "pmenu_accept" })
+end
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", key_opts("Clear search highlight"))
 map("n", "<leader>w", "<cmd>write<cr>", key_opts("Write file"))
 -- Do not add a config-reload mapping. Re-sourcing this file is not idempotent:
@@ -538,12 +562,14 @@ map("n", "<Tab>", "<cmd>bnext<cr>", key_opts("Next buffer"))
 map("n", "<S-Tab>", "<cmd>bprevious<cr>", key_opts("Previous buffer"))
 
 -- Files
-local function outline_symbols()
-  require("mini.extra").pickers.lsp({ scope = "document_symbol" })
-end
+if not is_box then
+  local function outline_symbols()
+    require("mini.extra").pickers.lsp({ scope = "document_symbol" })
+  end
 
-map("n", "<D-S-o>", outline_symbols, key_opts("Find symbols in current file"))
-map("n", "<leader>o", outline_symbols, key_opts("Find symbols in current file"))
+  map("n", "<D-S-o>", outline_symbols, key_opts("Find symbols in current file"))
+  map("n", "<leader>o", outline_symbols, key_opts("Find symbols in current file"))
+end
 map("n", "<leader>h", function()
   require("mini.pick").builtin.help()
 end, key_opts("Search help"))
@@ -573,14 +599,21 @@ end, key_opts("File explorer"))
 map("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", key_opts("Markdown preview"))
 map("n", "<leader>mr", "<cmd>MarkdownPreviewRefresh<cr>", key_opts("Refresh markdown preview"))
 map("n", "<leader>ms", "<cmd>MarkdownPreviewStop<cr>", key_opts("Stop markdown preview"))
-map("n", "<leader>mm", require("mini.map").toggle, key_opts("Toggle minimap"))
+map("n", "<leader>mm", function()
+  setup_minimap().toggle()
+end, key_opts("Toggle minimap"))
 
 -- LSP
-map("n", "<leader>p", function()
-  formatting.format_buffer(0)
-end, key_opts("Format file"))
-map("n", "<leader>k", vim.lsp.buf.hover, key_opts("Hover"))
-map("n", "gd", vim.lsp.buf.definition, key_opts("Go to definition"))
+if not is_box then
+  local formatting = require("formatting")
+  map("n", "<leader>p", function()
+    formatting.format_buffer(0)
+  end, key_opts("Format file"))
+  map("n", "<leader>k", vim.lsp.buf.hover, key_opts("Hover"))
+  map("n", "gd", vim.lsp.buf.definition, key_opts("Go to definition"))
+end
 -- ----------------------------- LANGUAGE TOOLING ------------------------------
-require("lsp").setup(user_group)
-require("formatting").setup(user_group)
+if not is_box then
+  require("lsp").setup(user_group)
+  require("formatting").setup(user_group)
+end
