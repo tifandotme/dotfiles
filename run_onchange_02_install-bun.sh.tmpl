@@ -89,4 +89,12 @@ if command -v bun &>/dev/null; then
 			bun remove -g "$pkg"
 		fi
 	done <<<"$installed_packages"
+
+	# {{ if eq .chezmoi.hostname "box" -}}
+	if ! command -v agent-browser >/dev/null 2>&1; then
+		printf '%s\n' 'agent-browser is missing after Bun package synchronization' >&2
+		exit 1
+	fi
+	agent-browser install --with-deps
+	# {{- end }}
 fi

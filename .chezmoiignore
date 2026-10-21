@@ -39,6 +39,8 @@ Library/LaunchAgents/**
 .config/raycast
 .config/keymaps
 .config/colima
+.local/bin/run-helium
+.local/bin/setup-helium
 
 # {{- end -}}
 
