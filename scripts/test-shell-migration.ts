@@ -58,7 +58,7 @@ try {
   for (const [os, hostname, expectedShell] of [
     ["darwin", "mac", "/bin/zsh"],
     ["linux", "box", "/home/linuxbrew/.linuxbrew/bin/zsh"],
-    ["linux", "other", "/bin/bash"],
+    ["linux", "other", "/home/linuxbrew/.linuxbrew/bin/zsh"],
   ] as const) {
     const rendered = good(
       [
@@ -291,9 +291,30 @@ fi`,
   assert.equal(run([process.execPath, script("claude-policy"), "--trust"], repo).exitCode, 1);
   assert.equal(readFileSync(config, "utf8"), before);
   assert(!existsSync(config + ".lock"));
-  mkdirSync(config + ".lock");
-  assert.equal(run([process.execPath, script("claude-policy")]).exitCode, 1);
-  assert(existsSync(config + ".lock"));
+  const lock = config + ".lock";
+  mkdirSync(lock);
+  const waiting = Bun.spawn([process.execPath, script("claude-policy")], {
+    cwd: home,
+    env,
+    stdin: "ignore",
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+  const stderr = waiting.stderr.getReader();
+  const notice = await stderr.read();
+  assert.equal(
+    new TextDecoder().decode(notice.value),
+    "Another Claude launch is updating MCP state; waiting for it to finish.\n",
+  );
+  rmSync(lock, { recursive: true });
+  let lockWaitOutput = "";
+  while (true) {
+    const chunk = await stderr.read();
+    if (chunk.done) break;
+    lockWaitOutput += new TextDecoder().decode(chunk.value);
+  }
+  assert.equal(await waiting.exited, 0, lockWaitOutput);
+  assert(!existsSync(lock));
 
   // Updater keeps going after failure and reports it; no real upgrade commands on PATH.
   stub("uv", "exit 17");

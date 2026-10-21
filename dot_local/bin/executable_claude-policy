@@ -12,9 +12,34 @@ interface Config {
   projects?: Record<string, Project>;
 }
 
+const lockWait = new Int32Array(new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT));
+
 function git(...args: string[]) {
   const result = Bun.spawnSync(["git", ...args], { stdout: "pipe", stderr: "pipe" });
   return result.exitCode === 0 ? result.stdout.toString().trim() : "";
+}
+
+function acquireLock(lock: string) {
+  const timeout = Date.now() + 30_000;
+  let waiting = false;
+  while (true) {
+    try {
+      mkdirSync(lock);
+      return;
+    } catch (error) {
+      if (!(error instanceof Error && "code" in error && error.code === "EEXIST")) throw error;
+      const remaining = timeout - Date.now();
+      if (remaining <= 0)
+        throw new Error(
+          `Timed out waiting for Claude MCP state lock at ${lock}; if no claude-policy process is running, remove the stale lock directory and retry`,
+        );
+      if (!waiting) {
+        console.error("Another Claude launch is updating MCP state; waiting for it to finish.");
+        waiting = true;
+      }
+      Atomics.wait(lockWait, 0, 0, Math.min(50, remaining));
+    }
+  }
 }
 
 function main() {
@@ -55,9 +80,8 @@ function main() {
     "Trello",
     "Whimsical",
   ].map((name) => `claude.ai ${name}`);
-  // ponytail: one global lock; use per-project locks if parallel launches matter.
   const lock = `${config}.lock`;
-  mkdirSync(lock);
+  acquireLock(lock);
   const temporary = `${config}.tmp-${crypto.randomUUID()}`;
   try {
     const data: Config = JSON.parse(readFileSync(config, "utf8"));
