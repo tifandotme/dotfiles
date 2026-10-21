@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
+# {{ if eq .chezmoi.hostname "box" -}}
+set -Eeuo pipefail
+
+artifact_dir="$HOME/.local/share/agent-artifacts"
+endpoint="box.javanese-pound.ts.net:8443"
+
+install -d -m 700 "$artifact_dir"
+sudo -n systemctl enable --now tailscaled
+config="$(tailscale serve status --json)"
+
+if jq -e --arg endpoint "$endpoint" --arg path "$artifact_dir" '
+  .TCP["8443"] == {"HTTPS": true} and
+  .Web[$endpoint].Handlers["/"] == {"Path": $path} and
+  .AllowFunnel[$endpoint] != true
+' <<<"$config" >/dev/null; then
+
+	exit 0
+fi
+
+if jq -e --arg endpoint "$endpoint" '
+  .TCP["8443"] != null or .Web[$endpoint] != null or .AllowFunnel[$endpoint] == true
+' <<<"$config" >/dev/null; then
+
+	printf '%s\n' "Portal setup stopped: $endpoint has a conflicting Serve or Funnel configuration." >&2
+	exit 1
+fi
+
+sudo -n tailscale serve --bg --https=8443 "$artifact_dir"
+# {{ end -}}
