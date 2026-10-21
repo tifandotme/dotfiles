@@ -603,17 +603,23 @@ map("n", "<leader>mm", function()
   setup_minimap().toggle()
 end, key_opts("Toggle minimap"))
 
+-- Formatting
+local formatting = require("formatting")
+map("n", "<leader>p", function()
+  if is_box then
+    formatting.format_buffer_cli(0)
+  else
+    formatting.format_buffer(0)
+  end
+end, key_opts("Format file"))
+
 -- LSP
 if not is_box then
-  local formatting = require("formatting")
-  map("n", "<leader>p", function()
-    formatting.format_buffer(0)
-  end, key_opts("Format file"))
   map("n", "<leader>k", vim.lsp.buf.hover, key_opts("Hover"))
   map("n", "gd", vim.lsp.buf.definition, key_opts("Go to definition"))
 end
 -- ----------------------------- LANGUAGE TOOLING ------------------------------
 if not is_box then
   require("lsp").setup(user_group)
-  require("formatting").setup(user_group)
+  formatting.setup(user_group)
 end

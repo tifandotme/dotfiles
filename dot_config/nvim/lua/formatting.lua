@@ -77,13 +77,69 @@ local template_commands = {
   end,
 }
 
-function M.format_buffer(bufnr)
-  bufnr = bufnr == 0 and vim.api.nvim_get_current_buf() or bufnr
+local cli_formatter_commands = {
+  stylua = function(path)
+    return {
+      "stylua",
+      "--config-path",
+      vim.fn.stdpath("config") .. "/stylua.toml",
+      "--stdin-filepath",
+      path,
+      "-",
+    }
+  end,
+}
+
+local function command_for_buffer(bufnr, cli_only)
   local path = vim.api.nvim_buf_get_name(bufnr)
   local filetype = vim.bo[bufnr].filetype
   local command = command_formatters[filetype]
   if command then
-    format_with_command(bufnr, command(path))
+    return command(path)
+  end
+
+  local formatter = formatters_by_filetype[filetype]
+  if not formatter then
+    return nil
+  end
+
+  if path:match("%.tmpl$") then
+    local template_command = template_commands[formatter]
+    if template_command then
+      return template_command(path:gsub("%.tmpl$", ""))
+    end
+    if cli_only then
+      return nil
+    end
+  end
+
+  if cli_only then
+    local formatter_command = cli_formatter_commands[formatter]
+    return formatter_command and formatter_command(path) or nil
+  end
+end
+
+function M.format_buffer_cli(bufnr)
+  bufnr = bufnr == 0 and vim.api.nvim_get_current_buf() or bufnr
+  local command = command_for_buffer(bufnr, true)
+  if not command then
+    vim.notify(
+      ("No CLI formatter configured for filetype %q"):format(vim.bo[bufnr].filetype),
+      vim.log.levels.WARN
+    )
+    return false
+  end
+
+  format_with_command(bufnr, command)
+  return true
+end
+
+function M.format_buffer(bufnr)
+  bufnr = bufnr == 0 and vim.api.nvim_get_current_buf() or bufnr
+  local filetype = vim.bo[bufnr].filetype
+  local command = command_for_buffer(bufnr, false)
+  if command then
+    format_with_command(bufnr, command)
     return
   end
 
@@ -91,14 +147,6 @@ function M.format_buffer(bufnr)
   if not formatter then
     vim.lsp.buf.format({ bufnr = bufnr, timeout_ms = 1000 })
     return
-  end
-
-  if path:match("%.tmpl$") then
-    local command = template_commands[formatter]
-    if command then
-      format_with_command(bufnr, command(path:gsub("%.tmpl$", "")))
-      return
-    end
   end
 
   vim.lsp.buf.format({
