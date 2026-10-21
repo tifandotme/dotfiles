@@ -42,6 +42,10 @@ Library/LaunchAgents/**
 
 # {{- end -}}
 
+# {{ if eq .chezmoi.os "darwin" -}}
+.local/bin/box-agents
+# {{- end }}
+
 # {{ if ne .chezmoi.hostname "box" -}}
 
 .inputrc
