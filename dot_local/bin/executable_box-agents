@@ -2,13 +2,14 @@
 set -Eeuo pipefail
 
 amp_session=box-amp
+agents=(amp chezmoi aquasense-app aquasense-service backoffice-windmill core-service gcp-terraform kamal-deploy)
 chezmoi_dir="$HOME/.local/share/chezmoi"
 discover_dir="$HOME/projects/personal"
 projects_dir="$HOME/projects/work"
 
 usage() {
-	printf 'Usage: %s {start|stop} <agent>\n' "${0##*/}" >&2
-	printf 'Agents: amp, chezmoi, aquasense-app, aquasense-service, backoffice-windmill, core-service, gcp-terraform, kamal-deploy\n' >&2
+	printf 'Usage: %s {start|stop} <agent> | %s status\n' "${0##*/}" "${0##*/}" >&2
+	printf 'Agents: %s\n' "${agents[*]}" >&2
 	exit 2
 }
 
@@ -60,12 +61,64 @@ stop_session() {
 	fi
 }
 
-[[ $# -eq 2 ]] || usage
+status_session() {
+	local agent=$1
+	local session=$2
+	local pane_status
+	local status
 
+	if ! tmux has-session -t "$session" 2>/dev/null; then
+		status='not running'
+	else
+		pane_status=$(tmux display-message -p -t "$session" '#{pane_dead}:#{pane_current_command}')
+		case $pane_status in
+		0:*)
+			status="running (${pane_status#*:})"
+			;;
+		1:*)
+			status='process exited (tmux session remains)'
+			;;
+		*)
+			status='unknown'
+			;;
+		esac
+	fi
+
+	printf '%-22s %-40s %s\n' "$agent" "$session" "$status"
+	[[ $status != unknown ]]
+}
+
+status_all() {
+	local agent
+	local session
+	local failed=0
+
+	printf '%-22s %-40s %s\n' 'AGENT' 'TMUX SESSION' 'STATUS'
+	for agent in "${agents[@]}"; do
+		if [[ $agent == amp ]]; then
+			session=$amp_session
+		else
+			session="box-claude-$agent"
+		fi
+		if ! status_session "$agent" "$session"; then
+			failed=1
+		fi
+	done
+	return "$failed"
+}
+
+[[ $# -ge 1 ]] || usage
 operation=$1
-agent=$2
 
-[[ $operation == start || $operation == stop ]] || usage
+if [[ $operation == status ]]; then
+	[[ $# -eq 1 ]] || usage
+	require_command tmux
+	status_all || exit $?
+	exit 0
+fi
+
+[[ $# -eq 2 && ($operation == start || $operation == stop) ]] || usage
+agent=$2
 
 case $agent in
 amp)
