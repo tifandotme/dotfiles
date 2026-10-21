@@ -80,32 +80,32 @@ chezmoi)
 aquasense-app)
 	session=box-claude-aquasense-app
 	cwd=$projects_dir/aquasense-app
-	spawn_mode=worktree
+	spawn_mode=same-dir
 	;;
 aquasense-service)
 	session=box-claude-aquasense-service
 	cwd=$projects_dir/aquasense-service
-	spawn_mode=worktree
+	spawn_mode=same-dir
 	;;
 backoffice-windmill)
 	session=box-claude-backoffice-windmill
 	cwd=$projects_dir/backoffice-windmill
-	spawn_mode=worktree
+	spawn_mode=same-dir
 	;;
 core-service)
 	session=box-claude-core-service
 	cwd=$projects_dir/core-service
-	spawn_mode=worktree
+	spawn_mode=same-dir
 	;;
 gcp-terraform)
 	session=box-claude-gcp-terraform
 	cwd=$projects_dir/gcp-terraform
-	spawn_mode=worktree
+	spawn_mode=same-dir
 	;;
 kamal-deploy)
 	session=box-claude-kamal-deploy
 	cwd=$projects_dir/kamal-deploy
-	spawn_mode=worktree
+	spawn_mode=same-dir
 	;;
 *)
 	usage
