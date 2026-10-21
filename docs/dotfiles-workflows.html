@@ -130,9 +130,9 @@
 				opens lazygit; <code>compare</code>
 				picks two files to diff</span></li><li><span class="step"><strong>Remote</strong><code>git push</code> and <code>gh pr create</code> run normally, any day</span></li></ol><!-- Sources: dot_config/shell/interactive.sh, dot_local/bin/executable_gh, dot_local/bin/executable_compare --></article>
 				<article class="workflow"><h3>Launch coding agents</h3><ol class="flow"><li><span class="step"><strong>From project directory</strong><code>pi</code>
-				or <code>claude</code></span></li><li><span class="step"><strong>Automatic</strong>Managed MCP config; Tolaria uses the same local <code>index.js</code> on Mac and box</span></li><li><span class="step"><strong>In Herdr</strong>Pane/tab gets a temporary agent label</span></li></ol><p><code>claudex</code>
+				or <code>claude</code></span></li><li><span class="step"><strong>Automatic</strong>Managed MCP config; Tolaria uses the same local <code>index.js</code> on Mac and box</span></li><li><span class="step"><strong>Box boot</strong><code>box-amp</code> and <code>box-claude-backoffice-windmill</code> start in tmux<small>Attach with <code>tmux attach -t box-amp</code> or <code>tmux attach -t box-claude-backoffice-windmill</code></small></span></li><li><span class="step"><strong>In Herdr</strong>Pane/tab gets a temporary agent label</span></li></ol><p><code>claudex</code>
 				routes Claude through the local proxy. <code>nvimg</code>
-				opens Neovim at the Git root.</p><!-- Sources: dot_config/shell/interactive.sh, dot_local/bin/executable_claude-policy, dot_config/pi/mcp.json.tmpl, dot_config/private_amp/private_settings.json.tmpl, run_after_06_configure-mcp-servers.sh.tmpl --></article>
+				opens Neovim at the Git root.</p><!-- Sources: dot_config/shell/interactive.sh, dot_local/bin/executable_claude-policy, dot_config/pi/mcp.json.tmpl, dot_config/private_amp/private_settings.json.tmpl, run_after_06_configure-mcp-servers.sh.tmpl, dot_config/systemd/user/box-agents-autostart.service, run_after_09_enable-box-agents-autostart.sh.tmpl --></article>
 				<article class="workflow"><h3>Containers and remote sessions</h3><ul class="list"><li><code>stop-all</code>
 				stops running Docker containers</li><li><code>stop-all --stop-colima</code>
 				also stops Colima</li><li><code>ssh</code>, <code>sshs</code>, <code>mosh</code>

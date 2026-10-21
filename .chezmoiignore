@@ -51,6 +51,8 @@ Library/LaunchAgents/**
 .inputrc
 .config/rclone/**
 .config/systemd/user/notes-drive-sync.*
+.config/systemd/user/box-agents-autostart.service
+09_enable-box-agents-autostart.sh
 .local/share/box-agents
 
 # {{- end -}}

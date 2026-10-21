@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
+# {{ if eq .chezmoi.hostname "box" -}}
+set -Eeuo pipefail
+
+systemctl --user daemon-reload
+systemctl --user enable box-agents-autostart.service
+# {{ end -}}
