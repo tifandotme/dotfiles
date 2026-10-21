@@ -1,0 +1,38 @@
+{
+  "gcloud_account": "tifan@hadl.ai",
+  "connections": {
+    "core_db_production": {
+      "label": "Core DB production",
+      "host": "localhost",
+      "port": 5435,
+      "database": "core_db",
+      "user": "tifan@hadl.ai",
+      "sslmode": "require",
+      "tunnel": "prod",
+      "tunnel_task": "tunnel-prod",
+      "auth": "gcloud-iam"
+    },
+    "core_db_staging": {
+      "label": "Core DB staging",
+      "host": "localhost",
+      "port": 5434,
+      "database": "core_db",
+      "user": "tifan@hadl.ai",
+      "sslmode": "require",
+      "tunnel": "staging",
+      "tunnel_task": "tunnel-staging",
+      "auth": "gcloud-iam"
+    },
+    "internal_db_windmill": {
+      "label": "Internal DB windmill",
+      "host": "localhost",
+      "port": 5433,
+      "database": "internal_db",
+      "user": "tifan@hadl.ai",
+      "sslmode": "require",
+      "tunnel": "windmill",
+      "tunnel_task": "tunnel-windmill",
+      "auth": "gcloud-iam"
+    }
+  }
+}

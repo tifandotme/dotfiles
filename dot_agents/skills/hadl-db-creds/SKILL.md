@@ -1,42 +1,36 @@
 ---
 name: hadl-db-creds
-description: Provides the local command contract for HADL database credentials and tunnels. Use when an agent needs to inspect, traverse, or query HADL, Aquasense, Backoffice, staging, production, or windmill databases.
+description: Provides the shared command contract for connecting to catalogued HADL PostgreSQL databases from macOS or Box with gcloud access tokens.
 ---
 
 # HADL DB Credentials
 
-For HADL database work, list the entry keys:
+The shared connection catalog currently has three entries configured to use gcloud IAM tokens. List their keys with:
 
 ```sh
-mise run db-creds | jq -r 'keys[]'
+mise run db-creds | jq -r '.connections | keys[]'
 ```
 
-Pick the entry whose key, `database`, `label`, or `tunnel` matches the request. If more than one entry matches, ask. Treat `db-creds` as a black box. Do not inspect credential storage unless the command is broken.
+Pick the entry whose key, `database`, `label`, or `tunnel` matches the request. If more than one entry matches, ask. The catalog contains connection metadata only. Do not inspect local credential storage unless a command is broken.
 
-Run `psql` through `db-psql`. Put the psql arguments after `--`. The task runs from the mise config root, so pass `-f` an absolute path:
+Run `psql` through `db-psql`. Put the psql arguments after `--`:
 
 ```sh
-mise run db-psql aquasense_db_staging -- -Atc "select 1"
-mise run db-psql aquasense_db_production -- -f "$PWD/query.sql"
+mise run db-psql core_db_staging -- -Atc "select 1"
+mise run db-psql core_db_production -- -f "$PWD/query.sql"
 ```
 
-`db-psql` builds the connection with `sslmode=require` and gets the password from TablePlus or from a fresh gcloud access token. It gives the password to `psql` through `PGPASSWORD` and does not print it. Do not get the password yourself for `psql`.
+`db-psql` gets a fresh access token for the catalog's explicit gcloud account and passes it to `psql` as `PGPASSWORD`. It does not print the token. Do not get the token yourself for `psql`. The task finds `psql` on `PATH` or under Homebrew's `libpq` prefix.
 
-If `db-psql` fails with `Tunnel port N is not listening` and you are inside herdr, run:
-
-```sh
-mise run tunnels-start
-```
-
-Then wait until the port listens and run the query again. `tunnels-start` finds or creates the exact `tunnels` workspace. It checks ports 5433 (windmill), 5434 (staging), and 5435 (prod), and restarts only the dead tunnel tasks in panes of that workspace. If duplicate `tunnels` workspaces exist, stop and ask the user to close or rename extras.
-
-Outside herdr, ask the user to run:
+If the required tunnel is not listening, run the tunnel task in a persistent terminal and leave it running while querying:
 
 ```sh
 mise run tunnels
 ```
 
-For a client other than `psql`, read the full entry from `mise run db-creds`. Each entry has `host`, `port`, `database`, `user`, `sslmode`, `tunnel`, `tunnel_task`, and `password_source`. For `password_source: "tableplus"`, use `password`. For `password_source: "gcloud-access-token"`, run `mise run gcloud-auth-check`, then use the output of `mise run gcloud-access-token` as the password.
+The task starts only tunnels whose local ports are not already listening. It uses `tifan@hadl.ai` explicitly and does not change the machine's active gcloud account.
+
+The Aquasense production and staging entries that still use password authentication are intentionally not in this catalog. Their IAM enablement is tracked by TIF-87.
 
 Do not paste passwords, access tokens, or sensitive query results into chat unless the user explicitly asks.
 

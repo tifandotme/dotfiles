@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#MISE description="Tunnel to the Aquasense staging DB"
+#MISE dir="{{cwd}}"
+set -Eeuo pipefail
+
+echo "localhost:5434" >&2
+exec gcloud --account=tifan@hadl.ai compute ssh \
+	--zone asia-southeast1-c aqusense-staging \
+	--project aquasense-staging \
+	--tunnel-through-iap \
+	-- -L 5434:172.16.0.3:5432 -N

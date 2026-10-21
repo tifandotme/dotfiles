@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#MISE description="Tunnel to the internal DB via backoffice-windmill"
+#MISE dir="{{cwd}}"
+set -Eeuo pipefail
+
+echo "localhost:5433" >&2
+exec gcloud --account=tifan@hadl.ai compute ssh \
+	--zone asia-southeast1-c backoffice-windmill \
+	--project backoffice-windmill \
+	--tunnel-through-iap \
+	-- -L 5433:172.16.0.3:5432 -N
