@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
+# {{ if eq .chezmoi.hostname "box" -}}
+set -Eeuo pipefail
+
+temporary_file="$(mktemp)"
+trap 'rm -f "$temporary_file"' EXIT
+
+cat >"$temporary_file" <<EOF
+abi <abi/4.0>,
+include <tunables/global>
+
+# Permit Chrome's namespace sandbox for agent-browser's downloaded versions.
+profile agent_browser_chrome "$HOME/.agent-browser/browsers/*/chrome" flags=(unconfined) {
+  userns,
+}
+EOF
+
+sudo -n apparmor_parser -Q -T "$temporary_file"
+sudo -n install -o root -g root -m 0644 "$temporary_file" /etc/apparmor.d/agent-browser
+sudo -n apparmor_parser -r /etc/apparmor.d/agent-browser
+# {{ end -}}
