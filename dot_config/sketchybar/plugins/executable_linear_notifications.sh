@@ -39,7 +39,7 @@ if [[ "$status" != ok ]]; then
 	status_color="$WARNING"
 	label="?"
 elif ((count > 0)); then
-	status_color="$DANGER"
+	status_color="$ACCENT"
 	label="$count"
 else
 	label="0"

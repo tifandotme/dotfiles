@@ -33,7 +33,7 @@ if [ "$USE_SIMPLE_INDICATOR" = true ]; then
 			icon=":slack:" \
 			icon.font="sketchybar-app-font:Regular:12.0" \
 			label="" \
-			icon.color="${DANGER}" \
+			icon.color="${ACCENT}" \
 			drawing=on
 	else
 		"$sketchybar_bin" --set "$NAME" \
@@ -51,7 +51,7 @@ else
 			icon=":slack:" \
 			icon.font="sketchybar-app-font:Regular:12.0" \
 			label="$BADGE_NUMBER" \
-			icon.color="${DANGER}" \
+			icon.color="${ACCENT}" \
 			drawing=on
 	else
 		"$sketchybar_bin" --set "$NAME" \
