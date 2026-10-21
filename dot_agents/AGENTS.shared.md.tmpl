@@ -47,6 +47,16 @@
 - Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. Account mappings: `personal` → `ifan.anvity@gmail.com`, `work` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`. If work gcloud reports `Reauthentication failed`, run `mise run gcloud-auth-check` from `~/projects/work`; it answers the reauth prompt from Keychain. Never ask for, read, or type the password yourself.
 - Library docs: use Context7 for current docs. If it has no relevant results, check official docs or source; say it lacked coverage and name the source used.
 
+## Remote and headless work
+
+- Establish the execution host and available desktop capabilities before tasks that need them. `box` is headless Linux. Treat the user's viewing device as separate unless the session explicitly confirms otherwise, including when executing on macOS.
+- Deliver HTML reports, prototypes, images, PDFs, recordings, and downloads through a user-reachable URL or supported attachment. A remote filesystem path, `file://` link, or `localhost` URL alone is not a usable handoff. If no delivery route exists, give the exact SSH forwarding or file-transfer command to run on the viewing device.
+- Prefer an existing private Tailscale Serve endpoint for artifacts and live web previews. Check `tailscale serve status` before using it; Tailscale being installed does not mean an endpoint exists. Ask before configuring routes or exposing additional content. Keep proxied dev servers on loopback, serve only intended artifacts, and preserve unrelated routes. Never expose the repository root, home directory, secrets, browser debugging ports, or a public Funnel as a shortcut.
+- When inside Herdr, load the `herdr` skill and run preview servers in a task-owned pane. Otherwise use the harness's supported long-running process mechanism. Keep previews available for review and report the URL, access requirements, process owner, expected lifetime, and exact stop command.
+- Use the browser workflow above for headless verification. Check referenced assets and affected interactions, not just the HTTP response. Report server-side checks separately from access verified on the user's device; ask for a device check when that access cannot be verified here.
+- For OAuth, prefer the provider's documented device-code or remote-login flow. A loopback callback belongs to the execution host; use documented forwarding when required. Keep credentials out of shared artifacts and URLs.
+- Replace desktop-only `open` commands, clipboard writes, and notifications with content or reachable links in the conversation. Native apps, simulators, desktop sessions, and physical hardware require a capable machine; complete headless checks first, then state the remaining check and concrete handoff without claiming it passed.
+
 ## Shell and code quality
 
 - Shell scripts: after modifying one, run `shfmt -w -ln <bash|posix|mksh|bats|zsh> <path-to-script>` with its dialect. Run `shellcheck <path-to-script>` for Bash or POSIX-compatible scripts, `bash -n <path-to-script>` for Bash, and `zsh -n <path-to-script>` for Zsh. Prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
