@@ -52,7 +52,6 @@ Library/LaunchAgents/**
 .config/systemd/user/box-agents-autostart.service
 09_enable-box-agents-autostart.sh
 10_configure-box-portal.sh
-.local/share/agent-artifacts
 .local/share/box-agents
 
 # {{- end -}}

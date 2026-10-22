@@ -27,8 +27,8 @@ cat >"$test_dir/bin/tailscale" <<'EOF'
 set -Eeuo pipefail
 if [[ $* == 'serve status --json' ]]; then
 	cat "$HOME/serve.json"
-elif [[ $1 == serve && $2 == --bg && $3 == --https=8443 ]]; then
-	jq --arg path "$4" '
+elif [[ $1 == serve && $2 == --bg && $3 == --https=8443 && $4 == --yes ]]; then
+	jq --arg path "$5" '
     .TCP["8443"] = {"HTTPS": true} |
     .Web["box.javanese-pound.ts.net:8443"].Handlers["/"] = {"Path": $path}
   ' "$HOME/serve.json" >"$HOME/next.json"
@@ -45,17 +45,15 @@ printf '%s\n' '{"TCP":{"9443":{"HTTPS":true}},"Web":{"other:9443":{"Handlers":{"
 
 bash "$test_dir/setup.sh"
 test -f "$HOME/tailscaled-enabled"
-jq -e --arg path "$HOME/.local/share/agent-artifacts" '
+jq -e --arg path "$HOME/projects" '
   .Web["box.javanese-pound.ts.net:8443"].Handlers["/"].Path == $path and
   .TCP["8443"].HTTPS == true and
   .Web["other:9443"].Handlers["/"].Proxy == "http://127.0.0.1:9000"
 ' "$HOME/serve.json" >/dev/null
 
-printf '%s\n' 'keep this report' >"$HOME/.local/share/agent-artifacts/report.txt"
 cp "$HOME/serve.json" "$test_dir/expected.json"
 bash "$test_dir/setup.sh"
 cmp "$test_dir/expected.json" "$HOME/serve.json"
-grep -Fxq 'keep this report' "$HOME/.local/share/agent-artifacts/report.txt"
 
 for config in \
 	"$(jq '.AllowFunnel["box.javanese-pound.ts.net:8443"] = true' "$HOME/serve.json")" \
@@ -71,4 +69,4 @@ for config in \
 	cmp "$test_dir/expected.json" "$HOME/serve.json"
 done
 
-printf '%s\n' 'box portal checks passed: setup, repeat apply, artifact retention, route conflicts'
+printf '%s\n' 'box portal checks passed: setup, repeat apply, route conflicts'

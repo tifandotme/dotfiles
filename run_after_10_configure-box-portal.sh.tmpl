@@ -4,14 +4,14 @@
 # {{ if eq .chezmoi.hostname "box" -}}
 set -Eeuo pipefail
 
-artifact_dir="$HOME/.local/share/agent-artifacts"
+project_dir="$HOME/projects"
 endpoint="box.javanese-pound.ts.net:8443"
 
-install -d -m 700 "$artifact_dir"
+mkdir -p "$project_dir"
 sudo -n systemctl enable --now tailscaled
 config="$(tailscale serve status --json)"
 
-if jq -e --arg endpoint "$endpoint" --arg path "$artifact_dir" '
+if jq -e --arg endpoint "$endpoint" --arg path "$project_dir" '
   .TCP["8443"] == {"HTTPS": true} and
   .Web[$endpoint].Handlers["/"] == {"Path": $path} and
   .AllowFunnel[$endpoint] != true
@@ -28,5 +28,5 @@ if jq -e --arg endpoint "$endpoint" '
 	exit 1
 fi
 
-sudo -n tailscale serve --bg --https=8443 "$artifact_dir"
+sudo -n tailscale serve --bg --https=8443 --yes "$project_dir"
 # {{ end -}}
