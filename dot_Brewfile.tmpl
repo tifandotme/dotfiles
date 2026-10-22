@@ -38,17 +38,17 @@ brew "yazi" # Blazing fast terminal file manager
 brew "jq"       # JSON preview
 brew "yq"       # YAML processor
 brew "sevenzip" # Archive extraction and preview
+brew "imagemagick"       # Font, HEIC, JPEG XL preview
+brew "poppler"           # PDF preview
+brew "ffmpeg"            # Video thumbnails
+brew "ffmpegthumbnailer" # Create thumbnails for video files
 
 # {{ if $isDarwin -}}
 
 brew "clippy"            # Copy Yazi file references to the macOS clipboard
 brew "infat"             # Declarative macOS file handlers
 cask "finicky"           # App-aware browser routing
-brew "imagemagick"       # Font, HEIC, JPEG XL preview
-brew "poppler"           # PDF preview
 brew "resvg"             # SVG preview
-brew "ffmpeg"            # Video thumbnails
-brew "ffmpegthumbnailer" # Create thumbnails for video files
 
 # {{- end }}
 
