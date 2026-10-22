@@ -7,13 +7,15 @@ description: "Shares selected files publicly from Box using Tailscale Funnel, wi
 
 ## Inspect first
 
+Check `hostname` first. Continue only on `box`; on any other host, stop before
+running Serve, Funnel, or systemd commands. Never set up this workflow on macOS.
+
 ```bash
-hostname
 tailscale serve status --json
 systemctl --user status agent-public-share.service --no-pager
 ```
 
-Run on `box` only. A missing transient service is normal. Port **8443** serves
+A missing transient service is normal. Port **8443** serves
 `~/projects` privately: preserve it and never enable Funnel on it. Reserve
 **443** for selected public files. Existing background file mounts can coexist;
 add new files at unused paths and preserve the existing mounts. Ask before
