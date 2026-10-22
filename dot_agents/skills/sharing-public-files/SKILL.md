@@ -15,9 +15,10 @@ tailscale serve status --json
 systemctl --user status agent-public-share.service --no-pager
 ```
 
-A missing transient service is normal. Port **8443** serves
-`~/projects` privately: preserve it and never enable Funnel on it. Reserve
-**443** for selected public files. Existing background file mounts can coexist;
+A missing transient service is normal. Kamal Proxy uses port **443** for app
+domains. Port **8443** serves `~/projects` privately: preserve it and never
+enable Funnel on it. Reserve port **10000** for selected public files. Keep
+Funnel disabled on 443 and 8443. Existing background file mounts can coexist;
 add new files at unused paths and preserve the existing mounts. Ask before
 replacing a path, changing an unfamiliar configuration, or altering a timed
 session. Do not reset Serve or Funnel globally.
@@ -57,7 +58,7 @@ Set `FILE` to the selected absolute file path. Set `SHARE_PATH` to a unique URL
 path such as `/review-<unique-id>/report.html`, with URL-safe path segments.
 
 ```bash
-tailscale funnel --bg --https=443 --set-path="$SHARE_PATH" "$FILE"
+tailscale funnel --bg --https=10000 --set-path="$SHARE_PATH" "$FILE"
 ```
 
 Repeat for each selected file with a distinct path. A request to share another
@@ -72,7 +73,7 @@ share survives agent completion and can resume after reboot.
 
 For a timed share, run foreground Funnel in a transient user service instead of
 using `--bg`. This keeps the session alive after the agent finishes and stops it
-at the requested duration. This mode requires port 443 and
+at the requested duration. This mode requires port 10000 and
 `agent-public-share.service` to be unused; if other shares exist, ask how to
 proceed rather than interrupting them. Set `DURATION` to a systemd timespan such as `2h` and
 `TAILSCALE` to the absolute path returned by `command -v tailscale`.
@@ -80,7 +81,7 @@ proceed rather than interrupting them. Set `DURATION` to a systemd timespan such
 ```bash
 systemd-run --user --unit=agent-public-share --collect \
   --property="RuntimeMaxSec=$DURATION" \
-  "$TAILSCALE" funnel --https=443 --set-path="$SHARE_PATH" "$FILE"
+  "$TAILSCALE" funnel --https=10000 --set-path="$SHARE_PATH" "$FILE"
 ```
 
 This requires the current user to have Tailscale Serve/Funnel permissions. If
@@ -95,7 +96,8 @@ files into an archive instead.
 
 Inspect `tailscale funnel status --json`, including foreground sessions: the new
 file handlers must match the selection, existing mounts must be unchanged, and
-Funnel must remain disabled on 8443. Fetch the public URL without
+Funnel must remain enabled only on 10000. Keep 443 available to Kamal and 8443
+private. Fetch the public URL without
 Tailscale access, check its content, and check that a sibling file cannot be
 fetched. For HTML, load `agent-browser` and verify rendering and assets. If no
 off-tailnet client is available, state that public reachability is unverified;
@@ -112,26 +114,29 @@ active solely because `systemd-run` accepted the unit.
 against the current configuration before running:
 
 ```bash
-tailscale funnel --https=443 --set-path="$SHARE_PATH" off
+tailscale funnel --https=10000 --set-path="$SHARE_PATH" off
 ```
 
 For a file in the timed foreground session, stop `agent-public-share.service`
 instead; a background `off` command does not target a foreground session.
 
 “Stop all public sharing” authorizes stopping the timed service, if active, and
-all background mounts on port 443:
+all background Funnel mounts. Check the status first; stop each public port
+without changing the private 8443 portal:
 
 ```bash
 systemctl --user stop agent-public-share.service # only if active
-tailscale funnel --https=443 --yes off           # only if background mounts exist
+tailscale funnel --https=10000 --yes off         # if public mounts exist on 10000
+tailscale funnel --https=443 --yes off           # only for a legacy public mount
 tailscale serve status --json
 ```
 
 For an ambiguous “stop public sharing”, clarify which file or whether all shares
-should stop. If public endpoints exist outside 443, identify them and confirm
-scope before altering an unfamiliar configuration.
+should stop. If public endpoints exist on unexpected ports, identify them and
+confirm scope before altering an unfamiliar configuration.
 
 Confirm the selected handlers are removed, their URLs no longer serve the files,
-other shares remain unchanged unless all were selected, and 8443 still serves
-`~/projects` privately. Never omit `--set-path` when stopping just one file:
-pathless `off` removes every background mount on that port.
+other shares remain unchanged unless all were selected, Funnel no longer uses
+443, and 8443 still serves `~/projects` privately. Never omit `--set-path` when
+stopping just one file: pathless `off` removes every background mount on that
+port.
