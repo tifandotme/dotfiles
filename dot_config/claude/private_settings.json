@@ -9,7 +9,6 @@
     "DISABLE_FEEDBACK_COMMAND": "1",
     "CLAUDE_CODE_COORDINATOR_MODE": "0",
     "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-5-5",
-    "CLAUDE_CODE_SUBAGENT_MODEL_FORCE": "1",
     "IS_DEMO": "1"
   },
   "attribution": {
@@ -21,6 +20,7 @@
     "deny": [
       "mcp__tavily__tavily_search",
       "mcp__tavily__tavily_extract",
+      "Agent(Explore)",
       "Agent(Plan)",
       "Agent(claude)",
       "Agent(statusline-setup)"
@@ -110,6 +110,7 @@
     ]
   },
   "enableArtifact": false,
+  "enableWorkflows": false,
   "statusLine": {
     "type": "command",
     "command": "ccstatusline --config \"$XDG_CONFIG_HOME/ccstatusline/settings.json\"",
@@ -120,17 +121,21 @@
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
-    "verbs": [
-      "Working"
-    ]
+    "verbs": ["Working"]
   },
   "effortLevel": "medium",
   "modelSettings": {
+    "claude-haiku-5-5": {
+      "effortLevel": "medium",
+      "autoCompactWindow": 100000
+    },
     "claude-sonnet-5-5": {
-      "effortLevel": "medium"
+      "effortLevel": "medium",
+      "autoCompactWindow": 400000
     },
     "claude-opus-5-5": {
-      "effortLevel": "medium"
+      "effortLevel": "medium",
+      "autoCompactWindow": 400000
     },
     "gpt-6-luna(high)": {
       "effortLevel": "high"
@@ -142,7 +147,7 @@
       "effortLevel": "medium"
     }
   },
-  "autoCompactWindow": 400000,
+  "advisorModel": "opus",
   "awaySummaryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "theme": "auto",
