@@ -1,5 +1,5 @@
 ---
-name: librarian
+name: Librarian
 description: Researches repositories and dependencies outside the current workspace, their history and issues, and technical documentation
 model: haiku
 tools: Read, Bash, mcp__fff__grep, mcp__fff__multi_grep, mcp__fff__find_files
