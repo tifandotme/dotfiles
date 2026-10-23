@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#MISE description="Check TLS certificate expiration as JSON"
+#MISE dir="{{cwd}}"
+#MISE quiet=true
+#MISE raw=true
+#USAGE arg "<domain>" help="TLS server domain"
+set -Eeuo pipefail
+
+target=${usage_domain:?}
+certificate=$(openssl s_client -servername "$target" -connect "$target:443" </dev/null 2>/dev/null)
+expiry=$(printf '%s\n' "$certificate" | openssl x509 -noout -enddate)
+expiry=${expiry#*=}
+
+if [[ $(uname -s) == Darwin ]]; then
+	epoch=$(LC_ALL=C date -j -u -f '%b %e %T %Y %Z' "$expiry" +%s)
+else
+	epoch=$(LC_ALL=C date -u -d "$expiry" +%s)
+fi
+
+remaining=$((epoch - $(date +%s)))
+expired=false
+
+if ((remaining < 0)); then
+	expired=true
+	days=$(((remaining - 43200) / 86400))
+else
+	days=$(((remaining + 43200) / 86400))
+fi
+
+jq -n --arg domain "$target" --arg expiry "$expiry" --argjson expired "$expired" --argjson days "$days" '{domain:$domain, expired:$expired, expiry_date:$expiry, days_left:$days}'

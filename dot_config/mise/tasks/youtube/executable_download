@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#MISE description="Download videos at 720p or audio with yt-dlp"
+#MISE dir="{{cwd}}"
+#MISE quiet=true
+#MISE raw=true
+#USAGE flag "--cwd" help="Save in the caller's current directory"
+#USAGE flag "-a --audio" help="Download audio only"
+#USAGE arg "[args]" var=#true double_dash="preserve" help="yt-dlp arguments; put flags after --"
+set -Eeuo pipefail
+
+destination=$HOME/Downloads
+format=(--format-sort 'res:720,codec:avc:m4a')
+args=()
+
+[[ ${usage_cwd:-false} != true ]] || destination=$PWD
+[[ ${usage_audio:-false} != true ]] || format=(-f 140)
+# mise shell-quotes each variadic value before exporting usage_args.
+eval "args=(${usage_args:-})"
+# Preserve the boundary during mise parsing, but pass the following flags to yt-dlp.
+for index in "${!args[@]}"; do
+	if [[ ${args[index]} == -- ]]; then
+		unset 'args[index]'
+		break
+	fi
+done
+
+printf 'Download starting, saving to %s\n' "$destination"
+exec yt-dlp --paths "$destination" "${format[@]}" ${args[@]+"${args[@]}"}

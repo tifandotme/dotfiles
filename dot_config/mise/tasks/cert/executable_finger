@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#MISE description="Show SHA-256 and SHA-1 TLS certificate fingerprints"
+#MISE dir="{{cwd}}"
+#MISE quiet=true
+#MISE raw=true
+#USAGE arg "<domain>" help="TLS server domain"
+set -Eeuo pipefail
+
+target=${usage_domain:?}
+certificate=$(openssl s_client -servername "$target" -connect "$target:443" </dev/null 2>/dev/null)
+printf '%s\n' "$certificate" | openssl x509 -noout -fingerprint -sha256
+printf '%s\n' "$certificate" | openssl x509 -noout -fingerprint -sha1

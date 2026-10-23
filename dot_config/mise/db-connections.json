@@ -9,7 +9,7 @@
       "user": "tifan@hadl.ai",
       "sslmode": "require",
       "tunnel": "prod",
-      "tunnel_task": "tunnel-prod",
+      "tunnel_task": "db:tunnel:prod",
       "auth": "gcloud-iam"
     },
     "core_db_staging": {
@@ -20,7 +20,7 @@
       "user": "tifan@hadl.ai",
       "sslmode": "require",
       "tunnel": "staging",
-      "tunnel_task": "tunnel-staging",
+      "tunnel_task": "db:tunnel:staging",
       "auth": "gcloud-iam"
     },
     "internal_db_windmill": {
@@ -31,7 +31,7 @@
       "user": "tifan@hadl.ai",
       "sslmode": "require",
       "tunnel": "windmill",
-      "tunnel_task": "tunnel-windmill",
+      "tunnel_task": "db:tunnel:windmill",
       "auth": "gcloud-iam"
     }
   }

@@ -1,0 +1,126 @@
+import { mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { dirname, join, resolve } from "node:path";
+
+interface Project {
+  hasTrustDialogAccepted?: boolean;
+  disabledMcpServers?: string[];
+  mcpServers?: Record<string, unknown>;
+}
+interface Config {
+  projects?: Record<string, Project>;
+}
+
+const lockWait = new Int32Array(new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT));
+
+function git(...args: string[]) {
+  const result = Bun.spawnSync(["git", ...args], { stdout: "pipe", stderr: "pipe" });
+  return result.exitCode === 0 ? result.stdout.toString().trim() : "";
+}
+
+function acquireLock(lock: string) {
+  const timeout = Date.now() + 30_000;
+  let waiting = false;
+  while (true) {
+    try {
+      mkdirSync(lock);
+      return;
+    } catch (error) {
+      if (!(error instanceof Error && "code" in error && error.code === "EEXIST")) throw error;
+      const remaining = timeout - Date.now();
+      if (remaining <= 0)
+        throw new Error(
+          `Timed out waiting for Claude MCP state lock at ${lock}; if no claude:policy task is running, remove the stale lock directory and retry`,
+        );
+      if (!waiting) {
+        console.error("Another Claude launch is updating MCP state; waiting for it to finish.");
+        waiting = true;
+      }
+      Atomics.wait(lockWait, 0, 0, Math.min(50, remaining));
+    }
+  }
+}
+
+function main() {
+  const trust = process.env.usage_trust === "true";
+  const config = join(
+    process.env.CLAUDE_CONFIG_DIR || join(homedir(), ".config/claude"),
+    ".claude.json",
+  );
+  const root = git("rev-parse", "--show-toplevel");
+  const project = resolve(root || process.cwd());
+  const common =
+    trust && root ? git("rev-parse", "--path-format=absolute", "--git-common-dir") : "";
+  if (trust && !common) throw new Error("Run claude-trust inside a Git repository");
+  const trustRoot = common ? dirname(resolve(common)) : "";
+  const allowed = new Set([
+    "fff",
+    "penpot",
+    ...["Gmail", "Google Calendar", "Google Drive", "Linear", "PostHog", "Slack"].map(
+      (name) => `claude.ai ${name}`,
+    ),
+  ]);
+  const blocked = [
+    "Asana",
+    "Atlassian",
+    "Attio",
+    "Box",
+    "Canva",
+    "Coda MCP",
+    "Figma",
+    "Gamma",
+    "Granola",
+    "HubSpot",
+    "Intercom",
+    "Jibble",
+    "Lovable",
+    "monday.com",
+    "Notion",
+    "Trello",
+    "Whimsical",
+  ].map((name) => `claude.ai ${name}`);
+  const lock = `${config}.lock`;
+  acquireLock(lock);
+  const temporary = `${config}.tmp-${crypto.randomUUID()}`;
+  try {
+    const data: Config = JSON.parse(readFileSync(config, "utf8"));
+    const before = JSON.stringify(data);
+    const projects = (data.projects ??= {});
+    if (trust && !projects[trustRoot]?.hasTrustDialogAccepted) {
+      if (!process.stdin.isTTY)
+        throw new Error("Run Claude interactively to trust this repository");
+      console.log(`Trust Claude in ${trustRoot}? This enables repository settings and hooks.`);
+      console.log("The Claude wrapper also skips tool permission prompts.");
+      if (prompt("Type TRUST to continue:")?.trim() !== "TRUST")
+        throw new Error("Claude trust declined");
+    }
+    const state = (projects[project] ??= {});
+    state.disabledMcpServers = [
+      ...new Set([
+        ...(state.disabledMcpServers ?? []),
+        ...blocked,
+        ...Object.keys(state.mcpServers ?? {}),
+      ]),
+    ]
+      .filter((name) => !allowed.has(name))
+      .sort();
+    if (trust) (projects[trustRoot] ??= {}).hasTrustDialogAccepted = true;
+    if (JSON.stringify(data) !== before) {
+      writeFileSync(temporary, JSON.stringify(data, null, 2) + "\n", { mode: 0o600, flag: "wx" });
+      renameSync(temporary, config);
+    }
+    if (trust) console.log("Claude trusts this canonical repository root.");
+  } finally {
+    rmSync(temporary, { force: true });
+    rmSync(lock, { recursive: true });
+  }
+}
+
+try {
+  main();
+} catch (error) {
+  console.error(
+    `Cannot update Claude MCP state: ${error instanceof Error ? error.message : error}`,
+  );
+  process.exitCode = 1;
+}

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#MISE description="Stop a Box agent tmux session"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE arg "<agent>" {
+#USAGE   choices "amp" "chezmoi" "aquasense-app" "aquasense-service" "backoffice-windmill" "core-service" "gcp-terraform" "kamal-deploy"
+#USAGE }
+set -Eeuo pipefail
+
+session="box-claude-${usage_agent?}"
+[[ $usage_agent != amp ]] || session=box-amp
+command -v tmux >/dev/null
+if tmux has-session -t "$session" 2>/dev/null; then
+	tmux kill-session -t "$session"
+	printf 'Stopped %s\n' "$session"
+else
+	printf '%s is not running\n' "$session"
+fi

@@ -99,10 +99,12 @@ nvimg() (
 	nvim "$@"
 )
 
-claude-trust() { claude-policy --trust; }
+gh() { command mise run --quiet --raw gh -- "$@"; }
+
+claude-trust() { command mise run --quiet --raw claude:policy --trust; }
 
 claude() {
-	claude-policy || return
+	command mise run --quiet --raw claude:policy || return
 
 	case ${1:-} in
 	remote-control | rc) herdr-wrap "${PWD##*/} (claude)" command claude --dangerously-skip-permissions "$@" ;;
@@ -160,7 +162,7 @@ chezmoi() {
 	case ${1:-} in
 	sync)
 		shift
-		chezmoi-sync "$@"
+		command mise run --quiet --raw chezmoi:sync "$@"
 		;;
 	cd)
 		shift
@@ -222,8 +224,8 @@ get-app-id() { pgrep -f -- "$1"; }
 
 commands() {
 	printf '%s\n' 'Shared aliases and functions: ~/.config/shell/interactive.sh' \
-		'Workflows: open-project, prune-worktrees, updater start|clean,' \
-		'chezmoi sync|cd, y, nvimg, compare, cert, youtube-download,' \
-		'open-book, stop-all, git rebase-release|loggy, gibo gibo-strip, claude-trust'
+		'Workflows: mise run project:open|prune, chezmoi sync|cd, y, nvimg,' \
+		'mise run files:compare|open-book, git rebase-release|loggy, gibo gibo-strip, claude-trust' \
+		'Global tasks: mise tasks ls; mise run updater:start|clean, cert:check, youtube:download, containers:stop, linear:unread'
 	alias
 }

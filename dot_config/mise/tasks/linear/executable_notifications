@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#MISE description="List unread Linear inbox notifications"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE flag "--account <account>" default="all" { choices "personal" "work" "all" }
+#USAGE flag "--json" help="Print JSON"
+#USAGE flag "--limit <count>" default="20" help="Maximum notifications per account"
+# shellcheck disable=SC2016
+set -Eeuo pipefail
+
+limit=${usage_limit?}
+[[ $limit =~ ^[1-9][0-9]*$ ]] || {
+	printf '%s\n' '--limit must be a positive integer' >&2
+	exit 2
+}
+# shellcheck source=dot_config/mise/tasks/linear/dot_api.sh
+source "${MISE_TASK_DIR?}/.api.sh"
+account=${usage_account?}
+if [[ $account == all ]]; then
+	personal=$(account_notifications personal "$limit")
+	work=$(account_notifications work "$limit")
+	result=$("$JQ_BIN" -cn --argjson personal "$personal" --argjson work "$work" '{personal:$personal,work:$work}')
+else
+	result=$(account_notifications "$account" "$limit")
+	result=$("$JQ_BIN" -cn --arg account "$account" --argjson result "$result" '{($account):$result}')
+fi
+if [[ ${usage_json:-false} == true ]]; then
+	printf '%s\n' "$result"
+	exit 0
+fi
+for profile in personal work; do
+	[[ $account == all || $account == "$profile" ]] || continue
+	personal=$("$JQ_BIN" -c --arg profile "$profile" '.[$profile] // empty' <<<"$result")
+	[[ -n $personal ]] || continue
+	status=$("$JQ_BIN" -r '.status' <<<"$personal")
+	if [[ $status != ok ]]; then
+		printf '%s notifications: %s\n' "$profile" "$status"
+		continue
+	fi
+	printf '%s unread notifications:\n' "$profile"
+	"$JQ_BIN" -r '.notifications[] | "  \(.title)\n  \(.inboxUrl // .url)"' <<<"$personal"
+done

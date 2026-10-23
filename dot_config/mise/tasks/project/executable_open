@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#MISE description="Pick a project or Git worktree in Herdr"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE arg "[query]" help="Initial picker search query"
+set -Eeuo pipefail
+
+if [[ -n ${usage_query:-} ]]; then
+	exec bun "${MISE_TASK_DIR?}/.open.ts" "$usage_query"
+fi
+exec bun "${MISE_TASK_DIR?}/.open.ts"

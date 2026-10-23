@@ -35,18 +35,16 @@ Library/LaunchAgents/**
 .config/raycast
 .config/keymaps
 .config/colima
-.local/bin/run-helium
-.local/bin/setup-helium
+.config/mise/tasks/helium
+.config/mise/tasks/claude/extra-usage
+.config/mise/tasks/spotify
 
 # {{- end -}}
-
-# {{ if eq .chezmoi.os "darwin" -}}
-.local/bin/box-agents
-# {{- end }}
 
 # {{ if ne .chezmoi.hostname "box" -}}
 
 .inputrc
+.config/mise/tasks/box-agents
 .config/rclone/**
 .config/systemd/user/notes-drive-sync.*
 .config/systemd/user/box-agents-autostart.service

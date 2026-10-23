@@ -66,7 +66,7 @@ umask 077
 temporary_dir="$(mktemp -d)"
 trap 'rm -rf "$temporary_dir"' EXIT
 
-run-helium
+mise run helium:run
 agent-browser --session "$HOST-auth-export" --cdp http://127.0.0.1:9222 \
   state save "$temporary_dir/full.json"
 jq -e --arg host "$HOST" --arg origin "$ORIGIN" '{

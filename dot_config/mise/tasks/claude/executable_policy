@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#MISE description="Update Claude project MCP policy"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE flag "--trust" help="Trust the canonical repository root"
+set -Eeuo pipefail
+
+exec bun "${MISE_TASK_DIR?}/.policy.ts"

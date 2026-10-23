@@ -46,7 +46,12 @@ if [[ -r "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]
 	bindkey -M viins '^ ' autosuggest-accept
 fi
 
-command -v atuin >/dev/null && eval "$(atuin init zsh --disable-up-arrow)"
+if command -v atuin >/dev/null; then
+	eval "$(atuin init zsh --disable-up-arrow)"
+	ZSH_AUTOSUGGEST_STRATEGY=(atuin completion)
+else
+	ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+fi
 
 # Syntax highlighting must follow all widget definitions.
 [[ ! -r "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] ||

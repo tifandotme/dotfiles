@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#MISE description="Run GitHub CLI or extract the Helium session token"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+set -Eeuo pipefail
+
+exec bun "${MISE_TASK_DIR?}/.gh.ts" "$@"

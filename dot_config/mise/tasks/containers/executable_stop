@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#MISE description="Stop all Docker containers, optionally stopping Colima"
+#MISE dir="{{cwd}}"
+#MISE quiet=true
+#MISE raw=true
+#USAGE flag "-c --stop-colima" help="Stop Colima after stopping containers"
+set -Eeuo pipefail
+
+containers=$(docker ps -aq)
+
+if [[ -n $containers ]]; then
+	while IFS= read -r container; do
+		docker stop "$container"
+	done <<<"$containers"
+fi
+
+if [[ ${usage_stop_colima:-false} == true ]]; then
+	colima stop
+fi

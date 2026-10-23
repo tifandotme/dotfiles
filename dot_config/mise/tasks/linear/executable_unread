@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+#MISE description="Show Linear unread counts"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE flag "--account <account>" default="all" { choices "personal" "work" "all" }
+#USAGE flag "--json" help="Print JSON"
+# shellcheck disable=SC2016
+set -Eeuo pipefail
+# shellcheck source=dot_config/mise/tasks/linear/dot_api.sh
+source "${MISE_TASK_DIR?}/.api.sh"
+
+account=${usage_account?}
+if [[ $account != all ]]; then
+	result=$(account_count "$account")
+	status=$("$JQ_BIN" -r '.status' <<<"$result")
+	if [[ ${usage_json:-false} == true ]]; then
+		printf '%s\n' "$result"
+		exit 0
+	fi
+	[[ $status == ok ]] || {
+		printf 'linear: %s account is %s\n' "$account" "$status" >&2
+		exit 1
+	}
+	printf '%s unread: %s\n' "$account" "$("$JQ_BIN" -r '.count' <<<"$result")"
+	exit 0
+fi
+personal=$(account_count personal)
+work=$(account_count work)
+result=$("$JQ_BIN" -cn --argjson personal "$personal" --argjson work "$work" '
+  {personal:$personal, work:$work,
+   total:(($personal.count // 0) + ($work.count // 0)),
+   complete:($personal.status == "ok" and $work.status == "ok")}
+')
+if [[ ${usage_json:-false} == true ]]; then
+	printf '%s\n' "$result"
+else
+	for account in personal work; do
+		status=$("$JQ_BIN" -r --arg account "$account" '.[$account].status' <<<"$result")
+		printf '%s unread: ' "$account"
+		if [[ $status == ok ]]; then
+			"$JQ_BIN" -r --arg account "$account" '.[$account].count' <<<"$result"
+		else
+			printf '%s\n' "$status"
+		fi
+	done
+	printf 'Known total: %s\n' "$("$JQ_BIN" -r '.total' <<<"$result")"
+fi

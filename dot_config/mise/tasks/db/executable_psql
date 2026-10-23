@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+#MISE description="Run psql with a gcloud IAM access token"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE arg "<entry>" help="Connection catalog key"
+#USAGE complete "entry" run="jq -r '.connections | keys[]' \"${MISE_CONFIG_DIR:-$HOME/.config/mise}/db-connections.json\""
+#USAGE arg "[psql_args]" var=#true double_dash="required" help="Arguments passed unchanged to psql after --"
+set -Eeuo pipefail
+
+entry=${usage_entry?}
+shift
+if [[ "${1:-}" == "--" ]]; then
+	shift
+fi
+
+config_dir="${MISE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/mise}"
+catalog="$config_dir/db-connections.json"
+if [[ ! -r "$catalog" ]]; then
+	echo "DB connection catalog is missing: $catalog" >&2
+	exit 1
+fi
+
+if ! connection=$(jq -c --arg key "$entry" '.connections[$key] // empty' "$catalog"); then
+	connection=""
+fi
+if [[ -z "$connection" ]]; then
+	echo "Unknown DB entry: $entry" >&2
+	jq -r '.connections | keys[] | "  " + .' "$catalog" >&2
+	exit 1
+fi
+
+field() {
+	jq -r --arg name "$1" '.[$name] // "" | tostring' <<<"$connection"
+}
+
+auth=$(field auth)
+if [[ "$auth" != "gcloud-iam" ]]; then
+	echo "Unsupported authentication for $entry: $auth" >&2
+	exit 1
+fi
+
+host=$(field host)
+port=$(field port)
+database=$(field database)
+user=$(field user)
+sslmode=$(field sslmode)
+tunnel_task=$(field tunnel_task)
+account=$(jq -r '.gcloud_account // ""' "$catalog")
+
+if [[ ! "$port" =~ ^[0-9]+$ ]]; then
+	echo "Invalid port for DB entry $entry: $port" >&2
+	exit 1
+fi
+
+if ! lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
+	echo "Tunnel port $port is not listening ($tunnel_task)" >&2
+	echo "Run: mise run db:tunnel:all" >&2
+	exit 1
+fi
+
+psql_bin=$(command -v psql || true)
+if [[ -z "$psql_bin" ]] && command -v brew >/dev/null 2>&1; then
+	libpq_prefix=$(brew --prefix libpq 2>/dev/null || true)
+	if [[ -n "$libpq_prefix" && -x "$libpq_prefix/bin/psql" ]]; then
+		psql_bin="$libpq_prefix/bin/psql"
+	fi
+fi
+if [[ -z "$psql_bin" ]]; then
+	echo "psql is not on PATH and was not found under Homebrew's libpq prefix" >&2
+	exit 127
+fi
+
+if [[ -z "$account" ]]; then
+	echo "The DB connection catalog has no gcloud_account" >&2
+	exit 1
+fi
+if [[ "$user" != "$account" ]]; then
+	echo "DB IAM user and gcloud account do not match for $entry" >&2
+	exit 1
+fi
+
+token=$(gcloud auth print-access-token --account "$account")
+if [[ -z "$token" ]]; then
+	echo "gcloud returned an empty access token for $account" >&2
+	exit 1
+fi
+
+export PGPASSWORD="$token"
+export PGHOST="$host"
+export PGPORT="$port"
+export PGDATABASE="$database"
+export PGUSER="$user"
+export PGSSLMODE="$sslmode"
+unset token connection
+
+exec "$psql_bin" "$@"

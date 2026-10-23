@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#MISE description="Apply chezmoi changes from a popup"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+set -uo pipefail
+
+chezmoi apply
+result=$?
+
+printf '\nPress any key to close...'
+read -r -n 1 || true
+
+exit "$result"

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#MISE description="Review and prune missing Git worktree registrations"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE arg "[repo]" help="Repository to check; omit to scan known projects"
+set -Eeuo pipefail
+
+if [[ -n ${usage_repo:-} ]]; then
+	exec bun "${MISE_TASK_DIR?}/.open.ts" _prune "$usage_repo"
+fi
+exec bun "${MISE_TASK_DIR?}/.open.ts" _prune

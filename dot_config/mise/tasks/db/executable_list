@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#MISE description="List database connection metadata"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE flag "-h --help" help="Print help"
+set -Eeuo pipefail
+
+config_dir="${MISE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/mise}"
+catalog="$config_dir/db-connections.json"
+
+if [[ ! -r "$catalog" ]]; then
+	echo "DB connection catalog is missing: $catalog" >&2
+	exit 1
+fi
+
+jq . "$catalog"

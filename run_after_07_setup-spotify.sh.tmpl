@@ -7,10 +7,10 @@ if [[ -f "$token_file" ]]; then
 fi
 
 if [[ ! -t 0 || ! -t 1 ]]; then
-	printf '%s\n' 'Spotify token is missing. Run ~/.local/bin/spotify-login in an interactive terminal.' >&2
+	printf '%s\n' 'Spotify token is missing. Run mise run spotify:login in an interactive terminal.' >&2
 	exit 0
 fi
 
-if ! "$HOME/.local/bin/spotify-login"; then
-	printf '%s\n' 'Spotify setup did not complete; rerun chezmoi apply or ~/.local/bin/spotify-login later.' >&2
+if ! mise run --quiet --raw spotify:login; then
+	printf '%s\n' 'Spotify setup did not complete; rerun chezmoi apply or mise run spotify:login later.' >&2
 fi

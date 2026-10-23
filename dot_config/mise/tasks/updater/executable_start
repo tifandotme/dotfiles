@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#MISE description="Upgrade installed tools"
+#MISE dir="{{cwd}}"
+#MISE quiet=true
+#MISE raw=true
+#USAGE flag "-h --help" help="Print help"
+set -uo pipefail
+
+available() { command -v "$1" >/dev/null 2>&1; }
+
+step() {
+	local label=$1
+	shift
+
+	printf '\n==> %s\n' "$label"
+	if ! "$@"; then
+		printf 'Skipping failed step: %s\n' "$label" >&2
+		failed=1
+	fi
+}
+
+failed=0
+
+available brew && step 'Homebrew packages' env HOMEBREW_NO_ASK=1 brew upgrade
+
+if available mise; then
+	ruby_before=$(mise where ruby 2>/dev/null || true)
+	step 'mise tools' mise upgrade --yes
+	ruby_after=$(mise where ruby 2>/dev/null || true)
+
+	if [[ -n $ruby_before && -n $ruby_after && $ruby_before != "$ruby_after" ]] && mise list | grep -q '^[[:space:]]*gem:'; then
+		step 'Reinstall gem tools after Ruby changed' mise install -f 'gem:*'
+	fi
+fi
+
+available uv && step 'uv tools' uv tool upgrade --all
+available gh && step 'GitHub extensions' gh extension upgrade --all
+
+if available ya; then
+	step 'Yazi packages' ya pkg upgrade
+	available chezmoi && step 'Sync Yazi package.toml' chezmoi add "$HOME/.config/yazi/package.toml"
+fi
+
+available bun && step 'Bun global packages' bun update --global --latest
+available bunx && step 'Agent skills' bunx skills update -g
+available pi && step 'Pi and installed packages' pi update --all
+available nvim && step 'Neovim packages' nvim --headless -c 'lua vim.pack.update(nil, { force = true })' -c 'qa!'
+
+if [[ $(uname -s) == Darwin ]]; then
+	for instance in agents work extra; do
+		step "Helium ($instance)" mise run --quiet --raw helium:setup "$instance"
+	done
+fi
+
+exit "$failed"

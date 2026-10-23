@@ -1,0 +1,564 @@
+import { createHash } from "node:crypto";
+import {
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  realpathSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
+import { homedir } from "node:os";
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import { spawnSync } from "node:child_process";
+
+export function run(args: string[], cwd?: string, data?: string) {
+  const result = spawnSync(args[0]!, args.slice(1), {
+    cwd,
+    input: data,
+    encoding: "utf8",
+    stdio: [data === undefined ? "ignore" : "pipe", "pipe", "pipe"],
+  });
+  return {
+    returncode: result.status ?? 127,
+    stdout: result.stdout ?? "",
+    stderr: result.stderr || result.error?.message || "",
+  };
+}
+
+export function git(path: string, ...args: string[]) {
+  return run(["git", "-C", path, ...args]);
+}
+
+function resolved(path: string) {
+  try {
+    return realpathSync(path);
+  } catch {
+    return resolve(path);
+  }
+}
+
+function projectsRoot() {
+  return resolved(process.env.XDG_PROJECTS_DIR ?? join(homedir(), "projects"));
+}
+
+export function inside(path: string, base: string) {
+  const part = relative(base, path);
+  return part !== ".." && !part.startsWith(`..${sep}`) && !isAbsolute(part);
+}
+
+function directories(base: string): string[] {
+  if (!existsSync(base)) return [];
+  return readdirSync(base)
+    .filter((name) => !name.startsWith("."))
+    .map((name) => join(base, name))
+    .filter((path) => existsSync(path) && statSync(path).isDirectory());
+}
+
+export function projectDirs(root = projectsRoot()) {
+  return ["personal", "work"]
+    .flatMap((group) =>
+      directories(join(root, group)).flatMap((path) =>
+        basename(path).startsWith("@") ? directories(path) : [path],
+      ),
+    )
+    .sort();
+}
+
+interface Worktree {
+  path: string;
+  branch: string;
+  locked: boolean;
+}
+
+export function inventory(path: string): Worktree[] {
+  const result = git(path, "worktree", "list", "--porcelain", "-z");
+  if (result.returncode) return [];
+  const trees: Worktree[] = [];
+  for (const field of result.stdout.split("\0")) {
+    const last = trees.at(-1);
+    if (field.startsWith("worktree "))
+      trees.push({ path: field.slice(9), branch: "(detached)", locked: false });
+    else if (last && field.startsWith("branch refs/heads/")) last.branch = field.slice(18);
+    else if (last && (field === "locked" || field.startsWith("locked "))) last.locked = true;
+  }
+  return trees;
+}
+
+export function groupFor(project: string, root = projectsRoot()) {
+  return ["personal", "work"]
+    .map((group) => join(root, group))
+    .find((base) => inside(resolved(project), base));
+}
+
+export function newPath(project: string, branch: string, root = projectsRoot()) {
+  const group = groupFor(project, root);
+  return group ? join(group, `${basename(project)}-${branch.replaceAll("/", "-")}`) : undefined;
+}
+
+export function lexists(path: string) {
+  try {
+    lstatSync(path);
+    return true;
+  } catch (error) {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") return false;
+    throw error;
+  }
+}
+
+interface HerdrEntry {
+  path: string | undefined;
+  open_workspace_id: string | undefined;
+  workspace_id: string | undefined;
+  agent_status: string | undefined;
+  name: string | undefined;
+  agent: string | undefined;
+  worktree: { repo_key: string | undefined; checkout_path: string | undefined } | undefined;
+}
+
+function record(value: unknown): Record<string, unknown> {
+  if (!value || typeof value !== "object" || Array.isArray(value))
+    throw new Error("Expected an object");
+  return value as Record<string, unknown>;
+}
+
+function optionalString(value: unknown): string | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value !== "string") throw new Error("Expected a string");
+  return value;
+}
+
+export function herdrList(
+  kind: "worktree" | "workspace" | "agent",
+  ...args: string[]
+): HerdrEntry[] {
+  const result = run(["herdr", kind, "list", ...args]);
+  if (result.returncode) throw new Error(result.stderr || "Herdr unavailable");
+  const values: unknown = record(record(JSON.parse(result.stdout)).result)[`${kind}s`];
+  if (!Array.isArray(values)) throw new Error("Expected a Herdr list");
+  return values.map((value: unknown) => {
+    const entry = record(value);
+    const tree = entry.worktree == null ? undefined : record(entry.worktree);
+    return {
+      path: optionalString(entry.path),
+      open_workspace_id: optionalString(entry.open_workspace_id),
+      workspace_id: optionalString(entry.workspace_id),
+      agent_status: optionalString(entry.agent_status),
+      name: optionalString(entry.name),
+      agent: optionalString(entry.agent),
+      worktree: tree
+        ? {
+            repo_key: optionalString(tree.repo_key),
+            checkout_path: optionalString(tree.checkout_path),
+          }
+        : undefined,
+    };
+  });
+}
+
+function relativeHome(path: string) {
+  return path.startsWith(homedir() + sep) ? "~/" + path.slice(homedir().length + 1) : path;
+}
+
+function rows() {
+  const seen = new Set<string>();
+  const entries: string[] = [];
+  for (const candidate of projectDirs()) {
+    const trees = inventory(candidate);
+    const project = trees[0]?.path;
+    if (!project || seen.has(project)) continue;
+    seen.add(project);
+    entries.push(
+      ["create", project, project, "", `\x1b[1;36m${basename(project)}\x1b[0m`].join("\t"),
+    );
+    const existing = trees.slice(1).filter((tree) => existsSync(tree.path));
+    existing.forEach((tree, index) => {
+      const display = `${index === existing.length - 1 ? "└─" : "├─"}  \x1b[1;32m${tree.branch}\x1b[0m  ${relativeHome(tree.path)}`;
+      entries.push(["worktree", project, tree.path, tree.branch, display].join("\t"));
+    });
+  }
+  return entries;
+}
+
+interface PullRequest {
+  number: number;
+  title: string;
+  state: string;
+  isDraft: boolean;
+  baseRefName: string;
+  url?: string | undefined;
+  statusCheckRollup: {
+    conclusion?: string | undefined;
+    state?: string | undefined;
+    status?: string | undefined;
+  }[];
+}
+
+function parsePrs(text: string): PullRequest[] {
+  const values: unknown = JSON.parse(text);
+  if (!Array.isArray(values)) throw new Error("Expected a PR list");
+  return values.map((value: unknown) => {
+    const pr = record(value);
+    if (
+      typeof pr.number !== "number" ||
+      typeof pr.isDraft !== "boolean" ||
+      typeof pr.title !== "string" ||
+      typeof pr.state !== "string" ||
+      typeof pr.baseRefName !== "string"
+    )
+      throw new Error("Invalid PR");
+    const checks: unknown = pr.statusCheckRollup ?? [];
+    if (!Array.isArray(checks)) throw new Error("Invalid PR checks");
+    return {
+      number: pr.number,
+      title: pr.title,
+      state: pr.state,
+      isDraft: pr.isDraft,
+      baseRefName: pr.baseRefName,
+      url: optionalString(pr.url),
+      statusCheckRollup: checks.map((value: unknown) => {
+        const check = record(value);
+        return {
+          conclusion: optionalString(check.conclusion),
+          state: optionalString(check.state),
+          status: optionalString(check.status),
+        };
+      }),
+    };
+  });
+}
+
+function preview(kind: string, path: string, branch: string) {
+  console.log(
+    `Enter: ${kind === "worktree" ? "open and focus this worktree" : "choose a branch and create its worktree"}\n`,
+  );
+  const status = git(path, "status", "--short");
+  console.log("Git: " + (status.returncode ? "unavailable" : status.stdout.trim() || "clean"));
+  if (kind !== "worktree") return;
+  const key = createHash("sha256")
+    .update(path + "\n" + branch)
+    .digest("hex");
+  const cache = join(
+    process.env.XDG_CACHE_HOME ?? join(homedir(), ".cache"),
+    "open-project",
+    key + ".json",
+  );
+  let prs: PullRequest[];
+  try {
+    if (Date.now() - statSync(cache).mtimeMs >= 60_000) throw new Error("expired");
+    prs = parsePrs(readFileSync(cache, "utf8"));
+  } catch {
+    const result = run(
+      [
+        "gh",
+        "pr",
+        "list",
+        "--head",
+        branch,
+        "--state",
+        "all",
+        "--limit",
+        "30",
+        "--json",
+        "number,title,state,isDraft,baseRefName,statusCheckRollup,url",
+      ],
+      path,
+    );
+    if (result.returncode) {
+      console.log("\nPR: unavailable");
+      return;
+    }
+    prs = parsePrs(result.stdout);
+    try {
+      mkdirSync(dirname(cache), { recursive: true });
+      writeFileSync(cache, JSON.stringify(prs));
+    } catch {
+      /* Cache writes are optional. */
+    }
+  }
+  console.log(prs.length ? `\nPRs: ${prs.length}` : "\nPR: none");
+  for (const pr of prs.sort((a, b) => Number(a.state !== "OPEN") - Number(b.state !== "OPEN"))) {
+    const number = pr.url ? `\x1b]8;;${pr.url}\x07#${pr.number}\x1b]8;;\x07` : `#${pr.number}`;
+    console.log(`${number}  ${pr.state}  -> ${pr.baseRefName}${pr.isDraft ? "  DRAFT" : ""}`);
+    console.log("  " + pr.title);
+    if (pr.state !== "OPEN") continue;
+    const counts = { passed: 0, failed: 0, pending: 0 };
+    for (const check of pr.statusCheckRollup) {
+      const state = (check.conclusion || check.state || check.status || "").toUpperCase();
+      if (["SUCCESS", "NEUTRAL", "SKIPPED"].includes(state)) counts.passed++;
+      else if (["FAILURE", "ERROR", "CANCELLED", "TIMED_OUT", "ACTION_REQUIRED"].includes(state))
+        counts.failed++;
+      else counts.pending++;
+    }
+    console.log(
+      "  Checks: " +
+        (Object.entries(counts)
+          .filter(([, n]) => n)
+          .map(([kind, n]) => `${n} ${kind}`)
+          .join(", ") || "none"),
+    );
+  }
+}
+
+function dialog(header: string, options = ["Back"]) {
+  const result = run(
+    [
+      "fzf",
+      "--ansi",
+      "--style",
+      "minimal",
+      "--border",
+      "none",
+      "--layout",
+      "reverse-list",
+      "--info",
+      "hidden",
+      "--no-scrollbar",
+      "--no-input",
+      "--header",
+      header,
+      "--header-first",
+    ],
+    undefined,
+    options.join("\n"),
+  );
+  return result.returncode ? "" : result.stdout.trim();
+}
+
+function busy(agents: HerdrEntry[], workspace: string) {
+  return agents.some(
+    (agent) =>
+      agent.workspace_id === workspace && ["working", "blocked"].includes(agent.agent_status ?? ""),
+  );
+}
+
+function closeTree(kind: string, project: string, path: string) {
+  let reason: string | undefined;
+  if (process.env.HERDR_ENV !== "1") reason = "Worktree actions require a Herdr-managed pane.";
+  else if (kind !== "worktree") reason = "Only existing worktrees can be closed.";
+  else {
+    const status = git(path, "status", "--porcelain", "--ignored");
+    const branch = git(path, "branch", "--show-current");
+    const defaultBranch = git(
+      project,
+      "symbolic-ref",
+      "--quiet",
+      "--short",
+      "refs/remotes/origin/HEAD",
+    );
+    if (status.returncode || status.stdout.trim())
+      reason = "Cannot close a dirty, ignored-file-containing, or unreadable worktree.";
+    else if (branch.returncode || !branch.stdout.trim())
+      reason = "Cannot close a detached or unidentifiable worktree.";
+    else if (defaultBranch.returncode || !defaultBranch.stdout.trim())
+      reason = "Cannot confirm the default branch. Set origin/HEAD before cleanup.";
+    else if (
+      git(project, "merge-base", "--is-ancestor", branch.stdout.trim(), defaultBranch.stdout.trim())
+        .returncode
+    )
+      reason = "Cannot close a branch that is not merged into the default branch.";
+  }
+  let workspace: string | undefined;
+  if (!reason) {
+    try {
+      const tree = herdrList("worktree", "--cwd", path).find((tree) => tree.path === path);
+      if (!tree) throw new Error("Missing worktree");
+      workspace = tree.open_workspace_id ?? undefined;
+      if (workspace && busy(herdrList("agent"), workspace))
+        reason = "Cannot close a worktree while an agent is working or blocked.";
+    } catch {
+      reason = "Cannot verify the Herdr workspace for this worktree.";
+    }
+  }
+  if (reason) dialog(reason);
+  else if (dialog("Close worktree?", ["No", "Yes"]) === "Yes") {
+    const result = workspace
+      ? run(["herdr", "worktree", "remove", "--workspace", workspace])
+      : git(project, "worktree", "remove", path);
+    if (result.returncode) dialog(result.stderr.trim() || "Could not close worktree.");
+  }
+}
+
+export function prune(project?: string) {
+  const repos = new Map<string, string>();
+  for (const path of project ? [project] : projectDirs()) {
+    const result = git(path, "rev-parse", "--path-format=absolute", "--git-common-dir");
+    if (!result.returncode) repos.set(result.stdout.trim(), path);
+  }
+  if (!repos.size) {
+    console.error("Run this inside a Git repository or pass its path.");
+    return;
+  }
+  const stale: string[] = [];
+  for (const path of repos.values()) {
+    const result = git(path, "worktree", "prune", "--dry-run", "--verbose");
+    const lines = (result.stdout + result.stderr).trim();
+    if (lines && !result.returncode) {
+      stale.push(path);
+      console.log(
+        "Git worktree registrations whose folder is gone:\n  " +
+          relativeHome(path) +
+          "\n    " +
+          lines.replaceAll("\n", "\n    "),
+      );
+    }
+  }
+  const closable: string[] = [];
+  let found = false;
+  try {
+    const workspaces = herdrList("workspace"),
+      agents = herdrList("agent");
+    for (const ws of workspaces) {
+      const tree = ws.worktree;
+      if (
+        !tree?.repo_key ||
+        !repos.has(tree.repo_key) ||
+        !tree.checkout_path ||
+        existsSync(tree.checkout_path) ||
+        !ws.workspace_id
+      )
+        continue;
+      found = true;
+      const here = agents.filter((agent) => agent.workspace_id === ws.workspace_id);
+      const isBusy = busy(here, ws.workspace_id);
+      console.log(
+        isBusy
+          ? "Skipped, an agent is working or blocked:"
+          : "Herdr workspace whose folder is gone (closing stops its agents):",
+      );
+      console.log(
+        `  ${ws.workspace_id}  ${relativeHome(tree.checkout_path)}  ${here.map((agent) => `${agent.name || agent.agent || "agent"} (${agent.agent_status})`).join(", ")}`,
+      );
+      if (!isBusy) closable.push(ws.workspace_id);
+    }
+  } catch {
+    /* Git previews still work when Herdr is unavailable. */
+  }
+  if (!stale.length && !found) console.log("Nothing to prune.");
+  if (!stale.length && !closable.length) return;
+  if (!process.stdin.isTTY) {
+    console.log("No terminal to confirm; nothing changed.");
+    return;
+  }
+  if (!["y", "yes"].includes((prompt("Prune these? [y/N] ") ?? "").trim().toLowerCase())) return;
+  for (const path of stale) {
+    const result = git(path, "worktree", "prune");
+    if (result.returncode) console.error(result.stderr);
+  }
+  for (const workspace of closable) {
+    // Recheck busy state immediately before stopping agents.
+    if (busy(herdrList("agent"), workspace)) continue;
+    const result = run(["herdr", "workspace", "close", workspace]);
+    if (result.returncode) console.error(result.stderr);
+  }
+}
+
+function quote(value: string) {
+  return "'" + value.replaceAll("'", "'\"'\"'") + "'";
+}
+
+function picker(query = "") {
+  const entries = rows();
+  if (!entries.length) {
+    console.log("No Git projects found.");
+    return;
+  }
+  const callback = `${quote(process.execPath)} ${quote(import.meta.path)}`;
+  const result = run(
+    [
+      "fzf",
+      "--ansi",
+      "--delimiter",
+      "\t",
+      "--with-nth",
+      "5",
+      "--no-sort",
+      "--layout",
+      "reverse-list",
+      "--prompt",
+      "worktree> ",
+      "--footer",
+      "Enter open/create  •  Ctrl-X close  •  Esc cancel",
+      "--bind",
+      `ctrl-x:execute(${callback} _close {1} {2} {3})+reload(${callback} _rows)`,
+      "--preview",
+      `${callback} _preview {1} {3} {4}`,
+      "--preview-window",
+      "right:45%",
+      "--preview-label",
+      " details ",
+      "--query",
+      query,
+    ],
+    undefined,
+    entries.join("\n"),
+  );
+  if (result.returncode || !result.stdout.trim()) return;
+  const [kind, project, selectedPath] = result.stdout.split("\n")[0]!.split("\t");
+  if (!kind || !project || !selectedPath) throw new Error("Invalid picker row");
+  if (process.env.HERDR_ENV !== "1") {
+    console.error("Worktree actions require a Herdr-managed pane.");
+    return;
+  }
+  let action;
+  if (kind === "worktree")
+    action = run([
+      "herdr",
+      "worktree",
+      "open",
+      "--cwd",
+      project,
+      "--path",
+      selectedPath,
+      "--focus",
+    ]);
+  else {
+    const branch = (prompt("New branch name: ") ?? "").trim();
+    const valid = git(project, "check-ref-format", "--branch", branch);
+    if (!branch || valid.returncode || valid.stdout.trim() !== branch) {
+      console.error("Invalid branch name: " + branch);
+      return;
+    }
+    const path = newPath(project, branch);
+    if (!path || lexists(path)) {
+      console.error("Unsupported project group or worktree path already exists: " + path);
+      return;
+    }
+    action = run([
+      "herdr",
+      "worktree",
+      "create",
+      "--cwd",
+      project,
+      "--branch",
+      branch,
+      "--path",
+      path,
+      "--focus",
+    ]);
+  }
+  if (action.returncode) console.error(action.stderr || "Herdr action failed.");
+}
+
+function main(args: string[]) {
+  const [command, ...rest] = args;
+  if (command === "_rows") console.log(rows().join("\n"));
+  else if (command === "_preview" || command === "_close") {
+    const [first, second, third] = rest;
+    if (first === undefined || second === undefined || third === undefined)
+      throw new Error("Missing callback arguments");
+    if (command === "_preview") preview(first, second, third);
+    else closeTree(first, second, third);
+  } else if (command === "_prune") prune(rest[0]);
+  else picker(command);
+}
+
+if (import.meta.main) {
+  try {
+    main(process.argv.slice(2));
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exitCode = 1;
+  }
+}

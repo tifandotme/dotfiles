@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#MISE description="Pick and open a local PDF or EPUB"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+set -Eeuo pipefail
+
+books=$HOME/personal/books
+
+[[ -d $books ]] || {
+	printf '%s\n' 'No books found.'
+	exit 0
+}
+
+IFS= read -r -d '' chosen < <(cd "$books" && find . -type f \( -iname '*.pdf' -o -iname '*.epub' \) -print0 | fzf --read0 --print0) || exit 0
+
+if [[ $(uname -s) == Darwin ]]; then
+	exec open "$books/$chosen"
+else
+	exec xdg-open "$books/$chosen"
+fi
