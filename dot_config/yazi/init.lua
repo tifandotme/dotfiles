@@ -1,7 +1,7 @@
 require("starship"):setup()
 require("full-border"):setup {
-  -- Available values: ui.Border.PLAIN, ui.Border.ROUNDED
-  type = ui.Border.PLAIN,
+  -- Available values: "plain", "rounded"
+  set = "plain",
 }
 require("git"):setup {
   order = 1500,
