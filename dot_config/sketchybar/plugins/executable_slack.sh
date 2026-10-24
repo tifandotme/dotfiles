@@ -34,6 +34,7 @@ if [ "$USE_SIMPLE_INDICATOR" = true ]; then
 			icon.font="sketchybar-app-font:Regular:12.0" \
 			label="" \
 			icon.color="${ACCENT}" \
+			label.color="${FOREGROUND}" \
 			drawing=on
 	else
 		"$sketchybar_bin" --set "$NAME" \
@@ -41,6 +42,7 @@ if [ "$USE_SIMPLE_INDICATOR" = true ]; then
 			icon.font="sketchybar-app-font:Regular:12.0" \
 			label="" \
 			icon.color="${ACCENT}" \
+			label.color="${FOREGROUND}" \
 			drawing=on
 	fi
 else
@@ -52,6 +54,7 @@ else
 			icon.font="sketchybar-app-font:Regular:12.0" \
 			label="$BADGE_NUMBER" \
 			icon.color="${ACCENT}" \
+			label.color="${FOREGROUND}" \
 			drawing=on
 	else
 		"$sketchybar_bin" --set "$NAME" \
@@ -59,6 +62,7 @@ else
 			icon.font="sketchybar-app-font:Regular:12.0" \
 			label="0" \
 			icon.color="${ACCENT}" \
+			label.color="${FOREGROUND}" \
 			drawing=on
 	fi
 fi

@@ -16,6 +16,8 @@ bar=(
 )
 sketchybar --bar "${bar[@]}"
 
+# Widget style contract: normal icons use ACCENT and labels use FOREGROUND.
+# Scripts must reset every overridden color on later state transitions.
 default=(
 	label.font="SF Mono:Semibold:12.5"
 
@@ -93,6 +95,7 @@ sketchybar --add item spotify center \
 	--set spotify \
 	"${GHOST[@]}" \
 	icon="􀑪" \
+	label.max_chars=40 \
 	update_freq=5 \
 	script="$PLUGIN_DIR/spotify.sh" \
 	--subscribe spotify spotify_update
@@ -230,7 +233,7 @@ sketchybar --add item caffeinate right \
 	--set caffeinate \
 	icon="􀴽" \
 	"${GHOST[@]}" \
-	icon.color="${FOREGROUND}" \
+	icon.color="${ACCENT}" \
 	icon.padding_right=0 \
 	script="$PLUGIN_DIR/caffeinate.sh" \
 	--subscribe caffeinate caffeinate_toggle
@@ -246,4 +249,5 @@ sketchybar --add item aerospace_mode right \
 
 # ------------------------------------------------------------------------------
 
+sketchybar --move spotify before calendar
 sketchybar --update

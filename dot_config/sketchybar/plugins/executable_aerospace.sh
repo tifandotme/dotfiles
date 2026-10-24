@@ -13,9 +13,11 @@ if [ "${apps}" != "" ]; then
   done <<<"${apps}"
 fi
 
+# Workspace labels are app-icon strips, so their unfocused color stays ACCENT.
 if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
   sketchybar --set "$NAME" \
     background.color="${ACCENT}" \
+    background.drawing=on \
     icon.color="${BACKGROUND}" \
     icon.font.style="Bold" \
     icon="$(echo "$1" | cut -d'_' -f1)" \
@@ -26,6 +28,7 @@ if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
 else
   sketchybar --set "$NAME" \
     background.color="${TRANSPARENT}" \
+    background.drawing=off \
     icon.color="${ACCENT}" \
     icon.font.style="Bold" \
     icon="$(echo "$1" | cut -d'_' -f1)" \

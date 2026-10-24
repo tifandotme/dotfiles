@@ -34,12 +34,13 @@ counts="$("$mise_bin" run --quiet --raw linear:unread --account work --json 2>/d
 status="$("$jq_bin" -r '.status' <<<"$counts")"
 count="$("$jq_bin" -r '.count // 0' <<<"$counts")"
 
-status_color="$ACCENT"
+icon_color="$ACCENT"
+label_color="$FOREGROUND"
 if [[ "$status" != ok ]]; then
-	status_color="$WARNING"
+	icon_color="$WARNING"
+	label_color="$WARNING"
 	label="?"
 elif ((count > 0)); then
-	status_color="$ACCENT"
 	label="$count"
 else
 	label="0"
@@ -49,6 +50,6 @@ fi
 	icon=":linear:" \
 	icon.font="sketchybar-app-font:Regular:12.0" \
 	label="$label" \
-	icon.color="$status_color" \
-	label.color="$status_color" \
+	icon.color="$icon_color" \
+	label.color="$label_color" \
 	drawing=on
