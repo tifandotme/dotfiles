@@ -10,6 +10,8 @@ scripts/
 .gitignore
 AGENTS.md
 CLAUDE.md
+.config/nvim/AGENTS.md
+.config/sketchybar/AGENTS.md
 .agents/AGENTS.content*
 .agents/AGENTS.shared*
 .agents/CLAUDE.shared*

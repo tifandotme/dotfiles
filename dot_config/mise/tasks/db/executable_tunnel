@@ -46,6 +46,12 @@ for key in "${entries[@]}"; do
 		continue
 	fi
 
+	if [[ -z "${authenticated:-}" ]]; then
+		# Reauthenticate once up front; parallel gcloud children would each prompt.
+		gcloud auth print-access-token --account "$account" >/dev/null
+		authenticated=1
+	fi
+
 	echo "localhost:$port ($key)" >&2
 	gcloud --account="$account" compute ssh "$instance" \
 		--project "$project" \

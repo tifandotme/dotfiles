@@ -1,3 +1,11 @@
 [tasks.machine-map]
 description = "Show which chezmoi files and rendered lines apply to each machine"
 run = "bun scripts/machine-map.ts"
+
+[tasks.check]
+description = "Render templates, lint shell and JSON, verify task references, and dry-run chezmoi apply"
+run = "bash scripts/check.sh"
+
+[tasks."check:task-refs"]
+description = "Fail when a tracked file runs a mise task that does not exist"
+run = "bash scripts/check-task-refs.sh"
