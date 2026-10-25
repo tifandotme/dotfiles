@@ -32,5 +32,9 @@ export default {
       match: (_url, { opener }) => opener?.bundleId === "com.tinyspeck.slackmacgap",
       browser: "net.imput.helium.work",
     },
+    {
+      match: (_url, { opener }) => opener?.bundleId === "com.anthropic.claudefordesktop.hadl",
+      browser: "net.imput.helium.work",
+    },
   ],
 };
