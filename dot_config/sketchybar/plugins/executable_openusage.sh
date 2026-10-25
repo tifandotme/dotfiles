@@ -6,14 +6,25 @@ source "$HOME/.config/theme/palette.sh"
 provider="${1:?provider is required}"
 metric="${2:?metric is required}"
 
-if ! command -v curl >/dev/null || ! command -v jq >/dev/null; then
+hide() {
 	sketchybar --set "$NAME" drawing=off
 	exit 0
+}
+
+# Hide while a Chromium browser shares the whole screen. Its tab title ends in
+# "Desktop content shared" (the floating "is sharing your screen" bar is not an
+# AeroSpace window).
+if command -v aerospace >/dev/null &&
+	aerospace list-windows --all --format '%{window-title}' 2>/dev/null | grep -Eqi 'desktop content shared|sharing your screen'; then
+	hide
+fi
+
+if ! command -v curl >/dev/null || ! command -v jq >/dev/null; then
+	hide
 fi
 
 usage="$(curl --connect-timeout 1 --max-time 2 --silent --show-error --fail "http://127.0.0.1:6736/v1/usage/$provider" 2>/dev/null)" || {
-	sketchybar --set "$NAME" drawing=off
-	exit 0
+	hide
 }
 
 metric_data="$(jq -r --arg label "$metric" '
@@ -29,8 +40,7 @@ metric_data="$(jq -r --arg label "$metric" '
 ' <<<"$usage")"
 IFS=$'\t' read -r used pace <<<"$metric_data"
 if [[ ! "$used" =~ ^[0-9]+([.][0-9]+)?$ ]] || [[ ! "$pace" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-	sketchybar --set "$NAME" drawing=off
-	exit 0
+	hide
 fi
 
 delta="$(awk -v used="$used" -v pace="$pace" 'BEGIN { print used - pace }')"

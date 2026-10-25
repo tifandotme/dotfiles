@@ -129,11 +129,59 @@ sketchybar --add item wifi right \
 	click_script="$PLUGIN_DIR/wifi.sh" \
 	--subscribe wifi wifi_change
 
+# Spacers inside the usage cluster follow the usage items: hidden while a
+# Chromium browser shares the whole screen, so no gap remains.
+SHARING_SPACER_SCRIPT='if aerospace list-windows --all --format "%{window-title}" 2>/dev/null | grep -Eqi "desktop content shared|sharing your screen"; then sketchybar --set "$NAME" drawing=off; else sketchybar --set "$NAME" drawing=on; fi'
+
+sketchybar --add item claude_hadl_extra right \
+	--set claude_hadl_extra \
+	background.drawing=off \
+	padding_left=0 \
+	update_freq=5 \
+	icon.drawing=off \
+	icon.width=0 \
+	icon.padding_left=0 \
+	icon.padding_right=0 \
+	script="$PLUGIN_DIR/claude_hadl.sh Extra"
+
+sketchybar --add item claude_hadl_weekly right \
+	--set claude_hadl_weekly \
+	background.drawing=off \
+	padding_left=0 \
+	label.padding_right=7 \
+	update_freq=5 \
+	icon.drawing=off \
+	icon.width=0 \
+	icon.padding_left=0 \
+	icon.padding_right=0 \
+	script="$PLUGIN_DIR/claude_hadl.sh Weekly"
+
+sketchybar --add item claude_hadl_session right \
+	--set claude_hadl_session \
+	background.drawing=off \
+	padding_left=0 \
+	label.padding_right=7 \
+	update_freq=5 \
+	icon=":claude:" \
+	icon.font="sketchybar-app-font:Regular:12.0" \
+	script="$PLUGIN_DIR/claude_hadl.sh Session"
+
+sketchybar --add item claude_hadl_spacer right \
+	--set claude_hadl_spacer \
+	background.drawing=off \
+	icon.drawing=off \
+	label.drawing=off \
+	padding_left=0 \
+	padding_right=0 \
+	width=5 \
+	update_freq=5 \
+	script="$SHARING_SPACER_SCRIPT"
+
 sketchybar --add item claude_weekly right \
 	--set claude_weekly \
 	background.drawing=off \
 	padding_left=0 \
-	update_freq=60 \
+	update_freq=5 \
 	icon.drawing=off \
 	icon.width=0 \
 	icon.padding_left=0 \
@@ -145,7 +193,7 @@ sketchybar --add item claude_session right \
 	background.drawing=off \
 	padding_left=0 \
 	label.padding_right=7 \
-	update_freq=60 \
+	update_freq=5 \
 	icon=":claude:" \
 	icon.font="sketchybar-app-font:Regular:12.0" \
 	script="$PLUGIN_DIR/openusage.sh claude Session"
@@ -157,13 +205,15 @@ sketchybar --add item claude_codex_spacer right \
 	label.drawing=off \
 	padding_left=0 \
 	padding_right=0 \
-	width=5
+	width=5 \
+	update_freq=5 \
+	script="$SHARING_SPACER_SCRIPT"
 
 sketchybar --add item codex_weekly right \
 	--set codex_weekly \
 	background.drawing=off \
 	padding_left=0 \
-	update_freq=60 \
+	update_freq=5 \
 	icon.drawing=off \
 	icon.width=0 \
 	icon.padding_left=0 \
@@ -175,7 +225,7 @@ sketchybar --add item codex_session right \
 	background.drawing=off \
 	padding_left=0 \
 	label.padding_right=7 \
-	update_freq=60 \
+	update_freq=5 \
 	icon=":openai:" \
 	icon.font="sketchybar-app-font:Regular:12.0" \
 	script="$PLUGIN_DIR/openusage.sh codex Session"
@@ -188,6 +238,12 @@ sketchybar --add bracket claude_usage claude_session claude_weekly \
 
 sketchybar --add bracket codex_usage codex_session codex_weekly \
 	--set codex_usage \
+	background.color="${BACKGROUND}" \
+	background.corner_radius=99 \
+	background.height=20
+
+sketchybar --add bracket claude_hadl_usage claude_hadl_session claude_hadl_weekly claude_hadl_extra \
+	--set claude_hadl_usage \
 	background.color="${BACKGROUND}" \
 	background.corner_radius=99 \
 	background.height=20
@@ -213,7 +269,9 @@ sketchybar --add item openusage_spacer right \
 	label.drawing=off \
 	padding_left=0 \
 	padding_right=0 \
-	width=5
+	width=5 \
+	update_freq=5 \
+	script="$SHARING_SPACER_SCRIPT"
 
 sketchybar --add item linear_notifications right \
 	--set linear_notifications \
