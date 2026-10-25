@@ -36,11 +36,6 @@
             "type": "command",
             "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-agent-state.sh\" session",
             "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-title-sync.sh\"",
-            "timeout": 10
           }
         ]
       },
@@ -60,18 +55,6 @@
           {
             "type": "command",
             "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-agent-state.sh\" session",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-title-sync.sh\"",
             "timeout": 10
           }
         ]
