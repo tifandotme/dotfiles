@@ -1,1 +1,7 @@
-{{- include "dot_config/claude/private_settings.json" -}}
+{{- $settings := include "dot_config/claude/private_settings.json" | fromJson -}}
+{{- $denied := list -}}
+{{- range list "Asana" "Atlassian" "Attio" "Box" "Canva" "Coda MCP" "Figma" "Gamma" "Granola" "HubSpot" "Intercom" "Jibble" "Lovable" "monday.com" "Notion" "Trello" "Whimsical" "Circleback" "Superhuman Mail" -}}
+{{- $denied = append $denied (dict "serverName" (printf "claude.ai %s" .)) -}}
+{{- end -}}
+{{- $_ := set $settings "deniedMcpServers" $denied -}}
+{{- toPrettyJson $settings }}

@@ -50,6 +50,7 @@ if [[ $(uname -s) == Darwin ]]; then
 	for instance in agents work extra; do
 		step "Helium ($instance)" mise run --quiet --raw helium:setup "$instance"
 	done
+	step 'Claude Hadl' mise run --quiet --raw claude:setup
 fi
 
 exit "$failed"

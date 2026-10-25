@@ -1,1 +1,1 @@
-{{- includeTemplate "dot_config/claude/CLAUDE.md.tmpl" . -}}
+{{- includeTemplate "dot_agents/CLAUDE.shared.md.tmpl" (merge (dict "claudeAccount" "hadl") .) -}}

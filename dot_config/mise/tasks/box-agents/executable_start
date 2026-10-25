@@ -33,7 +33,7 @@ if [[ $agent == amp || $agent == amp-hadl ]]; then
 else
 	command -v claude >/dev/null
 	# Keep Claude sessions inside tmux so Herdr sees tmux instead of Claude.
-	launch='exec mise exec -- bash -c '\''mise run --quiet --raw claude:policy && exec claude remote-control --permission-mode=bypassPermissions --spawn=same-dir --capacity=10 --no-chrome'\'''
+	launch='exec mise exec -- bash -c '\''exec claude remote-control --permission-mode=bypassPermissions --spawn=same-dir --capacity=10 --no-chrome'\'''
 fi
 # Refresh inherited mise selection in the launch directory, including when leaving Hadl.
 # shellcheck disable=SC2016

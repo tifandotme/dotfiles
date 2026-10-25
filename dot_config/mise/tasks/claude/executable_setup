@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+#MISE description="Create the isolated Claude Hadl desktop app"
+#MISE dir="{{cwd}}"
+#MISE quiet=true
+#MISE raw=true
+set -Eeuo pipefail
+
+readonly SOURCE_APP="${CLAUDE_APP_PATH:-/Applications/Claude.app}"
+readonly APP_PATH="${CLAUDE_HADL_APP_PATH:-$HOME/Applications/Claude Hadl.app}"
+readonly APP_NAME="Claude Hadl"
+# Electron finds its "Claude Helper" apps from CFBundleName, so only
+# CFBundleDisplayName changes. The launcher is a separate executable.
+readonly LAUNCHER_NAME="launcher"
+readonly BUNDLE_ID="com.anthropic.claudefordesktop.hadl"
+readonly USER_DATA_DIR="${CLAUDE_HADL_USER_DATA_DIR:-$HOME/Library/Application Support/Claude-Hadl}"
+readonly CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/claude-hadl"
+
+fail() {
+	printf '%s\n' "$1" >&2
+	exit 1
+}
+
+plist_value() {
+	/usr/libexec/PlistBuddy -c "Print :$2" "$1" 2>/dev/null
+}
+
+set_plist_value() {
+	/usr/libexec/PlistBuddy -c "Set :$2 $3" "$1" >/dev/null 2>&1 ||
+		/usr/libexec/PlistBuddy -c "Add :$2 string $3" "$1"
+}
+
+is_current() {
+	local source_plist="$SOURCE_APP/Contents/Info.plist"
+	local target_plist="$APP_PATH/Contents/Info.plist"
+	local executable
+
+	[[ -f "$target_plist" ]] || return 1
+	[[ "$(plist_value "$source_plist" CFBundleVersion)" == "$(plist_value "$target_plist" CFBundleVersion)" ]] || return 1
+	[[ "$(plist_value "$target_plist" CFBundleIdentifier)" == "$BUNDLE_ID" ]] || return 1
+
+	[[ "$(plist_value "$target_plist" CFBundleExecutable)" == "$LAUNCHER_NAME" ]] || return 1
+	executable="$APP_PATH/Contents/MacOS/$LAUNCHER_NAME"
+	[[ -x "$APP_PATH/Contents/MacOS/$(plist_value "$source_plist" CFBundleExecutable)" ]] || return 1
+	grep -Fq -- "$USER_DATA_DIR" "$executable" || return 1
+	grep -Fq -- "$CONFIG_DIR" "$executable" || return 1
+	codesign --verify --deep --strict "$APP_PATH" >/dev/null 2>&1
+}
+
+create_app() {
+	local plist executable name
+
+	pgrep -f -- "$APP_PATH/Contents/MacOS/" >/dev/null && fail "Quit $APP_NAME before recreating it"
+
+	mkdir -p "$(dirname "$APP_PATH")"
+	rm -rf "$APP_PATH"
+	cp -R "$SOURCE_APP" "$APP_PATH"
+
+	plist="$APP_PATH/Contents/Info.plist"
+	set_plist_value "$plist" CFBundleIdentifier "$BUNDLE_ID"
+	set_plist_value "$plist" CFBundleDisplayName "$APP_NAME"
+	# Keep claude:// and msauth:// callbacks with the personal app.
+	/usr/libexec/PlistBuddy -c 'Delete :CFBundleURLTypes' "$plist" >/dev/null 2>&1 || true
+
+	name="$(plist_value "$plist" CFBundleExecutable)"
+	executable="$APP_PATH/Contents/MacOS/$LAUNCHER_NAME"
+	set_plist_value "$plist" CFBundleExecutable "$LAUNCHER_NAME"
+	cat >"$executable" <<LAUNCHER
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+export CLAUDE_CONFIG_DIR="$CONFIG_DIR"
+mkdir -p "$USER_DATA_DIR"
+exec "\$(dirname "\$0")/$name" --user-data-dir="$USER_DATA_DIR" "\$@"
+LAUNCHER
+	chmod +x "$executable"
+
+	xattr -dr com.apple.FinderInfo "$APP_PATH"
+	codesign --force --deep --sign - "$APP_PATH" >/dev/null
+	/usr/bin/tccutil reset ScreenCapture "$BUNDLE_ID" >/dev/null 2>&1 || true
+	printf 'Created %s\n' "$APP_PATH"
+}
+
+main() {
+	[[ -d "$SOURCE_APP" ]] || fail "Claude app not found: $SOURCE_APP"
+	if is_current; then
+		printf 'Already current %s\n' "$APP_PATH"
+	else
+		create_app
+	fi
+}
+
+main "$@"

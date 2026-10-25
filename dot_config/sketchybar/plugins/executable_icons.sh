@@ -6,7 +6,8 @@
 # shellcheck disable=SC1091
 source "$CONFIG_DIR/external/sketchybar-app-font/dist/icon_map.sh"
 
-# The upstream map knows only "Helium"; clones use names like "Helium Work".
-__icon_map "${1/#Helium*/Helium}"
+# The upstream map knows only "Helium" and "Claude"; clones use names like "Helium Work".
+name="${1/#Helium*/Helium}"
+__icon_map "${name/#Claude Hadl/Claude}"
 
 echo "${icon_result:-}"

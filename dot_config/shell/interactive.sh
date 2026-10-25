@@ -101,15 +101,31 @@ nvimg() (
 
 gh() { command mise run --quiet --raw gh -- "$@"; }
 
-claude-trust() { command mise run --quiet --raw claude:policy --trust; }
-
 claude() {
 	case ${1:-} in
 	remote-control | rc) ;;
 	*) set -- --no-chrome "$@" ;;
 	esac
+	# shellcheck disable=SC2016
 	herdr-wrap "${PWD##*/} (claude)" command mise exec -- bash -c '
-		mise run --quiet --raw claude:policy || exit
+		if common=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null); then
+			root=$(dirname "$common")
+		else
+			root=$(pwd -P)
+		fi
+		config=${CLAUDE_CONFIG_DIR:-$HOME/.config/claude}/.claude.json
+		if [ -t 0 ] && [ -f "$config" ] &&
+			[ "$(jq -r --arg root "$root" ".projects[\$root].hasTrustDialogAccepted // false" "$config")" != true ]; then
+			printf "Trust %s? Project hooks and settings will run. [y/N] " "$root" >&2
+			read -r answer
+			case $answer in
+			[yY]*)
+				tmp=$config.tmp-$$
+				(umask 077 && jq --arg root "$root" ".projects[\$root].hasTrustDialogAccepted = true" "$config" >"$tmp") &&
+					mv "$tmp" "$config" || rm -f "$tmp"
+				;;
+			esac
+		fi
 		exec claude --dangerously-skip-permissions "$@"
 	' _ "$@"
 }
@@ -227,7 +243,7 @@ get-app-id() { pgrep -f -- "$1"; }
 commands() {
 	printf '%s\n' 'Shared aliases and functions: ~/.config/shell/interactive.sh' \
 		'Workflows: mise run project:open|prune, chezmoi sync|cd, y, nvimg,' \
-		'mise run files:compare|open-book, git rebase-release|loggy, gibo gibo-strip, claude-trust' \
+		'mise run files:compare|open-book, git rebase-release|loggy, gibo gibo-strip' \
 		'Global tasks: mise tasks ls; mise run updater:start|clean, cert:check, youtube:download, containers:stop, linear:unread'
 	alias
 }

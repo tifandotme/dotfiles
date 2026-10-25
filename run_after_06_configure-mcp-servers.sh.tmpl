@@ -7,6 +7,10 @@ warn() {
 	printf 'warning: %s\n' "$1" >&2
 }
 
+if ! command -v claude >/dev/null 2>&1; then
+	exit 0
+fi
+
 if ! command -v jq >/dev/null 2>&1; then
 	warn 'jq is not installed; skipping MCP server setup'
 	exit 0
@@ -17,126 +21,83 @@ if [[ -r "$HOME/.secrets" ]]; then
 	. "$HOME/.secrets"
 fi
 
-ensure_claude_mcp() {
+# add_mcp NAME JSON: declares a user-scope server. Leaves it alone when every
+# key in JSON already matches the stored entry, so unchanged servers keep
+# their OAuth state; otherwise replaces it.
+add_mcp() {
 	local name="$1"
-	local transport="$2"
-	local endpoint="$3"
-	local config_dir="${CLAUDE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/claude}"
-	local config="$config_dir/.claude.json"
-	local command_path
-	local command_args=("${@:4}")
+	local json="$2"
 
-	if ! command -v claude >/dev/null 2>&1; then
+	managed+=" $name"
+	if jq -e --arg name "$name" --argjson want "$json" \
+		'.mcpServers[$name] as $have | $want | to_entries | all(.value == $have[.key])' \
+		"$CLAUDE_CONFIG_DIR/.claude.json" >/dev/null 2>&1; then
 		return 0
 	fi
-
-	if [[ "$name" == tolaria ]] && ! command_path="$(command -v "$endpoint")"; then
-		warn "cannot add Claude MCP server $name; $endpoint is not installed"
-		return 0
-	fi
-
-	if [[ -f "$config" ]]; then
-		if ! jq -e 'type == "object"' "$config" >/dev/null 2>&1; then
-			warn "Claude config is not valid JSON; cannot check MCP server $name"
-			return 0
-		fi
-		if ! jq -e '(.mcpServers // {}) | type == "object"' "$config" >/dev/null 2>&1; then
-			warn "Claude MCP server list is invalid; cannot check MCP server $name"
-			return 0
-		fi
-		if jq -e --arg name "$name" '(.mcpServers // {}) | has($name)' "$config" >/dev/null; then
-			if [[ "$name" == tolaria ]]; then
-				if jq -e --arg command "$command_path" --arg arg "${command_args[0]}" \
-					--arg vault_path "${tolaria_vault_path:-}" \
-					'.mcpServers.tolaria | .command == $command and .args == [$arg] and .env.WS_UI_PORT == "9711" and (if $vault_path == "" then (.env.VAULT_PATH // "") == "" else .env.VAULT_PATH == $vault_path end)' \
-					"$config" >/dev/null; then
-					return 0
-				fi
-			elif [[ "$transport" != http || "$name" != penpot ]] ||
-				jq -e --arg name "$name" --arg endpoint "$endpoint" \
-					'.mcpServers[$name] | .type == "http" and .url == $endpoint and ((.headers // {}) | length == 0)' \
-					"$config" >/dev/null; then
-				return 0
-			fi
-			if ! claude mcp remove --scope user "$name"; then
-				warn "could not replace Claude MCP server $name"
-				return 0
-			fi
-		fi
-	fi
-
-	if [[ "$transport" == stdio ]]; then
-		if [[ "$name" != tolaria ]] && ! command_path="$(command -v "$endpoint")"; then
-			warn "cannot add Claude MCP server $name; $endpoint is not installed"
-			return 0
-		fi
-		if [[ "$name" == tolaria ]]; then
-			local -a env_args=(-e WS_UI_PORT=9711)
-			if [[ -n "${tolaria_vault_path:-}" ]]; then
-				env_args+=(-e "VAULT_PATH=$tolaria_vault_path")
-			fi
-			if ! claude mcp add --scope user "$name" "${env_args[@]}" -- "$command_path" "${command_args[@]}"; then
-				warn "could not add Claude MCP server $name"
-			fi
-		elif ! claude mcp add --scope user "$name" -- "$command_path"; then
-			warn "could not add Claude MCP server $name"
-		fi
-		return 0
-	fi
-
-	if ! claude mcp add --scope user --transport "$transport" "$name" "$endpoint"; then
-		warn "could not add Claude MCP server $name"
-	fi
+	claude mcp remove --scope user "$name" >/dev/null 2>&1 || true
+	claude mcp add-json --scope user "$name" "$json" || warn "could not add Claude MCP server $name"
 }
 
-prune_claude_mcps() {
-	local config_dir="${CLAUDE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/claude}"
-	local config="$config_dir/.claude.json"
+add_http() {
+	add_mcp "$1" "$(jq -n --arg url "$2" '{type: "http", url: $url}')"
+}
+
+prune_mcps() {
+	local config="$CLAUDE_CONFIG_DIR/.claude.json"
+	local names
 	local name
 
-	if ! command -v claude >/dev/null 2>&1 || [[ ! -f "$config" ]]; then
+	[[ -f "$config" ]] || return 0
+	if ! names="$(jq -r '(.mcpServers // {}) | keys[]' "$config")"; then
+		warn "cannot read MCP servers from $config; skipping prune"
 		return 0
 	fi
-	if ! jq -e 'type == "object" and ((.mcpServers // {}) | type == "object")' \
-		"$config" >/dev/null 2>&1; then
-		warn 'Claude config is invalid; cannot remove unmanaged user MCP servers'
-		return 0
-	fi
-
 	while IFS= read -r name; do
-		case "$name" in
-		fff | context7 | tavily | penpot) continue ;;
-		tolaria) [[ "$CLAUDE_CONFIG_DIR" != "$personal_config_dir" ]] || continue ;;
-		esac
-		if ! claude mcp remove --scope user "$name"; then
-			warn "could not remove unmanaged Claude user MCP server $name"
+		if [[ -z "$name" || " $managed " == *" $name "* ]]; then
+			continue
 		fi
-	done < <(jq -r '(.mcpServers // {}) | keys[]' "$config")
+		claude mcp remove --scope user "$name" ||
+			warn "could not remove unmanaged Claude user MCP server $name"
+	done <<<"$names"
 }
 
+tolaria_node=
+tolaria_vault_path=
 # {{ if eq .chezmoi.os "darwin" -}}
 tolaria_node="$HOME/.local/share/mise/shims/node"
-tolaria_vault_path=
 # {{ else if eq .chezmoi.hostname "box" -}}
 tolaria_node=node
 tolaria_vault_path="$HOME/projects/personal/notes"
 # {{ end -}}
 tolaria_server="$HOME/.local/share/tolaria-mcp/index.js"
-personal_config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/claude"
-for config_dir in "$personal_config_dir" "${XDG_CONFIG_HOME:-$HOME/.config}/claude-hadl"; do
+
+for config_dir in "${XDG_CONFIG_HOME:-$HOME/.config}/claude" "${XDG_CONFIG_HOME:-$HOME/.config}/claude-hadl"; do
 	export CLAUDE_CONFIG_DIR="$config_dir"
-	prune_claude_mcps
-	ensure_claude_mcp fff stdio fff-mcp
-	# {{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.hostname "box") -}}
-	if [[ "$config_dir" == "$personal_config_dir" ]]; then
-		ensure_claude_mcp tolaria stdio "$tolaria_node" "$tolaria_server"
+
+	managed=
+
+	if fff_bin="$(command -v fff-mcp)"; then
+		add_mcp fff "$(jq -n --arg command "$fff_bin" '{type: "stdio", command: $command}')"
+	else
+		warn 'cannot add Claude MCP server fff; fff-mcp is not installed'
 	fi
-	# {{ end -}}
-	ensure_claude_mcp context7 http https://mcp.context7.com/mcp/oauth
-	ensure_claude_mcp tavily http https://mcp.tavily.com/mcp/
+
+	if [[ -n "$tolaria_node" ]]; then
+		if tolaria_bin="$(command -v "$tolaria_node")"; then
+			add_mcp tolaria "$(jq -n --arg command "$tolaria_bin" --arg server "$tolaria_server" \
+				--arg vault "$tolaria_vault_path" \
+				'{type: "stdio", command: $command, args: [$server],
+					env: ({WS_UI_PORT: "9711"} + (if $vault == "" then {} else {VAULT_PATH: $vault} end))}')"
+		else
+			warn "cannot add Claude MCP server tolaria; $tolaria_node is not installed"
+		fi
+	fi
+
 	if [[ -n "${PENPOT_MCP_URL:-}" ]]; then
-		ensure_claude_mcp penpot http "$PENPOT_MCP_URL"
+		add_http penpot "$PENPOT_MCP_URL"
 	else
 		warn 'cannot add Claude MCP server penpot; PENPOT_MCP_URL is unset'
 	fi
+
+	prune_mcps
 done

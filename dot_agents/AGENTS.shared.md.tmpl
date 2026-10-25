@@ -5,7 +5,13 @@
 ## Linear
 
 - For work likely to span sessions or require coordination, ask whether to track it unless a relevant Linear issue already exists, and include the issue identifier in branch, commit, and PR names when relevant.
+{{ if eq (get . "claudeAccount") "personal" -}}
+- Use the Citra Linear workspace for repositories owned by `tifandotme`. If the remote is missing or has another owner, ask before Linear access.
+{{ else if eq (get . "claudeAccount") "hadl" -}}
+- Use the Hadl Linear workspace for repositories owned by `hadl-labs`. If the remote is missing or has another owner, ask before Linear access.
+{{ else -}}
 - Before Linear read/write, confirm that the repository owner matches the Linear workspace: `tifandotme` → `Citra`; `hadl-labs` → `Hadl`. If the remote is missing or has another owner, ask the user.
+{{- end }}
 
 ## Completion
 
@@ -35,7 +41,14 @@
 - X/Twitter: use `bird` instead of browser automation.
 - Browser use: load `agent-browser` first and use a task-scoped session as its skill directs. On macOS, connect that session to Helium for Agents with `agent-browser connect 9222`; if Helium is unavailable or the connection launches a fresh profile, close the session, run `mise run helium:run`, and reconnect. On headless Linux, use `agent-browser`'s managed headless browser directly and diagnose launch failures with `agent-browser doctor`. For Electron, follow the project `AGENTS.md` and its project-specific CDP port.
 - Authenticated browsing: load `authenticating-browsers` before using saved website logins, refreshing login seeds on macOS, or diagnosing Chrome's sandbox on the headless Linux VPS (hostname `box`). Follow the documented per-site workflow; keep login seeds and runtime credentials out of logs and review artifacts.
-- Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. The `personal` configuration uses `ifan.anvity@gmail.com`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`.
+- Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`.
+{{ if eq (get . "claudeAccount") "personal" -}}
+- For Google Cloud credentials, run `gcloud auth login ifan.anvity@gmail.com --no-activate` for the `personal` configuration.
+{{ else if eq (get . "claudeAccount") "hadl" -}}
+- For Google Cloud credentials, run `gcloud auth login tifan@hadl.ai --no-activate` for the `hadl` configuration.
+{{ else -}}
+- Google Cloud accounts: `personal` → `ifan.anvity@gmail.com`; `hadl` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`.
+{{ end -}}
 - Library docs: use Context7 for current docs. If it has no relevant results, check official docs or source; say it lacked coverage and name the source used.
 
 ## Remote and headless work
@@ -59,7 +72,7 @@
 
 - When running in Herdr, prefer `herdr worktree` for a separate write-owning task that needs its own checkout. Let native subagents share their parent checkout. Remove a worktree with the tool that created it.
 - When a task wraps up (its PR is merged, or the user closes it), clean up what you created for it: stop each agent session you started there, run `herdr worktree remove --workspace <id>` without `--force`, and delete the merged local branch. When the worktree is dirty or holds commits the merged PR lacks, stop and report instead.
-- Put worktrees directly under their project group: `~/projects/{work|personal}/<repo-name>-<branch-name>`.
+- Create worktrees beside the source checkout, named `<repo-name>-<branch-name>`.
 - Replace `/` in branch names with `-` when forming the directory name. If the destination exists, stop and report the collision instead of choosing another path.
 - Pass the absolute destination with `--path` and the chosen branch with `--branch` to `herdr worktree create`. Herdr does not choose this path for the local workflow.
 - Keep session data in each harness's supported storage and resume mechanism. Do not move or edit session files to imitate migration.

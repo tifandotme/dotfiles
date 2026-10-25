@@ -12,6 +12,7 @@ AGENTS.md
 CLAUDE.md
 .agents/AGENTS.content*
 .agents/AGENTS.shared*
+.agents/CLAUDE.shared*
 docs/agents/
 
 # {{ if ne .chezmoi.os "darwin" -}}
@@ -37,6 +38,7 @@ Library/LaunchAgents/**
 .config/colima
 .config/mise/tasks/helium
 .config/mise/tasks/claude/extra-usage
+.config/mise/tasks/claude/setup
 .config/mise/tasks/spotify
 
 # {{- end -}}
