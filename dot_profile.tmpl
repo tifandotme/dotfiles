@@ -16,9 +16,6 @@ if [ -f "$XDG_CONFIG_HOME/user-dirs.dirs" ]; then
 	set +a
 fi
 
-export GRAFANA_SERVER="https://citra.grafana.net"
-export GRAFANA_ORG_ID="1"
-
 export ATUIN_SYNC_ADDRESS="https://atuin.tifan.me"
 
 export CLOUDSDK_PYTHON="$HOME/projects/work/.venv-gcloud/bin/python"
@@ -32,7 +29,7 @@ export GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE="$XDG_CONFIG_HOME/gws/credentials.j
 export CLOUDSDK_ACTIVE_CONFIG_NAME="personal"
 
 # overriden by ~/projects/work/mise.toml
-export GRAFANA_SERVER="https://prudentbunting943.grafana.net/"
+export GRAFANA_SERVER="https://citra.grafana.net"
 
 export CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$XDG_CONFIG_HOME/claude}"
 export CODEX_HOME="${CODEX_HOME:-$XDG_CONFIG_HOME/codex}"
