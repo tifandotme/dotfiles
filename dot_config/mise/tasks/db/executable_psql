@@ -45,7 +45,6 @@ port=$(field port)
 database=$(field database)
 user=$(field user)
 sslmode=$(field sslmode)
-tunnel_task=$(field tunnel_task)
 account=$(jq -r '.gcloud_account // ""' "$catalog")
 
 if [[ ! "$port" =~ ^[0-9]+$ ]]; then
@@ -54,8 +53,8 @@ if [[ ! "$port" =~ ^[0-9]+$ ]]; then
 fi
 
 if ! lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
-	echo "Tunnel port $port is not listening ($tunnel_task)" >&2
-	echo "Run: mise run db:tunnel:all" >&2
+	echo "Tunnel port $port is not listening" >&2
+	echo "Run: mise run db:tunnel" >&2
 	exit 1
 fi
 

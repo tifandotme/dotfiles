@@ -11,7 +11,7 @@ The shared connection catalog currently has three entries configured to use gclo
 mise run db:list | jq -r '.connections | keys[]'
 ```
 
-Pick the entry whose key, `database`, `label`, or `tunnel` matches the request. If more than one entry matches, ask. The catalog contains connection metadata only. Do not inspect local credential storage unless a command is broken.
+Pick the entry whose key or `database` matches the request. If more than one entry matches, ask. The catalog contains connection metadata only. Do not inspect local credential storage unless a command is broken.
 
 Run `psql` through `db:psql`. Put the psql arguments after `--`:
 
@@ -25,7 +25,8 @@ mise run db:psql core_db_production -- -f "$PWD/query.sql"
 If the required tunnel is not listening, run the tunnel task in a persistent terminal and leave it running while querying:
 
 ```sh
-mise run db:tunnel:all
+mise run db:tunnel core_db_staging   # one entry
+mise run db:tunnel                   # every entry
 ```
 
 The task starts only tunnels whose local ports are not already listening. It uses `tifan@hadl.ai` explicitly and does not change the machine's active gcloud account.

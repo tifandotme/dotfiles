@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#MISE description="Open IAP SSH tunnels to databases in the connection catalog"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE arg "[entry]" help="Connection catalog key; omit to open every missing tunnel"
+#USAGE complete "entry" run="jq -r '.connections | keys[]' \"${MISE_CONFIG_DIR:-$HOME/.config/mise}/db-connections.json\""
+set -Eeuo pipefail
+
+config_dir="${MISE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/mise}"
+catalog="$config_dir/db-connections.json"
+if [[ ! -r "$catalog" ]]; then
+	echo "DB connection catalog is missing: $catalog" >&2
+	exit 1
+fi
+
+account=$(jq -r '.gcloud_account // empty' "$catalog")
+if [[ -z "$account" ]]; then
+	echo "The DB connection catalog has no gcloud_account" >&2
+	exit 1
+fi
+
+entry=${usage_entry:-}
+if [[ -n "$entry" ]]; then
+	if ! jq -e --arg key "$entry" '.connections[$key]' "$catalog" >/dev/null 2>&1; then
+		echo "Unknown DB entry: $entry" >&2
+		jq -r '.connections | keys[] | "  " + .' "$catalog" >&2
+		exit 1
+	fi
+	entries=("$entry")
+else
+	entries=()
+	while IFS= read -r key; do
+		entries+=("$key")
+	done < <(jq -r '.connections | keys[]' "$catalog")
+fi
+
+pids=()
+for key in "${entries[@]}"; do
+	{
+		IFS=$'\t' read -r port instance project zone remote
+	} < <(jq -r --arg key "$key" '.connections[$key] | [.port, .instance, .project, .zone, .remote] | @tsv' "$catalog")
+
+	if lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
+		echo "Tunnel already listening on localhost:$port ($key)" >&2
+		continue
+	fi
+
+	echo "localhost:$port ($key)" >&2
+	gcloud --account="$account" compute ssh "$instance" \
+		--project "$project" \
+		--zone "$zone" \
+		--tunnel-through-iap \
+		-- -L "$port:$remote" -N &
+	pids+=("$!")
+done
+
+status=0
+for pid in ${pids[@]+"${pids[@]}"}; do
+	wait "$pid" || status=1
+done
+exit "$status"

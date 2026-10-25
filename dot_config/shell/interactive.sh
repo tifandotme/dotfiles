@@ -178,10 +178,6 @@ chezmoi() {
 	local target
 
 	case ${1:-} in
-	sync)
-		shift
-		command mise run --quiet --raw chezmoi:sync "$@"
-		;;
 	cd)
 		shift
 		target=$(TERM=dumb command chezmoi source-path "$@") || return

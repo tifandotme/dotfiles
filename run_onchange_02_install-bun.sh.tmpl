@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+set -Eeuo pipefail
+
 if command -v bun &>/dev/null; then
 	normalize_bun_pkg() {
 		local pkg="$1"
@@ -67,7 +69,7 @@ if command -v bun &>/dev/null; then
 	done
 
 	# --json request to avoid the mess below: https://github.com/oven-sh/bun/issues/26222
-	installed_packages=$(bun pm ls -g 2>/dev/null | grep -E '^├──|^└──' | sed -E 's/^[├└]── //' | while read -r pkg; do normalize_bun_pkg "$pkg"; done | sort)
+	installed_packages=$(bun pm ls -g 2>/dev/null | grep -E '^├──|^└──' | sed -E 's/^[├└]── //' | while read -r pkg; do normalize_bun_pkg "$pkg"; done | sort || true)
 
 	for pkg in "${desired_bun_packages[@]}"; do
 		if is_versioned_bun_pkg "$pkg"; then

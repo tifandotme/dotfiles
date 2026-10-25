@@ -19,14 +19,13 @@ Edit `dot_config/mise/tasks/<group>/executable_<action>`. Chezmoi installs each 
 | `box-agents` | `start`, `stop`, `status`                      | `mise run box-agents:start chezmoi`                   |
 | `linear`     | `unread`, `notifications`                      | `mise run linear:unread --account work --json`        |
 | `chezmoi`    | `sync`, `apply-popup`                          | `mise run chezmoi:sync`                               |
-| `claude`     | `policy`, `extra-usage`                        | `mise run claude:policy --trust`                      |
+| `claude`     | `extra-usage`                                  | (none)                                               |
 | `commit`     | `generate`                                     | `mise run commit:generate --agent pi`                 |
 | `files`      | `compare`, `open-book`                         | `mise run files:compare`                              |
 | `project`    | `open`, `prune`                                | `mise run project:open`                               |
 | `spotify`    | `login`                                        | `mise run spotify:login`                              |
 | `gh`         | CLI passthrough                                | `mise run gh -- pr list`                              |
-| `db`         | `list`, `psql`                                 | `mise run db:psql core_db_staging -- -Atc 'select 1'` |
-| `db:tunnel`  | `prod`, `staging`, `windmill`, `all`           | `mise run db:tunnel:staging`                          |
+| `db`         | `list`, `psql`, `tunnel [entry]`               | `mise run db:psql core_db_staging -- -Atc 'select 1'` |
 
 Every script and symlink formerly in `dot_local/bin/` now has a mise task or shared task implementation. Helium, Spotify login, and Claude extra-usage tasks install only on macOS. Box-agent tasks install only on Box. The migration adds no compatibility wrappers to `~/.local/bin`, generated parsers, Bashly schemas, or shared shell framework. The hidden Linear `.api.sh` shares existing API logic between its two tasks and is not executable.
 
@@ -42,7 +41,7 @@ After Atuin initialization, use `ZSH_AUTOSUGGEST_STRATEGY=(atuin completion)`. W
 
 The global DB tasks have useful behavior: one metadata catalog, explicit gcloud IAM identity, token delivery through `PGPASSWORD`, and a libpq fallback when `psql` is not on PATH. Keep that behavior. Seven work-project tasks only forwarded to the global files, so remove those duplicate wrappers from `projects/work/encrypted_mise.toml.age`. Preserve every other parsed TOML value, including authentication tasks and project environment.
 
-Keep all three connection keys, target projects and instances, forwarded ports, and SSL settings unchanged. `db:tunnel:all` retains the existing listener check and foreground child-wait behavior. A listening port is not a database health check. This refactor does not change tunnel lifecycle or enable password-backed Aquasense connections.
+Keep all three connection keys, target projects and instances, forwarded ports, and SSL settings unchanged. `db:tunnel` without an entry retains the existing listener check and foreground child-wait behavior. A listening port is not a database health check. This refactor does not change tunnel lifecycle or enable password-backed Aquasense connections.
 
 ## Scope and rollout
 

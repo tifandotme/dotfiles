@@ -2,37 +2,40 @@
   "gcloud_account": "tifan@hadl.ai",
   "connections": {
     "core_db_production": {
-      "label": "Core DB production",
       "host": "localhost",
       "port": 5435,
       "database": "core_db",
       "user": "tifan@hadl.ai",
       "sslmode": "require",
-      "tunnel": "prod",
-      "tunnel_task": "db:tunnel:prod",
-      "auth": "gcloud-iam"
+      "auth": "gcloud-iam",
+      "instance": "aquasense-prod",
+      "project": "aquasense-production",
+      "zone": "asia-southeast1-a",
+      "remote": "10.2.0.3:5432"
     },
     "core_db_staging": {
-      "label": "Core DB staging",
       "host": "localhost",
       "port": 5434,
       "database": "core_db",
       "user": "tifan@hadl.ai",
       "sslmode": "require",
-      "tunnel": "staging",
-      "tunnel_task": "db:tunnel:staging",
-      "auth": "gcloud-iam"
+      "auth": "gcloud-iam",
+      "instance": "aqusense-staging",
+      "project": "aquasense-staging",
+      "zone": "asia-southeast1-c",
+      "remote": "172.16.0.3:5432"
     },
     "internal_db_windmill": {
-      "label": "Internal DB windmill",
       "host": "localhost",
       "port": 5433,
       "database": "internal_db",
       "user": "tifan@hadl.ai",
       "sslmode": "require",
-      "tunnel": "windmill",
-      "tunnel_task": "db:tunnel:windmill",
-      "auth": "gcloud-iam"
+      "auth": "gcloud-iam",
+      "instance": "backoffice-windmill",
+      "project": "backoffice-windmill",
+      "zone": "asia-southeast1-c",
+      "remote": "172.16.0.3:5432"
     }
   }
 }

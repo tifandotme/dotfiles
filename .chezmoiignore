@@ -13,7 +13,7 @@ CLAUDE.md
 .agents/AGENTS.content*
 .agents/AGENTS.shared*
 .agents/CLAUDE.shared*
-docs/agents/
+docs/
 
 # {{ if ne .chezmoi.os "darwin" -}}
 
