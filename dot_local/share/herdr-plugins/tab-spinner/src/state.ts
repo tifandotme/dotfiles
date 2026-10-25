@@ -68,3 +68,7 @@ export function isDecoration(label: string, state: SpinnerState): boolean {
     label === `⏸ ${state.baseLabel}`
   )
 }
+
+export function undecorate(label: string): string {
+  return label.replace(new RegExp(`^(?:[${FRAMES.join("")}⏸] )+`), "")
+}

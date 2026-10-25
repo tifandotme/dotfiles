@@ -5,6 +5,7 @@ import {
   INTERVAL_MS,
   isDecoration,
   readState,
+  undecorate,
   writeState,
 } from "./state.ts"
 
@@ -40,7 +41,7 @@ export async function runWorker(
 
     const baseLabel = isDecoration(currentLabel, state)
       ? state.baseLabel
-      : currentLabel
+      : undecorate(currentLabel)
     if (!baseLabel) return
 
     const decoratedLabel = `${FRAMES[frameIndex]} ${baseLabel}`

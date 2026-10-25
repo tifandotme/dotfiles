@@ -9,6 +9,7 @@ import {
   runtimeDirectory,
   statePathForTab,
   stopWorker,
+  undecorate,
   writeState,
 } from "./state.ts"
 import { runWorker, startWorker } from "./worker.ts"
@@ -37,7 +38,7 @@ async function updateFromEvent(event: HerdrStatusEvent): Promise<void> {
     (currentLabel
       ? {
           tabId,
-          baseLabel: currentLabel,
+          baseLabel: undecorate(currentLabel),
           decoratedLabel: "",
         }
       : undefined)
@@ -45,7 +46,7 @@ async function updateFromEvent(event: HerdrStatusEvent): Promise<void> {
   state.tabId = tabId
 
   if (currentLabel && !isDecoration(currentLabel, state)) {
-    state.baseLabel = currentLabel
+    state.baseLabel = undecorate(currentLabel)
   }
 
   state.mode =
