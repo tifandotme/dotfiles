@@ -179,6 +179,10 @@ if.app-id = "com.anthropic.claudefordesktop"
 run = "move-node-to-workspace 3_dev"
 
 [[on-window-detected]]
+if.app-id = "com.anthropic.claudefordesktop.hadl"
+run = "move-node-to-workspace 3_dev"
+
+[[on-window-detected]]
 if.app-id = "com.openai.codex"
 run = "move-node-to-workspace 3_dev"
 
