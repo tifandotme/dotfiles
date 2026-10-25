@@ -30,6 +30,20 @@ if [[ ! -d $cwd ]]; then
 fi
 
 command -v claude >/dev/null
+# Cloned repos have no trust entry and `claude remote-control` exits on an untrusted
+# workspace. Owners are allowlisted above, so record trust the way interactive.sh does,
+# in the config dir mise selects for this directory.
+# shellcheck disable=SC2016
+config=$(mise -C "$cwd" exec -- bash -c 'printf %s "${CLAUDE_CONFIG_DIR:-$HOME/.config/claude}"')/.claude.json
+if [[ -f $config ]]; then
+	tmp=$config.tmp-$$
+	# shellcheck disable=SC2015
+	(umask 077 && jq --arg root "$(cd "$cwd" && pwd -P)" '.projects[$root].hasTrustDialogAccepted = true' "$config" >"$tmp") &&
+		mv "$tmp" "$config" || {
+		rm -f "$tmp"
+		fail "Could not record workspace trust in $config"
+	}
+fi
 # Keep Claude sessions inside tmux so Herdr sees tmux instead of Claude.
 launch='exec mise exec -- bash -c '\''exec claude remote-control --permission-mode=bypassPermissions --spawn=same-dir --capacity=10 --no-chrome'\'''
 start_session "$(claude_session "$repo")" "$cwd" "$launch"
