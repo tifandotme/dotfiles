@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#MISE description="Start a Box Claude tmux session for a GitHub repo, cloning it if missing"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE arg "<repo>" help="GitHub owner/repo"
+set -Eeuo pipefail
+# shellcheck source=../lib.sh
+source "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
+
+repo=${usage_repo?}
+[[ $repo =~ ^($name_re)/($name_re)$ ]] || fail "Invalid repo: $repo (expected owner/repo)"
+owner=${BASH_REMATCH[1]}
+name=${BASH_REMATCH[2]}
+# Directory that holds each owner's clones. Add a line per organization.
+case $owner in
+hadl-labs) base="$HOME/projects/work" ;;
+tifandotme) base="$HOME/projects/personal" ;;
+*) fail "Unknown owner: $owner (known: hadl-labs tifandotme)" ;;
+esac
+cwd="$base/$name"
+[[ $repo == tifandotme/dotfiles ]] && cwd="$HOME/.local/share/chezmoi"
+
+if [[ ! -d $cwd ]]; then
+	command -v gh >/dev/null
+	[[ -d $base ]] || fail "Missing directory: $base"
+	# Run in the owner's directory so mise selects that account's credentials.
+	# gh fails without creating anything when the repo does not exist.
+	mise -C "$base" exec -- gh repo clone "$repo" "$cwd"
+fi
+
+command -v claude >/dev/null
+# Keep Claude sessions inside tmux so Herdr sees tmux instead of Claude.
+launch='exec mise exec -- bash -c '\''exec claude remote-control --permission-mode=bypassPermissions --spawn=same-dir --capacity=10 --no-chrome'\'''
+start_session "$(claude_session "$repo")" "$cwd" "$launch"
