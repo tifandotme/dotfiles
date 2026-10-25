@@ -4,7 +4,7 @@
 #MISE raw=true
 #MISE quiet=true
 #USAGE arg "<agent>" {
-#USAGE   choices "amp" "chezmoi" "aquasense-app" "aquasense-service" "backoffice-windmill" "core-service" "gcp-terraform" "kamal-deploy"
+#USAGE   choices "amp" "amp-hadl" "chezmoi" "aquasense-app" "aquasense-service" "backoffice-windmill" "core-service" "gcp-terraform" "kamal-deploy"
 #USAGE }
 set -Eeuo pipefail
 
@@ -14,21 +14,30 @@ cwd="$HOME/projects/work/$agent"
 if [[ $agent == amp || $agent == chezmoi ]]; then
 	cwd="$HOME/.local/share/chezmoi"
 fi
-if [[ $agent == amp ]]; then
-	session=box-amp
+if [[ $agent == amp || $agent == amp-hadl ]]; then
+	session="box-$agent"
+	runner_id=box
+	discover_dir="$HOME/projects/personal"
+	if [[ $agent == amp-hadl ]]; then
+		cwd="$HOME/projects/work"
+		runner_id=box-hadl
+		discover_dir="$cwd"
+	fi
 	command -v amp >/dev/null
-	[[ -d $HOME/projects/personal ]] || {
-		printf 'Missing directory: %s\n' "$HOME/projects/personal" >&2
+	[[ -d $discover_dir ]] || {
+		printf 'Missing directory: %s\n' "$discover_dir" >&2
 		exit 1
 	}
-	# tmux expands HOME in its launch shell.
-	# shellcheck disable=SC2016
-	launch='exec amp --no-tui --runner-id=box --no-serve-cwd --discover-dirs="$HOME/projects/personal" --dir="$HOME/.local/share/chezmoi"'
+	printf -v launch 'exec mise exec -- amp --no-tui --runner-id=%q --no-serve-cwd --discover-dirs=%q --dir=%q' \
+		"$runner_id" "$discover_dir" "$cwd"
 else
 	command -v claude >/dev/null
 	# Keep Claude sessions inside tmux so Herdr sees tmux instead of Claude.
-	launch='exec claude remote-control --permission-mode=bypassPermissions --spawn=same-dir --capacity=10 --no-chrome'
+	launch='exec mise exec -- bash -c '\''mise run --quiet --raw claude:policy && exec claude remote-control --permission-mode=bypassPermissions --spawn=same-dir --capacity=10 --no-chrome'\'''
 fi
+# Refresh inherited mise selection in the launch directory, including when leaving Hadl.
+# shellcheck disable=SC2016
+printf -v launch 'exec bash -c %q' 'mise_env=$(mise hook-env -s bash) && eval "$mise_env" && '"$launch"
 [[ -d $cwd ]] || {
 	printf 'Missing directory: %s\n' "$cwd" >&2
 	exit 1

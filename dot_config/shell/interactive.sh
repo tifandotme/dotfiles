@@ -79,7 +79,7 @@ backlog() { herdr-wrap "${PWD##*/} (backlog)" command backlog "$@"; }
 nvim() { herdr-wrap "${PWD##*/} (nvim)" command nvim "$@"; }
 pi() { herdr-wrap "${PWD##*/} (pi)" command pi "$@"; }
 btm() { herdr-wrap btm command btm "$@"; }
-amp() { AMP_REMOTE_CONTROL_TERMINAL=1 herdr-wrap "${PWD##*/} (amp)" command amp "$@"; }
+amp() { AMP_REMOTE_CONTROL_TERMINAL=1 herdr-wrap "${PWD##*/} (amp)" command mise exec -- amp "$@"; }
 gdu-go() { herdr-wrap "${1:-$PWD} (gdu-go)" command gdu-go "$@"; }
 ssh() { TERM=xterm-256color herdr-wrap "> ${*: -1}" command ssh "$@"; }
 mosh() { TERM=xterm-256color herdr-wrap "> ${*: -1}" command mosh "$@"; }
@@ -104,12 +104,14 @@ gh() { command mise run --quiet --raw gh -- "$@"; }
 claude-trust() { command mise run --quiet --raw claude:policy --trust; }
 
 claude() {
-	command mise run --quiet --raw claude:policy || return
-
 	case ${1:-} in
-	remote-control | rc) herdr-wrap "${PWD##*/} (claude)" command claude --dangerously-skip-permissions "$@" ;;
-	*) herdr-wrap "${PWD##*/} (claude)" command claude --dangerously-skip-permissions --no-chrome "$@" ;;
+	remote-control | rc) ;;
+	*) set -- --no-chrome "$@" ;;
 	esac
+	herdr-wrap "${PWD##*/} (claude)" command mise exec -- bash -c '
+		mise run --quiet --raw claude:policy || exit
+		exec claude --dangerously-skip-permissions "$@"
+	' _ "$@"
 }
 
 claudex() {

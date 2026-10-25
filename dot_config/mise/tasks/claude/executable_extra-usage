@@ -20,71 +20,26 @@ require_cmd() {
 }
 
 read_access_token() {
-	local service
-	local payload
+	local service="$KEYCHAIN_SERVICE"
 	local account="${CODEXBAR_CLAUDE_KEYCHAIN_ACCOUNT:-}"
 	local -a args
-	local -a services=("$KEYCHAIN_SERVICE")
 
-	while IFS= read -r service; do
-		services+=("$service")
-	done < <(security dump-keychain 2>/dev/null |
-		grep -o "\"${KEYCHAIN_SERVICE}-[^\"]*\"" |
-		tr -d '"' || true)
-
-	{
-		for service in "${services[@]}"; do
-			args=(find-generic-password -s "$service" -w)
-			[[ -n "$account" ]] && args+=(-a "$account")
-			if payload="$(security "${args[@]}" 2>/dev/null)"; then
-				printf '%s\0' "$payload"
-			fi
-		done
-	} | python3 -c '
-import json
-import math
-import sys
-import time
-
-def find_tokens(value):
-    if isinstance(value, dict):
-        expiry = value.get("expiresAt")
-        if isinstance(expiry, (int, float)) and not isinstance(expiry, bool):
-            expiry = float(expiry)
-            if math.isfinite(expiry) and expiry > time.time() * 1000:
-                for key in ("accessToken", "access_token"):
-                    token = value.get(key)
-                    if isinstance(token, str) and token.strip():
-                        yield expiry, token.strip()
-        else:
-            for key in ("accessToken", "access_token"):
-                token = value.get(key)
-                if isinstance(token, str) and token.strip():
-                    yield 0, token.strip()
-        for nested in value.values():
-            if isinstance(nested, (dict, list)):
-                yield from find_tokens(nested)
-    elif isinstance(value, list):
-        for nested in value:
-            yield from find_tokens(nested)
-
-
-candidates = []
-for raw in sys.stdin.buffer.read().split(b"\0"):
-    payload = raw.decode("utf-8", errors="replace").strip()
-    if not payload:
-        continue
-    try:
-        value = json.loads(payload)
-    except json.JSONDecodeError:
-        candidates.append((0, payload))
-    else:
-        candidates.extend(find_tokens(value))
-
-if candidates:
-    print(max(candidates, key=lambda candidate: candidate[0])[1])
-else:
-    raise SystemExit(1)
+	# Claude hashes the exact explicit config path, including any trailing slash.
+	if [[ -n "${CLAUDE_CONFIG_DIR:-}" ]]; then
+		service+="-$(bun -e 'console.log(new Bun.CryptoHasher("sha256").update(process.env.CLAUDE_CONFIG_DIR).digest("hex").slice(0, 8))')" || return 1
+	fi
+	args=(find-generic-password -s "$service" -w)
+	[[ -n "$account" ]] && args+=(-a "$account")
+	security "${args[@]}" 2>/dev/null | bun -e '
+try {
+    const oauth = JSON.parse(await Bun.stdin.text()).claudeAiOauth;
+    const token = oauth?.accessToken;
+    if (typeof token !== "string" || !token.trim() ||
+        (oauth.expiresAt != null && (!Number.isFinite(oauth.expiresAt) || oauth.expiresAt <= Date.now()))) process.exit(1);
+    console.log(token.trim());
+} catch {
+    process.exit(1);
+}
 '
 }
 
@@ -98,6 +53,7 @@ cleanup() {
 
 main() {
 	require_cmd curl
+	require_cmd bun
 	require_cmd python3
 	require_cmd security
 
@@ -106,7 +62,7 @@ main() {
 
 	trap cleanup EXIT
 
-	token="$(read_access_token)" || die "could not find an unexpired Claude OAuth access token in Keychain"
+	token="$(read_access_token)" || die "could not find an unexpired Claude OAuth access token in Keychain for the selected CLAUDE_CONFIG_DIR"
 
 	response_body="$(mktemp)"
 

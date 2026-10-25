@@ -105,7 +105,8 @@ prune_claude_mcps() {
 
 	while IFS= read -r name; do
 		case "$name" in
-		fff | tolaria | context7 | tavily | penpot) continue ;;
+		fff | context7 | tavily | penpot) continue ;;
+		tolaria) [[ "$CLAUDE_CONFIG_DIR" != "$personal_config_dir" ]] || continue ;;
 		esac
 		if ! claude mcp remove --scope user "$name"; then
 			warn "could not remove unmanaged Claude user MCP server $name"
@@ -113,67 +114,6 @@ prune_claude_mcps() {
 	done < <(jq -r '(.mcpServers // {}) | keys[]' "$config")
 }
 
-ensure_amp_mcp() {
-	local servers="$1"
-	local name="$2"
-	local url="$3"
-
-	if jq -e --arg name "$name" --arg url "$url" \
-		'.servers | any(.[]; .name == $name and .url == $url)' \
-		<<<"$servers" >/dev/null; then
-		return 0
-	fi
-	if jq -e --arg name "$name" '.servers | any(.[]; .name == $name)' \
-		<<<"$servers" >/dev/null; then
-		warn "Amp MCP server $name has a different URL; replacing it"
-		if ! amp mcp remote remove --personal --yes "$name"; then
-			warn "could not remove mismatched Amp personal MCP server $name"
-			return 0
-		fi
-	fi
-	if ! amp mcp remote add "$name" "$url" --auth oauth --personal; then
-		warn "could not add Amp personal MCP server $name"
-	fi
-}
-
-ensure_amp_mcps() {
-	local name
-	local servers
-
-	if ! command -v amp >/dev/null 2>&1; then
-		return 0
-	fi
-	if ! servers="$(amp mcp remote list --personal --json 2>/dev/null)"; then
-		warn 'could not list Amp personal MCP servers; skipping remote MCP setup'
-		return 0
-	fi
-	if ! jq -e 'try ((.servers | type) == "array" and (.servers | all(.[]; (.name | type) == "string" and (.url | type) == "string"))) catch false' \
-		<<<"$servers" >/dev/null 2>&1; then
-		warn 'Amp returned an invalid personal MCP server list; skipping remote MCP setup'
-		return 0
-	fi
-
-	while IFS= read -r name; do
-		[[ -z "$name" ]] && continue
-		if ! amp mcp remote remove --personal --yes "$name"; then
-			warn "could not remove unmanaged Amp personal MCP server $name"
-		fi
-	done < <(jq -r '
-		.servers[]
-		| select(.name != "posthog-personal" and .name != "linear-personal" and .name != "context7" and .name != "tavily" and .name != "cloudflare-api" and .name != "vercel")
-		| .name
-	' <<<"$servers")
-
-	ensure_amp_mcp "$servers" posthog-personal https://mcp.posthog.com/mcp
-	ensure_amp_mcp "$servers" linear-personal https://mcp.linear.app/mcp
-	ensure_amp_mcp "$servers" context7 https://mcp.context7.com/mcp/oauth
-	ensure_amp_mcp "$servers" tavily https://mcp.tavily.com/mcp/
-	ensure_amp_mcp "$servers" cloudflare-api https://mcp.cloudflare.com/mcp
-	ensure_amp_mcp "$servers" vercel https://mcp.vercel.com
-}
-
-prune_claude_mcps
-ensure_claude_mcp fff stdio fff-mcp
 # {{ if eq .chezmoi.os "darwin" -}}
 tolaria_node="$HOME/.local/share/mise/shims/node"
 tolaria_vault_path=
@@ -182,14 +122,21 @@ tolaria_node=node
 tolaria_vault_path="$HOME/projects/personal/notes"
 # {{ end -}}
 tolaria_server="$HOME/.local/share/tolaria-mcp/index.js"
-# {{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.hostname "box") -}}
-ensure_claude_mcp tolaria stdio "$tolaria_node" "$tolaria_server"
-# {{ end -}}
-ensure_claude_mcp context7 http https://mcp.context7.com/mcp/oauth
-ensure_claude_mcp tavily http https://mcp.tavily.com/mcp/
-if [[ -n "${PENPOT_MCP_URL:-}" ]]; then
-	ensure_claude_mcp penpot http "$PENPOT_MCP_URL"
-else
-	warn 'cannot add Claude MCP server penpot; PENPOT_MCP_URL is unset'
-fi
-ensure_amp_mcps
+personal_config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/claude"
+for config_dir in "$personal_config_dir" "${XDG_CONFIG_HOME:-$HOME/.config}/claude-hadl"; do
+	export CLAUDE_CONFIG_DIR="$config_dir"
+	prune_claude_mcps
+	ensure_claude_mcp fff stdio fff-mcp
+	# {{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.hostname "box") -}}
+	if [[ "$config_dir" == "$personal_config_dir" ]]; then
+		ensure_claude_mcp tolaria stdio "$tolaria_node" "$tolaria_server"
+	fi
+	# {{ end -}}
+	ensure_claude_mcp context7 http https://mcp.context7.com/mcp/oauth
+	ensure_claude_mcp tavily http https://mcp.tavily.com/mcp/
+	if [[ -n "${PENPOT_MCP_URL:-}" ]]; then
+		ensure_claude_mcp penpot http "$PENPOT_MCP_URL"
+	else
+		warn 'cannot add Claude MCP server penpot; PENPOT_MCP_URL is unset'
+	fi
+done

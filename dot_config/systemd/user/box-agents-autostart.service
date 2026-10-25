@@ -5,6 +5,7 @@ Description=Start selected Box agents in tmux
 Type=oneshot
 Environment="PATH=%h/.local/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:/usr/bin:/bin"
 ExecStart=/home/linuxbrew/.linuxbrew/bin/mise run --quiet --raw box-agents:start amp
+ExecStart=/home/linuxbrew/.linuxbrew/bin/mise run --quiet --raw box-agents:start amp-hadl
 ExecStart=/home/linuxbrew/.linuxbrew/bin/mise run --quiet --raw box-agents:start backoffice-windmill
 RemainAfterExit=yes
 

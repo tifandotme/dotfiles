@@ -94,8 +94,10 @@ if grep -Fq 'npm ' "$macos_install_script"; then
 	exit 1
 fi
 grep -Fq 'shasum -a 256 package-lock.json' "$macos_install_script"
-mkdir -p "$test_dir/bin" "$test_dir/claude"
-printf '%s\n' '{"mcpServers":{"betterstack":{"type":"http","url":"https://mcp.betterstack.com"},"penpot":{"type":"http","url":"https://old.example/mcp"}}}' >"$test_dir/claude/.claude.json"
+mkdir -p "$test_dir/bin" "$test_home/.config/claude" "$test_home/.config/claude-hadl"
+for profile in claude claude-hadl; do
+	printf '%s\n' '{"account":"'"$profile"'","mcpServers":{"betterstack":{"type":"http","url":"https://mcp.betterstack.com"},"penpot":{"type":"http","url":"https://old.example/mcp"},"tolaria":{"type":"stdio","command":"old-node"}}}' >"$test_home/.config/$profile/.claude.json"
+done
 
 cat >"$test_dir/bin/claude" <<'EOF'
 #!/usr/bin/env bash
@@ -151,24 +153,7 @@ cat >"$test_dir/bin/amp" <<'EOF'
 #!/usr/bin/env bash
 set -Eeuo pipefail
 printf '%s\n' "$*" >>"$AMP_TEST_LOG"
-case "$*" in
-	'mcp remote list --personal --json')
-		cat "$AMP_TEST_SERVERS"
-		;;
-	'mcp remote remove --personal --yes '*)
-		jq --arg name "$6" '.servers |= map(select(.name != $name))' \
-			"$AMP_TEST_SERVERS" >"$AMP_TEST_SERVERS.tmp"
-		mv "$AMP_TEST_SERVERS.tmp" "$AMP_TEST_SERVERS"
-		;;
-	'mcp remote add '*)
-		[[ "$6 $7 $8" == '--auth oauth --personal' ]]
-		jq --arg name "$4" --arg url "$5" \
-			'.servers += [{name: $name, url: $url}]' \
-			"$AMP_TEST_SERVERS" >"$AMP_TEST_SERVERS.tmp"
-		mv "$AMP_TEST_SERVERS.tmp" "$AMP_TEST_SERVERS"
-		;;
-	*) exit 2 ;;
-esac
+exit 1
 EOF
 
 printf '%s\n' '#!/usr/bin/env bash' 'exit 0' >"$test_dir/bin/fff-mcp"
@@ -178,33 +163,27 @@ jq_dir="$(dirname "$(command -v jq)")"
 node_dir="$(dirname "$(command -v node)")"
 export PATH="$test_dir/bin:$jq_dir:$node_dir:/usr/bin:/bin:/usr/sbin:/sbin"
 export HOME="$test_home"
+export XDG_CONFIG_HOME="$HOME/.config"
 mkdir -p "$HOME"
 penpot_test_url='https://design.penpot.app/mcp/stream?userToken=test-token'
 printf 'export PENPOT_MCP_URL=%q\n' "$penpot_test_url" >"$HOME/.secrets"
-export CLAUDE_CONFIG_DIR="$test_dir/claude"
+export CLAUDE_CONFIG_DIR="$XDG_CONFIG_HOME/claude-hadl"
 export CLAUDE_TEST_LOG="$test_dir/claude.log"
 export AMP_TEST_LOG="$test_dir/amp.log"
-export AMP_TEST_SERVERS="$test_dir/amp-servers.json"
-printf '%s\n' '{"servers":[{"name":"unmanaged","url":"https://old.example/mcp"}]}' >"$AMP_TEST_SERVERS"
 bash "$setup_script"
+export CLAUDE_CONFIG_DIR="$test_dir/unrelated-profile"
 bash "$setup_script"
 
-[[ "$(grep -c '^mcp add ' "$CLAUDE_TEST_LOG")" -eq 5 ]]
+[[ ! -e "$test_dir/unrelated-profile" ]]
+[[ "$(grep -c '^mcp add ' "$CLAUDE_TEST_LOG")" -eq 9 ]]
 [[ "$(grep -c '^mcp add --scope user tolaria -e WS_UI_PORT=9711 -e VAULT_PATH=.* -- ' "$CLAUDE_TEST_LOG")" -eq 1 ]]
-[[ "$(grep -Fxc "mcp add --scope user --transport http penpot $penpot_test_url" "$CLAUDE_TEST_LOG")" -eq 1 ]]
-[[ "$(grep -c '^mcp remove --scope user betterstack$' "$CLAUDE_TEST_LOG")" -eq 1 ]]
-[[ "$(grep -c '^mcp remove --scope user penpot$' "$CLAUDE_TEST_LOG")" -eq 1 ]]
+[[ "$(grep -Fxc "mcp add --scope user --transport http penpot $penpot_test_url" "$CLAUDE_TEST_LOG")" -eq 2 ]]
+[[ "$(grep -c '^mcp remove --scope user betterstack$' "$CLAUDE_TEST_LOG")" -eq 2 ]]
+[[ "$(grep -c '^mcp remove --scope user penpot$' "$CLAUDE_TEST_LOG")" -eq 2 ]]
 if grep -Fq 'mcp add --scope user --transport http betterstack ' "$CLAUDE_TEST_LOG"; then
 	exit 1
 fi
-[[ "$(grep -c '^mcp remote add ' "$AMP_TEST_LOG")" -eq 6 ]]
-[[ "$(grep -c '^mcp remote remove --personal --yes unmanaged$' "$AMP_TEST_LOG")" -eq 1 ]]
-grep -Fqx 'mcp remote add cloudflare-api https://mcp.cloudflare.com/mcp --auth oauth --personal' "$AMP_TEST_LOG"
-jq -e '
-	(.servers | length) == 6
-	and any(.servers[]; .name == "cloudflare-api" and .url == "https://mcp.cloudflare.com/mcp")
-	and all(.servers[]; .name != "unmanaged")
-' "$AMP_TEST_SERVERS" >/dev/null
+[[ ! -e "$AMP_TEST_LOG" ]]
 node_path="$(command -v node)"
 jq -e --arg node "$node_path" --arg home "$HOME" --arg penpot_url "$penpot_test_url" '
 	.mcpServers.tolaria.command == $node
@@ -214,6 +193,12 @@ jq -e --arg node "$node_path" --arg home "$HOME" --arg penpot_url "$penpot_test_
 	and .mcpServers.penpot.type == "http"
 	and .mcpServers.penpot.url == $penpot_url
 	and (.mcpServers | has("betterstack") | not)
-' "$CLAUDE_CONFIG_DIR/.claude.json" >/dev/null
+' "$XDG_CONFIG_HOME/claude/.claude.json" >/dev/null
+for profile in claude claude-hadl; do
+	jq -e --arg profile "$profile" '
+		.account == $profile and
+		(.mcpServers | keys) == (if $profile == "claude" then ["context7", "fff", "penpot", "tavily", "tolaria"] else ["context7", "fff", "penpot", "tavily"] end)
+	' "$XDG_CONFIG_HOME/$profile/.claude.json" >/dev/null
+done
 
-printf '%s\n' 'Mac and Box Pi, Amp, and Claude configs use the standalone Tolaria MCP server.'
+printf '%s\n' 'MCP setup provisions both Claude profiles, isolates Tolaria, and never invokes Amp.'

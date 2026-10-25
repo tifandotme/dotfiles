@@ -6,16 +6,6 @@
 
 - For work likely to span sessions or require coordination, ask whether to track it unless a relevant Linear issue already exists, and include the issue identifier in branch, commit, and PR names when relevant.
 - Before Linear read/write, confirm that the repository owner matches the Linear workspace: `tifandotme` → `Citra`; `hadl-labs` → `Hadl`. If the remote is missing or has another owner, ask the user.
-- In the Hadl workspace, do not move issues to Done unless the user explicitly tells you to.
-
-## Hadl production
-
-- Applies to manual changes to production systems or data operated by Hadl (such as a deploy, restart, migration, config or secret change, or data write). Only a change that reaches production automatically when an approved PR merges needs no announcement; the PR approval is the ack.
-- A production deploy that someone triggers (a `workflow_dispatch` run, a tag pick, a rollout or restart workflow, a `kamal` command) is a manual change, even when it ships an approved PR through CI/CD.
-- Before a manual change, draft an announcement for Slack #engineering (`C0AEV5BP35W`) in the user's voice and show it to the user. Post it only after the user confirms.
-- After posting, wait until any engineer replies in the thread, then do the action. Do not require a specific person. If nobody replies, ask the user instead of proceeding.
-- A database migration is the exception: after posting, apply it without waiting for a reply.
-- This does not apply to personal tools or infrastructure just because they work with `hadl-labs` repositories.
 
 ## Completion
 
@@ -45,7 +35,7 @@
 - X/Twitter: use `bird` instead of browser automation.
 - Browser use: load `agent-browser` first and use a task-scoped session as its skill directs. On macOS, connect that session to Helium for Agents with `agent-browser connect 9222`; if Helium is unavailable or the connection launches a fresh profile, close the session, run `mise run helium:run`, and reconnect. On headless Linux, use `agent-browser`'s managed headless browser directly and diagnose launch failures with `agent-browser doctor`. For Electron, follow the project `AGENTS.md` and its project-specific CDP port.
 - Authenticated browsing: load `authenticating-browsers` before using saved website logins, refreshing login seeds on macOS, or diagnosing Chrome's sandbox on the headless Linux VPS (hostname `box`). Follow the documented per-site workflow; keep login seeds and runtime credentials out of logs and review artifacts.
-- Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. Account mappings: `personal` → `ifan.anvity@gmail.com`, `work` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`. If work gcloud reports `Reauthentication failed`, run `mise run gcloud-auth-check` from `~/projects/work`; its reauth task uses the configured OS keyring. Report unavailable keyring access as a blocker. Never ask for, read, or type the password yourself.
+- Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`. The `personal` configuration uses `ifan.anvity@gmail.com`. If credentials are missing, run `gcloud auth login <account> --no-activate`; never omit `--no-activate`.
 - Library docs: use Context7 for current docs. If it has no relevant results, check official docs or source; say it lacked coverage and name the source used.
 
 ## Remote and headless work

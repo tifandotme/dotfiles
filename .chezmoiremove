@@ -25,3 +25,4 @@
 .config/mise/tasks/tunnel-staging
 .config/mise/tasks/tunnel-windmill
 .config/mise/tasks/tunnels
+.config/gcloud/configurations/config_work

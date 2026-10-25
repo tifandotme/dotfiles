@@ -9,9 +9,11 @@ set -Eeuo pipefail
 command -v tmux >/dev/null
 failed=0
 printf '%-22s %-40s %s\n' AGENT 'TMUX SESSION' STATUS
-for agent in amp chezmoi aquasense-app aquasense-service backoffice-windmill core-service gcp-terraform kamal-deploy; do
+for agent in amp amp-hadl chezmoi aquasense-app aquasense-service backoffice-windmill core-service gcp-terraform kamal-deploy; do
 	session="box-claude-$agent"
-	[[ $agent != amp ]] || session=box-amp
+	case $agent in
+	amp | amp-hadl) session="box-$agent" ;;
+	esac
 	if ! tmux has-session -t "$session" 2>/dev/null; then
 		status='not running'
 	else
