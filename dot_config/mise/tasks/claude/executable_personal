@@ -56,6 +56,7 @@ if ! mise exec -- claude auth status | jq -e '.authMethod == "oauth_token" and .
 	fail 'Claude did not select OAuth token authentication. Check apiKeyHelper and other authentication settings.'
 fi
 
+export CLAUDE_ACCOUNT=personal
 [[ ${1:-} != -- ]] || shift
 printf 'Using personal Claude OAuth; keeping profile %s.\n' "${CLAUDE_CONFIG_DIR:-$HOME/.config/claude}" >&2
 # shellcheck source=/dev/null

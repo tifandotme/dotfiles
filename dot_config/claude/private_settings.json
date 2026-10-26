@@ -119,15 +119,6 @@
     "claude-opus-5-5": {
       "effortLevel": "medium",
       "autoCompactWindow": 400000
-    },
-    "gpt-6-luna(high)": {
-      "effortLevel": "high"
-    },
-    "gpt-6-sol(medium)": {
-      "effortLevel": "medium"
-    },
-    "gpt-6-astra(medium)": {
-      "effortLevel": "medium"
     }
   },
   "advisorModel": "opus",

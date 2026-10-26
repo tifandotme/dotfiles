@@ -130,14 +130,6 @@ claude() {
 	' _ "$@"
 }
 
-claudex() {
-	ANTHROPIC_BASE_URL=http://127.0.0.1:8317 ANTHROPIC_AUTH_TOKEN=sk-dummy \
-		ANTHROPIC_DEFAULT_OPUS_MODEL='gpt-6-astra(medium)' \
-		ANTHROPIC_DEFAULT_SONNET_MODEL='gpt-6-sol(medium)' \
-		ANTHROPIC_DEFAULT_HAIKU_MODEL='gpt-6-luna(high)' claude "$@"
-}
-
-cliproxyapi() { command cliproxyapi --config "$XDG_CONFIG_HOME/cliproxyapi/config.yaml" "$@"; }
 dotenvx() { DOTENVX_NO_ARMOR=true DOTENVX_NO_1PASSWORD=true command dotenvx "$@"; }
 codex() { command codex --dangerously-bypass-approvals-and-sandbox "$@"; }
 
