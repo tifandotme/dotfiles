@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+#MISE description="Use personal Claude OAuth with the current project's profile"
+#MISE dir="{{cwd}}"
+#MISE raw=true
+#MISE quiet=true
+#USAGE flag "--store-token" help="Read a personal setup-token without echo and save it encrypted with chezmoi"
+#USAGE arg "[claude_args]" var=#true double_dash="required" help="Claude arguments after --, such as --resume SESSION_ID or --continue"
+set +x
+set -Eeuo pipefail
+
+fail() {
+	printf '%s\n' "$1" >&2
+	exit 1
+}
+
+token_file="${XDG_CONFIG_HOME:-$HOME/.config}/claude/personal-oauth-token"
+if [[ ${1:-} == --store-token ]]; then
+	[[ $# == 1 ]] || fail 'Use --store-token without Claude arguments.'
+	IFS= read -r -s -p 'Personal Claude setup-token: ' token
+	printf '\n' >&2
+	[[ -n $token && $token != *[[:space:]]* ]] || fail 'The token is empty or contains whitespace.'
+	source_file="$(chezmoi source-path)/dot_config/claude/encrypted_private_personal-oauth-token.age"
+	umask 077
+	tmp=$(mktemp "${source_file}.XXXXXX")
+	trap 'rm -f "$tmp"' EXIT
+	printf '%s\n' "$token" | chezmoi encrypt --output "$tmp"
+	unset token
+	mv "$tmp" "$source_file"
+	chezmoi apply --include=files "$token_file"
+	printf 'Saved encrypted personal Claude token; shells do not load it automatically.\n'
+	exit 0
+fi
+
+for variable in ANTHROPIC_API_KEY ANTHROPIC_AUTH_TOKEN ANTHROPIC_BASE_URL CLAUDE_CODE_USE_BEDROCK CLAUDE_CODE_USE_VERTEX CLAUDE_CODE_USE_FOUNDRY; do
+	[[ -z ${!variable:-} ]] || fail "Unset $variable before using personal Claude OAuth."
+done
+
+for argument in "$@"; do
+	[[ $argument != --bare ]] || fail 'Personal Claude OAuth is unavailable with --bare.'
+done
+
+[[ -f $token_file ]] || fail 'No personal Claude OAuth token. Run: mise run claude:personal --store-token'
+case $(uname -s) in
+Darwin) permissions=$(stat -f '%Lp' "$token_file") ;;
+Linux) permissions=$(stat -c '%a' "$token_file") ;;
+*) fail 'Personal Claude OAuth supports macOS and Linux.' ;;
+esac
+[[ -O $token_file && $permissions == 600 ]] || fail "$token_file must be owned by you with mode 600."
+token=$(cat "$token_file")
+
+[[ -n $token && $token != *[[:space:]]* ]] || fail 'The personal Claude OAuth token is empty or contains whitespace.'
+export CLAUDE_CODE_OAUTH_TOKEN="$token"
+unset token
+
+if ! mise exec -- claude auth status | jq -e '.authMethod == "oauth_token" and .apiProvider == "firstParty"' >/dev/null; then
+	fail 'Claude did not select OAuth token authentication. Check apiKeyHelper and other authentication settings.'
+fi
+
+[[ ${1:-} != -- ]] || shift
+printf 'Using personal Claude OAuth; keeping profile %s.\n' "${CLAUDE_CONFIG_DIR:-$HOME/.config/claude}" >&2
+# shellcheck source=/dev/null
+. "${XDG_CONFIG_HOME:-$HOME/.config}/shell/interactive.sh"
+claude "$@"
