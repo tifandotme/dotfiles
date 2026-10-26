@@ -5,6 +5,10 @@ local get_target = ya.sync(function()
   return hovered and tostring(hovered.url) or nil
 end)
 
+local invalidate = ya.sync(function()
+  ps.pub("chezmoi-refresh", {})
+end)
+
 local function notify(title, content, level)
   ya.notify { title = title, content = content, timeout = level == "error" and 5 or 3, level = level }
 end
@@ -21,6 +25,7 @@ local function run_chezmoi(args, success_msg)
   end
 
   if output.status.success then
+    invalidate()
     notify("Chezmoi", success_msg, "info")
   else
     notify("Chezmoi", output.stderr ~= "" and output.stderr or ("Exit " .. output.status.code), "error")
