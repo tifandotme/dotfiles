@@ -3,6 +3,7 @@
 ## Linear
 
 - In the Hadl workspace, do not move issues to Done unless the user explicitly tells you to.
+- Embed screenshots and other evidence images in the issue description or a comment: `prepare_file_upload`, PUT the file, then paste the returned markdown. Use `prepare_attachment_upload` only for files people download. Each upload needs its own prepare and PUT within 60 seconds.
 
 ## Production
 

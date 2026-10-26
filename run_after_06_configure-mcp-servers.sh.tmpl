@@ -77,7 +77,7 @@ for config_dir in "${XDG_CONFIG_HOME:-$HOME/.config}/claude" "${XDG_CONFIG_HOME:
 	managed=
 
 	if fff_bin="$(command -v fff-mcp)"; then
-		add_mcp fff "$(jq -n --arg command "$fff_bin" '{type: "stdio", command: $command}')"
+		add_mcp fff "$(jq -n --arg command "$fff_bin" '{type: "stdio", command: $command, alwaysLoad: true}')"
 	else
 		warn 'cannot add Claude MCP server fff; fff-mcp is not installed'
 	fi

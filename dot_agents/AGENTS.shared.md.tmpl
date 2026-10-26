@@ -35,6 +35,7 @@
 ## Git and GitHub
 
 - Git commits: use Conventional Commits only (`fix`, `feat`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`, `revert`). Keep headers under 72 chars, lowercase subject, no period, prefer header-only.
+- PR and issue images: on macOS, `GH_SESSION_TOKEN=$(mise run gh image extract-token) gh image --repo <owner/repo> <file>...` uploads each file to GitHub and prints its markdown; never print or log the token. Without a token, commit the files to an orphan branch `<issue>-screenshots`, link them as `https://github.com/<owner>/<repo>/blob/<branch>/<file>?raw=true`, and delete the branch after the merge. Check that an image shows no customer data first.
 
 ## Browser, web, and cloud tools
 
@@ -66,6 +67,7 @@
 - Code cleanup: after a fix changes direction, audit for speculative or now-dead code from earlier attempts. Remove unused helpers/imports/types before final checks, then rerun the relevant typecheck/lint/format commands.
 - Code comments: never leave tombstone comments (e.g. `# foo removed — reason`) or incident history: what an earlier version did, what broke, how it was found, who found it, ticket and PR numbers for the fix. Say what the code does and why it is this way now. Git blame and the commit message carry the story for anyone who wants it.
 - UI: Keep copy task-focused. Use clear guidance for empty states and errors; avoid decorative narrative.
+- UI options: when the user asks for visual options or a mockup of a UI choice, load `html-prototype` and ground it in the repo's own design tokens. Use `html-wireframe` only for layout and structure questions.
 
 ## Worktrees
 
