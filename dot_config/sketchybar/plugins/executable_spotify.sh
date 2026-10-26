@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Reads Spotify OAuth token from ~/.cache/sketchybar/spotify_token.json.
 
 set -euo pipefail
@@ -13,6 +13,16 @@ TOKEN_FILE="$HOME/.cache/sketchybar/spotify_token.json"
 CLIENT_ID="ad07638fe4104114b946ae56d85ed21b"
 
 if ! pgrep -x Spotify >/dev/null 2>&1; then
+	sketchybar --set "$NAME" drawing=off
+	exit 0
+fi
+
+# Reserve the laptop screen's limited horizontal space for other widgets.
+if ! system_profiler SPDisplaysDataType -json | jq -e '
+	any(.SPDisplaysDataType[]?.spdisplays_ndrvs[]?;
+		.spdisplays_online == "spdisplays_yes" and
+		.spdisplays_connection_type != "spdisplays_internal")
+' >/dev/null; then
 	sketchybar --set "$NAME" drawing=off
 	exit 0
 fi

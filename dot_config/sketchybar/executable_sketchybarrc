@@ -94,11 +94,12 @@ sketchybar --add event spotify_update "com.spotify.client.PlaybackStateChanged"
 sketchybar --add item spotify center \
 	--set spotify \
 	"${GHOST[@]}" \
+	drawing=off \
 	icon="􀑪" \
 	label.max_chars=40 \
 	update_freq=5 \
 	script="$PLUGIN_DIR/spotify.sh" \
-	--subscribe spotify spotify_update
+	--subscribe spotify spotify_update system_woke
 
 # --------------- RIGHT
 
