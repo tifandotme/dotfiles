@@ -41,6 +41,10 @@ for key in "${entries[@]}"; do
 		IFS=$'\t' read -r port instance project zone remote
 	} < <(jq -r --arg key "$key" '.connections[$key] | [.port, .instance, .project, .zone, .remote] | @tsv' "$catalog")
 
+	# Entries on one instance share a port; one forward serves them all.
+	case " ${started:-} " in *" $port "*) continue ;; esac
+	started="${started:-} $port"
+
 	if lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
 		echo "Tunnel already listening on localhost:$port ($key)" >&2
 		continue

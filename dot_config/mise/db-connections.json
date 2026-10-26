@@ -1,6 +1,30 @@
 {
   "gcloud_account": "tifan@hadl.ai",
   "connections": {
+    "aquasense_db_production": {
+      "host": "localhost",
+      "port": 5435,
+      "database": "aquasense_db",
+      "user": "tifan@hadl.ai",
+      "sslmode": "require",
+      "auth": "gcloud-iam",
+      "instance": "aquasense-prod",
+      "project": "aquasense-production",
+      "zone": "asia-southeast1-a",
+      "remote": "10.2.0.3:5432"
+    },
+    "aquasense_db_staging": {
+      "host": "localhost",
+      "port": 5434,
+      "database": "aquasense_db",
+      "user": "tifan@hadl.ai",
+      "sslmode": "require",
+      "auth": "gcloud-iam",
+      "instance": "aqusense-staging",
+      "project": "aquasense-staging",
+      "zone": "asia-southeast1-c",
+      "remote": "172.16.0.3:5432"
+    },
     "core_db_production": {
       "host": "localhost",
       "port": 5435,

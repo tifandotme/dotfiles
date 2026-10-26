@@ -31,7 +31,7 @@ mise run db:tunnel                   # every entry
 
 The task starts only tunnels whose local ports are not already listening. It uses `tifan@hadl.ai` explicitly and does not change the machine's active gcloud account.
 
-The Aquasense production and staging entries that still use password authentication are intentionally not in this catalog. Their IAM enablement is tracked by TIF-87.
+Entries on the same instance (for example `core_db_staging` and `aquasense_db_staging`) share one local port and tunnel.
 
 Do not paste passwords, access tokens, or sensitive query results into chat unless the user explicitly asks.
 
