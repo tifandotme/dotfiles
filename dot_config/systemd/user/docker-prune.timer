@@ -1,0 +1,10 @@
+[Unit]
+Description=Prune Docker build cache and old unused images weekly
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+Unit=docker-prune.service
+
+[Install]
+WantedBy=timers.target

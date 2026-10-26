@@ -51,9 +51,11 @@ Library/LaunchAgents/**
 .config/mise/tasks/box-agents
 .config/rclone/**
 .config/systemd/user/notes-drive-sync.*
+.config/systemd/user/docker-prune.*
 .config/systemd/user/box-agents-autostart.service
 09_enable-box-agents-autostart.sh
 10_configure-box-portal.sh
+11_enable-box-docker-prune.sh
 .local/share/box-agents
 
 # {{- end -}}
