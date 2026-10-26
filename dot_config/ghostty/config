@@ -9,7 +9,7 @@ macos-option-as-alt = true
 
 theme = light:Gruvbox Light,dark:IR Black
 
-custom-shader = shaders/cursors/cursor_warp.glsl
+custom-shader = shaders/cursors/ghostty/cursor_warp.glsl
 custom-shader-animation = always
 
 maximize = true
