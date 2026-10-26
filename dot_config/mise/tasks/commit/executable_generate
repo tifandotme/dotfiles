@@ -149,7 +149,7 @@ generate_message() {
 		fi
 	else
 		if ! raw_output="$(
-			claude \
+			mise run --quiet --raw claude:personal -- \
 				--print \
 				--no-session-persistence \
 				--tools '' \
