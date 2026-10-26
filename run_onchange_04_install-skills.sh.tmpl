@@ -5,27 +5,28 @@
 set -Eeuo pipefail
 
 skills_dir="$HOME/.agents/skills"
-claude_skills_dir="${XDG_CONFIG_HOME:-$HOME/.config}/claude/skills"
+claude_config_dirs=("${XDG_CONFIG_HOME:-$HOME/.config}/claude" "${XDG_CONFIG_HOME:-$HOME/.config}/claude-hadl")
 
 desired_skills=()
 
 install_repo_skills() {
 	local repo="$1"
 	shift
-	local skill_name
-	local missing_skills=()
+	local skill_name config_dir
+	local missing_skills
 
 	desired_skills+=("$@")
-	for skill_name in "$@"; do
-		[[ -f "$skills_dir/$skill_name/SKILL.md" && -f "$claude_skills_dir/$skill_name/SKILL.md" ]] || missing_skills+=("$skill_name")
+	for config_dir in "${claude_config_dirs[@]}"; do
+		missing_skills=()
+		for skill_name in "$@"; do
+			[[ -f "$skills_dir/$skill_name/SKILL.md" && -f "$config_dir/skills/$skill_name/SKILL.md" ]] || missing_skills+=("$skill_name")
+		done
+
+		if ((${#missing_skills[@]} > 0)); then
+			printf 'Installing skills from %s into %s\n' "$repo" "$config_dir"
+			CLAUDE_CONFIG_DIR="$config_dir" skills add "$repo" --agent claude-code codex --skill "${missing_skills[@]}" --global --yes --full-depth
+		fi
 	done
-
-	if ((${#missing_skills[@]} == 0)); then
-		return
-	fi
-
-	printf 'Installing skills from %s\n' "$repo"
-	skills add "$repo" --agent claude-code codex --skill "${missing_skills[@]}" --global --yes --full-depth
 }
 
 if ! command -v skills >/dev/null 2>&1; then
@@ -51,22 +52,6 @@ install_repo_skills "https://github.com/DietrichGebert/ponytail.git" \
 	ponytail-debt
 install_repo_skills "https://github.com/github/gh-stack.git" \
 	gh-stack
-install_repo_skills "https://github.com/googleworkspace/cli.git" \
-	gws-shared \
-	gws-drive \
-	gws-calendar \
-	gws-gmail \
-	gws-gmail-triage \
-	gws-gmail-read \
-	gws-gmail-send \
-	gws-gmail-reply \
-	gws-gmail-reply-all \
-	gws-gmail-forward \
-	gws-gmail-watch \
-	gws-workflow \
-	gws-workflow-meeting-prep \
-	gws-workflow-weekly-digest \
-	gws-sheets
 install_repo_skills "https://github.com/herdrdev/herdr.git" \
 	herdr
 install_repo_skills "https://github.com/humanlayer/skills.git" \
@@ -140,7 +125,7 @@ protected_skills=()
 while IFS= read -r skill_name; do
 	[[ -n "$skill_name" ]] && protected_skills+=("$skill_name")
 done < <(
-	chezmoi managed |
+	chezmoi --persistent-state "$(mktemp -u)" managed |
 		awk -F/ '$1 == ".agents" && $2 == "skills" && NF == 3 { print $3 }' |
 		sort -u
 )
@@ -174,5 +159,7 @@ done
 
 if ((${#stale_skills[@]} > 0)); then
 	printf 'Removing stale global skills: %s\n' "${stale_skills[*]}"
-	skills remove --global "${stale_skills[@]}" --yes
+	for config_dir in "${claude_config_dirs[@]}"; do
+		CLAUDE_CONFIG_DIR="$config_dir" skills remove --global "${stale_skills[@]}" --yes
+	done
 fi
