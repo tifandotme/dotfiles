@@ -1,5 +1,9 @@
 # Hadl
 
+## Repositories
+
+- Before editing a repo's files, read its `AGENTS.md` and `REVIEW.md`, even when the session started in another repo.
+
 ## Linear
 
 - In the Hadl workspace, do not move issues to Done unless the user explicitly tells you to.
