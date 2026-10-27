@@ -8,7 +8,7 @@
     "CLAUDE_CODE_NO_FLICKER": "1",
     "DISABLE_FEEDBACK_COMMAND": "1",
     "CLAUDE_CODE_COORDINATOR_MODE": "0",
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-5-5",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-haiku-5-5",
     "IS_DEMO": "1"
   },
   "attribution": {
