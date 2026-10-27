@@ -69,6 +69,15 @@ export function isDecoration(label: string, state: SpinnerState): boolean {
   )
 }
 
+const MAX_LABEL_LENGTH = 24
+
+// Herdr auto-labels a tab with the last shell command ("> cmd ..."). Renaming
+// pins that label, so cap it before it is pinned.
 export function undecorate(label: string): string {
-  return label.replace(new RegExp(`^(?:[${FRAMES.join("")}⏸] )+`), "")
+  const base = label
+    .replace(new RegExp(`^(?:[${FRAMES.join("")}⏸] )+`), "")
+    .replace(/^> /, "")
+  return base.length > MAX_LABEL_LENGTH
+    ? `${base.slice(0, MAX_LABEL_LENGTH - 1)}…`
+    : base
 }
