@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
-#MISE description="Stop a Box agent tmux session"
+#MISE description="Stop an agent tmux session"
 #MISE dir="{{cwd}}"
 #MISE raw=true
 #MISE quiet=true
-#USAGE arg "<agent>" help="owner/repo, amp:personal, or amp:work"
+#USAGE arg "<agent>" help="Box Claude owner/repo, amp:personal, or amp:work"
 set -Eeuo pipefail
 # shellcheck source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
 agent=${usage_agent?}
 case $agent in
-amp:personal | amp:work) session="box-amp-${agent#amp:}" ;;
-*) session=$(claude_session "$agent") ;;
+amp:personal | amp:work) session="$(agent_machine)-amp-${agent#amp:}" ;;
+*)
+	[[ $(agent_machine) == box ]] || fail 'Repo-based Claude sessions are available only on Box'
+	session=$(claude_session "$agent")
+	;;
 esac
 command -v tmux >/dev/null
 if tmux has-session -t "=$session" 2>/dev/null; then

@@ -21,6 +21,7 @@ docs/
 
 08_install-borders-native.sh
 09_load-borders-native.sh
+10_load-amp-runners.sh
 work/
 personal/
 .zprofile
@@ -48,7 +49,7 @@ Library/LaunchAgents/**
 # {{ if ne .chezmoi.hostname "box" -}}
 
 .inputrc
-.config/mise/tasks/box-agents
+.config/mise/tasks/agents/start/claude
 .config/rclone/**
 .config/systemd/user/notes-drive-sync.*
 .config/systemd/user/docker-prune.*

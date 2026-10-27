@@ -4,8 +4,8 @@ Description=Start selected Box agents in tmux
 [Service]
 Type=oneshot
 Environment="PATH=%h/.local/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:/usr/bin:/bin"
-ExecStart=/home/linuxbrew/.linuxbrew/bin/mise run --quiet --raw box-agents:start:amp personal
-ExecStart=/home/linuxbrew/.linuxbrew/bin/mise run --quiet --raw box-agents:start:amp work
+ExecStart=/home/linuxbrew/.linuxbrew/bin/mise run --quiet --raw agents:start:amp personal
+ExecStart=/home/linuxbrew/.linuxbrew/bin/mise run --quiet --raw agents:start:amp work
 RemainAfterExit=yes
 
 [Install]

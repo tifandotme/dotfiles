@@ -1,11 +1,21 @@
 # shellcheck shell=bash disable=SC2034
-# Shared by the box-agents tasks; sourced, not run.
+# Shared by the agents tasks; sourced, not run.
 
 name_re='[A-Za-z0-9_][A-Za-z0-9._-]*'
 
 fail() {
 	printf '%s\n' "$1" >&2
 	exit 1
+}
+
+agent_machine() {
+	local os
+	os=$(uname -s)
+	case $os in
+	Darwin) printf 'macbook\n' ;;
+	Linux) printf 'box\n' ;;
+	*) fail "Unsupported host for agent sessions: $os" ;;
+	esac
 }
 
 # tmux rewrites "." in session names to "_", so do it here to keep names predictable.

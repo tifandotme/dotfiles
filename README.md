@@ -7,7 +7,7 @@ A chezmoi-managed setup for exactly two machines:
 
 ## Shells
 
-macOS and `box` use Zsh for interactive sessions. `box` keeps Bash installed for scripts and recovery. `.profile` owns shared exported environment, and `.zshrc` loads `~/.config/shell/interactive.sh` for aliases and functions. User-invoked workflows live in `~/.config/mise/tasks/`; run them with `mise run`, for example `mise run cert:check example.com` or `mise run box-agents:status`. `~/.local/bin` remains on `PATH` for installed CLI tools.
+macOS and `box` use Zsh for interactive sessions. `box` keeps Bash installed for scripts and recovery. `.profile` owns shared exported environment, and `.zshrc` loads `~/.config/shell/interactive.sh` for aliases and functions. User-invoked workflows live in `~/.config/mise/tasks/`; run them with `mise run`, for example `mise run cert:check example.com` or `mise run agents:status`. `~/.local/bin` remains on `PATH` for installed CLI tools.
 
 Starship supplies the prompt. Zsh uses native completion, vi editing, `zsh-autosuggestions`, and `zsh-syntax-highlighting`. Atuin owns Ctrl-R in Zsh and syncs encrypted history to the self-hosted service on `box`; autosuggestions try Atuin's local history, then completion. Tab offers mise task names and declared argument choices. Fzf keeps Ctrl-T and Alt-C, and zoxide provides `cd` and `cdi`.
 

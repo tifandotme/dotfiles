@@ -1,15 +1,24 @@
 #!/usr/bin/env bash
-#MISE description="Show all Box agent sessions"
+#MISE description="Show agent tmux sessions"
 #MISE dir="{{cwd}}"
 #MISE raw=true
 #MISE quiet=true
 #USAGE flag "-h --help" help="Print help"
 set -Eeuo pipefail
+# shellcheck source=lib.sh
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
 command -v tmux >/dev/null
+machine=$(agent_machine)
 failed=0
 printf '%-52s %s\n' 'TMUX SESSION' STATUS
-for session in box-amp-personal box-amp-work $(tmux list-sessions -F '#{session_name}' 2>/dev/null | grep -E '^box-claude-' || true); do
+sessions=("$machine-amp-personal" "$machine-amp-work")
+if [[ $machine == box ]]; then
+	while IFS= read -r session; do
+		sessions+=("$session")
+	done < <(tmux list-sessions -F '#{session_name}' 2>/dev/null | grep -E '^box-claude-' || true)
+fi
+for session in "${sessions[@]}"; do
 	if ! tmux has-session -t "=$session" 2>/dev/null; then
 		status='not running'
 	else

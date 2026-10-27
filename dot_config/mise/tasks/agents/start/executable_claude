@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#MISE description="Start a Box Claude tmux session for a GitHub repo, cloning it if missing"
+#MISE description="Start a Box Claude repo session, cloning it if missing"
 #MISE dir="{{cwd}}"
 #MISE raw=true
 #MISE quiet=true

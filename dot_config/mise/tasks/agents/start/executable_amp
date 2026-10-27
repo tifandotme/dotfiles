@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#MISE description="Start a Box Amp runner tmux session"
+#MISE description="Start an Amp runner tmux session"
 #MISE dir="{{cwd}}"
 #MISE raw=true
 #MISE quiet=true
@@ -11,20 +11,20 @@ set -Eeuo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 
 profile=${usage_profile?}
+machine=$(agent_machine)
 case $profile in
 personal)
 	cwd="$HOME/.local/share/chezmoi"
-	runner_id=box
 	discover_dir="$HOME/projects/personal"
 	;;
 work)
 	cwd="$HOME/projects/work"
-	runner_id=box-hadl
 	discover_dir=$cwd
 	;;
 esac
+runner_id=$machine
 command -v amp >/dev/null
 [[ -d $discover_dir ]] || fail "Missing directory: $discover_dir"
 printf -v launch 'exec mise exec -- amp --no-tui --runner-id=%q --no-serve-cwd --discover-dirs=%q --dir=%q' \
 	"$runner_id" "$discover_dir" "$cwd"
-start_session "box-amp-$profile" "$cwd" "$launch"
+start_session "$machine-amp-$profile" "$cwd" "$launch"
