@@ -5,8 +5,9 @@ cd "$(dirname "$0")/.." || exit
 
 tasks=$(
 	{
-		# Global tasks: dot_config/mise/tasks/<group>/executable_<action> -> group:action
-		git ls-files dot_config/mise/tasks | while IFS= read -r path; do
+		# Include untracked source files and skip deleted tracked files during a rename.
+		git ls-files -co --exclude-standard -- dot_config/mise/tasks | while IFS= read -r path; do
+			[[ -f $path ]] || continue
 			rel=${path#dot_config/mise/tasks/}
 			out=""
 			skip=0

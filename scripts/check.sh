@@ -43,6 +43,7 @@ check_json() {
 
 step 'Rendered run_* scripts: bash -n and ShellCheck' check_scripts
 step 'JSON files' check_json
+step 'Amp task profile selection' bash scripts/check-agent-tasks.sh
 step 'mise run references' bash scripts/check-task-refs.sh
 step 'chezmoi apply --dry-run' chezmoi apply --dry-run
 
