@@ -110,7 +110,7 @@
   "modelSettings": {
     "claude-haiku-5-5": {
       "effortLevel": "medium",
-      "autoCompactWindow": 100000
+      "autoCompactWindow": 300000
     },
     "claude-sonnet-5-5": {
       "effortLevel": "medium",
