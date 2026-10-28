@@ -42,11 +42,13 @@ sketchybar --set "$NAME" \\
 
 Use Nerd Font-style icons such as `󰍹` or SF Symbols such as `􀋚`. SketchyBar App Font renders these characters; mappings come from the `sketchybar-app-font` chezmoi external.
 
-Some plugin toggles and theme scripts are symlinks to Raycast scripts. Reuse these instead of duplicating logic:
+Reuse the shared mise task scripts instead of duplicating toggle logic:
 
 ```text
-plugins/symlink_toggle_appearance.sh -> ../../raycast/scripts/toggle_appearance.sh
+plugins/symlink_toggle_appearance.sh -> ../../mise/tasks/theme/appearance
 ```
+
+The caffeinate plugins source `~/.config/mise/tasks/caffeinate/.lib.sh`.
 
 ### Key Files
 

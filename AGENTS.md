@@ -25,7 +25,7 @@ brew "starship"
 
 # Applies only to the main macOS machine:
 # {{ if eq .chezmoi.os "darwin" -}}
-brew "raycast"
+cask "abue-ammar/tinycast/tinycast"
 # {{- end }}
 
 # Applies only to the Ubuntu VPS named box:
@@ -81,7 +81,7 @@ macos-only-value
 
 - GUI apps launched by `launchd` do not source shell startup files or project-scoped `mise.toml` files. They receive the launchd environment instead.
 - `Library/LaunchAgents/private_com.tifan.global-envs.plist.tmpl` is the shared GUI environment; it embeds `GITHUB_TOKEN` from the decrypted secrets, so keep the `private_` prefix. Keep its PATH minimal and stable; do not copy the full interactive shell PATH.
-- GUI-launched scripts must use absolute paths for required external commands. Raycast starts with a system-only PATH; when a launcher delegates to a shared `dot_config/theme` script that resolves Homebrew tools by name, set a minimal stable PATH in that launcher: `/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin`. Add it only to launchers that need those tools, not every Raycast script.
+- GUI-launched scripts must use absolute paths for required external commands. Tinycast commands use `/opt/homebrew/bin/mise`; tasks that delegate to shared `dot_config/theme` scripts set a minimal stable PATH: `/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin`.
 - Keep shared `dot_config/theme` scripts portable to `box` by resolving commands through their inherited PATH instead of hardcoding macOS paths.
 - Do not set `CLOUDSDK_ACTIVE_CONFIG_NAME` globally when the account varies by project. Use an explicit wrapper or project-scoped `mise.toml`.
 - Validate the rendered launch-agent plist with `plutil -lint`; use the shared shell and template checks from `dot_agents/AGENTS.shared.md.tmpl`.

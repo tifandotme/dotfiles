@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#MISE description="Apply a theme color or restore the previous theme"
+#MISE dir="{{cwd}}"
+#USAGE arg "[color]" help="Optional color; opens the picker when omitted"
+#USAGE flag "--undo" help="Restore the previous theme"
+
+set -Eeuo pipefail
+export PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+if [[ ${usage_undo:-false} == true ]]; then
+	if [[ -n ${usage_color:-} ]]; then
+		printf '%s\n' 'A color cannot be combined with --undo.' >&2
+		exit 2
+	fi
+	exec /opt/homebrew/bin/bun "$HOME/.config/theme/apply-theme.ts" --undo
+fi
+
+exec /opt/homebrew/bin/bun "$HOME/.config/theme/apply-theme.ts" "${usage_color:-}"

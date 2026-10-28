@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+
+# {{ if eq .chezmoi.os "darwin" -}}
+set -Eeuo pipefail
+export PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+domain=${TINYCAST_SYNC_DOMAIN:-com.tinycast.app}
+if [[ $domain == com.tinycast.app ]] && /usr/bin/pgrep -x Tinycast >/dev/null; then
+	printf '%s\n' 'Quit Tinycast before applying its managed commands, then rerun chezmoi apply.' >&2
+	exit 1
+fi
+
+tmp=$(/usr/bin/mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+if /usr/bin/defaults export "$domain" "$tmp/preferences.plist" 2>/dev/null; then
+	if /usr/libexec/PlistBuddy -c 'Print :customCommands' "$tmp/preferences.plist" >/dev/null 2>&1; then
+		/usr/bin/plutil -extract customCommands raw -o - "$tmp/preferences.plist" |
+			/usr/bin/base64 -D >"$tmp/current.json"
+	else
+		printf '[]' >"$tmp/current.json"
+	fi
+else
+	if /usr/bin/defaults domains | /usr/bin/tr ',' '\n' | /usr/bin/sed 's/^[[:space:]]*//' | /usr/bin/grep -Fx "$domain" >/dev/null; then
+		printf 'Cannot read Tinycast preferences: %s\n' "$domain" >&2
+		exit 1
+	fi
+	printf '[]' >"$tmp/current.json"
+fi
+
+jq -ce '
+  if type != "array" or any(.[]; type != "object" or (.name | type) != "string") then
+    error("Invalid Tinycast custom commands")
+  else . end
+  | [
+      {id: "25FC77CC-9494-40E2-8D10-15F8E0B9EE8D", name: "Apply Theme",
+       command: "/opt/homebrew/bin/mise run --quiet theme:apply \"$@\"",
+       arguments: [{name: "Optional hex color", isOptional: true}]},
+      {id: "C1CF363C-726E-4707-A76C-3C54A32624AB", name: "Toggle Appearance",
+       command: "/opt/homebrew/bin/mise run --quiet theme:appearance", arguments: []},
+      {id: "FF0675DA-FCE3-4252-870E-F4656A997AAA", name: "Toggle Caffeinate",
+       command: "/opt/homebrew/bin/mise run --quiet caffeinate:toggle", arguments: []},
+      {id: "CE99C26F-B9A1-46CA-BC96-B12B3DB90BA6", name: "Undo Wallpaper Theme",
+       command: "/opt/homebrew/bin/mise run --quiet theme:apply --undo", arguments: []}
+    ] as $managed
+  | reduce $managed[] as $entry (.;
+      if ([.[] | select(.name == $entry.name)] | length) > 1 then
+        error("Duplicate Tinycast command: " + $entry.name)
+      elif any(.[]; .name == $entry.name) then
+        map(if .name == $entry.name then
+          .command = $entry.command | .arguments = $entry.arguments | .workingDirectory = "~"
+        else . end)
+      elif any(.[]; (.id // "" | ascii_downcase) == ($entry.id | ascii_downcase)) then
+        error("Tinycast command ID already in use: " + $entry.name)
+      else . + [$entry + {workingDirectory: "~"}] end)
+' "$tmp/current.json" >"$tmp/updated.json"
+
+if ! /usr/bin/cmp -s "$tmp/current.json" "$tmp/updated.json"; then
+	hex=$(/usr/bin/od -An -v -tx1 "$tmp/updated.json" | /usr/bin/tr -d '[:space:]')
+	/usr/bin/defaults write "$domain" customCommands -data "$hex"
+fi
+# {{ end -}}

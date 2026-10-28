@@ -36,15 +36,6 @@ function optionalRun(command: string, args: string[]) {
   }
 }
 
-function isProcessRunning(name: string) {
-  try {
-    execFileSync("/usr/bin/pgrep", ["-x", name], { stdio: "ignore" });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 function hexToArgb(hex: string, alpha: string) {
   return `0x${alpha}${hex.replace("#", "")}`.toLowerCase();
 }
@@ -181,15 +172,10 @@ function applyTheme() {
     "apply",
     join(home, ".config", "theme"),
     join(home, ".config", "sketchybar"),
-    join(home, ".config", "borders"),
     join(home, ".config", "herdr"),
   ]);
   optionalRun("sketchybar", ["--reload"]);
   if (process.platform === "darwin") {
-    if (isProcessRunning("borders")) {
-      optionalRun(join(home, ".config", "borders", "bordersrc"), []);
-    }
-
     const domain = `gui/${run("/usr/bin/id", ["-u"], { quiet: true })}`;
     optionalRun("/bin/launchctl", ["kickstart", "-k", `${domain}/local.borders-native`]);
   }

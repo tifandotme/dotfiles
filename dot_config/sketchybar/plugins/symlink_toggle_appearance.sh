@@ -1,1 +1,1 @@
-../../raycast/scripts/toggle_appearance.sh
+../../mise/tasks/theme/appearance

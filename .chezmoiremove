@@ -1,2 +1,7 @@
 .config/claude/skills/create-rfc
 .config/claude/skills/hadl-db-creds
+.config/raycast/scripts/apply_theme.sh
+.config/raycast/scripts/caffeinate_lib.sh
+.config/raycast/scripts/toggle_appearance.sh
+.config/raycast/scripts/toggle_caffeinate.sh
+.config/raycast/scripts/undo_wallpaper_theme.sh

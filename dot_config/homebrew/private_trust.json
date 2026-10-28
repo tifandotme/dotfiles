@@ -1,5 +1,6 @@
 {
   "trustedtaps": [
+    "abue-ammar/tinycast",
     "basecamp/tap",
     "dmtrkovalenko/fff",
     "felixkratz/formulae",
@@ -9,5 +10,8 @@
     "nikitabobko/tap",
     "oven-sh/bun",
     "philocalyst/tap"
+  ],
+  "trustedcasks": [
+    "abue-ammar/tinycast/tinycast"
   ]
 }
