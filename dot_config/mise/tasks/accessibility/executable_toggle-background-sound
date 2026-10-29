@@ -7,8 +7,17 @@ set -Eeuo pipefail
 domain=com.apple.ComfortSounds
 key=comfortSoundsEnabled
 
+# Drop a press that lands while another toggle is running, so two reads never race.
+lock="${TMPDIR:-/tmp}/toggle-background-sound.lock"
+mkdir "$lock" 2>/dev/null || exit 0
+trap 'rmdir "$lock"' EXIT
+
 if [ "$(/usr/bin/defaults read "$domain" "$key" 2>/dev/null || echo 0)" = 1 ]; then
 	/usr/bin/defaults write "$domain" "$key" -bool false
 else
 	/usr/bin/defaults write "$domain" "$key" -bool true
 fi
+
+# ponytail: heard only picks up the new value after a restart; launchd respawns it.
+# Ceiling: interrupts a sound that is playing. Upgrade: call the HearingUtilities setComfortSoundsEnabled API.
+/usr/bin/killall heard 2>/dev/null || true
