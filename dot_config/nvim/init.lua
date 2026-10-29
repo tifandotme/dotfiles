@@ -596,9 +596,9 @@ map({ "n", "v" }, "<leader>e", function()
 end, key_opts("File explorer"))
 
 -- Markdown
-map("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", key_opts("Markdown preview"))
-map("n", "<leader>mr", "<cmd>MarkdownPreviewRefresh<cr>", key_opts("Refresh markdown preview"))
-map("n", "<leader>ms", "<cmd>MarkdownPreviewStop<cr>", key_opts("Stop markdown preview"))
+map("n", "<leader>mp", "<cmd>MdKite start<cr>", key_opts("Markdown preview"))
+map("n", "<leader>mr", "<cmd>MdKite refresh<cr>", key_opts("Refresh markdown preview"))
+map("n", "<leader>ms", "<cmd>MdKite stop<cr>", key_opts("Stop markdown preview"))
 map("n", "<leader>mm", function()
   setup_minimap().toggle()
 end, key_opts("Toggle minimap"))
