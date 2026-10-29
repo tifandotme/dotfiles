@@ -20,14 +20,6 @@ if ! command -v curl >/dev/null || ! command -v jq >/dev/null; then
 	hide
 fi
 
-# Hide while a Chromium browser shares the whole screen. Its tab title ends in
-# "Desktop content shared" (the floating "is sharing your screen" bar is not an
-# AeroSpace window).
-if command -v aerospace >/dev/null &&
-	aerospace list-windows --all --format '%{window-title}' 2>/dev/null | grep -Eqi 'desktop content shared|sharing your screen'; then
-	hide
-fi
-
 fetch() {
 	local service token
 	# Claude names the Keychain item after the first 8 hex chars of sha256(config dir).
@@ -98,8 +90,7 @@ Extra)
 *) hide ;;
 esac
 
-sketchybar --set "$NAME" \
+"$HOME/.config/sketchybar/plugins/usage_privacy.sh" show \
 	icon.color="$ACCENT" \
 	label.color="$color" \
-	label="$label" \
-	drawing=on
+	label="$label"

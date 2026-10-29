@@ -41,6 +41,7 @@ Library/LaunchAgents/**
 .config/keymaps
 .config/colima
 .config/mise/tasks/caffeinate
+.config/mise/tasks/sketchybar
 .config/mise/tasks/theme
 .config/mise/tasks/helium
 .config/mise/tasks/claude/extra-usage

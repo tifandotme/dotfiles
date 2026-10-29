@@ -18,6 +18,11 @@ refreshPeriod = "168h"
 [".config/ghostty/shaders/cursors"."pull"]
 args = ["--rebase", "--autostash"]
 
+["Library/Application Support/com.tinycast.app/extensions/screenshot-search"]
+type = "archive"
+url = "https://github.com/kosuketut/tinycast-screenshot-search/releases/download/v1.2.0/screenshot-search.zip"
+checksum.sha256 = "c5e6a4b18a8c29b4274e9cc378d4a6c3560fe98be84013b05aa969c354538c6a"
+
 # {{ end -}}
 
 [".local/share/tolaria-mcp"]

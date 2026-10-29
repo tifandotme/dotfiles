@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#MISE description="Toggle Claude and Codex usage visibility"
+#MISE dir="{{cwd}}"
+
+export PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+exec "$HOME/.config/sketchybar/plugins/usage_privacy.sh" toggle
