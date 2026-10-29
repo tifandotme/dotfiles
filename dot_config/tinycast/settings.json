@@ -137,12 +137,12 @@
     "commands": {}
   },
   "windowManagement": {
-    "enabled": false,
+    "enabled": true,
     "showInLauncher": true,
     "gap": 0,
     "cycle": "off",
-    "layoutsShowInLauncher": true,
-    "roomsShowInLauncher": true,
+    "layoutsShowInLauncher": false,
+    "roomsShowInLauncher": false,
     "shortcuts": {
       "left-half": null,
       "right-half": null,
