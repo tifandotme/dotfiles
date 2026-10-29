@@ -15,7 +15,7 @@
     {{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.hostname "box") -}}
     "tolaria": {
       "command": "{{ if eq .chezmoi.os "darwin" }}{{ .chezmoi.homeDir }}/.local/share/mise/shims/node{{ else }}node{{ end }}",
-      "args": ["{{ .chezmoi.homeDir }}/.local/share/tolaria-mcp/index.js"],
+      "args": ["{{ .chezmoi.homeDir }}/.local/share/tolaria-mcp/mcp-server/index.js"],
       "env": {
         {{ if eq .chezmoi.hostname "box" -}}
         "VAULT_PATH": "{{ .chezmoi.homeDir }}/projects/personal/notes",

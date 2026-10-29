@@ -25,6 +25,6 @@ type = "archive"
 # {{ with gitHubLatestRelease "refactoringhq/tolaria" -}}
 url = "https://github.com/refactoringhq/tolaria/archive/refs/tags/# {{ .TagName }}.tar.gz"
 # {{ end -}}
-stripComponents = 2
-include = ["*/mcp-server/**"]
+stripComponents = 1
+include = ["*/mcp-server/**", "*/src", "*/src/utils", "*/src/utils/typeInstanceDefaults.mjs"]
 refreshPeriod = "168h"

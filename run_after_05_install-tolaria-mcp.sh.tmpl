@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 # chezmoi:template:left-delimiter="# {{" right-delimiter=}}
-tolaria_dir="$HOME/.local/share/tolaria-mcp"
+tolaria_dir="$HOME/.local/share/tolaria-mcp/mcp-server"
 # {{ if eq .chezmoi.hostname "box" -}}
 vault_path="$HOME/projects/personal/notes"
 
@@ -20,9 +20,9 @@ fi
 
 cd "$tolaria_dir"
 # {{ if eq .chezmoi.os "darwin" -}}
-lock_hash="$(shasum -a 256 package-lock.json | awk '{print $1}')"
+lock_hash="$(shasum -a 256 package.json package-lock.json | shasum -a 256 | awk '{print $1}')"
 # {{ else -}}
-lock_hash="$(sha256sum package-lock.json | awk '{print $1}')"
+lock_hash="$(sha256sum package.json package-lock.json | sha256sum | awk '{print $1}')"
 # {{ end -}}
 installed_hash=""
 if [[ -f .chezmoi-package-lock-hash ]]; then
@@ -30,10 +30,33 @@ if [[ -f .chezmoi-package-lock-hash ]]; then
 fi
 
 if [[ ! -d node_modules || "$installed_hash" != "$lock_hash" ]]; then
-	if [[ "$installed_hash" != "$lock_hash" ]]; then
-		rm -f bun.lock bun.lockb
+	install_dir="$(mktemp -d "$tolaria_dir/.install.XXXXXXXX")"
+	trap '
+		if [[ ( -e "$install_dir/previous-node_modules" || -L "$install_dir/previous-node_modules" ) && ! -e node_modules && ! -L node_modules ]]; then
+			mv "$install_dir/previous-node_modules" node_modules || exit 1
+		fi
+		rm -rf "$install_dir"
+	' EXIT
+	cp package.json package-lock.json "$install_dir/"
+	if bun install --cwd "$install_dir" --no-save --production >"$install_dir/bun.log" 2>&1; then
+		cat "$install_dir/bun.log"
+	else
+		cat "$install_dir/bun.log" >&2
+		# Remove this workaround when https://github.com/refactoringhq/tolaria/issues/1303 is fixed.
+		if ! grep -Fq 'lockfile had changes, but lockfile is frozen' "$install_dir/bun.log"; then
+			exit 1
+		fi
+		if ! command -v npm >/dev/null 2>&1; then
+			printf '%s\n' 'npm is required to repair the Tolaria MCP lockfile' >&2
+			exit 1
+		fi
+		(cd "$install_dir" && npm install --package-lock-only --ignore-scripts --no-audit --no-fund)
+		bun install --cwd "$install_dir" --no-save --production
 	fi
-	bun install --no-save --production
+	if [[ -e node_modules || -L node_modules ]]; then
+		mv node_modules "$install_dir/previous-node_modules"
+	fi
+	mv "$install_dir/node_modules" node_modules
 	printf '%s\n' "$lock_hash" >.chezmoi-package-lock-hash.tmp
 	mv .chezmoi-package-lock-hash.tmp .chezmoi-package-lock-hash
 fi

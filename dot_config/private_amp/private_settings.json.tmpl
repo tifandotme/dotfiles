@@ -48,7 +48,7 @@
     "tolaria": {
       "command": "{{ if eq .chezmoi.os "darwin" }}{{ .chezmoi.homeDir }}/.local/share/mise/shims/node{{ else }}node{{ end }}",
       "args": [
-        "{{ .chezmoi.homeDir }}/.local/share/tolaria-mcp/index.js"
+        "{{ .chezmoi.homeDir }}/.local/share/tolaria-mcp/mcp-server/index.js"
       ],
       "env": {
         {{ if eq .chezmoi.hostname "box" -}}
