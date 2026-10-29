@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#MISE description="Toggle macOS accessibility background sounds"
+#MISE description="Toggle macOS accessibility background sounds (Wired In)"
 #MISE dir="{{cwd}}"
 
 set -Eeuo pipefail
@@ -8,7 +8,7 @@ domain=com.apple.ComfortSounds
 key=comfortSoundsEnabled
 
 # Drop a press that lands while another toggle is running, so two reads never race.
-lock="${TMPDIR:-/tmp}/toggle-background-sound.lock"
+lock="${TMPDIR:-/tmp}/toggle-wired-in.lock"
 mkdir "$lock" 2>/dev/null || exit 0
 trap 'rmdir "$lock"' EXIT
 
