@@ -22,7 +22,6 @@ docs/
 08_install-borders-native.sh
 09_load-borders-native.sh
 10_load-amp-runners.sh
-12_configure-tinycast.sh
 work/
 personal/
 .zprofile
@@ -38,6 +37,7 @@ Library/LaunchAgents/**
 .config/kanata
 .config/sketchybar
 .config/tinycast
+.config/raycast
 .config/keymaps
 .config/colima
 .config/mise/tasks/caffeinate
