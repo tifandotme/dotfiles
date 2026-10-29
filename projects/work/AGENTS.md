@@ -21,4 +21,4 @@
 ## Google Cloud
 
 - The `hadl` configuration uses `tifan@hadl.ai`, selected by `CLOUDSDK_ACTIVE_CONFIG_NAME` in `~/projects/work/mise.toml`. Preserve the global active configuration.
-- If gcloud reports `Reauthentication failed`, run `mise run gcloud-auth-check` from `~/projects/work`; its reauth task uses the configured OS keyring. Report unavailable keyring access as a blocker. Never ask for, read, or type the password yourself.
+- If gcloud reports `Reauthentication failed`, run `mise run gcloud-auth-check` from `~/projects/work`; its reauth task uses `GCLOUD_PASS` from `~/.secrets`. Never ask for, read, or type the password yourself.

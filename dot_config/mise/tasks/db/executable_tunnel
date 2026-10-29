@@ -7,6 +7,9 @@
 #USAGE complete "entry" run="jq -r '.connections | keys[]' \"${MISE_CONFIG_DIR:-$HOME/.config/mise}/db-connections.json\""
 set -Eeuo pipefail
 
+# shellcheck source=dot_config/mise/tasks/db/dot_access-token.sh
+source "$(dirname "$0")/.access-token.sh"
+
 config_dir="${MISE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/mise}"
 catalog="$config_dir/db-connections.json"
 if [[ ! -r "$catalog" ]]; then
@@ -52,7 +55,7 @@ for key in "${entries[@]}"; do
 
 	if [[ -z "${authenticated:-}" ]]; then
 		# Reauthenticate once up front; parallel gcloud children would each prompt.
-		gcloud auth print-access-token --account "$account" >/dev/null
+		db_access_token "$account" >/dev/null
 		authenticated=1
 	fi
 
