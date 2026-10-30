@@ -23,4 +23,10 @@ if command -v uv &>/dev/null; then
 			uv tool uninstall "$tool"
 		fi
 	done
+
+	gcloud_venv="$HOME/projects/work/.venv-gcloud"
+	if [[ ! -d "$gcloud_venv" ]]; then
+		uv venv "$gcloud_venv"
+	fi
+	uv pip install --python "$gcloud_venv/bin/python" numpy
 fi
