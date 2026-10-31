@@ -3,20 +3,53 @@
 #MISE dir="{{cwd}}"
 #MISE raw=true
 #MISE quiet=true
-#USAGE arg "<agent>" help="Box Claude owner/repo, amp:personal, or amp:work"
+#USAGE arg "[agent]" help="Session name, Box Claude owner/repo, amp:personal, or amp:work; omit to choose"
 set -Eeuo pipefail
 # shellcheck source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
-agent=${usage_agent?}
+agent=${usage_agent:-}
+machine=$(agent_machine)
+command -v tmux >/dev/null
+if [[ -z $agent ]]; then
+	pattern="^$machine-amp-(personal|work)$"
+	[[ $machine != box ]] || pattern+='|^box-claude-'
+	if ! sessions=$(LC_ALL=C tmux list-sessions -F '#{session_name}' 2>&1); then
+		case $sessions in
+		'no server running on '* | 'error connecting to '*' (No such file or directory)')
+			[[ -z ${TMUX:-} ]] || fail "$sessions"
+			sessions=
+			;;
+		*) fail "$sessions" ;;
+		esac
+	fi
+	sessions=$(printf '%s\n' "$sessions" | grep -E "$pattern" || true)
+	if [[ -z $sessions ]]; then
+		printf 'No agent sessions to stop\n'
+		exit 0
+	fi
+	command -v fzf >/dev/null
+	agent=$(printf '%s\n' "$sessions" | fzf --height='~10' --layout=reverse --no-multi --prompt='Stop agent > ') || {
+		status=$?
+		[[ $status == 1 || $status == 130 ]] && exit 0
+		exit "$status"
+	}
+fi
 case $agent in
-amp:personal | amp:work) session="$(agent_machine)-amp-${agent#amp:}" ;;
+amp:personal | amp:work) session="$machine-amp-${agent#amp:}" ;;
+"$machine-amp-personal" | "$machine-amp-work") session=$agent ;;
+box-claude-*)
+	[[ $machine == box ]] || fail 'Repo-based Claude sessions are available only on Box'
+	session=$agent
+	;;
 *)
-	[[ $(agent_machine) == box ]] || fail 'Repo-based Claude sessions are available only on Box'
+	[[ $machine == box ]] || fail 'Repo-based Claude sessions are available only on Box'
 	session=$(claude_session "$agent")
 	;;
 esac
-command -v tmux >/dev/null
+if [[ $session == box-claude-* ]]; then
+	[[ $session =~ ^box-claude-[A-Za-z0-9_-]+$ ]] || fail "Invalid agent: $agent"
+fi
 if tmux has-session -t "=$session" 2>/dev/null; then
 	tmux kill-session -t "=$session"
 	printf 'Stopped %s\n' "$session"
