@@ -14,8 +14,7 @@
 - Applies to manual changes to production systems or data operated by Hadl (such as a deploy, restart, migration, config or secret change, or data write). Only a change that reaches production automatically when an approved PR merges needs no announcement; the PR approval is the ack.
 - A production deploy that someone triggers (a `workflow_dispatch` run, a tag pick, a rollout or restart workflow, a `kamal` command) is a manual change, even when it ships an approved PR through CI/CD.
 - Before a manual change, draft an announcement for Slack #engineering (`C0AEV5BP35W`) in the user's voice and show it to the user. Post it only after the user confirms.
-- After posting, wait until any engineer replies in the thread, then do the action. Do not require a specific person. If nobody replies, ask the user instead of proceeding.
-- A database migration is the exception: after posting, apply it without waiting for a reply.
+- After posting, do the action. Do not wait for a reply.
 - This does not apply to personal tools or infrastructure just because they work with `hadl-labs` repositories.
 
 ## Google Cloud
