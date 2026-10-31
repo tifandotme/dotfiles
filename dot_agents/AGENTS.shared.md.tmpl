@@ -55,6 +55,7 @@
 ## Remote and headless work
 
 - Before desktop-dependent tasks, identify the execution host and available capabilities. `box` is headless Linux; the viewing device may be elsewhere, even when executing on macOS.
+- Android on the MacBook: prefer wireless ADB. Check `adb devices -l`, then `adb mdns services` if needed; if discovery fails, ask for the current IP and port from the phone's Wireless debugging screen. If ADB cannot connect despite a reachable phone, ask the user to start the ADB server from Ghostty, which has worked on this Mac.
 - On `box` (check `hostname`), end any reply that produced an artifact under `$HOME/projects` (HTML, report, screenshot) with its link: `https://box.javanese-pound.ts.net:8443/` plus the URL-encoded path relative to `$HOME/projects`. Tailnet-only; viewers need Tailscale. For files outside that tree, or on any other host, use an attachment. For public sharing, load `sharing-public-files`.
 - For other remote handoffs, deliver reachable URLs or attachments, not executor-local paths or `localhost`. If unavailable, give exact SSH forwarding or file-transfer commands for the viewing device.
 - For watchers, dev servers, and background shells, use task-owned Herdr panes when inside Herdr (load its skill); otherwise use harness-supported long-running processes. Match the pane's shell. Report temporary previews' URLs, access requirements, lifetime, and stop commands.
