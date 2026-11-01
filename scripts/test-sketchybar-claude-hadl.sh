@@ -26,9 +26,12 @@ check() {
 	fi
 }
 
-check '{"is_enabled":true,"monthly_limit":15000,"used_credits":0,"utilization":null}' on 'label=$0/$150' normal
-check '{"is_enabled":true,"monthly_limit":15000,"used_credits":12000,"utilization":null}' on 'label=$120/$150' warning
-check '{"is_enabled":true,"monthly_limit":15000,"used_credits":15000,"utilization":null}' on 'label=$150/$150' danger
-check '{"is_enabled":true,"monthly_limit":15000,"used_credits":0,"utilization":85}' on 'label=$0/$150' warning
+check '{"is_enabled":true,"monthly_limit":15000,"used_credits":0,"utilization":null}' on "label=\$0/\$150" normal
+check '{"is_enabled":true,"monthly_limit":15000,"used_credits":12000,"utilization":null}' on "label=\$120/\$150" warning
+check '{"is_enabled":true,"monthly_limit":15000,"used_credits":15000,"utilization":null}' on "label=\$150/\$150" danger
+check '{"is_enabled":true,"monthly_limit":15000,"used_credits":0,"utilization":85}' on "label=\$0/\$150" warning
+check '{"is_enabled":true,"monthly_limit":0,"used_credits":0,"utilization":null}' on "label=\$0/\$0" normal
+check '{"is_enabled":true,"monthly_limit":0,"used_credits":100,"utilization":null}' on "label=\$1/\$0" danger
+check '{"is_enabled":true,"monthly_limit":15000,"used_credits":null,"utilization":null}' off
 check '{"is_enabled":false,"monthly_limit":15000,"used_credits":0,"utilization":null}' off
 printf 'Work Claude extra usage: PASS\n'

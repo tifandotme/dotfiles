@@ -79,7 +79,7 @@ Extra)
 		hide
 	fi
 	if [[ -z "$utilization" ]]; then
-		utilization="$(awk -v used="$used" -v limit="$limit" 'BEGIN { print limit > 0 ? used / limit * 100 : (used > 0 ? 100 : 0) }')"
+		utilization="$(awk -v used="$used" -v limit="$limit" 'BEGIN { printf "%.10f", (limit > 0 ? used / limit * 100 : (used > 0 ? 100 : 0)) }')"
 	fi
 	if [[ ! "$utilization" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
 		hide
