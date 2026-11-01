@@ -42,6 +42,9 @@
 - X/Twitter: use `bird` instead of browser automation.
 - Browser use: load `agent-browser` first and use a task-scoped session as its skill directs. On macOS, connect that session to Helium for Agents with `agent-browser connect 9222`; if Helium is unavailable or the connection launches a fresh profile, close the session, run `mise run helium:run`, and reconnect. On headless Linux, use `agent-browser`'s managed headless browser directly and diagnose launch failures with `agent-browser doctor`. For Electron, follow the project `AGENTS.md` and its project-specific CDP port.
 - Authenticated browsing: load `authenticating-browsers` before using saved website logins, refreshing login seeds on macOS, or diagnosing Chrome's sandbox on the headless Linux VPS (hostname `box`). Follow the documented per-site workflow; keep login seeds and runtime credentials out of logs and review artifacts.
+{{ if eq .chezmoi.os "darwin" -}}
+- Android device checks: use `agent-device`. Run `agent-device doctor` first; wireless adb devices show up in `agent-device devices --platform android`. Loop: `open`, `snapshot -i`, act on refs, verify, `close`. In unattended runs, pin the version (`bunx agent-device@<version>`). The first Android snapshot installs a helper APK on the phone; it may need one confirmation tap.
+{{ end -}}
 - Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`.
 {{ if eq (get . "claudeAccount") "personal" -}}
 - For Google Cloud credentials, run `gcloud auth login ifan.anvity@gmail.com --no-activate` for the `personal` configuration.
