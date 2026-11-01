@@ -282,10 +282,6 @@ run = "move-node-to-workspace 0_misc"
 
 # Windows that should float
 [[on-window-detected]]
-if.app-id = "com.pais.handy"
-run = "layout floating"
-
-[[on-window-detected]]
 if.app-id = "com.apple.systempreferences"
 run = "layout floating"
 

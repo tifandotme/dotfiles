@@ -35,9 +35,9 @@ brew "zoxide"  # Smarter cd command with memory
 
 brew "yazi" # Blazing fast terminal file manager
 # Yazi previews: uses fd, fzf, ripgrep, zoxide from "Modern CLI replacements" above; plus:
-brew "jq"       # JSON preview
-brew "yq"       # YAML processor
-brew "sevenzip" # Archive extraction and preview
+brew "jq"                # JSON preview
+brew "yq"                # YAML processor
+brew "sevenzip"          # Archive extraction and preview
 brew "imagemagick"       # Font, HEIC, JPEG XL preview
 brew "poppler"           # PDF preview
 brew "ffmpeg"            # Video thumbnails
@@ -45,10 +45,10 @@ brew "ffmpegthumbnailer" # Create thumbnails for video files
 
 # {{ if $isDarwin -}}
 
-brew "clippy"            # Copy Yazi file references to the macOS clipboard
-brew "infat"             # Declarative macOS file handlers
-cask "finicky"           # App-aware browser routing
-brew "resvg"             # SVG preview
+brew "clippy"  # Copy Yazi file references to the macOS clipboard
+brew "infat"   # Declarative macOS file handlers
+cask "finicky" # App-aware browser routing
+brew "resvg"   # SVG preview
 
 # {{- end }}
 
@@ -286,8 +286,8 @@ cask "qmk-toolbox" # Toolbox companion for QMK Firmware
 # =============================================================================
 
 brew "cloud-sql-proxy"
-cask "tailscale-app"   # Mesh VPN based on WireGuard
-cask "teamviewer"      # Remote access and connectivity software
+cask "tailscale-app" # Mesh VPN based on WireGuard
+cask "teamviewer"    # Remote access and connectivity software
 
 # =============================================================================
 # COMMUNICATION
@@ -324,10 +324,11 @@ cask "transmission"     # BitTorrent client
 cask "bitwarden" # Desktop password and login vault
 cask "crisp"     # Menu bar display manager for DDC brightness, HiDPI, presets, and virtual displays
 # cask "crystalfetch" # UI for creating Windows installer ISO
-cask "handy"       # Speech to text application
-cask "keycastr"    # Open-source keystroke visualiser
-cask "linearmouse" # Customize mouse behavior
-cask "notunes"     # Prevent iTunes/Apple Music from launching
+tap "anomalyco/tap", trusted: true
+cask "anomalyco/tap/hex" # Local voice dictation
+cask "keycastr"          # Open-source keystroke visualiser
+cask "linearmouse"       # Customize mouse behavior
+cask "notunes"           # Prevent iTunes/Apple Music from launching
 tap "abue-ammar/tinycast", trusted: true
 cask "abue-ammar/tinycast/tinycast" # Native launcher
 
