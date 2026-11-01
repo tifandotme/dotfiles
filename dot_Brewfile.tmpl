@@ -109,6 +109,12 @@ brew "dmtrKovalenko/fff/fff-mcp" # Fast file search MCP server for AI agents
 tap "basecamp/tap", trusted: true
 cask "basecamp/tap/fizzy" # CLI for managing Fizzy boards, cards, and tasks
 
+# {{ if $isDarwin -}}
+# Mobile testing
+tap "mobile-dev-inc/tap", trusted: true
+brew "mobile-dev-inc/tap/maestro" # Mobile UI testing framework
+# {{- end }}
+
 # Shell scripting
 brew "actionlint" # Static checker for GitHub Actions workflow files
 brew "shellcheck" # Static analysis for shell scripts
