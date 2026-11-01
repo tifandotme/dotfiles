@@ -75,7 +75,13 @@ Extra)
 	  [.used_credits / 100, .monthly_limit / 100, .utilization] | @tsv
 	' "$CACHE" 2>/dev/null)"
 	IFS=$'\t' read -r used limit utilization <<<"$extra"
-	if [[ ! "$used" =~ ^[0-9]+([.][0-9]+)?$ ]] || [[ ! "$limit" =~ ^[0-9]+([.][0-9]+)?$ ]] || [[ ! "$utilization" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+	if [[ ! "$used" =~ ^[0-9]+([.][0-9]+)?$ ]] || [[ ! "$limit" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+		hide
+	fi
+	if [[ -z "$utilization" ]]; then
+		utilization="$(awk -v used="$used" -v limit="$limit" 'BEGIN { print limit > 0 ? used / limit * 100 : (used > 0 ? 100 : 0) }')"
+	fi
+	if [[ ! "$utilization" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
 		hide
 	fi
 	if awk -v u="$utilization" 'BEGIN { exit !(u >= 100) }'; then

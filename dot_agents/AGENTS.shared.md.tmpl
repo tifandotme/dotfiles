@@ -43,7 +43,7 @@
 - Browser use: load `agent-browser` first and use a task-scoped session as its skill directs. On macOS, connect that session to Helium for Agents with `agent-browser connect 9222`; if Helium is unavailable or the connection launches a fresh profile, close the session, run `mise run helium:run`, and reconnect. On headless Linux, use `agent-browser`'s managed headless browser directly and diagnose launch failures with `agent-browser doctor`. For Electron, follow the project `AGENTS.md` and its project-specific CDP port.
 - Authenticated browsing: load `authenticating-browsers` before using saved website logins, refreshing login seeds on macOS, or diagnosing Chrome's sandbox on the headless Linux VPS (hostname `box`). Follow the documented per-site workflow; keep login seeds and runtime credentials out of logs and review artifacts.
 {{ if eq .chezmoi.os "darwin" -}}
-- Android device checks: use `agent-device`. Run `agent-device doctor` first; wireless adb devices show up in `agent-device devices --platform android`. Loop: `open`, `snapshot -i`, act on refs, verify, `close`. In unattended runs, pin the version (`bunx agent-device@<version>`). The first Android snapshot installs a helper APK on the phone; it may need one confirmation tap.
+- Android devices: prefer wireless ADB. Check `adb devices -l`, then `adb mdns services` if needed; if discovery fails, ask for the current IP and port from the phone's Wireless debugging screen. If ADB cannot connect despite a reachable phone, ask the user to start the ADB server from Ghostty, which has worked on this Mac. For UI checks use `agent-device`, and pin its version in unattended runs. The first Android snapshot installs a helper APK on the phone; it may need one confirmation tap.
 {{ end -}}
 - Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`.
 {{ if eq (get . "claudeAccount") "personal" -}}
@@ -58,7 +58,6 @@
 ## Remote and headless work
 
 - Before desktop-dependent tasks, identify the execution host and available capabilities. `box` is headless Linux; the viewing device may be elsewhere, even when executing on macOS.
-- Android on the MacBook: prefer wireless ADB. Check `adb devices -l`, then `adb mdns services` if needed; if discovery fails, ask for the current IP and port from the phone's Wireless debugging screen. If ADB cannot connect despite a reachable phone, ask the user to start the ADB server from Ghostty, which has worked on this Mac.
 - On `box` (check `hostname`), end any reply that produced an artifact under `$HOME/projects` (HTML, report, screenshot) with its link: `https://box.javanese-pound.ts.net:8443/` plus the URL-encoded path relative to `$HOME/projects`. Tailnet-only; viewers need Tailscale. For files outside that tree, or on any other host, use an attachment. For public sharing, load `sharing-public-files`.
 - For other remote handoffs, deliver reachable URLs or attachments, not executor-local paths or `localhost`. If unavailable, give exact SSH forwarding or file-transfer commands for the viewing device.
 - For watchers, dev servers, and background shells, use task-owned Herdr panes when inside Herdr (load its skill); otherwise use harness-supported long-running processes. Match the pane's shell. Report temporary previews' URLs, access requirements, lifetime, and stop commands.

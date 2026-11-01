@@ -7,7 +7,7 @@ macOS-first dotfiles, chezmoi + age encryption. Shells: system Zsh on macOS and 
 - `box` is reachable at all times with `ssh eddies@box-tailnet` (Tailscale).
 - `box` context: read `~/projects/personal/box/GLOSSARY.md` when work concerns the `box` VPS. Read `~/projects/personal/box/AGENTS.md` before changing that repository.
 
-30+ tools: terminal emulators, editors, window mgmt, status bars, dev tooling. Scoped `AGENTS.md` files are not installed to `$HOME`.
+Scoped `AGENTS.md` files are not installed to `$HOME`.
 
 ### Machine Targeting
 
@@ -88,8 +88,7 @@ macos-only-value
 
 ### Pi Configuration
 
-- `.profile` sets `PI_CODING_AGENT_DIR` to `$XDG_CONFIG_HOME/pi`.
-- Treat `~/.config/pi` as canonical Pi agent config dir.
+- `.profile` sets `PI_CODING_AGENT_DIR` to `$XDG_CONFIG_HOME/pi`; treat `~/.config/pi` as the canonical Pi agent config dir.
 - Don't write Pi config/agents/extensions/settings to `~/.pi/agent` unless asked or `PI_CODING_AGENT_DIR` unset.
 
 ## Shell Configuration
