@@ -17,11 +17,6 @@ if command -v bun &>/dev/null; then
 	}
 
 	desired_bun_packages=(
-		# macOS-only packaging tools
-		# {{ if eq .chezmoi.os "darwin" -}}
-		"agent-device"
-		# {{ end -}}
-
 		# updater
 		"npm-check-updates"
 		"actions-up"
@@ -47,6 +42,10 @@ if command -v bun &>/dev/null; then
 		"skills"
 		"@earendil-works/pi-coding-agent"
 		"agent-browser"
+		# {{ if eq .chezmoi.os "darwin" -}}
+		"agent-desktop"
+		"agent-device"
+		# {{ end -}}
 		"ccstatusline"
 
 		# apps clis
