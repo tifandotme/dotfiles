@@ -52,7 +52,13 @@
   },
   "systemSettings": {
     "enabled": true,
-    "panes": {}
+    "panes": {
+      "com.apple.Spotlight-Settings.extension": {
+        "shortcut": null,
+        "alias": null,
+        "showInLauncher": false
+      }
+    }
   },
   "systemActions": {
     "enabled": true,
