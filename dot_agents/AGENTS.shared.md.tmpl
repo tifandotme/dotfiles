@@ -36,7 +36,7 @@
 
 - Git commits: use Conventional Commits only (`fix`, `feat`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`, `revert`). Keep headers under 72 chars, lowercase subject, no period, prefer header-only.
 - PR and issue images: on macOS, `GH_SESSION_TOKEN=$(mise run gh image extract-token) gh image --repo <owner/repo> <file>...` uploads each file to GitHub and prints its markdown; never print or log the token. Without a token, commit the files to an orphan branch `<issue>-screenshots`, link them as `https://github.com/<owner>/<repo>/blob/<branch>/<file>?raw=true`, and delete the branch after the merge. Check that an image shows no customer data first.
-- Pull requests: when you open a PR from an Amp thread, end the body with `Amp thread: <Amp Thread URL>`.
+- Pull requests: when you open a PR from an Amp thread, end the body with `Thread: <Amp Thread URL>`.
 
 ## Browser, web, and cloud tools
 
