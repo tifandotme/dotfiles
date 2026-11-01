@@ -93,5 +93,3 @@ On Ubuntu, `chezmoi` will skip the macOS-only files. Host-specific files for `bo
 After Homebrew is available on `box`, apply installs Zsh from the Brewfile. The post-apply hook adds it to `/etc/shells` if needed and sets it as the login shell. It may prompt for `sudo` access to update `/etc/shells`. Open a new SSH session to start Zsh. Keep `/bin/bash` installed for scripts and recovery.
 
 Open a new terminal session after bootstrap so new tools and shell config are on your path.
-
-probe one
