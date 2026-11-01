@@ -13,13 +13,13 @@ fail() {
 	exit 1
 }
 
-token_file="${XDG_CONFIG_HOME:-$HOME/.config}/claude/personal-oauth-token"
+token_file="${XDG_CONFIG_HOME:-$HOME/.config}/claude/oauth-token"
 if [[ ${1:-} == --store-token ]]; then
 	[[ $# == 1 ]] || fail 'Use --store-token without Claude arguments.'
 	IFS= read -r -s -p 'Personal Claude setup-token: ' token
 	printf '\n' >&2
 	[[ -n $token && $token != *[[:space:]]* ]] || fail 'The token is empty or contains whitespace.'
-	source_file="$(chezmoi source-path)/dot_config/claude/encrypted_private_personal-oauth-token.age"
+	source_file="$(chezmoi source-path)/dot_config/claude/encrypted_private_oauth-token.age"
 	umask 077
 	tmp=$(mktemp "${source_file}.XXXXXX")
 	trap 'rm -f "$tmp"' EXIT
