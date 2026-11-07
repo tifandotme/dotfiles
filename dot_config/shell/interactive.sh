@@ -131,7 +131,6 @@ claude() {
 }
 
 dotenvx() { DOTENVX_NO_ARMOR=true DOTENVX_NO_1PASSWORD=true command dotenvx "$@"; }
-codex() { command codex --dangerously-bypass-approvals-and-sandbox "$@"; }
 
 brew() {
 	if [ "${CHEZMOI_BYPASS_BREW_GUARD:-0}" != 1 ]; then
