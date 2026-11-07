@@ -31,6 +31,8 @@ Library/LaunchAgents/**
 07_setup-spotify.sh
 .cache/sketchybar
 .config/aerospace
+.config/codex/config.toml
+.config/codex/hooks.json
 .config/ghostty
 .config/infat
 .config/finicky

@@ -17,7 +17,7 @@ toggle)
 		: >"$hidden"
 		args=()
 		for item in claude_hadl_extra claude_hadl_weekly claude_hadl_session claude_hadl_spacer \
-			claude_weekly claude_session openusage_spacer; do
+			claude_weekly claude_session claude_codex_spacer codex_weekly codex_session openusage_spacer; do
 			args+=(--set "$item" drawing=off)
 		done
 		sketchybar "${args[@]}"
