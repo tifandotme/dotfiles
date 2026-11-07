@@ -19,6 +19,8 @@ docs/
 
 # {{ if ne .chezmoi.os "darwin" -}}
 
+04_apply-infat-file-associations.sh
+05_build-sketchybar-app-font.sh
 08_install-borders-native.sh
 09_load-borders-native.sh
 10_load-amp-runners.sh
@@ -55,11 +57,12 @@ Library/LaunchAgents/**
 .inputrc
 .config/mise/tasks/agents/start/claude
 .config/rclone/**
-.config/systemd/user/notes-drive-sync.*
-.config/systemd/user/docker-prune.*
-.config/systemd/user/box-agents-autostart.service
+.config/systemd
+05_configure-agent-browser-sandbox.sh
+08_set-box-login-shell.sh
 09_enable-box-agents-autostart.sh
 10_configure-box-portal.sh
+10_configure-journald.sh
 11_enable-box-docker-prune.sh
 .local/share/box-agents
 
