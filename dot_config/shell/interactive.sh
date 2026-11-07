@@ -81,17 +81,9 @@ pi() { herdr-wrap "${PWD##*/} (pi)" command pi "$@"; }
 btm() { herdr-wrap btm command btm "$@"; }
 amp() { AMP_REMOTE_CONTROL_TERMINAL=1 herdr-wrap "${PWD##*/} (amp)" command mise exec -- amp "$@"; }
 gdu-go() { herdr-wrap "${1:-$PWD} (gdu-go)" command gdu-go "$@"; }
-ssh() { TERM=xterm-256color herdr-wrap "> ${*: -1}" command ssh "$@"; }
-mosh() { TERM=xterm-256color herdr-wrap "> ${*: -1}" command mosh "$@"; }
-
-sshs() {
-	if [ -n "${HERDR_PANE_ID:-}" ]; then
-		TERM=xterm-256color herdr-wrap '> sshs' command sshs "$@" --template \
-			"bash -c '. \"\$XDG_CONFIG_HOME/shell/interactive.sh\"; ssh \"\$1\"' _ '{{{name}}}'"
-	else
-		TERM=xterm-256color command sshs "$@"
-	fi
-}
+ssh() { TERM=xterm-256color command ssh "$@"; }
+mosh() { TERM=xterm-256color command mosh "$@"; }
+sshs() { TERM=xterm-256color command sshs "$@"; }
 
 nvimg() (
 	root=$(git rev-parse --show-toplevel) || return

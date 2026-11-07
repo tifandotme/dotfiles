@@ -21,3 +21,7 @@
 
 - The `hadl` configuration uses `tifan@hadl.ai`, selected by `CLOUDSDK_ACTIVE_CONFIG_NAME` in `~/projects/work/mise.toml`. Preserve the global active configuration.
 - If gcloud reports `Reauthentication failed`, run `mise run gcloud-auth-check` from `~/projects/work`; its reauth task uses `GCLOUD_PASS` from `~/.secrets`. Never ask for, read, or type the password yourself.
+
+## Amp links
+
+- Hadl PRs, Linear issues, Slack messages and commits carry no Amp attachments, thread URLs or other `ampcode.com` links; the team cannot open them. Upload images through GitHub or Linear and link repo, PR or Linear URLs.

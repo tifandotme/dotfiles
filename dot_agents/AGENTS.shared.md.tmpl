@@ -71,7 +71,8 @@
 - Code cleanup: after a fix changes direction, audit for speculative or now-dead code from earlier attempts. Remove unused helpers/imports/types before final checks, then rerun the relevant typecheck/lint/format commands.
 - Code comments: never leave tombstone comments (e.g. `# foo removed — reason`) or incident history: what an earlier version did, what broke, how it was found, who found it, ticket and PR numbers for the fix. Say what the code does and why it is this way now. Git blame and the commit message carry the story for anyone who wants it.
 - UI: Keep copy task-focused. Use clear guidance for empty states and errors; avoid decorative narrative.
-- UI options: when the user asks for visual options or a mockup of a UI choice, load `html-prototype` and ground it in the repo's own design tokens. Use `html-wireframe` only for layout and structure questions.
+- UI options: when a design choice needs the user's decision, show a mockup. Follow the repo's design convention (for example Penpot in haul); without one, make a single self-contained HTML file. Load `html-prototype` and ground it in the repo's own design tokens. Use `html-wireframe` only for layout and structure questions.
+- Design changes: when a design change is final, update the repo's design source (for example Penpot screens) in the same PR. When its tool is unreachable (for example the Penpot tab is closed), ask the user to open it.
 
 ## Worktrees
 
