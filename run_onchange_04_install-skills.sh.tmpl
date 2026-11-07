@@ -40,8 +40,6 @@ if ! command -v chezmoi >/dev/null 2>&1; then
 fi
 
 # Skills are grouped by their source repository.
-install_repo_skills "https://github.com/basecamp/fizzy-cli.git" \
-	fizzy
 install_repo_skills "https://github.com/blader/humanizer.git" \
 	humanizer
 install_repo_skills "https://github.com/cursor/plugins.git#main" \
@@ -59,8 +57,6 @@ install_repo_skills "https://github.com/github/gh-stack.git" \
 	gh-stack
 install_repo_skills "https://github.com/herdrdev/herdr.git" \
 	herdr
-install_repo_skills "https://github.com/humanlayer/skills.git" \
-	show-me
 install_repo_skills "https://github.com/intellectronica/agent-skills.git" \
 	youtube-transcript
 install_repo_skills "https://github.com/jakubkrehel/make-interfaces-feel-better.git" \
@@ -126,45 +122,28 @@ install_repo_skills "https://github.com/warpdotdev/common-skills.git" \
 install_repo_skills "https://github.com/wshobson/agents.git" \
 	bash-defensive-patterns
 
-protected_skills=()
-while IFS= read -r skill_name; do
-	[[ -n "$skill_name" ]] && protected_skills+=("$skill_name")
-done < <(
+keep_skills=$(
+	printf '%s\n' "${desired_skills[@]}"
 	chezmoi --persistent-state "$(mktemp -u)" managed |
-		awk -F/ '$1 == ".agents" && $2 == "skills" && NF == 3 { print $3 }' |
-		sort -u
+		awk -F/ '$1 == ".agents" && $2 == "skills" && NF == 3 { print $3 }'
 )
-
-contains_skill() {
-	local needle="$1"
-	shift
-	local skill_name
-
-	for skill_name in "$@"; do
-		[[ "$skill_name" == "$needle" ]] && return 0
-	done
-	return 1
-}
-
 stale_skills=()
 shopt -s nullglob
 for skill_path in "$skills_dir"/*; do
 	[[ -d "$skill_path" ]] || continue
 
 	skill_name=${skill_path##*/}
-	if contains_skill "$skill_name" "${desired_skills[@]}"; then
-		continue
-	fi
-	if contains_skill "$skill_name" "${protected_skills[@]}"; then
-		continue
-	fi
-
-	stale_skills+=("$skill_name")
+	grep -qxF "$skill_name" <<<"$keep_skills" || stale_skills+=("$skill_name")
 done
 
 if ((${#stale_skills[@]} > 0)); then
 	printf 'Removing stale global skills: %s\n' "${stale_skills[*]}"
 	for config_dir in "${claude_config_dirs[@]}"; do
 		CLAUDE_CONFIG_DIR="$config_dir" skills remove --global "${stale_skills[@]}" --yes
+		# The CLI cleans only this profile's links; drop the ones left dangling by the shared store removal.
+		for skill_name in "${stale_skills[@]}"; do
+			link="$config_dir/skills/$skill_name"
+			if [[ -L $link && ! -e $link ]]; then rm "$link"; fi
+		done
 	done
 fi
