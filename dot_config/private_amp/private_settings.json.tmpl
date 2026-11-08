@@ -1,4 +1,5 @@
 {
+  "$schema": "https://ampcode.com/cli-settings.schema.json",
   "amp.terminal.theme": "terminal",
   "amp.git.commit.coauthor.enabled": false,
   "amp.git.commit.ampThread.enabled": true,
@@ -6,10 +7,6 @@
   "amp.skills.disableClaudeCodeSkills": true,
   "amp.dangerouslyAllowAll": true,
   "amp.gauge": "tokens",
-  "amp.tools.disable": [
-    "builtin:read_web_page",
-    "builtin:web_search"
-  ],
 
   "amp.keymap": {
     "leader": "ctrl+x",
@@ -21,6 +18,7 @@
     "prompt.copySelection": null,
     "prompt.dequeue": null,
     "prompt.history": "ctrl+r",
+    // Ctrl+G does not open $EDITOR in amp 0.0.1794110442-ga8fc4f. Bug report amp_bug_6EMZKeWgp0YUXYdVC6ZYLM: pending.
     "prompt.openInEditor": "ctrl+g",
     "prompt.pasteImageFromClipboard": "ctrl+v",
     "prompt.queue": "ctrl+enter",

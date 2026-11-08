@@ -39,6 +39,8 @@ The task starts only tunnels whose local ports are not already listening. It use
 
 Entries on the same instance (for example `core_db_staging` and `aquasense_db_staging`) share one local port and tunnel.
 
+When a `db:*` task reports that reauthentication is required, it runs `mise -C ~/projects/work run gcloud-reauth`. That task is defined in the work `mise.toml`, so `~/projects/work` must exist on the machine. To check the gcloud state, run `mise -C ~/projects/work run gcloud-auth-check`. Never read or type the password.
+
 Do not paste passwords, access tokens, or sensitive query results into chat unless the user explicitly asks.
 
 These credentials reach live production data. Read freely; before any statement or admin API call that changes a row in a production database or in `haul_db_staging`, state the exact change and the rows it touches, then wait for the user to confirm. Run it with `--write` only after that confirmation. This holds even when the change looks like a cleanup that follows from a finding you just reported: the user asked for the finding, not for the write.

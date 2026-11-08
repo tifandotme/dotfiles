@@ -85,7 +85,16 @@ backlog() { herdr-wrap "${PWD##*/} (backlog)" command backlog "$@"; }
 nvim() { herdr-wrap "${PWD##*/} (nvim)" command nvim "$@"; }
 pi() { herdr-wrap "${PWD##*/} (pi)" command pi "$@"; }
 btm() { herdr-wrap btm command btm "$@"; }
-amp() { AMP_REMOTE_CONTROL_TERMINAL=1 herdr-wrap "${PWD##*/} (amp)" command mise exec -- amp "$@"; }
+amp() {
+	local close=0 rc=0
+	[ "$#" -eq 0 ] && close=1
+	AMP_REMOTE_CONTROL_TERMINAL=1 herdr-wrap "${PWD##*/} (amp)" command mise exec -- amp "$@" || rc=$?
+	# tmux can inherit the ID of a different Herdr pane.
+	if [ "$close" = 1 ] && [ "${HERDR_ENV:-}" = 1 ] && [ -n "${HERDR_PANE_ID:-}" ] && [ -z "${TMUX:-}" ]; then
+		command herdr pane close "$HERDR_PANE_ID" >/dev/null || return "$rc"
+	fi
+	return "$rc"
+}
 gdu-go() { herdr-wrap "${1:-$PWD} (gdu-go)" command gdu-go "$@"; }
 ssh() { TERM=xterm-256color command ssh "$@"; }
 mosh() { TERM=xterm-256color command mosh "$@"; }
@@ -100,6 +109,8 @@ nvimg() (
 gh() { command mise run --quiet --raw gh -- "$@"; }
 
 claude() {
+	local close=0 rc=0
+	[ "$#" -eq 0 ] && close=1
 	case ${1:-} in
 	remote-control | rc) ;;
 	*) set -- --no-chrome "$@" ;;
@@ -125,7 +136,12 @@ claude() {
 			esac
 		fi
 		exec claude --dangerously-skip-permissions "$@"
-	' _ "$@"
+	' _ "$@" || rc=$?
+	# tmux can inherit the ID of a different Herdr pane.
+	if [ "$close" = 1 ] && [ "${HERDR_ENV:-}" = 1 ] && [ -n "${HERDR_PANE_ID:-}" ] && [ -z "${TMUX:-}" ]; then
+		command herdr pane close "$HERDR_PANE_ID" >/dev/null || return "$rc"
+	fi
+	return "$rc"
 }
 
 dotenvx() { DOTENVX_NO_ARMOR=true DOTENVX_NO_1PASSWORD=true command dotenvx "$@"; }

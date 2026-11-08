@@ -1,8 +1,10 @@
-# Hadl
+# Hadl.ai
+
+Hadl.ai builds AI products and expert-labelled data for aquaculture and other physical-world industries.
 
 ## Repositories
 
-- Before editing a repo's files, read its `AGENTS.md` and `REVIEW.md`, even when the session started in another repo.
+- Before editing a repo's files, read its `AGENTS.md`, and its `REVIEW.md` when it has one, even when the session started in another repo.
 
 ## Linear
 
@@ -11,17 +13,14 @@
 
 ## Production
 
-- Applies to manual changes to production systems or data operated by Hadl (such as a deploy, restart, migration, config or secret change, or data write). Only a change that reaches production automatically when an approved PR merges needs no announcement; the PR approval is the ack.
-- A production deploy that someone triggers (a `workflow_dispatch` run, a tag pick, a rollout or restart workflow, a `kamal` command) is a manual change, even when it ships an approved PR through CI/CD.
-- Before a manual change, draft an announcement for Slack #engineering (`C0AEV5BP35W`) in the user's voice and show it to the user. Post it only after the user confirms.
-- After posting, do the action. Do not wait for a reply.
-- This does not apply to personal tools or infrastructure just because they work with `hadl-labs` repositories.
+- Manual changes to production systems or data (a deploy, restart, migration, config or secret change, or data write) need an announcement for Slack #engineering (`C0AEV5BP35W`). Draft it in the user's voice, show it, and post only after the user confirms. Then do the action without waiting for a reply.
+- A deploy someone triggers (a `workflow_dispatch` run, a tag pick, a rollout or restart workflow, a `kamal` command) is manual, even when it ships an approved PR through CI/CD. A change that reaches production automatically when an approved PR merges needs no announcement; the PR approval is the ack.
+- Personal tools and infrastructure are out of scope, even when they work with `hadl-labs` repositories.
 
 ## Google Cloud
 
-- The `hadl` configuration uses `tifan@hadl.ai`, selected by `CLOUDSDK_ACTIVE_CONFIG_NAME` in `~/projects/work/mise.toml`. Preserve the global active configuration.
-- If gcloud reports `Reauthentication failed`, run `mise run gcloud-auth-check` from `~/projects/work`; its reauth task uses `GCLOUD_PASS` from `~/.secrets`. Never ask for, read, or type the password yourself.
+- If gcloud reports `Reauthentication failed`, run `mise -C ~/projects/work run gcloud-auth-check`, which reauthenticates on its own. Never read `~/.secrets` or type the password yourself.
 
 ## Amp links
 
-- Hadl PRs, Linear issues, Slack messages and commits carry no Amp attachments, thread URLs or other `ampcode.com` links; the team cannot open them. Upload images through GitHub or Linear and link repo, PR or Linear URLs.
+- Hadl PRs, Linear issues, Slack messages and commits carry no Amp attachments, thread URLs, `Amp-Thread-ID` trailers or other `ampcode.com` links; the team cannot open them. Upload images through GitHub or Linear and link repo, PR or Linear URLs.
