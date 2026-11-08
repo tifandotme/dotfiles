@@ -49,6 +49,18 @@
       "zone": "asia-southeast1-c",
       "remote": "172.16.0.3:5432"
     },
+    "haul_db_staging": {
+      "host": "localhost",
+      "port": 5434,
+      "database": "haul_db",
+      "user": "tifan@hadl.ai",
+      "sslmode": "require",
+      "auth": "gcloud-iam",
+      "instance": "aqusense-staging",
+      "project": "aquasense-staging",
+      "zone": "asia-southeast1-c",
+      "remote": "172.16.0.3:5432"
+    },
     "internal_db_windmill": {
       "host": "localhost",
       "port": 5433,

@@ -1,1 +1,4 @@
 .config/claude-hadl/skills/chezmoi
+.agents/skills/hadl-db-creds
+.config/claude-hadl/skills/hadl-db-creds
+.agents/skills/chezmoi/hadl-db-creds

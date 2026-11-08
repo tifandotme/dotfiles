@@ -1,11 +1,11 @@
 ---
-name: hadl-db-creds
-description: Provides the shared command contract for connecting to catalogued HADL PostgreSQL databases from macOS or Box with gcloud access tokens.
+name: accessing-hadl-dbs
+description: Queries and tunnels to catalogued Hadl PostgreSQL databases from macOS or Box with gcloud access tokens. Use when asked to query, inspect, or connect to a Hadl database.
 ---
 
-# HADL DB Credentials
+# Accessing Hadl DBs
 
-The shared connection catalog currently has three entries configured to use gcloud IAM tokens. List their keys with:
+The shared connection catalog lists its entries, all using gcloud IAM tokens. List their keys with:
 
 ```sh
 mise run db:list | jq -r '.connections | keys[]'
@@ -35,4 +35,4 @@ Entries on the same instance (for example `core_db_staging` and `aquasense_db_st
 
 Do not paste passwords, access tokens, or sensitive query results into chat unless the user explicitly asks.
 
-These credentials reach live production data. Read freely; before any statement or admin API call that changes a production row, state the exact change and the rows it touches, then wait for the user to confirm. This holds even when the change looks like a cleanup that follows from a finding you just reported: the user asked for the finding, not for the write.
+These credentials reach live production data. Read freely; before any statement or admin API call that changes a row in a production database or in `haul_db_staging`, state the exact change and the rows it touches, then wait for the user to confirm. This holds even when the change looks like a cleanup that follows from a finding you just reported: the user asked for the finding, not for the write.
