@@ -87,7 +87,7 @@ pi() { herdr-wrap "${PWD##*/} (pi)" command pi "$@"; }
 btm() { herdr-wrap btm command btm "$@"; }
 amp() {
 	local close=0 rc=0
-	[ "$#" -eq 0 ] && close=1
+	[ "$#" -eq 0 ] && [ -t 0 ] && [ -t 1 ] && close=1
 	AMP_REMOTE_CONTROL_TERMINAL=1 herdr-wrap "${PWD##*/} (amp)" command mise exec -- amp "$@" || rc=$?
 	# tmux can inherit the ID of a different Herdr pane.
 	if [ "$close" = 1 ] && [ "${HERDR_ENV:-}" = 1 ] && [ -n "${HERDR_PANE_ID:-}" ] && [ -z "${TMUX:-}" ]; then
@@ -110,7 +110,7 @@ gh() { command mise run --quiet --raw gh -- "$@"; }
 
 claude() {
 	local close=0 rc=0
-	[ "$#" -eq 0 ] && close=1
+	[ "$#" -eq 0 ] && [ -t 0 ] && [ -t 1 ] && close=1
 	case ${1:-} in
 	remote-control | rc) ;;
 	*) set -- --no-chrome "$@" ;;
