@@ -2,17 +2,6 @@
 
 {{ output "gh" "api" "-H" "Accept: application/vnd.github.raw" "repos/DietrichGebert/ponytail/contents/AGENTS.md?ref=e3ba2aa6f1e6f0bc4d69eb09c9f0d0a93af56156" "--cache" "168h" | replace "# Ponytail, lazy senior dev mode\n\n" "" | replace "(Yes, this file also applies to agents working on the ponytail repo itself. Especially to them.)" "" | trim }}
 
-## Linear
-
-- For work likely to span sessions or require coordination, ask whether to track it unless a relevant Linear issue already exists, and include the issue identifier in branch, commit, and PR names when relevant.
-{{ if eq (get . "claudeAccount") "personal" -}}
-- Use the Citra Linear workspace for repositories owned by `tifandotme`. If the remote is missing or has another owner, ask before Linear access.
-{{ else if eq (get . "claudeAccount") "hadl" -}}
-- Use the Hadl Linear workspace for repositories owned by `hadl-labs`. If the remote is missing or has another owner, ask before Linear access.
-{{ else -}}
-- Before Linear read/write, confirm that the repository owner matches the Linear workspace: `tifandotme` → `Citra`; `hadl-labs` → `Hadl`. If the remote is missing or has another owner, ask the user.
-{{- end }}
-
 ## Completion
 
 - Keep going when the next step does not need the user's input. Ask before destructive or hard-to-undo actions, or when you cannot continue without a decision.
@@ -30,7 +19,6 @@
 - Markdown: format Markdown files with `oxfmt --write <path-to-file.md>`.
 - Format prose with Markdown, not ANSI terminal escape sequences. Before saving prose through MCP tools, verify it contains no unintended control characters.
 - Human-facing prose: for new files meant for humans to read, load `writing-clearly-and-concisely` first and `humanizer` last; do not use em dashes.
-- Replies to review comments or other claims: before a draft agrees with a claim, verify it against the code, docs, source, or data, and tell the user how you checked. If you could not verify it, say so in the draft instead of agreeing.
 
 ## Git and GitHub
 
@@ -44,17 +32,9 @@
 - Authenticated browsing: load `authenticating-browsers` before using saved website logins, refreshing login seeds on macOS, or diagnosing Chrome's sandbox on the headless Linux VPS (hostname `box`). Follow the documented per-site workflow; keep login seeds and runtime credentials out of logs and review artifacts.
 {{ if eq .chezmoi.os "darwin" -}}
 - Native desktop apps and OS dialogs: use `agent-desktop`. For Electron app content, follow the project's `agent-browser` workflow above. Before using `agent-desktop`, run `agent-desktop skills get desktop` and `agent-desktop skills get platform`.
-- Android UI checks: drive the phone with `agent-device`; pin its version in unattended runs. The first Android snapshot installs a helper APK on the phone; it may need one confirmation tap. For the connection, prefer wireless ADB. Check `adb devices -l`, then `adb mdns services` if needed; if discovery fails, ask for the current IP and port from the phone's Wireless debugging screen. If ADB cannot connect despite a reachable phone, ask the user to start the ADB server from Ghostty, which has worked on this Mac.
+- Android UI checks: drive the phone with `agent-device`, pinned to a version in unattended runs. The first snapshot installs a helper APK that may need one confirmation tap. Connect over wireless ADB (`adb devices -l`, then `adb mdns services`); if discovery fails, ask for the IP and port from the phone's Wireless debugging screen. If ADB still cannot connect, ask the user to start the ADB server from Ghostty, which works on this Mac.
 {{ end -}}
-- Google Cloud: use mise-provided `CLOUDSDK_ACTIVE_CONFIG_NAME`; never run `gcloud config configurations activate`.
-{{ if eq (get . "claudeAccount") "personal" -}}
-- For Google Cloud credentials, run `gcloud auth login ifan.anvity@gmail.com --no-activate` for the `personal` configuration.
-{{ else if eq (get . "claudeAccount") "hadl" -}}
-- For Google Cloud credentials, run `gcloud auth login tifan@hadl.ai --no-activate` for the `hadl` configuration.
-{{ else -}}
-- Google Cloud accounts: `personal` → `ifan.anvity@gmail.com`; `hadl` → `tifan@hadl.ai`. If credentials are missing, run `gcloud auth login <account> --no-activate`.
-{{ end -}}
-- Library docs: use Context7 for current docs. If it has no relevant results, check official docs or source; say it lacked coverage and name the source used.
+- Tool and library docs: Use Context7 to find relevant documentation. Check the official docs or source when coverage is missing, results conflict, or exact version or current behavior matters. Prefer docs for the version in use.
 
 ## Remote and headless work
 
@@ -69,20 +49,16 @@
 
 - Shell scripts: after modifying one, run `shfmt -w -ln <bash|posix|mksh|bats|zsh> <path-to-script>` with its dialect. Run `shellcheck <path-to-script>` for Bash or POSIX-compatible scripts, `bash -n <path-to-script>` for Bash, and `zsh -n <path-to-script>` for Zsh. Prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
 - Code cleanup: after a fix changes direction, audit for speculative or now-dead code from earlier attempts. Remove unused helpers/imports/types before final checks, then rerun the relevant typecheck/lint/format commands.
-- Code comments: never leave tombstone comments (e.g. `# foo removed — reason`) or incident history: what an earlier version did, what broke, how it was found, who found it, ticket and PR numbers for the fix. Say what the code does and why it is this way now. Git blame and the commit message carry the story for anyone who wants it.
+- Code comments: say what the code does and why it is that way now. Leave out tombstones (`# foo removed`) and incident history; git blame and commit messages carry that.
 - UI: Keep copy task-focused. Use clear guidance for empty states and errors; avoid decorative narrative.
 - UI options: when a design choice needs the user's decision, show a mockup. Follow the repo's design convention (for example Penpot in haul); without one, make a single self-contained HTML file. Load `html-prototype` and ground it in the repo's own design tokens. Use `html-wireframe` only for layout and structure questions.
 - Design changes: when a design change is final, update the repo's design source (for example Penpot screens) in the same PR. When its tool is unreachable (for example the Penpot tab is closed), ask the user to open it.
 
 ## Worktrees
 
-- When running in Herdr, prefer `herdr worktree` for a separate write-owning task that needs its own checkout. Let native subagents share their parent checkout. Remove a worktree with the tool that created it.
-- When a task wraps up (its PR is merged, or the user closes it), clean up what you created for it: stop each agent session you started there, run `herdr worktree remove --workspace <id>` without `--force`, and delete the merged local branch. When the worktree is dirty or holds commits the merged PR lacks, stop and report instead.
-- Create worktrees beside the source checkout, named `<repo-name>-<branch-name>`.
-- Replace `/` in branch names with `-` when forming the directory name. If the destination exists, stop and report the collision instead of choosing another path.
-- Pass the absolute destination with `--path` and the chosen branch with `--branch` to `herdr worktree create`. Herdr does not choose this path for the local workflow.
-- Keep session data in each harness's supported storage and resume mechanism. Do not move or edit session files to imitate migration.
-- The project picker removes only clean worktrees merged into the default branch, and refuses worktrees containing ignored files.
-- `mise run project:prune` repairs leftovers of a folder deleted outside Herdr: stale Git registrations and Herdr workspaces whose folder is gone. It is for repairs only, never part of task cleanup. Agents preview with `mise run project:prune [repo] </dev/null`; the user confirms in a terminal.
-- Keep one writing agent per worktree at a time. To move a task to a different agent, stop the first session, then start the next session in the same worktree.
-- When a task spans more than one checkout, put the target in every git and gh command (`git -C <path>`, `gh --repo <owner/name>`); the shell's working directory can reset between calls.
+- When running in Herdr, prefer `herdr worktree` for a separate write-owning task that needs its own checkout; let native subagents share their parent checkout. Create the worktree beside the source checkout as `<repo-name>-<branch-name>`, with `/` in the branch replaced by `-`. Pass the absolute path to `--path` and the branch to `--branch`. If the destination exists, stop and report the collision.
+- When a task wraps up (its PR is merged, or the user closes it), stop the agent sessions you started there, run `herdr worktree remove --workspace <id>` without `--force`, and delete the merged local branch. If the worktree is dirty or holds commits the merged PR lacks, stop and report instead.
+- Keep one writing agent per worktree. To move a task to another agent, stop the first session and start the next one in the same worktree.
+- `mise run project:prune` repairs folders deleted outside Herdr and is never part of task cleanup. Agents preview with `mise run project:prune [repo] </dev/null`; the user confirms it in a terminal.
+- Do not move or edit harness session files to imitate a migration.
+- When a task spans several checkouts, pass the target to every git and gh command (`git -C <path>`, `gh --repo <owner/name>`).
