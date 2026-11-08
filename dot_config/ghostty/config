@@ -81,7 +81,8 @@ keybind = super+ctrl+arrow_down=unbind
 keybind = super+ctrl+arrow_left=unbind
 keybind = super+ctrl+arrow_right=unbind
 keybind = super+ctrl+==unbind
-keybind = super+enter=unbind
+# Cmd+Enter sends Ctrl+Enter (CSI 13;5u) so Amp queues the message (prompt.queue in amp.keymap).
+keybind = super+enter=text:\x1b[13;5u
 keybind = super+shift+enter=unbind
 
 keybind = super+s=write_scrollback_file:open
