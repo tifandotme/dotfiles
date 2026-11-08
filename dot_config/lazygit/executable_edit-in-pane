@@ -22,7 +22,8 @@ done
 
 pane=$(herdr pane split "$HERDR_PANE_ID" --direction down --cwd "$PWD" --focus | jq -r '.result.pane.pane_id') || pane=""
 if [ -z "$pane" ] || [ "$pane" = null ]; then
-	exec nvim "$@"
+	echo "edit-in-pane: herdr could not split a pane for the editor" >&2
+	exit 1
 fi
 
 if [ "$wait" = 0 ]; then
