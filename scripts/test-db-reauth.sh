@@ -125,6 +125,14 @@ rm -f "$TEST_AUTHENTICATED" "$TEST_LOG"
 [[ $(TEST_LISTEN=yes bash "$tmp/tasks/psql" staging -- -Atc 'select 1') == 1 ]]
 [[ $(grep -c '^prompt$' "$TEST_LOG") == 1 ]]
 
+cat >"$tmp/bin/psql" <<'SH'
+#!/usr/bin/env bash
+printf '%s\n' "${PGOPTIONS:-unset}" "$@"
+SH
+[[ $(TEST_LISTEN=yes bash "$tmp/tasks/psql" staging -- -Atc 'select 1') == $'-c default_transaction_read_only=on\n-Atc\nselect 1' ]]
+[[ $(usage_write=true TEST_LISTEN=yes bash "$tmp/tasks/psql" staging --write -- -Atc 'select 1') == $'unset\n-Atc\nselect 1' ]]
+[[ $(PGOPTIONS='-c statement_timeout=5s' TEST_LISTEN=yes bash "$tmp/tasks/psql" staging -- -Atc 'select 1') == $'-c statement_timeout=5s -c default_transaction_read_only=on\n-Atc\nselect 1' ]]
+
 rm -f "$TEST_AUTHENTICATED" "$TEST_LOG"
 TEST_LISTEN=no bash "$tmp/tasks/tunnel"
 grep -qx 'tunnel' "$TEST_LOG"

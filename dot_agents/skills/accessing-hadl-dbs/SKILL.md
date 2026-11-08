@@ -20,6 +20,12 @@ mise run db:psql core_db_staging -- -Atc "select 1"
 mise run db:psql core_db_production -- -f "$PWD/query.sql"
 ```
 
+Sessions are read-only by default. Pass `--write` before `--` only for a change the user has confirmed under the rule at the end:
+
+```sh
+mise run db:psql haul_db_staging --write -- -f "$PWD/fix.sql"
+```
+
 `db:psql` gets a fresh access token for the catalog's explicit gcloud account and passes it to `psql` as `PGPASSWORD`. It does not print the token. Do not get the token yourself for `psql`. The task finds `psql` on `PATH` or under Homebrew's `libpq` prefix.
 
 If the required tunnel is not listening, run the tunnel task in a persistent terminal and leave it running while querying:
@@ -35,4 +41,4 @@ Entries on the same instance (for example `core_db_staging` and `aquasense_db_st
 
 Do not paste passwords, access tokens, or sensitive query results into chat unless the user explicitly asks.
 
-These credentials reach live production data. Read freely; before any statement or admin API call that changes a row in a production database or in `haul_db_staging`, state the exact change and the rows it touches, then wait for the user to confirm. This holds even when the change looks like a cleanup that follows from a finding you just reported: the user asked for the finding, not for the write.
+These credentials reach live production data. Read freely; before any statement or admin API call that changes a row in a production database or in `haul_db_staging`, state the exact change and the rows it touches, then wait for the user to confirm. Run it with `--write` only after that confirmation. This holds even when the change looks like a cleanup that follows from a finding you just reported: the user asked for the finding, not for the write.
