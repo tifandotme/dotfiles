@@ -1,0 +1,40 @@
+#!/usr/bin/env sh
+# Opens a file in nvim for lazygit. Inside herdr, nvim runs in a new pane below,
+# and that pane closes when nvim exits. Elsewhere, nvim runs in place.
+# Usage: edit-in-pane [--wait] [+LINE] FILE
+# Without --wait, the script returns at once so lazygit keeps drawing.
+set -eu
+
+wait=0
+if [ "${1:-}" = --wait ]; then
+	wait=1
+	shift
+fi
+
+if [ "${HERDR_ENV:-}" != 1 ] || [ -z "${HERDR_PANE_ID:-}" ]; then
+	exec nvim "$@"
+fi
+
+quoted=""
+for arg in "$@"; do
+	quoted="$quoted '$(printf '%s' "$arg" | sed "s/'/'\\\\''/g")'"
+done
+
+pane=$(herdr pane split "$HERDR_PANE_ID" --direction down --cwd "$PWD" --focus | jq -r '.result.pane.pane_id') || pane=""
+if [ -z "$pane" ] || [ "$pane" = null ]; then
+	exec nvim "$@"
+fi
+
+if [ "$wait" = 0 ]; then
+	herdr pane run "$pane" "nvim$quoted; herdr pane close \"\$HERDR_PANE_ID\""
+	exit 0
+fi
+
+# Lazygit waits for this script, so wait for nvim to finish or for the pane to go away.
+done_file=$(mktemp -t lazygit-edit)
+rm -f "$done_file"
+herdr pane run "$pane" "nvim$quoted; touch '$done_file'; herdr pane close \"\$HERDR_PANE_ID\""
+while [ ! -e "$done_file" ] && herdr pane get "$pane" >/dev/null 2>&1; do
+	sleep 0.2
+done
+rm -f "$done_file"

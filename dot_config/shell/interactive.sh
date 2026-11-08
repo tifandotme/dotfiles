@@ -73,7 +73,13 @@ herdr-wrap() (
 )
 
 tv() { command tv --color-always --extend-width-and-length "$@" | bat --style plain; }
-lazygit() { herdr-wrap "${PWD##*/} (lzg)" command lazygit "$@"; }
+lazygit() {
+	if [ "${HERDR_ENV:-}" = 1 ]; then
+		herdr-wrap "${PWD##*/} (lzg)" env LG_CONFIG_FILE="$XDG_CONFIG_HOME/lazygit/config.yml,$XDG_CONFIG_HOME/lazygit/herdr.yml" lazygit "$@"
+	else
+		herdr-wrap "${PWD##*/} (lzg)" command lazygit "$@"
+	fi
+}
 lazydocker() { herdr-wrap "${PWD##*/} (lzd)" command lazydocker "$@"; }
 backlog() { herdr-wrap "${PWD##*/} (backlog)" command backlog "$@"; }
 nvim() { herdr-wrap "${PWD##*/} (nvim)" command nvim "$@"; }

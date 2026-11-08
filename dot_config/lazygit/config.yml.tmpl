@@ -6,6 +6,10 @@ os:
   # {{ else }}
   open: "bash -c 'xdg-open {{filename}}'"
   # {{ end }}
+  # Opens nvim in a split pane inside herdr, see edit-in-pane.
+  edit: "$HOME/.config/lazygit/edit-in-pane {{filename}}"
+  editAtLine: "$HOME/.config/lazygit/edit-in-pane +{{line}} {{filename}}"
+  editAtLineAndWait: "$HOME/.config/lazygit/edit-in-pane --wait +{{line}} {{filename}}"
 git:
   overrideGpg: true
   # {{ if eq .chezmoi.os "darwin" }}

@@ -1,0 +1,8 @@
+# Loaded after config.yml, only inside herdr (see lazygit() in dot_config/shell/interactive.sh).
+# Suspending lazygit for an editor inside herdr drops keys and breaks lazygit's redraw, so
+# lazygit keeps drawing and edit-in-pane opens the editor in a split pane instead.
+# Open upstream issues, for when this override can be dropped:
+# https://github.com/herdrdev/herdr/issues/5883
+# https://github.com/jesseduffield/lazygit/issues/6191
+os:
+  editInTerminal: false
