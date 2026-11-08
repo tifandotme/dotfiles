@@ -2,10 +2,6 @@
 
 Hadl.ai builds AI products and expert-labelled data for aquaculture and other physical-world industries.
 
-## Repositories
-
-- Before editing a repo's files, read its `AGENTS.md`, and its `REVIEW.md` when it has one, even when the session started in another repo.
-
 ## Linear
 
 - For work likely to span sessions or require coordination, ask whether to track it unless a relevant Linear issue already exists, and include the issue identifier in branch, commit, and PR names when relevant.
@@ -28,4 +24,4 @@ Hadl.ai builds AI products and expert-labelled data for aquaculture and other ph
 
 ## Amp links
 
-- Hadl PRs, Linear issues, Slack messages and commits carry no Amp attachments, thread URLs, `Amp-Thread-ID` trailers or other `ampcode.com` links; the team cannot open them. Upload images through GitHub or Linear and link repo, PR or Linear URLs.
+- PRs, Linear issues/documents, Slack messages must not mention or include Amp artifacts, thread URLs, or other `ampcode.com` links. The team cannot open them; the user is the only active Amp user.
