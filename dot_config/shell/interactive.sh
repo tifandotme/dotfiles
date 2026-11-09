@@ -244,7 +244,7 @@ get-app-id() { pgrep -f -- "$1"; }
 
 commands() {
 	printf '%s\n' 'Shared aliases and functions: ~/.config/shell/interactive.sh' \
-		'Workflows: mise run project:open|prune, chezmoi sync|cd, y, nvimg,' \
+		'Workflows: chezmoi sync|cd, y, nvimg,' \
 		'mise run files:compare|open-book, git rebase-release|loggy, gibo gibo-strip' \
 		'Global tasks: mise tasks ls; mise run updater:start|clean, cert:check, youtube:download, containers:stop, linear:unread'
 	alias

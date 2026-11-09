@@ -59,6 +59,5 @@
 - When running in Herdr, prefer `herdr worktree` for a separate write-owning task that needs its own checkout; let native subagents share their parent checkout. Create the worktree beside the source checkout as `<repo-name>-<branch-name>`, with `/` in the branch replaced by `-`. Pass the absolute path to `--path` and the branch to `--branch`. If the destination exists, stop and report the collision.
 - When a task wraps up (its PR is merged, or the user closes it), stop the agent sessions you started there, run `herdr worktree remove --workspace <id>` without `--force`, and delete the merged local branch. If the worktree is dirty or holds commits the merged PR lacks, stop and report instead.
 - Keep one writing agent per worktree. To move a task to another agent, stop the first session and start the next one in the same worktree.
-- `mise run project:prune` repairs folders deleted outside Herdr and is never part of task cleanup. Agents preview with `mise run project:prune [repo] </dev/null`; the user confirms it in a terminal.
 - Do not move or edit harness session files to imitate a migration.
 - When a task spans several checkouts, pass the target to every git and gh command (`git -C <path>`, `gh --repo <owner/name>`).
