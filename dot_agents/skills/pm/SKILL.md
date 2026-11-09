@@ -11,7 +11,7 @@ Project facts (tracker, runners, announcements, build rules, rollout) live in th
 
 1. Find the project root with `git rev-parse --show-toplevel` from the working directory. If it is not a git repo, ask which project this is.
 2. Read the project's `AGENTS.md`, `docs/agents/*.md`, and any `AGENTS.md` above the repo root. A workspace-level file often holds the announcement and production rules.
-3. Read the handoff doc at `~/.local/state/pm/<main-repo-name>.md`, including every "Update" section. `<main-repo-name>` is the folder name of the main checkout, even when this thread runs in a worktree: `basename "$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")"`. If the file does not exist, create it with empty sections and ask the user for the current state.
+3. Read the handoff doc at `~/.local/state/pm/<main-repo-name>.md`, including every "Update" section. `<main-repo-name>` is the folder name of the main checkout, even when this thread runs in a worktree: `basename "$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")"`. If the file does not exist, create it with the sections under "Handoff" below, left empty, and ask the user for the current state.
 4. Reply with a short summary: current state, open items, blockers, and one `Next:` line. Wait for the user's OK before spawning any child.
 
 ## Role
@@ -26,6 +26,7 @@ You do not implement code. You plan, spawn and steer implementor threads, keep t
 - Ask before adding anything native (new native module, plugin, permission, SDK bump) or starting a paid or rationed build. The project docs name the build quota.
 - If a change alters a recorded decision, a config table, or another ticket's input, stop and ask.
 - Follow the project's own rules for design, builds, and device checks. Do not restate them here.
+- If a child reports something the user already settled with it, record it in the handoff and do not reply. No acknowledgments.
 
 ## Models and runners
 
@@ -44,7 +45,7 @@ Start with the goal in one line, then "Do the work yourself; do not create other
 5. Ask before anything native, or before changing a recorded decision.
 6. Verify with the project's checks.
 7. Ship flow (below). "Me" in the ship flow means the user.
-8. End: report to the orchestrator thread with `send_thread_message` (outcome, PR URL, blockers), include the same in the final response, then archive yourself.
+8. End: when you finish, get blocked, or need a decision, report to the orchestrator thread with `send_thread_message` (outcome, PR URL, blockers). Do not report each reply. If the user messages you directly, answer them in this thread and do not forward that exchange; report the outcome once when it is done. Include the same in the final response, then archive yourself.
 
 ## Ship flow
 
@@ -62,8 +63,15 @@ Squash-merge once CI passes, the current changes are approved, and blocking feed
 
 ## Rollout
 
-Rollout steps come from the project docs or the handoff doc. Do not invent them.
+Rollout steps come from the project docs. Do not invent them.
 
 ## Handoff
 
-Update the handoff doc at each hand-off and after any state change: open PRs, builds, open items, and decisions taken. Keep it short. Never put secrets in it.
+The handoff doc holds state only, in these sections:
+
+- **Open threads:** child threads and open PRs, with IDs and status.
+- **Decisions waiting on the user:** each open question, with the options.
+- **Blockers:** what stops work, and who can unblock it.
+- **Last updated:** the date of the last change.
+
+Update it at each hand-off and after any of those change. Keep it short. Never put secrets in it. Rules, commands and procedures belong in the project's docs. If you find one in the handoff, tell the user which project doc it should move to.
