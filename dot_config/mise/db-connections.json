@@ -58,6 +58,8 @@
       "auth": "gcloud-iam",
       "instance": "aqusense-staging",
       "project": "aquasense-staging",
+      "db_instance": "staging-db",
+      "db_project": "hadl-staging",
       "zone": "asia-southeast1-c",
       "remote": "172.16.0.3:5432"
     },
