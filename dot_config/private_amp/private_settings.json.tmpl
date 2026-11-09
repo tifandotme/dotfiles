@@ -44,6 +44,10 @@
   },
   {{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.hostname "box") -}}
   "amp.mcpServers": {
+    "whatsapp": {
+      "url": "http://box.javanese-pound.ts.net:8765/sse",
+      "transport": "sse"
+    },
     {{ if eq .chezmoi.os "darwin" -}}
     "openpencil": {
       "url": "http://127.0.0.1:7600/mcp"
