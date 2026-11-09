@@ -44,6 +44,11 @@
   },
   {{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.hostname "box") -}}
   "amp.mcpServers": {
+    {{ if eq .chezmoi.os "darwin" -}}
+    "openpencil": {
+      "url": "http://127.0.0.1:7600/mcp"
+    },
+    {{ end -}}
     "tolaria": {
       "command": "{{ if eq .chezmoi.os "darwin" }}{{ .chezmoi.homeDir }}/.local/share/mise/shims/node{{ else }}node{{ end }}",
       "args": [
