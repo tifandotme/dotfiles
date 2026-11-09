@@ -50,7 +50,8 @@
     },
     {{ if eq .chezmoi.os "darwin" -}}
     "openpencil": {
-      "url": "http://127.0.0.1:7600/mcp"
+      "command": "{{ .chezmoi.homeDir }}/.local/share/mise/shims/node",
+      "args": ["{{ .chezmoi.homeDir }}/.local/share/bun/bin/openpencil-mcp"]
     },
     {{ end -}}
     "tolaria": {
