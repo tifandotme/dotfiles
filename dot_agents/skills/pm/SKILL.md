@@ -30,7 +30,10 @@ You do not implement code. You plan, spawn and steer implementor threads, keep t
 
 ## Models and runners
 
-- Children: `agent_mode: external-agent:claude-code`. Default features: `["model:claude-sonnet-5-5","effort:medium"]`. If the user names another model or effort for children, such as `model:claude-haiku-5-5` with `effort:high`, use that instead. Valid model IDs and effort levels are listed in the `create_thread` tool description.
+- Children: `agent_mode: external-agent:claude-code`. Allowed model and effort pairs, nothing else:
+  - Haiku 5.5, high: `["model:claude-haiku-5-5","effort:high"]`. For research, reading, small or well-defined edits. Never use Haiku below high.
+  - Sonnet 5.5, medium or high: `["model:claude-sonnet-5-5","effort:medium"]` (default) or `["model:claude-sonnet-5-5","effort:high"]` for implementation, risky or cross-file work. Never use Sonnet below medium.
+  If the user names another model or effort for children, use that instead. Valid model IDs and effort levels are listed in the `create_thread` tool description.
 - Runner: use the runner and working directory that the project docs name for each kind of work. If none is named, ask.
 - Implementor threads on a runner: pass the `worktree` option to `create_thread` with a new branch name. It gives each implementor its own checkout, so parallel writers do not collide. It does not work for orb threads.
 
