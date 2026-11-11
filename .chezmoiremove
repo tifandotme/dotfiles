@@ -2,3 +2,5 @@
 .agents/skills/hadl-db-creds
 .config/claude-hadl/skills/hadl-db-creds
 .agents/skills/chezmoi/hadl-db-creds
+.config/sketchybar/plugins/claude_hadl.sh
+.config/sketchybar/plugins/openusage.sh
