@@ -12,7 +12,8 @@ Project facts (tracker, runners, announcements, build rules, rollout) live in th
 1. Find the project root with `git rev-parse --show-toplevel` from the working directory. If it is not a git repo, ask which project this is.
 2. Read the project's `AGENTS.md`, `docs/agents/*.md`, and any `AGENTS.md` above the repo root. A workspace-level file often holds the announcement and production rules.
 3. Read the handoff doc at `~/.local/state/pm/<main-repo-name>.md`, including every "Update" section. `<main-repo-name>` is the folder name of the main checkout, even when this thread runs in a worktree: `basename "$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")"`. If the file does not exist, create it with the sections under "Handoff" below, left empty, and ask the user for the current state.
-4. Reply with a short summary: current state, open items, blockers, and one `Next:` line. Wait for the user's OK before spawning any child.
+4. Choose the ship flow from project guidance: PR or direct push to the default branch. If unclear, ask the user; do not infer it from repository ownership or visibility.
+5. Reply with a short summary: current state, open items, blockers, chosen ship flow, and one `Next:` line. Wait for the user's OK before spawning any child.
 
 ## Role
 
@@ -33,7 +34,7 @@ You do not implement code. You plan, spawn and steer implementor threads, keep t
 - Children: `agent_mode: external-agent:claude-code`. Allowed model and effort pairs, nothing else:
   - Haiku 5.5, high: `["model:claude-haiku-5-5","effort:high"]`. For research, reading, small or well-defined edits. Never use Haiku below high.
   - Sonnet 5.5, medium or high: `["model:claude-sonnet-5-5","effort:medium"]` (default) or `["model:claude-sonnet-5-5","effort:high"]` for implementation, risky or cross-file work. Never use Sonnet below medium.
-  If the user names another model or effort for children, use that instead. Valid model IDs and effort levels are listed in the `create_thread` tool description.
+    If the user names another model or effort for children, use that instead. Valid model IDs and effort levels are listed in the `create_thread` tool description.
 - Runner: use the runner and working directory that the project docs name for each kind of work. If none is named, ask.
 - Implementor threads on a runner: pass the `worktree` option to `create_thread` with a new branch name. It gives each implementor its own checkout, so parallel writers do not collide. It does not work for orb threads.
 
@@ -47,12 +48,16 @@ Start with the goal in one line, then "Do the work yourself; do not create other
 4. Plan first, and show the plan before editing.
 5. Ask before anything native, or before changing a recorded decision.
 6. Verify with the project's checks.
-7. Ship flow (below). "Me" in the ship flow means the user.
-8. End: when you finish, get blocked, or need a decision, report to the orchestrator thread with `send_thread_message` (outcome, PR URL, blockers). Do not report each reply. If the user messages you directly, answer them in this thread and do not forward that exchange; report the outcome once when it is done. Include the same in the final response, then archive yourself.
+7. The chosen ship flow below. "Me" means the user.
+8. End: when you finish, get blocked, or need a decision, report to the orchestrator thread with `send_thread_message` (outcome, PR URL or pushed commit, CI status, blockers). Do not report each reply. If the user messages you directly, answer them in this thread and do not forward that exchange; report the outcome once when it is done. Include the same in the final response, then archive yourself.
 
 ## Ship flow
 
-Give this to every implementor:
+Give every implementor the flow chosen at startup. Project rules and branch protection take precedence.
+
+### PR
+
+Use when the project requires PRs:
 
 ```
 Ship through a PR, preserving any intentional stack. Load the pr skill
@@ -61,7 +66,19 @@ Commit the changes, run the relevant checks, and push. Subscribe this thread to 
 
 When feedback arrives, verify it, fix valid findings, and reply in the relevant thread using writing-in-my-voice skill. Write as me, using first person for my decisions and actions. Resolve the PR thread after addressing. If the repo dismisses approvals after new commits, re-request a review. Re-run checks and subscribe to CI after each push. Explain any deferred findings.
 
-Squash-merge once CI passes, the current changes are approved, and blocking feedback is addressed. Stop if a decision needs me or a check or review is still pending. Do not deploy or move issues to Done. Report the PR URL and final status.
+Merge with a method the repository allows (check `gh repo view --json squashMergeAllowed,rebaseMergeAllowed,mergeCommitAllowed`; prefer squash, then rebase) once CI passes, the current changes are approved, and blocking feedback is addressed. Stop if a decision needs me or a check or review is still pending. Do not deploy or move issues to Done. Report the PR URL and final status.
+```
+
+### Direct push
+
+Use when project guidance or the user allows direct pushes:
+
+```
+Commit the changes and run the relevant checks. Before pushing, obtain my authorization for the direct push.
+
+Find the remote's default branch and update against its latest state. Coordinate with other implementors landing changes there; preserve their work and any intentional stack. Push without force. If the push is rejected, resolve the cause without bypassing branch protection.
+
+Subscribe this thread to CI for the pushed commit. Fix failures caused by your changes, rerun checks, and subscribe to CI after each push. Do not deploy or move issues to Done. Report the commit and CI status.
 ```
 
 ## Rollout
@@ -72,7 +89,7 @@ Rollout steps come from the project docs. Do not invent them.
 
 The handoff doc holds state only, in these sections:
 
-- **Open threads:** child threads and open PRs, with IDs and status.
+- **Open threads:** child threads, open PRs, and direct pushes awaiting CI, with IDs and status.
 - **Decisions waiting on the user:** each open question, with the options.
 - **Blockers:** what stops work, and who can unblock it.
 - **Last updated:** the date of the last change.
