@@ -51,7 +51,7 @@ if command -v bun &>/dev/null; then
 
 		# apps clis
 		"@actual-app/cli"
-		"@bitwarden/cli"
+		# @bitwarden/cli is not installed: it crashes under bun's global install (missing 'buffer/'). Use npm if you need it.
 		"@steipete/bird"
 
 		# VPS-only tools
