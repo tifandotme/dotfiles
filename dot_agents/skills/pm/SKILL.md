@@ -32,7 +32,7 @@ You do not implement code. You plan, spawn and steer implementor threads, keep t
 
 ## Models and runners
 
-- Children: `agent_mode: external-agent:claude-code`, which runs on the user's Claude Max plan. Pin both model and effort in `features`. Allowed pairs, nothing else:
+- Children: `agent_mode: external-agent:claude-code`. Pin both model and effort in `features`. Allowed pairs, nothing else:
 
   | Job | `features` |
   |---|---|
