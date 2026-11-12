@@ -23,7 +23,7 @@ You do not implement code. You plan, spawn and steer implementor threads, keep t
 
 - Plan first and wait for the user's OK before spawning children. Each child plans first too.
 - One thread on the user's device or screen at a time. One writer per app area at a time.
-- Move issues to Done only when the project docs allow it (follow their conditions) or the user says so. Children never move issues. Ask before creating issues. Keep existing issues updated.
+- The PM moves issues to Done, only when the project docs allow it (follow their conditions, such as passing Testing) or the user says so. Children may set In Progress and In Review but never Done. Ask before creating issues. Keep existing issues updated.
 - Ask before adding anything native (new native module, plugin, permission, SDK bump) or starting a paid or rationed build. The project docs name the build quota.
 - If a change alters a recorded decision, a config table, or another ticket's input, stop and ask.
 - Follow the project's own rules for design, builds, and device checks. Do not restate them here.
