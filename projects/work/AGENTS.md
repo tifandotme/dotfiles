@@ -6,7 +6,7 @@ Hadl.ai builds AI products and expert-labelled data for aquaculture and other ph
 
 - For work likely to span sessions or require coordination, ask whether to track it unless a relevant Linear issue already exists, and include the issue identifier in branch, commit, and PR names when relevant.
 - Use the Hadl Linear workspace for repositories owned by `hadl-labs`. If the remote is missing or has another owner, ask before Linear access.
-- In the Hadl workspace, do not move issues to Done unless the user explicitly tells you to.
+- In the Hadl workspace, a merged PR moves its issue from In Review to Testing automatically. Move an issue to Done only after it has passed Testing (the work is merged and verified). Never skip Testing, and do not move an issue to Done while it is still in progress or in review.
 - Embed screenshots and other evidence images in the issue description or a comment: `prepare_file_upload`, PUT the file, then paste the returned markdown. Use `prepare_attachment_upload` only for files people download. Each upload needs its own prepare and PUT within 60 seconds.
 
 ## Production

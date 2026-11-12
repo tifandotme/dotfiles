@@ -33,4 +33,4 @@ Report the rows removed and the rows kept, with the reason for each kept row.
 - Ancestor checks and `git cherry` miss squash merges. The PR head SHA is the reliable signal.
 - The primary checkout (first `worktree` entry) is never removed, even when it is dirty or on a merged branch.
 - Untracked files make a worktree dirty. Do not force past them.
-- Process checks use `lsof` and only see files and processes the current user can inspect. A process can start after the final check.
+- Process checks use `lsof` and only see files and processes the current user can inspect. A process can start after the final check. `lsof` warnings about filesystems that neither hold nor contain the projects directory are ignored; any other warning fails the scan.
