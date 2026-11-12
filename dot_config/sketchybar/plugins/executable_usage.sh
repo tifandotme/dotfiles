@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Usage widget fed by the Windmill usage backend (Tailscale only, server-side cached).
-# All items share one cached response, refreshed at most every CACHE_TTL seconds.
+# All items share one cached response, refreshed at most every CACHE_TTL seconds (the backend polls providers every 5 min).
 
 # shellcheck disable=SC1091
 source "$HOME/.config/theme/palette.sh"
@@ -10,7 +10,7 @@ metric="${2:?metric is required (session|weekly|spend)}"
 
 readonly URL="${USAGE_URL:-https://windmill.tifan.me/api/r/production/usage/latest}"
 readonly CACHE="${TMPDIR:-/tmp}/windmill_usage.json"
-readonly CACHE_TTL=60
+readonly CACHE_TTL=5
 
 hide() {
 	sketchybar --set "$NAME" drawing=off
