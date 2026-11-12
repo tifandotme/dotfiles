@@ -2,6 +2,11 @@
 
 {{ output "gh" "api" "-H" "Accept: application/vnd.github.raw" "repos/DietrichGebert/ponytail/contents/AGENTS.md?ref=e3ba2aa6f1e6f0bc4d69eb09c9f0d0a93af56156" "--cache" "168h" | replace "# Ponytail, lazy senior dev mode\n\n" "" | replace "(Yes, this file also applies to agents working on the ponytail repo itself. Especially to them.)" "" | trim }}
 
+## Architecture
+
+- Build cleanly and modularly, with proper architecture and separation of concerns. Never bolt a feature on just because it was asked for.
+- If a feature cannot be built naturally in the current structure and a refactor would make it clean, stop before doing the work and recommend the refactor.
+
 ## Completion
 
 - Keep going when the next step does not need the user's input. Ask before destructive or hard-to-undo actions, or when you cannot continue without a decision.
