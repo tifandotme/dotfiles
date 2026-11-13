@@ -30,20 +30,20 @@ You do not implement code. You plan, spawn and steer implementor threads, keep t
 - Write steering messages to children as plain instructions from the orchestrator that state the ask. Odd text after tool output may be treated as injection and ignored.
 - If a child reports something the user already settled with it, record it in the handoff and do not reply. No acknowledgments.
 
-## Modes and runners
+## Models, effort and runners
 
-- Children: pass `agent_mode` as the mode for the job, and leave `features` unset.
+- Children: set `agent_mode` and `effort` explicitly using the table below. Leave `features` unset.
 
-  | Job | `agent_mode` |
-  |---|---|
-  | Research, reading, small or well-defined edits | `low` |
-  | Normal implementation (default) | `medium` |
-  | Risky, cross-file or long implementation; independent review; hard design, migrations, hard debugging | `high` |
-  | Work that still fails at `high` | `ultra`, only with the user's OK |
+  | Job                                                                                                   | `agent_mode`                  | `effort` |
+  | ----------------------------------------------------------------------------------------------------- | ----------------------------- | -------- |
+  | Research, reading, small or well-defined edits                                                        | `anthropic/claude-sonnet-5-5` | `medium` |
+  | Normal implementation (default)                                                                       | `anthropic/claude-opus-5-5`   | `medium` |
+  | Risky, cross-file or long implementation; independent review; hard design, migrations, hard debugging | `anthropic/claude-opus-5-5`   | `high`   |
+  | Work that still fails with Opus 5.5 high, only with the user's OK                                     | `anthropic/claude-fable-5-2`  | `medium` |
+  - Escalate early stops, skipped checks or repeated failures in this order: Sonnet 5.5 medium → Opus 5.5 medium → Opus 5.5 high. Ask for the user's OK before escalating to Fable 5.2 medium.
+  - To adjust thinking effort, change `effort`, not the prompt. Keep each model within the effort levels listed above.
+  - If the user explicitly chooses another model or effort for children, use that instead.
 
-  - If a child stops early or skips checks, move it up one mode before rewording the brief. If it fails the same task twice, move it up again.
-  - To get more or less thinking, change the mode, not the prompt.
-  - If the user names another mode for children, use that instead.
 - Runner: use the runner and working directory that the project docs name for each kind of work. If none is named, ask.
 - Implementor threads on a runner: pass the `worktree` option to `create_thread` with a new branch name. It gives each implementor its own checkout, so parallel writers do not collide. It does not work for orb threads.
 
@@ -56,7 +56,7 @@ Start with the goal in one line, then "Do the work yourself; do not create other
 3. Do: numbered steps, and what not to touch (no deploys, no moving issues to Done).
 4. Plan first, and show the plan before editing.
 5. Ask before anything native, or before changing a recorded decision.
-6. Verify with the project's checks. For `low` children, add: "Before reporting done, run a real check that exercises the change (tests, type-check, build, or the changed command). A syntax-only check does not count. If no real check can run, say which one you skipped and why."
+6. Verify with the project's checks. For Sonnet children, add: "Before reporting done, run a real check that exercises the change (tests, type-check, build, or the changed command). A syntax-only check does not count. If no real check can run, say which one you skipped and why."
 7. The chosen ship flow below. "Me" means the user.
 8. End: when you finish, get blocked, or need a decision, report to the orchestrator thread with `send_thread_message` (outcome, PR URL or pushed commit, CI status, blockers). Do not report each reply. If the user messages you directly, answer them in this thread and do not forward that exchange; report the outcome once when it is done. Include the same in the final response, then archive yourself.
 
