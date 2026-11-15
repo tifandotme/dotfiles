@@ -1,5 +1,7 @@
 # Mole `mo clean` coverage for updater cleanup
 
+Historical comparison: `updater:clean` now uses the `cleaning-up-storage` skill's bounded helper and does not invoke Mole. The coverage below describes the earlier updater implementation.
+
 ## Scope
 
 The installed `mo --version` reports Mole 1.64.0. The official `V1.64.0` tag resolves to commit `8eb31131b57e63419b97cab3500b906538eb341a`; its `mole` entrypoint sets `VERSION="1.64.0"` [S1]. The README requires macOS 12 or newer, so Linux is outside the documented platform support [S2].

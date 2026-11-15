@@ -4,6 +4,9 @@
 .agents/skills/chezmoi/hadl-db-creds
 .config/sketchybar/plugins/claude_hadl.sh
 .config/sketchybar/plugins/openusage.sh
+.agents/skills/cleaning-up-worktrees
+.config/claude/skills/cleaning-up-worktrees
+.config/claude-hadl/skills/cleaning-up-worktrees
 .agents/skills/html
 .agents/skills/html-diagram
 .agents/skills/html-plan

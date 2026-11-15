@@ -1,62 +1,13 @@
 #!/usr/bin/env bash
-#MISE description="Remove caches and unused resources"
+#MISE description="Audit storage; explicitly recover space from inactive merged worktrees and safe caches"
 #MISE dir="{{cwd}}"
 #MISE quiet=true
 #MISE raw=true
+#USAGE flag "--apply" help="Clean all eligible worktrees and allowlisted caches"
+#USAGE flag "--recover" help="Clean only until free-space headroom is restored"
+#USAGE flag "--check" help="Check free space only; exit 3 when low"
+#USAGE flag "--worktree <path>" help="Restrict worktree candidates to this path; caches remain in scope"
 #USAGE flag "-h --help" help="Print help"
-set -uo pipefail
+set -Eeuo pipefail
 
-available() { command -v "$1" >/dev/null 2>&1; }
-
-step() {
-	local label=$1
-	shift
-
-	printf '\n==> %s\n' "$label"
-	if ! "$@"; then
-		printf 'Skipping failed step: %s\n' "$label" >&2
-		failed=1
-	fi
-}
-
-failed=0
-
-if available mise; then
-	step 'mise unused versions' mise prune -y
-fi
-
-if ! available mo; then
-	if available mise; then
-		step 'mise cache' mise cache clear -y
-	fi
-	available pnpm && step 'pnpm store' pnpm store prune
-	available npm && step 'npm cache' npm cache clean --force
-	available uv && step 'uv cache' uv cache clean
-	if available go; then
-		step 'Go build cache' go clean -cache
-		step 'Go module cache' go clean -modcache
-	fi
-fi
-
-if available brew; then
-	step 'Homebrew cleanup' brew cleanup --prune-prefix
-	step 'Homebrew old versions' brew cleanup --prune=all
-	step 'Homebrew unused dependencies' brew autoremove
-fi
-
-if [[ $(hostname -s) != box ]] && available docker && docker info >/dev/null 2>&1; then
-	# Volumes may contain databases; prune them explicitly when needed.
-	step 'Docker stopped containers' docker container prune -f
-	step 'Docker unused networks' docker network prune -f
-	step 'Docker unused images' docker image prune -a -f
-	step 'Docker build cache' docker builder prune -f
-fi
-
-if [[ $(uname -s) == Linux ]]; then
-	[[ ! -d $HOME/.local/share/Trash ]] || step 'Linux Trash' sudo -n find "$HOME/.local/share/Trash" -mindepth 2 -delete
-	available journalctl && step 'User journal' journalctl --user --vacuum-size=200M
-fi
-
-available mo && step 'Mole cleanup' mo clean
-
-exit "$failed"
+exec bun "$HOME/.agents/skills/cleaning-up-storage/scripts/cleanup.ts" "$@"

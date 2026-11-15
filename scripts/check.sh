@@ -46,6 +46,7 @@ step 'JSON files' check_json
 step 'Amp task profile selection' bash scripts/check-agent-tasks.sh
 step 'Amp runner restart' bash scripts/test-amp-runner-restart.sh
 step 'Agent pane closure' bash scripts/test-agent-pane-close.sh
+step 'Storage cleanup safety' bun scripts/test-storage-cleanup.ts
 step 'mise run references' bash scripts/check-task-refs.sh
 step 'chezmoi apply --dry-run' chezmoi apply --dry-run
 
