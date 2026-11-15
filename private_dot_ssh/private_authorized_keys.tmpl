@@ -1,0 +1,5 @@
+{{ if eq .chezmoi.hostname "box" -}}
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP8C5ffF7fJa0i8u93wcMWWlzXZVWY8zqR8bFc28uto4 hi@tifan.me
+{{ else if eq .chezmoi.os "darwin" -}}
+from="100.76.252.84" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINrvX2FBkLk3i4fbxFTKyihymMmfcOU5FhrDeLrPQ5kh box->macbook
+{{ end -}}

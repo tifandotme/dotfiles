@@ -65,5 +65,7 @@ Library/LaunchAgents/**
 10_configure-journald.sh
 11_enable-box-docker-prune.sh
 .local/share/box-agents
+.ssh/id_ed25519_macbook
+.ssh/id_ed25519_macbook.pub
 
 # {{- end -}}
