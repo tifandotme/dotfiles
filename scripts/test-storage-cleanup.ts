@@ -36,7 +36,6 @@ const env = {
   XDG_DATA_HOME: join(home, ".local/share"),
   XDG_PROJECTS_DIR: join(home, "projects"),
   PATH: `${bin}:${process.env.PATH}`,
-  HERDR_ENV: "",
   TEST_REAL_GIT: originalGit,
   GIT_CONFIG_GLOBAL: "/dev/null",
   GIT_CONFIG_NOSYSTEM: "1",
@@ -62,9 +61,11 @@ lsof)
   [[ \${TEST_SCAN_FAIL:-0} != 1 ]] || exit 1
   printf '%s\\n' "\${TEST_LSOF:-p1}"
   [[ -z \${TEST_WARNING:-} ]] || printf '%s\\n' "$TEST_WARNING" >&2 ;;
-amp) [[ \${TEST_RUNNER_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_RUNNERS:-}" ;;
+amp)
+  if [[ "\${1:-}" == threads ]]; then
+    [[ \${TEST_THREADS_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_THREADS:-[]}"
+  else [[ \${TEST_RUNNER_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_RUNNERS:-}"; fi ;;
 du) [[ \${TEST_DU_FAIL:-0} != 1 ]] || exit 1; exec /usr/bin/du "$@" ;;
-herdr) [[ \${TEST_HERDR_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_HERDR:-}" ;;
 tmux) printf '%s\\n' "\${TEST_PANE:-/unrelated}" ;;
 gh) [[ \${TEST_PR_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_PRS:-[]}" ;;
 docker) [[ "$*" == 'system df' ]] || exit 99; printf 'report only\\n' ;;
@@ -89,7 +90,7 @@ for (const tool of [
   "lsof",
   "amp",
   "du",
-  "herdr",
+
   "tmux",
   "gh",
   "docker",
@@ -142,6 +143,15 @@ try {
   git(repo, "worktree", "lock", locked);
   const active = tree("active");
   const idle = tree("idle");
+  const stale = tree("stale");
+  // A thread still served from `idle` protects it; `stale` is only a picker entry.
+  put(
+    join(home, ".local/share/amp/runner/test.json"),
+    JSON.stringify({
+      workingDirectory: repo,
+      servedThreadWorkingDirectories: { "T-1": idle },
+    }),
+  );
   const unfinished = tree("unfinished");
   git(unfinished, "commit", "--allow-empty", "-qm", "unmerged");
   const hidden = tree("hidden");
@@ -159,7 +169,7 @@ try {
     TEST_LSOF: `p12\nn${join(alias, "projects/active/tracked")}`,
     TEST_PROCESSES: "1 init\n13 amp",
     TEST_RUNNERS: JSON.stringify({
-      runners: [{ workingDirectory: repo, directories: [{ path: idle }] }],
+      runners: [{ workingDirectory: repo, directories: [{ path: idle }, { path: stale }] }],
     }),
   };
   const audit = command([], protectedEnv);
@@ -169,6 +179,7 @@ try {
   command(["--apply"], protectedEnv);
   assert.ok(!existsSync(safe), "merged inactive worktree should be removed");
   assert.ok(!git(repo, "branch", "--list", "safe-with-spaces"), "branch should be removed");
+  assert.ok(!existsSync(stale), "a runner picker entry alone must not protect a worktree");
   for (const path of [repo, dirty, untracked, ignored, locked, active, idle, unfinished, hidden])
     assert.ok(existsSync(path), path);
   assert.equal(readFileSync(join(ignored, ".env"), "utf8"), "SECRET=preserve\n");
@@ -182,7 +193,6 @@ try {
   for (const extra of [
     { TEST_SCAN_FAIL: "1" },
     { TEST_FETCH_FAIL: "1" },
-    { TEST_PROCESSES: "1 herdr" },
     { TEST_PROCESSES: "1 amp", TEST_RUNNER_FAIL: "1" },
     { TEST_PROCESSES: "1 tmux: server", TEST_PANE: guarded },
     { TEST_WARNING: `lsof: WARNING: can't stat() ext4 file system ${home}` },
@@ -197,23 +207,25 @@ try {
   command(["--apply", "--worktree", guarded], { TEST_RACE: guarded });
   assert.ok(existsSync(guarded), "changed HEAD must survive");
   assert.equal(git(guarded, "log", "-1", "--format=%s"), "race");
-  // Inside Herdr, protect the paths it reports; unreadable or path-less inventory keeps everything.
-  const herdrTree = tree("herdr");
-  const inHerdr = { TEST_PROCESSES: "1 herdr", HERDR_ENV: "1" };
-  for (const extra of [
-    { TEST_HERDR: JSON.stringify({ panes: [{ cwd: herdrTree }] }) },
-    { TEST_HERDR: "{}" },
-    { TEST_HERDR: "not json" },
-    { TEST_HERDR_FAIL: "1" },
-  ]) {
-    command(["--apply", "--worktree", herdrTree], { ...inHerdr, ...extra });
-    assert.ok(existsSync(herdrTree), JSON.stringify(extra));
-  }
-  command(["--apply", "--worktree", herdrTree], {
-    ...inHerdr,
-    TEST_HERDR: JSON.stringify({ panes: [{ cwd: home }] }),
-  });
-  assert.ok(!existsSync(herdrTree), "a Herdr inventory that excludes a worktree must not block it");
+  const detached = tree("detached");
+  git(detached, "checkout", "-q", "--detach");
+  command(["--apply", "--worktree", detached], { TEST_FETCH_FAIL: "1" });
+  assert.ok(existsSync(detached), "detached worktree needs a refreshed remote base");
+  command(["--apply", "--worktree", detached]);
+  assert.ok(!existsSync(detached), "merged detached worktree should be removed");
+  const detachedAhead = tree("detached-ahead");
+  git(detachedAhead, "checkout", "-q", "--detach");
+  git(detachedAhead, "commit", "--allow-empty", "-qm", "unmerged detached");
+  command(["--apply", "--worktree", detachedAhead]);
+  assert.ok(existsSync(detachedAhead), "unmerged detached worktree must survive");
+  const sleeping = tree("sleeping");
+  const thread = JSON.stringify([{ id: "T-2", tree: `file://${sleeping}` }]);
+  command(["--apply", "--worktree", sleeping], { TEST_THREADS: thread });
+  assert.ok(existsSync(sleeping), "an unarchived thread must protect its worktree");
+  command(["--apply", "--worktree", sleeping], { TEST_THREADS_FAIL: "1" });
+  assert.ok(existsSync(sleeping), "an unreadable thread list must keep worktrees");
+  command(["--apply", "--worktree", sleeping]);
+  assert.ok(!existsSync(sleeping), "an archived thread must not protect its worktree");
   const squash = tree("squash");
   git(squash, "commit", "--allow-empty", "-qm", "squashed elsewhere");
   const head = git(squash, "rev-parse", "HEAD");

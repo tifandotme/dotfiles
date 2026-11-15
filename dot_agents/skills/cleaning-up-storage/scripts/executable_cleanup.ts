@@ -174,40 +174,9 @@ function processReason(path: string, scan: ReturnType<typeof activity>) {
     return "open files or process working directory";
   return "";
 }
-function herdrInventory() {
-  if (process.env.HERDR_ENV !== "1") return undefined;
-  // The JSON schema is not fixed here: protect every absolute path string it reports.
-  const found: string[] = [];
-  const walk = (value: unknown) => {
-    if (typeof value === "string" && isAbsolute(value)) found.push(value);
-    else if (Array.isArray(value)) value.forEach(walk);
-    else if (record(value)) Object.values(value).forEach(walk);
-  };
-  for (const argv of [
-    ["pane", "list"],
-    ["workspace", "list"],
-  ]) {
-    const result = run("herdr", argv);
-    if (!result.ok) return undefined;
-    try {
-      walk(JSON.parse(result.out));
-    } catch {
-      return undefined;
-    }
-    // Without any reported path the inventory proves nothing, so keep everything.
-    if (!found.length) return undefined;
-  }
-  return found;
-}
 function sessions(scan: ReturnType<typeof activity>) {
   const protectedPaths = [cwd];
   let error = "";
-  if (scan.names.some((name) => /^(herdr|herdr-server)$/.test(name))) {
-    // Herdr forbids inspecting its session from outside a managed pane.
-    const herdrPaths = herdrInventory();
-    if (herdrPaths) protectedPaths.push(...herdrPaths);
-    else error = "Herdr is running; keep worktrees until session ownership can be verified";
-  }
   if (scan.names.some((name) => name.startsWith("tmux"))) {
     const panes = run("tmux", ["list-panes", "-a", "-F", "#{pane_current_path}"]);
     if (!panes.ok || !panes.out || panes.out.split("\n").some((path) => !isAbsolute(path)))
@@ -220,21 +189,12 @@ function sessions(scan: ReturnType<typeof activity>) {
       const data: unknown = JSON.parse(runners.out);
       if (!runners.ok || !record(data) || !Array.isArray(data.runners)) throw new Error();
       for (const runner of data.runners) {
-        if (
-          !record(runner) ||
-          !Array.isArray(runner.directories) ||
-          typeof runner.workingDirectory !== "string"
-        )
-          throw new Error();
+        if (!record(runner) || typeof runner.workingDirectory !== "string") throw new Error();
+        // Served directories only fill the new-thread picker and outlive archived threads.
         protectedPaths.push(runner.workingDirectory);
-        for (const dir of runner.directories) {
-          if (!record(dir) || typeof dir.path !== "string" || !isAbsolute(dir.path))
-            throw new Error();
-          protectedPaths.push(dir.path);
-        }
       }
       // A runner from another account may not appear in this CLI's response.
-      // Keep every directory recorded by either account, including sleeping sessions.
+      // Keep the working directory of every thread either account's runners serve.
       const root = join(process.env.XDG_DATA_HOME || join(home, ".local/share"), "amp");
       const roots = [join(root, "runner")];
       const accounts = join(root, "accounts");
@@ -245,12 +205,12 @@ function sessions(scan: ReturnType<typeof activity>) {
           const state: unknown = JSON.parse(readFileSync(join(dir, file), "utf8"));
           if (
             !record(state) ||
-            !Array.isArray(state.directories) ||
+            typeof state.workingDirectory !== "string" ||
             !record(state.servedThreadWorkingDirectories)
           )
             throw new Error();
           for (const path of [
-            ...state.directories,
+            state.workingDirectory,
             ...Object.values(state.servedThreadWorkingDirectories),
           ]) {
             if (typeof path !== "string" || !isAbsolute(path)) throw new Error();
@@ -259,6 +219,25 @@ function sessions(scan: ReturnType<typeof activity>) {
         }
     } catch {
       error = "Amp runner/session inventory unavailable";
+    }
+  }
+  // An unarchived thread keeps its checkout even while its runner sleeps it.
+  // Each Amp account lists its own threads; the work account is selected by mise.
+  const lists = [["amp"]];
+  if (existsSync(join(projects, "work")))
+    lists.push(["mise", "exec", "-C", join(projects, "work"), "--", "amp"]);
+  for (const [command, ...prefix] of lists) {
+    const threads = run(command!, [...prefix, "threads", "list", "--json", "--limit", "1000"]);
+    try {
+      const data: unknown = JSON.parse(threads.out);
+      if (!threads.ok || !Array.isArray(data)) throw new Error();
+      for (const thread of data) {
+        if (!record(thread)) throw new Error();
+        if (typeof thread.tree === "string" && thread.tree.startsWith("file://"))
+          protectedPaths.push(decodeURIComponent(thread.tree.slice(7)));
+      }
+    } catch {
+      error = "Amp thread inventory unavailable";
     }
   }
   return {
@@ -342,7 +321,6 @@ function eligibility(
   if (tree.path === tree.primary) return "primary checkout";
   if (within(cwd, path)) return "current checkout or its parent";
   if (tree.locked) return "locked worktree";
-  if (!tree.branch) return "detached worktree; review manually";
   if (!base) return "remote refresh/default branch failed";
   const process = activityReason(path, scan, session);
   if (process) return process;
@@ -367,7 +345,8 @@ function eligibility(
     return "sensitive ignored files or ignored-file scan failed";
   const url = git(path, "remote", "get-url", "origin");
   let mergedPR = false;
-  if (/github\.com[:/]/.test(url.out)) {
+  // A detached HEAD has no PR; only ancestry on the remote base counts.
+  if (tree.branch && /github\.com[:/]/.test(url.out)) {
     const prs = run(
       "gh",
       [
