@@ -38,10 +38,6 @@ add_mcp() {
 	claude mcp add-json --scope user "$name" "$json" || warn "could not add Claude MCP server $name"
 }
 
-add_http() {
-	add_mcp "$1" "$(jq -n --arg url "$2" '{type: "http", url: $url}')"
-}
-
 prune_mcps() {
 	local config="$CLAUDE_CONFIG_DIR/.claude.json"
 	local names
@@ -91,12 +87,6 @@ for config_dir in "${XDG_CONFIG_HOME:-$HOME/.config}/claude" "${XDG_CONFIG_HOME:
 		else
 			warn "cannot add Claude MCP server tolaria; $tolaria_node is not installed"
 		fi
-	fi
-
-	if [[ -n "${PENPOT_MCP_URL:-}" ]]; then
-		add_http penpot "$PENPOT_MCP_URL"
-	else
-		warn 'cannot add Claude MCP server penpot; PENPOT_MCP_URL is unset'
 	fi
 
 	prune_mcps
