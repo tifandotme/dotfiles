@@ -31,7 +31,7 @@ The helper must confirm every safety check before removal. A failed or unavailab
 - Keep primary, current, locked, dirty, and untracked worktrees. Keep worktrees with sensitive or other ignored files; only ignored `node_modules/` directories and root `.amp/in/` scratch may be discarded with an otherwise eligible worktree.
 - Require merge evidence: HEAD is already on the remote base, or a merged PR's head SHA exactly matches local HEAD. The exact PR head match supports squash merges; a similar patch or a merged PR for an older head does not. Keep worktrees with open PRs.
 - Keep worktrees in use by processes, open files, or tmux panes. Protect all Amp runner-registered directories, even idle ones. An idle runner directory is not evidence of an unused checkout.
-- If Herdr is running, keep worktrees: its sessions cannot be safely inventoried from outside Herdr. This is an intentional safety limit, not a reason to bypass the helper. Cache cleanup can still proceed.
+- If Herdr is running, keep worktrees unless you run the helper inside a Herdr pane (`HERDR_ENV=1`). There it protects every path that `herdr pane list` and `herdr workspace list` report, and keeps all worktrees if that inventory fails or reports no paths. Outside Herdr its sessions cannot be inventoried, so this is an intentional safety limit, not a reason to bypass the helper. Cache cleanup can still proceed.
 - Do not stop processes, close sessions, or unregister runner paths to make a worktree eligible. Do not force removal of a kept worktree. Let the helper remove only eligible worktrees and their eligible merged local branches.
 
 ## Cache allowlist

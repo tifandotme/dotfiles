@@ -174,12 +174,39 @@ function processReason(path: string, scan: ReturnType<typeof activity>) {
     return "open files or process working directory";
   return "";
 }
+function herdrInventory() {
+  if (process.env.HERDR_ENV !== "1") return undefined;
+  // The JSON schema is not fixed here: protect every absolute path string it reports.
+  const found: string[] = [];
+  const walk = (value: unknown) => {
+    if (typeof value === "string" && isAbsolute(value)) found.push(value);
+    else if (Array.isArray(value)) value.forEach(walk);
+    else if (record(value)) Object.values(value).forEach(walk);
+  };
+  for (const argv of [
+    ["pane", "list"],
+    ["workspace", "list"],
+  ]) {
+    const result = run("herdr", argv);
+    if (!result.ok) return undefined;
+    try {
+      walk(JSON.parse(result.out));
+    } catch {
+      return undefined;
+    }
+    // Without any reported path the inventory proves nothing, so keep everything.
+    if (!found.length) return undefined;
+  }
+  return found;
+}
 function sessions(scan: ReturnType<typeof activity>) {
   const protectedPaths = [cwd];
   let error = "";
   if (scan.names.some((name) => /^(herdr|herdr-server)$/.test(name))) {
-    // Herdr forbids inspecting the focused session from outside a managed pane.
-    error = "Herdr is running; keep worktrees until session ownership can be verified";
+    // Herdr forbids inspecting its session from outside a managed pane.
+    const herdrPaths = herdrInventory();
+    if (herdrPaths) protectedPaths.push(...herdrPaths);
+    else error = "Herdr is running; keep worktrees until session ownership can be verified";
   }
   if (scan.names.some((name) => name.startsWith("tmux"))) {
     const panes = run("tmux", ["list-panes", "-a", "-F", "#{pane_current_path}"]);
@@ -400,7 +427,8 @@ for (const repo of repos.values()) {
     console.log(
       `${reason ? "keep" : "eligible"}\t${bytes < 0 ? "size unknown" : gib(bytes)}\t${tree.path}\t${reason || "merged and inactive"}`,
     );
-    if (!reason && bytes >= 0) candidates.push({ ...tree, bytes });
+    // Size only orders candidates; a failed scan must not block cleanup.
+    if (!reason) candidates.push({ ...tree, bytes: Math.max(bytes, 0) });
   }
 }
 
@@ -458,7 +486,7 @@ for (const spec of cacheSpecs) {
   console.log(
     `${reason ? "keep" : "eligible"}\t${bytes < 0 ? "size unknown" : gib(bytes)}\t${path}\t${reason || spec.clean.join(" ")}`,
   );
-  if (!reason && bytes >= 0) caches.push({ spec, path, bytes });
+  if (!reason) caches.push({ spec, path, bytes: Math.max(bytes, 0) });
 }
 console.log("\nDocker (report only; reclaimable does not mean safe):");
 const docker = run("docker", ["system", "df"]);

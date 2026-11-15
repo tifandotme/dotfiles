@@ -36,6 +36,7 @@ const env = {
   XDG_DATA_HOME: join(home, ".local/share"),
   XDG_PROJECTS_DIR: join(home, "projects"),
   PATH: `${bin}:${process.env.PATH}`,
+  HERDR_ENV: "",
   TEST_REAL_GIT: originalGit,
   GIT_CONFIG_GLOBAL: "/dev/null",
   GIT_CONFIG_NOSYSTEM: "1",
@@ -62,6 +63,8 @@ lsof)
   printf '%s\\n' "\${TEST_LSOF:-p1}"
   [[ -z \${TEST_WARNING:-} ]] || printf '%s\\n' "$TEST_WARNING" >&2 ;;
 amp) [[ \${TEST_RUNNER_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_RUNNERS:-}" ;;
+du) [[ \${TEST_DU_FAIL:-0} != 1 ]] || exit 1; exec /usr/bin/du "$@" ;;
+herdr) [[ \${TEST_HERDR_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_HERDR:-}" ;;
 tmux) printf '%s\\n' "\${TEST_PANE:-/unrelated}" ;;
 gh) [[ \${TEST_PR_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_PRS:-[]}" ;;
 docker) [[ "$*" == 'system df' ]] || exit 99; printf 'report only\\n' ;;
@@ -81,7 +84,21 @@ git)
   exec "$TEST_REAL_GIT" "$@" ;;
 esac
 `;
-for (const tool of ["ps", "lsof", "amp", "tmux", "gh", "docker", "bun", "npm", "uv", "go", "git"]) {
+for (const tool of [
+  "ps",
+  "lsof",
+  "amp",
+  "du",
+  "herdr",
+  "tmux",
+  "gh",
+  "docker",
+  "bun",
+  "npm",
+  "uv",
+  "go",
+  "git",
+]) {
   writeFileSync(join(bin, tool), mock.replace("]NAME[", tool), { mode: 0o755 });
 }
 function command(args: string[] = [], extra: Record<string, string> = {}, directory = home) {
@@ -180,6 +197,23 @@ try {
   command(["--apply", "--worktree", guarded], { TEST_RACE: guarded });
   assert.ok(existsSync(guarded), "changed HEAD must survive");
   assert.equal(git(guarded, "log", "-1", "--format=%s"), "race");
+  // Inside Herdr, protect the paths it reports; unreadable or path-less inventory keeps everything.
+  const herdrTree = tree("herdr");
+  const inHerdr = { TEST_PROCESSES: "1 herdr", HERDR_ENV: "1" };
+  for (const extra of [
+    { TEST_HERDR: JSON.stringify({ panes: [{ cwd: herdrTree }] }) },
+    { TEST_HERDR: "{}" },
+    { TEST_HERDR: "not json" },
+    { TEST_HERDR_FAIL: "1" },
+  ]) {
+    command(["--apply", "--worktree", herdrTree], { ...inHerdr, ...extra });
+    assert.ok(existsSync(herdrTree), JSON.stringify(extra));
+  }
+  command(["--apply", "--worktree", herdrTree], {
+    ...inHerdr,
+    TEST_HERDR: JSON.stringify({ panes: [{ cwd: home }] }),
+  });
+  assert.ok(!existsSync(herdrTree), "a Herdr inventory that excludes a worktree must not block it");
   const squash = tree("squash");
   git(squash, "commit", "--allow-empty", "-qm", "squashed elsewhere");
   const head = git(squash, "rev-parse", "HEAD");
@@ -209,6 +243,9 @@ try {
   put(join(cache, "download"));
   command(["--apply"], { TEST_PROCESSES: "1 node" });
   assert.ok(existsSync(cache), "active cache owner must protect cache");
+  command(["--apply"], { TEST_DU_FAIL: "1" });
+  assert.ok(!existsSync(cache), "a failed size scan must not block cache cleanup");
+  put(join(cache, "download"));
   rmSync(cache, { recursive: true });
   const documents = join(home, "Documents");
   put(join(documents, "keep"));
