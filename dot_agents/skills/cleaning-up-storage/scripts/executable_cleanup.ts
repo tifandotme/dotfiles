@@ -227,10 +227,11 @@ function sessions(scan: ReturnType<typeof activity>) {
   if (existsSync(join(projects, "work")))
     lists.push(["mise", "exec", "-C", join(projects, "work"), "--", "amp"]);
   for (const [command, ...prefix] of lists) {
-    const threads = run(command!, [...prefix, "threads", "list", "--json", "--limit", "1000"]);
+    const threads = run(command!, [...prefix, "threads", "list", "--json", "--limit", "500"]);
     try {
       const data: unknown = JSON.parse(threads.out);
-      if (!threads.ok || !Array.isArray(data)) throw new Error();
+      // The CLI caps --limit at 500; a full page may hide threads, so fail closed.
+      if (!threads.ok || !Array.isArray(data) || data.length >= 500) throw new Error();
       for (const thread of data) {
         if (!record(thread)) throw new Error();
         if (typeof thread.tree === "string" && thread.tree.startsWith("file://"))
