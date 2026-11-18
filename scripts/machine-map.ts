@@ -1,8 +1,10 @@
 #!/usr/bin/env bun
 /** Compare rendered chezmoi state for the main Mac and the box VPS. */
 
-import { execFileSync, spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { Crust } from "@crustjs/core@0.6.1";
+import { help } from "@crustjs/extensions@0.6.1";
+import { $ } from "bun";
+import { mkdtemp, rm } from "node:fs/promises";
 import { homedir, tmpdir } from "node:os";
 import { basename, join } from "node:path";
 
@@ -18,38 +20,35 @@ function overrideData(machine: Machine) {
 
 function runDelta(args: string[], directory: string) {
   const width = process.stdout.columns;
-  const result = spawnSync("delta", width ? [`--width=${width}`, ...args] : args, {
+  const result = Bun.spawnSync(["delta", ...(width ? [`--width=${width}`] : []), ...args], {
     cwd: directory,
-    stdio: "inherit",
+    stdio: ["inherit", "inherit", "inherit"],
   });
-  if (result.error) throw result.error;
-  if (result.status !== 0 && result.status !== 1) {
-    throw new Error(`delta exited with ${result.status}`);
+  if (result.exitCode !== 0 && result.exitCode !== 1) {
+    throw new Error(`delta exited with ${result.signalCode ?? result.exitCode}`);
   }
 }
 
-function managed(machine: Machine) {
-  return execFileSync("chezmoi", ["--override-data", overrideData(machine), "managed", "--include", "files"])
-    .toString()
-    .trim()
-    .split("\n")
-    .filter(Boolean);
+async function managed(machine: Machine) {
+  const output = await $`chezmoi --override-data ${overrideData(machine)} managed --include files`.text();
+  return output.trim().split("\n").filter(Boolean);
 }
 
-function render(machine: Machine, target: string) {
-  return execFileSync("chezmoi", ["--override-data", overrideData(machine), "cat", join(homedir(), target)]);
+async function render(machine: Machine, target: string) {
+  const { stdout } = await $`chezmoi --override-data ${overrideData(machine)} cat ${join(homedir(), target)}`.quiet();
+  return stdout;
 }
 
-function withTempDir(run: (directory: string) => void) {
-  const directory = mkdtempSync(join(tmpdir(), "machine-map-"));
+async function withTempDir(run: (directory: string) => Promise<void>) {
+  const directory = await mkdtemp(join(tmpdir(), "machine-map-"));
   try {
-    run(directory);
+    await run(directory);
   } finally {
-    rmSync(directory, { recursive: true, force: true });
+    await rm(directory, { recursive: true, force: true });
   }
 }
 
-function showInventory(mainFiles: string[], boxFiles: string[]) {
+async function showInventory(mainFiles: string[], boxFiles: string[]) {
   const mainSet = new Set(mainFiles);
   const boxSet = new Set(boxFiles);
   const mainOnly = mainFiles.filter((file) => !boxSet.has(file));
@@ -60,11 +59,11 @@ function showInventory(mainFiles: string[], boxFiles: string[]) {
     return;
   }
 
-  withTempDir((directory) => {
+  await withTempDir(async (directory) => {
     const mainName = `MAIN ONLY (${mainOnly.length})`;
     const boxName = `BOX ONLY (${boxOnly.length})`;
-    writeFileSync(join(directory, mainName), `${mainFiles.join("\n")}\n`);
-    writeFileSync(join(directory, boxName), `${boxFiles.join("\n")}\n`);
+    await Bun.write(join(directory, mainName), `${mainFiles.join("\n")}\n`);
+    await Bun.write(join(directory, boxName), `${boxFiles.join("\n")}\n`);
     runDelta(
       [
         "--paging=never",
@@ -82,26 +81,26 @@ function showInventory(mainFiles: string[], boxFiles: string[]) {
   });
 }
 
-function changedSharedFiles(mainFiles: string[], boxFiles: string[]) {
+async function changedSharedFiles(mainFiles: string[], boxFiles: string[]) {
   const boxSet = new Set(boxFiles);
   const changed: string[] = [];
 
   for (const target of mainFiles) {
     if (!boxSet.has(target)) continue;
-    if (!render(machines[0], target).equals(render(machines[1], target))) changed.push(target);
+    if (!(await render(machines[0], target)).equals(await render(machines[1], target))) changed.push(target);
   }
 
   return changed;
 }
 
-function showFocusedDiff(target: string, mainFiles: string[], boxFiles: string[]) {
+async function showFocusedDiff(target: string, mainFiles: string[], boxFiles: string[]) {
   const mainHasTarget = mainFiles.includes(target);
   const boxHasTarget = boxFiles.includes(target);
 
   if (!mainHasTarget && !boxHasTarget) throw new Error(`Not a managed file: ${target}`);
 
-  const mainContent = mainHasTarget ? render(machines[0], target) : Buffer.alloc(0);
-  const boxContent = boxHasTarget ? render(machines[1], target) : Buffer.alloc(0);
+  const mainContent = mainHasTarget ? await render(machines[0], target) : Buffer.alloc(0);
+  const boxContent = boxHasTarget ? await render(machines[1], target) : Buffer.alloc(0);
 
   if (mainContent.equals(boxContent)) {
     console.log(`No rendered differences: ${target}`);
@@ -109,39 +108,42 @@ function showFocusedDiff(target: string, mainFiles: string[], boxFiles: string[]
   }
 
   console.log(`Rendered diff: ${target}\n`);
-  withTempDir((directory) => {
+  await withTempDir(async (directory) => {
     const mainName = `main:${basename(target)}`;
     const boxName = `box:${basename(target)}`;
-    writeFileSync(join(directory, mainName), mainContent);
-    writeFileSync(join(directory, boxName), boxContent);
+    await Bun.write(join(directory, mainName), mainContent);
+    await Bun.write(join(directory, boxName), boxContent);
     runDelta(["--side-by-side", mainName, boxName], directory);
   });
 }
 
-function main() {
-  const targets = process.argv.slice(2);
-  if (targets.length > 1) throw new Error("Usage: machine-map [exact-managed-path]");
-
-  const mainFiles = managed(machines[0]);
-  const boxFiles = managed(machines[1]);
-  const target = targets[0];
+async function main(target: string | undefined) {
+  const mainFiles = await managed(machines[0]);
+  const boxFiles = await managed(machines[1]);
 
   if (target) {
-    showFocusedDiff(target, mainFiles, boxFiles);
+    await showFocusedDiff(target, mainFiles, boxFiles);
     return;
   }
 
-  showInventory(mainFiles, boxFiles);
-  const changed = changedSharedFiles(mainFiles, boxFiles);
+  await showInventory(mainFiles, boxFiles);
+  const changed = await changedSharedFiles(mainFiles, boxFiles);
   console.log("\nInspect a rendered diff:");
   console.log("  mise run machine-map -- .Brewfile");
   console.log(`\nCHANGED SHARED FILES (${changed.length})`);
   console.log(changed.length === 0 ? "(none)" : changed.join("\n"));
 }
 
-try {
-  main();
-} catch (error: unknown) {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exitCode = 1;
-}
+await new Crust("machine-map", { description: "Compare rendered chezmoi state for the main Mac and box" })
+  .extend(help())
+  .args({ name: "target", type: "string", description: "Exact managed path to inspect" })
+  .action(async ({ args, rawArgs }) => {
+    if (rawArgs.length) throw new Error(`Unexpected positional argument: ${JSON.stringify(rawArgs[0])}`);
+    try {
+      await main(args.target);
+    } catch (error) {
+      if (error instanceof $.ShellError) throw new Error(error.stderr.toString().trim() || error.message);
+      throw error;
+    }
+  })
+  .execute();
