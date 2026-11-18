@@ -28,5 +28,28 @@ if [[ "$actual_revision" != "$revision" ]]; then
 	exit 1
 fi
 
+# Local fix: retry accessibility registration for apps that are still launching.
+# Without it, apps started after borders-native never report focus changes between their windows.
+# Upstream PR: https://github.com/krashnakant/borders-native/pull/1 (drop this patch once it is merged and the pin is bumped)
+/usr/bin/git -C "$source_directory" apply <<'PATCH'
+diff --git a/borders.swift b/borders.swift
+index c36f84a..a79e68f 100644
+--- a/borders.swift
++++ b/borders.swift
+@@ -249,7 +249,11 @@ func observe(_ a: NSRunningApplication) {
+   var o: AXObserver?
+   guard AXObserverCreate(pid, axCallback, &o) == .success, let o else { return }
+   let el = AXUIElementCreateApplication(pid)
+-  for n in appNotes { AXObserverAddNotification(o, el, n as CFString, nil) }
++  // An app that is still launching answers cannotComplete; retry rather than keep an observer that never fires.
++  guard appNotes.allSatisfy({ AXObserverAddNotification(o, el, $0 as CFString, nil) == .success }) else {
++    if !a.isTerminated { DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { observe(a) } }
++    return
++  }
+   CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(o), .commonModes)
+   observers[pid] = o
+ }
+PATCH
+
 mkdir -p "$install_prefix/bin"
 /usr/bin/make -C "$source_directory" install "PREFIX=$install_prefix"
