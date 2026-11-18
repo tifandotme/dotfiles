@@ -1,11 +1,11 @@
-import { readFile, rename, writeFile } from "node:fs/promises"
+import { rename } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 
 export const FRAMES = ["◐", "◓", "◑", "◒"]
 export const INTERVAL_MS = 120
 export const runtimeDirectory = path.join(
-  process.env.XDG_RUNTIME_DIR || os.tmpdir(),
+  Bun.env.XDG_RUNTIME_DIR || os.tmpdir(),
   "herdr-tab-spinner",
 )
 
@@ -27,7 +27,7 @@ export async function readState(
   statePath: string,
 ): Promise<SpinnerState | undefined> {
   try {
-    return JSON.parse(await readFile(statePath, "utf8")) as SpinnerState
+    return (await Bun.file(statePath).json()) as SpinnerState
   } catch {
     return undefined
   }
@@ -38,7 +38,7 @@ export async function writeState(
   state: SpinnerState,
 ): Promise<void> {
   const temporaryPath = `${statePath}.${process.pid}.tmp`
-  await writeFile(temporaryPath, JSON.stringify(state))
+  await Bun.write(temporaryPath, JSON.stringify(state))
   await rename(temporaryPath, statePath)
 }
 

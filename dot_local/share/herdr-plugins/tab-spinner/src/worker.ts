@@ -1,4 +1,3 @@
-import { spawn } from "node:child_process"
 import { currentTabLabel, renameTab } from "./herdr.ts"
 import {
   FRAMES,
@@ -13,13 +12,12 @@ export function startWorker(
   scriptPath: string,
   statePath: string,
   tabId: string,
-): number | undefined {
-  const worker = spawn(
-    process.execPath,
-    [scriptPath, "--worker", statePath, tabId],
+): number {
+  const worker = Bun.spawn(
+    [process.execPath, scriptPath, "--worker", statePath, tabId],
     {
       detached: true,
-      stdio: "ignore",
+      stdio: ["ignore", "ignore", "ignore"],
     },
   )
   worker.unref()
@@ -36,7 +34,7 @@ export async function runWorker(
     const state = await readState(statePath)
     if (!state || state.mode !== "working" || state.tabId !== tabId) return
 
-    const currentLabel = await currentTabLabel(tabId)
+    const currentLabel = currentTabLabel(tabId)
     if (!currentLabel) return
 
     const baseLabel = isDecoration(currentLabel, state)
@@ -45,7 +43,7 @@ export async function runWorker(
     if (!baseLabel) return
 
     const decoratedLabel = `${FRAMES[frameIndex]} ${baseLabel}`
-    await renameTab(tabId, decoratedLabel)
+    renameTab(tabId, decoratedLabel)
 
     const latest = await readState(statePath)
     if (!latest || latest.mode !== "working") return
@@ -54,6 +52,6 @@ export async function runWorker(
     await writeState(statePath, latest)
 
     frameIndex = (frameIndex + 1) % FRAMES.length
-    await new Promise((resolve) => setTimeout(resolve, INTERVAL_MS))
+    await Bun.sleep(INTERVAL_MS)
   }
 }

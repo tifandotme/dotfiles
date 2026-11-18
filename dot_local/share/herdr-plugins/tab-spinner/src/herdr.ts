@@ -1,6 +1,3 @@
-import { execFile } from "node:child_process"
-import { promisify } from "node:util"
-
 type HerdrResponse = {
   result?: {
     tab?: {
@@ -9,28 +6,37 @@ type HerdrResponse = {
   }
 }
 
-const execFileAsync = promisify(execFile)
+function runHerdr(args: string[], maxBuffer: number) {
+  // Bound both the time and the captured output of a Herdr RPC.
+  const timeout = 1_000
+  const started = performance.now()
+  const result = Bun.spawnSync(["herdr", ...args], {
+    stdio: ["ignore", "pipe", "pipe"],
+    timeout,
+    maxBuffer,
+  })
+  if (
+    !result.success ||
+    performance.now() - started >= timeout ||
+    result.stdout.length > maxBuffer ||
+    result.stderr.length > maxBuffer
+  ) return undefined
+  return result.stdout
+}
 
-export async function renameTab(tabId: string, label: string): Promise<void> {
+export function renameTab(tabId: string, label: string): void {
   try {
-    await execFileAsync("herdr", ["tab", "rename", tabId, label], {
-      timeout: 1_000,
-      maxBuffer: 8 * 1024,
-    })
+    runHerdr(["tab", "rename", tabId, label], 8 * 1024)
   } catch {
     // Herdr may have closed the tab already.
   }
 }
 
-export async function currentTabLabel(
-  tabId: string,
-): Promise<string | undefined> {
+export function currentTabLabel(tabId: string): string | undefined {
   try {
-    const { stdout } = await execFileAsync("herdr", ["tab", "get", tabId], {
-      timeout: 1_000,
-      maxBuffer: 64 * 1024,
-    })
-    const response = JSON.parse(stdout) as HerdrResponse
+    const stdout = runHerdr(["tab", "get", tabId], 64 * 1024)
+    if (!stdout) return undefined
+    const response = JSON.parse(stdout.toString()) as HerdrResponse
     const label = response.result?.tab?.label
     return typeof label === "string" ? label : undefined
   } catch {

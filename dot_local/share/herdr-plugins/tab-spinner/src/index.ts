@@ -1,5 +1,6 @@
+#!/usr/bin/env bun
+
 import { mkdir, rm } from "node:fs/promises"
-import { fileURLToPath } from "node:url"
 
 import { currentTabLabel, renameTab } from "./herdr.ts"
 import {
@@ -21,18 +22,16 @@ type HerdrStatusEvent = {
   }
 }
 
-const scriptPath = fileURLToPath(import.meta.url)
-
 async function updateFromEvent(event: HerdrStatusEvent): Promise<void> {
   const data = event.data
-  const tabId = process.env.HERDR_TAB_ID
+  const tabId = Bun.env.HERDR_TAB_ID
   const status = data?.agent_status
 
   if (typeof data?.agent !== "string") return
   if (!tabId || typeof status !== "string") return
 
   const statePath = statePathForTab(tabId)
-  const currentLabel = await currentTabLabel(tabId)
+  const currentLabel = currentTabLabel(tabId)
   const state =
     (await readState(statePath)) ||
     (currentLabel
@@ -58,9 +57,9 @@ async function updateFromEvent(event: HerdrStatusEvent): Promise<void> {
     await writeState(statePath, state)
     stopWorker(workerPid)
 
-    const latestLabel = await currentTabLabel(tabId)
+    const latestLabel = currentTabLabel(tabId)
     if (state.baseLabel && latestLabel && isDecoration(latestLabel, state)) {
-      await renameTab(tabId, state.baseLabel)
+      renameTab(tabId, state.baseLabel)
     }
     await rm(statePath, { force: true })
     return
@@ -71,7 +70,7 @@ async function updateFromEvent(event: HerdrStatusEvent): Promise<void> {
     state.workerPid = undefined
     state.decoratedLabel = `⏸ ${state.baseLabel}`
     await writeState(statePath, state)
-    await renameTab(tabId, state.decoratedLabel)
+    renameTab(tabId, state.decoratedLabel)
     return
   }
 
@@ -82,21 +81,21 @@ async function updateFromEvent(event: HerdrStatusEvent): Promise<void> {
   await writeState(statePath, state)
 
   if (!state.workerPid) {
-    state.workerPid = startWorker(scriptPath, statePath, tabId)
+    state.workerPid = startWorker(import.meta.path, statePath, tabId)
     await writeState(statePath, state)
   }
 }
 
 async function main(): Promise<void> {
-  if (process.argv[2] === "--worker") {
-    const statePath = process.argv[3]
-    const tabId = process.argv[4]
+  if (Bun.argv[2] === "--worker") {
+    const statePath = Bun.argv[3]
+    const tabId = Bun.argv[4]
     if (!statePath || !tabId) return
     await runWorker(statePath, tabId)
     return
   }
 
-  const rawEvent = process.env.HERDR_PLUGIN_EVENT_JSON
+  const rawEvent = Bun.env.HERDR_PLUGIN_EVENT_JSON
   if (!rawEvent) return
 
   try {

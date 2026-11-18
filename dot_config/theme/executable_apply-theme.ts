@@ -1,7 +1,6 @@
 #!/usr/bin/env bun
 
-import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { $ } from "bun";
 import { join } from "node:path";
 
 interface Palette {
@@ -17,47 +16,24 @@ const warning = "#eed49f";
 const accentTemplate = "hsl(0, 18%, 68%)";
 const backgroundTemplate = "hsl(0, 12%, 24.1%)";
 
-function run(command: string, args: string[], options: { quiet?: boolean } = {}) {
-  try {
-    return execFileSync(command, args, {
-      encoding: "utf8",
-      stdio: options.quiet ? ["ignore", "pipe", "pipe"] : ["inherit", "pipe", "inherit"],
-    }).trim();
-  } catch (error) {
-    throw new Error(`Command failed: ${command} ${args.join(" ")}`);
-  }
-}
-
-function optionalRun(command: string, args: string[]) {
-  try {
-    execFileSync(command, args, { stdio: "ignore" });
-  } catch {
-    // Optional live reload failed. The source files were still updated.
-  }
-}
-
 function hexToArgb(hex: string, alpha: string) {
   return `0x${alpha}${hex.replace("#", "")}`.toLowerCase();
 }
 
-function normalizeColor(input: string) {
-  return run("pastel", ["format", "hex", input], { quiet: true }).toLowerCase();
+async function normalizeColor(input: string) {
+  return (await $`pastel format hex ${input}`.text()).trim().toLowerCase();
 }
 
-function colorFromPicker() {
-  return run("pastel", ["format", "hex", "pick"], { quiet: true }).toLowerCase();
-}
-
-function derivePalette(source: string): Palette {
-  const normalizedSource = normalizeColor(source);
-  const hue = Number(run("pastel", ["format", "hsl-hue", normalizedSource], { quiet: true }));
+async function derivePalette(source: string): Promise<Palette> {
+  const normalizedSource = await normalizeColor(source);
+  const hue = Number((await $`pastel format hsl-hue ${normalizedSource}`.text()).trim());
 
   if (!Number.isFinite(hue)) {
     throw new Error(`Could not derive hue from ${normalizedSource}`);
   }
 
-  const accent = normalizeColor(run("pastel", ["set", "hsl-hue", String(hue), accentTemplate], { quiet: true }));
-  const background = normalizeColor(run("pastel", ["set", "hsl-hue", String(hue), backgroundTemplate], { quiet: true }));
+  const accent = await normalizeColor((await $`pastel set hsl-hue ${hue} ${accentTemplate}`.text()).trim());
+  const background = await normalizeColor((await $`pastel set hsl-hue ${hue} ${backgroundTemplate}`.text()).trim());
 
   return {
     source: normalizedSource,
@@ -88,14 +64,6 @@ export BORDER_INACTIVE=${hexToArgb(palette.background, "ff")}
 `;
 }
 
-function sourceRoot() {
-  return run("chezmoi", ["source-path"], { quiet: true });
-}
-
-function themeDir() {
-  return join(sourceRoot(), "dot_config", "theme");
-}
-
 function isPalette(value: unknown): value is Palette {
   if (!value || typeof value !== "object") {
     return false;
@@ -111,8 +79,8 @@ function isPalette(value: unknown): value is Palette {
   );
 }
 
-function readPalette(path: string) {
-  const parsed: unknown = JSON.parse(readFileSync(path, "utf8"));
+async function readPalette(path: string) {
+  const parsed: unknown = await Bun.file(path).json();
 
   if (!isPalette(parsed)) {
     throw new Error(`Invalid palette file: ${path}`);
@@ -121,86 +89,79 @@ function readPalette(path: string) {
   return parsed;
 }
 
-function writePaletteFiles(palette: Palette) {
-  const dir = themeDir();
-
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "palette.json"), renderPaletteJson(palette));
-  writeFileSync(join(dir, "palette.sh"), renderPaletteShell(palette));
+async function writePaletteFiles(dir: string, palette: Palette) {
+  await Bun.write(join(dir, "palette.json"), renderPaletteJson(palette));
+  await Bun.write(join(dir, "palette.sh"), renderPaletteShell(palette));
 }
 
-function writePalette(palette: Palette) {
-  const dir = themeDir();
+async function writePalette(dir: string, palette: Palette) {
   const currentPath = join(dir, "palette.json");
 
-  if (existsSync(currentPath)) {
-    const current = readPalette(currentPath);
-    writeFileSync(join(dir, "palette.previous.json"), renderPaletteJson(current));
+  if (await Bun.file(currentPath).exists()) {
+    const current = await readPalette(currentPath);
+    await Bun.write(join(dir, "palette.previous.json"), renderPaletteJson(current));
   }
 
-  writePaletteFiles(palette);
+  await writePaletteFiles(dir, palette);
 }
 
-function undoPalette() {
-  const dir = themeDir();
+async function undoPalette(dir: string) {
   const currentPath = join(dir, "palette.json");
   const previousPath = join(dir, "palette.previous.json");
 
-  if (!existsSync(previousPath)) {
+  if (!(await Bun.file(previousPath).exists())) {
     throw new Error("No previous palette to restore");
   }
 
-  const previous = readPalette(previousPath);
+  const previous = await readPalette(previousPath);
 
-  if (existsSync(currentPath)) {
-    const current = readPalette(currentPath);
-    writeFileSync(previousPath, renderPaletteJson(current));
+  if (await Bun.file(currentPath).exists()) {
+    const current = await readPalette(currentPath);
+    await Bun.write(previousPath, renderPaletteJson(current));
   }
 
-  writePaletteFiles(previous);
+  await writePaletteFiles(dir, previous);
   return previous;
 }
 
-function applyTheme() {
-  const home = process.env.HOME;
+async function applyTheme() {
+  const home = Bun.env.HOME;
 
   if (!home) {
     throw new Error("HOME is not set");
   }
 
-  run("chezmoi", [
-    "apply",
+  const targets = [
     join(home, ".config", "theme"),
     join(home, ".config", "sketchybar"),
     join(home, ".config", "herdr"),
-  ]);
-  optionalRun("sketchybar", ["--reload"]);
+  ];
+  // An edited target can make chezmoi prompt on the caller's terminal.
+  const result = Bun.spawnSync(["chezmoi", "apply", ...targets], {
+    stdio: ["inherit", "ignore", "inherit"],
+  });
+  if (!result.success) throw new Error("chezmoi apply failed");
+
+  await $`sketchybar --reload`.quiet().nothrow();
   if (process.platform === "darwin") {
-    const domain = `gui/${run("/usr/bin/id", ["-u"], { quiet: true })}`;
-    optionalRun("/bin/launchctl", ["kickstart", "-k", `${domain}/local.borders-native`]);
+    const uid = (await $`/usr/bin/id -u`.text()).trim();
+    await $`/bin/launchctl kickstart -k ${`gui/${uid}/local.borders-native`}`.quiet().nothrow();
   }
-  optionalRun("herdr", ["server", "reload-config"]);
+  await $`herdr server reload-config`.quiet().nothrow();
 }
 
-function main() {
-  if (process.argv.includes("--undo")) {
-    const palette = undoPalette();
+async function main() {
+  const dir = join((await $`chezmoi source-path`.text()).trim(), "dot_config", "theme");
+  const undo = Bun.env.usage_undo === "true";
+  const palette = undo
+    ? await undoPalette(dir)
+    : await derivePalette(Bun.env.usage_color?.trim() || (await normalizeColor("pick")));
 
-    applyTheme();
+  if (!undo) await writePalette(dir, palette);
+  await applyTheme();
 
-    console.log(`Restored theme from ${palette.source} at hue ${palette.hue}`);
-    console.log(`accent ${palette.accent} / background ${palette.background}`);
-    return;
-  }
-
-  const input = process.argv[2]?.trim() || colorFromPicker();
-  const palette = derivePalette(input);
-
-  writePalette(palette);
-  applyTheme();
-
-  console.log(`Applied theme from ${palette.source} at hue ${palette.hue}`);
+  console.log(`${undo ? "Restored" : "Applied"} theme from ${palette.source} at hue ${palette.hue}`);
   console.log(`accent ${palette.accent} / background ${palette.background}`);
 }
 
-main();
+await main();
