@@ -142,6 +142,11 @@ let failed = false;
 function activity() {
   const files = run("lsof", ["-n", "-P", "-Fpcn"]);
   const processes = run("ps", ["-u", String(userInfo().uid), "-o", "pid=", "-o", "comm="]);
+  const argv = run("ps", ["-u", String(userInfo().uid), "-o", "pid=", "-o", "args="]);
+  const commands = argv.out
+    .split("\n")
+    .filter((line) => Number(line.trim().split(/\s+/)[0]) !== process.pid)
+    .map((line) => line.trim().replace(/^\d+\s+/, ""));
   const names = processes.out
     .split("\n")
     .filter((line) => Number(line.trim().split(/\s+/)[0]) !== process.pid)
@@ -151,12 +156,13 @@ function activity() {
     .filter((line) => line.startsWith("n/"))
     .map((line) => line.slice(1).replace(/ \(deleted\)$/, ""))
     .map(canonical);
-  return { files, processes, names, paths };
+  return { files, processes, argv, names, commands, paths };
 }
 function processReason(path: string, scan: ReturnType<typeof activity>) {
   if (
     !scan.files.ok ||
     !scan.processes.ok ||
+    !scan.argv.ok ||
     !/^p\d+$/m.test(scan.files.out) ||
     !scan.processes.out
   )
@@ -404,20 +410,23 @@ for (const repo of repos.values()) {
   }
 }
 
+// Only commands that read or write the package cache; a bare node or bun process does not.
+const JS_INSTALLER =
+  /(^|[\s/])(bun|npm|pnpm|yarn|vp)\s+(install|i|add|ci|update|up|upgrade|dlx|x|create|exec)(\s|$)|(^|[\s/])(bunx|npx|pnpx)(\s|$)/;
 const cacheSpecs = [
   {
     tool: "bun",
     query: ["pm", "cache"],
     clean: ["pm", "cache", "rm"],
     paths: [".bun/install/cache", ".local/share/bun/install/cache"],
-    owners: /^(bun|node|npm|pnpm|yarn)$/,
+    busy: JS_INSTALLER,
   },
   {
     tool: "npm",
     query: ["config", "get", "cache"],
     clean: ["cache", "clean", "--force"],
     paths: [".npm", ".cache/npm"],
-    owners: /^(bun|node|npm|pnpm|yarn)$/,
+    busy: JS_INSTALLER,
   },
   {
     tool: "uv",
@@ -444,7 +453,11 @@ function cacheReason(
   for (let dir = path; dir !== home; dir = dirname(dir)) {
     if (lstatSync(dir).isSymbolicLink()) return "symlinked cache path";
   }
-  if (scan.names.some((name) => spec.owners.test(name))) return "cache owner is running";
+  const running =
+    "busy" in spec
+      ? scan.commands.some((command) => spec.busy.test(command))
+      : scan.names.some((name) => spec.owners.test(name));
+  if (running) return "cache owner is running";
   return processReason(path, scan);
 }
 console.log("\nSafe cache allowlist:");

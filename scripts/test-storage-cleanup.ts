@@ -254,8 +254,18 @@ try {
   assert.equal(existsSync(recovery), !low, "recovery should delete only while headroom is low");
 
   put(join(cache, "download"));
-  command(["--apply"], { TEST_PROCESSES: "1 node" });
-  assert.ok(existsSync(cache), "active cache owner must protect cache");
+  for (const busy of [
+    "1 node /x/bin/npm install",
+    "1 bun add left-pad",
+    "1 vp install",
+    "1 bunx cowsay",
+  ]) {
+    command(["--apply"], { TEST_PROCESSES: busy });
+    assert.ok(existsSync(cache), `${busy} must protect the cache`);
+  }
+  command(["--apply"], { TEST_PROCESSES: "1 node server.js" });
+  assert.ok(!existsSync(cache), "a bare node process must not protect the cache");
+  put(join(cache, "download"));
   command(["--apply"], { TEST_DU_FAIL: "1" });
   assert.ok(!existsSync(cache), "a failed size scan must not block cache cleanup");
   put(join(cache, "download"));

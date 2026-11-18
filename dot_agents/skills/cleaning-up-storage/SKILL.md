@@ -37,7 +37,7 @@ The helper must confirm every safety check before removal. A failed or unavailab
 
 ## Cache allowlist
 
-Clean only the Bun download cache, npm cache, uv cache through `uv cache prune`, and Go build cache, and only when owner-process and open-file checks confirm they are unused. Keep a cache if either check fails or finds use.
+Clean only the Bun download cache, npm cache, uv cache through `uv cache prune`, and Go build cache, and only when owner-process and open-file checks confirm they are unused. For the Bun and npm caches, an owner is a running package-manager command (`bun|npm|pnpm|yarn|vp install/add/ci/update/dlx/x/create/exec`, `bunx`, `npx`), not any `node` or `bun` process. Keep a cache if either check fails or finds use.
 
 Do not remove installed versions, packages, or the Go module cache. Do not mutate Docker, empty Trash, run Mole, or make production changes. These are outside the standing authorization, even when the target remains unmet.
 
