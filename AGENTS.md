@@ -96,13 +96,16 @@ macos-only-value
 - Shared exported environment belongs in `dot_profile.tmpl`, sourced by `dot_zshenv.tmpl` and read by Bash login shells when no Bash-specific profile exists. Keep it quiet for noninteractive agents and SSH.
 - Shared aliases and shell functions belong in `dot_config/shell/interactive.sh`. Zsh sources it from `dot_zshrc`; keep syntax compatible with both shells.
 - Keep Zsh completion and widgets in `dot_zshrc`. Do not add Bash startup files; retain Bash for scripts and recovery. Disable fzf's Ctrl-R binding when Atuin owns history search. Use `zoxide init --cmd cd` for `cd`/`cdi`.
-- Put user-invoked shell workflows in `dot_config/mise/tasks/<group>/executable_<action>` and invoke them with `mise run <group>:<action>`. Declare help, arguments, and choices with `#USAGE`; keep the caller directory with `#MISE dir="{{cwd}}"`. Reserve `dot_local/bin/` for installed tools or executables that must be addressed by path. Use Bash 3.2-compatible scripts for simple orchestration and the existing Bun runtime for structured state. Avoid Python.
+- Use `mise run` for user-invoked workflows. Put installed tasks in `dot_config/mise/tasks/<group>/executable_<action>` and checkout-only tasks in `mise-tasks/dotfiles/`, which chezmoi ignores. Use executable file tasks with `#MISE` and `#USAGE` headers (`//MISE` and `//USAGE` in Bun scripts). Read parsed `usage_*` values in the implementation instead of adding a second CLI parser. Keep raw argv for transparent wrappers. Use `#MISE dir="{{cwd}}"` for installed tasks that need the caller's directory. Reserve `dot_local/bin/` for executables that must be addressed by path.
+- Use Bash 3.2-compatible scripts for simple orchestration and Bun for structured data. Avoid Python. Start Bun entrypoints with `#!/usr/bin/env bun`. Use Bun-native APIs first and compatibility APIs when they are the simplest correct option. Use Bun Shell (`$`) for ordinary subprocesses and `Bun.spawn` or `Bun.spawnSync` for terminal or process control.
+- Prefer built-ins. When a Bun task script needs an external package and can tolerate registry access on first run, pin the import to an exact version (for example, `package@1.2.3`). Keep recovery scripts dependency-free.
 - Declare Zsh and Atuin packages in `dot_Brewfile.tmpl` and source integrations directly. No plugin manager is needed.
 - Check global task discovery with `mise tasks ls --global`. Render templates with `chezmoi execute-template`, run shell syntax checks and ShellCheck, then inspect a dry run before applying.
 
 ## Definition of Done
 
-- `mise run check` passes
+- `mise run dotfiles:check` passes
+- Keep a regression check only when it protects an observable behavior. Extend an existing check first and remove throwaway verification scripts.
 
 ## Agent skills
 

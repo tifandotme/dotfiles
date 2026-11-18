@@ -2,7 +2,7 @@
 
 README.md
 key.txt.age
-.mise.toml
+mise-tasks/
 scripts/
 
 **/node_modules

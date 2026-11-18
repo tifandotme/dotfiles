@@ -1,8 +1,8 @@
 #!/usr/bin/env bun
-/** Compare rendered chezmoi state for the main Mac and the box VPS. */
+//MISE description="Show which chezmoi files and rendered lines apply to each machine"
+//USAGE arg "[target]" help="Exact chezmoi target to compare; omit for the full inventory"
+//USAGE complete "target" run="MISE_MACHINE_MAP_COMPLETE=1 mise run --quiet dotfiles:machine-map"
 
-import { Crust } from "@crustjs/core@0.6.1";
-import { help } from "@crustjs/extensions@0.6.1";
 import { $ } from "bun";
 import { mkdtemp, rm } from "node:fs/promises";
 import { homedir, tmpdir } from "node:os";
@@ -117,10 +117,16 @@ async function showFocusedDiff(target: string, mainFiles: string[], boxFiles: st
   });
 }
 
-async function main(target: string | undefined) {
+async function main() {
   const mainFiles = await managed(machines[0]);
   const boxFiles = await managed(machines[1]);
 
+  if (Bun.env.MISE_MACHINE_MAP_COMPLETE === "1") {
+    console.log([...new Set([...mainFiles, ...boxFiles])].sort().join("\n"));
+    return;
+  }
+
+  const target = Bun.env.usage_target;
   if (target) {
     await showFocusedDiff(target, mainFiles, boxFiles);
     return;
@@ -129,21 +135,15 @@ async function main(target: string | undefined) {
   await showInventory(mainFiles, boxFiles);
   const changed = await changedSharedFiles(mainFiles, boxFiles);
   console.log("\nInspect a rendered diff:");
-  console.log("  mise run machine-map -- .Brewfile");
+  console.log("  mise run dotfiles:machine-map .Brewfile");
   console.log(`\nCHANGED SHARED FILES (${changed.length})`);
   console.log(changed.length === 0 ? "(none)" : changed.join("\n"));
 }
 
-await new Crust("machine-map", { description: "Compare rendered chezmoi state for the main Mac and box" })
-  .extend(help())
-  .args({ name: "target", type: "string", description: "Exact managed path to inspect" })
-  .action(async ({ args, rawArgs }) => {
-    if (rawArgs.length) throw new Error(`Unexpected positional argument: ${JSON.stringify(rawArgs[0])}`);
-    try {
-      await main(args.target);
-    } catch (error) {
-      if (error instanceof $.ShellError) throw new Error(error.stderr.toString().trim() || error.message);
-      throw error;
-    }
-  })
-  .execute();
+try {
+  await main();
+} catch (error) {
+  const message = error instanceof $.ShellError ? error.stderr.toString().trim() || error.message : error;
+  console.error(message instanceof Error ? message.message : message);
+  process.exitCode = 1;
+}

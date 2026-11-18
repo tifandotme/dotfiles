@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Repo checks: rendered shell scripts, JSON, mise task references, chezmoi dry run.
+#MISE description="Render templates, lint shell and JSON, verify task references, and dry-run chezmoi apply"
 set -uo pipefail
-cd "$(dirname "$0")/.." || exit
+cd "$(dirname "$0")/../../.." || exit
 
 failed=0
 step() {
@@ -47,7 +47,7 @@ step 'Amp task profile selection' bash scripts/check-agent-tasks.sh
 step 'Amp runner restart' bash scripts/test-amp-runner-restart.sh
 step 'Agent pane closure' bash scripts/test-agent-pane-close.sh
 step 'Storage cleanup safety' bun scripts/test-storage-cleanup.ts
-step 'mise run references' bash scripts/check-task-refs.sh
+step 'Mise task references' mise run dotfiles:check:task-refs
 # --force: a drifted target must not open a TTY prompt, which agents cannot answer.
 step 'chezmoi apply --dry-run' chezmoi apply --dry-run --force
 

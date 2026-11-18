@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Fails when a tracked file runs `mise run <task>` for a task that does not exist.
+#MISE description="Fail when a tracked file runs a mise task that does not exist"
 set -Eeuo pipefail
-cd "$(dirname "$0")/.." || exit
+cd "$(dirname "$0")/../../.." || exit
 
 tasks=$(
 	{
@@ -19,8 +19,11 @@ tasks=$(
 			done
 			((skip)) || printf '%s\n' "$out"
 		done
-		# Project tasks declared in tracked mise.toml files
-		git ls-files -z -- '*mise.toml' | xargs -0 sed -n 's/^\[tasks\.\(.*\)\]$/\1/p' | tr -d '"'
+		# Managed project configs define tasks outside this checkout's mise context.
+		git ls-files -- '*mise.toml' | while IFS= read -r path; do
+			[[ ! -f $path ]] || sed -n 's/^\[tasks\.\(.*\)\]$/\1/p' "$path" | tr -d '"'
+		done
+		mise tasks ls --no-global --name-only
 	} | sort -u
 )
 
