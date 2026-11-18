@@ -28,7 +28,7 @@ Use this entry point on the host that holds the files. The task runs `~/.agents/
 
 The helper must confirm every safety check before removal. A failed or unavailable network, process, open-file, or session check means keep, not permission to bypass it.
 
-- Keep primary, current, locked, dirty, and untracked worktrees. Keep worktrees with sensitive or other ignored files; only ignored `node_modules/` directories and root `.amp/in/` scratch may be discarded with an otherwise eligible worktree.
+- Keep primary, current, locked, dirty, and untracked worktrees. Ignored files (build output, `.amp/`, caches, `.env*`, `node_modules/`) are discarded with an otherwise eligible worktree.
 - Require merge evidence: HEAD is already on the remote base, or a merged PR's head SHA exactly matches local HEAD. The exact PR head match supports squash merges; a similar patch or a merged PR for an older head does not. Keep worktrees with open PRs.
 - Keep worktrees in use by processes, open files, tmux panes, or threads a runner is serving. A runner's plain served-directory list only fills the new-thread picker and does not protect a checkout.
 - Herdr panes are covered by the process check: a shell or agent whose working directory is inside a worktree keeps it. Herdr itself is not inspected.

@@ -336,14 +336,6 @@ function eligibility(
   const flags = git(path, "ls-files", "-v", "-z");
   if (!flags.ok || flags.out.split("\0").some((file) => /^[a-zS]/.test(file)))
     return "index hides tracked changes; review manually";
-  const ignored = git(path, "ls-files", "--others", "--ignored", "--exclude-standard", "-z");
-  if (
-    !ignored.ok ||
-    ignored.out
-      .split("\0")
-      .some((file) => file && !/(^|\/)node_modules\//.test(file) && !file.startsWith(".amp/in/"))
-  )
-    return "sensitive ignored files or ignored-file scan failed";
   const url = git(path, "remote", "get-url", "origin");
   let mergedPR = false;
   // A detached HEAD has no PR; only ancestry on the remote base counts.
@@ -397,7 +389,7 @@ function size(path: string) {
 const scan = activity();
 const session = sessions(scan);
 const candidates: (Worktree & { bytes: number })[] = [];
-console.log("\nWorktrees (size includes allowed ignored dependencies and .amp/in scratch):");
+console.log("\nWorktrees (size includes discardable ignored files):");
 for (const repo of repos.values()) {
   const base = refresh(repo);
   for (const tree of worktrees(repo)) {

@@ -121,7 +121,7 @@ function tree(name: string) {
 }
 try {
   git(repo, "init", "-qb", "main");
-  put(join(repo, ".gitignore"), "node_modules/\n.amp/in/\n.env\n");
+  put(join(repo, ".gitignore"), "node_modules/\n.amp/\ndist/\n.env\n");
   put(join(repo, "tracked"));
   git(repo, "add", ".");
   git(repo, "commit", "-qm", "initial");
@@ -158,7 +158,8 @@ try {
   git(hidden, "update-index", "--skip-worktree", "tracked");
   put(join(hidden, "tracked"), "hidden work\n");
   put(join(safe, "node_modules/package/index.js"));
-  put(join(safe, ".amp/in/result.txt"));
+  put(join(safe, ".amp/out/result.txt"));
+  put(join(safe, "dist/bundle.js"));
   const cache = join(home, ".bun/install/cache");
   put(join(cache, "download"));
   put(join(home, ".Trash/keep"));
@@ -180,9 +181,9 @@ try {
   assert.ok(!existsSync(safe), "merged inactive worktree should be removed");
   assert.ok(!git(repo, "branch", "--list", "safe-with-spaces"), "branch should be removed");
   assert.ok(!existsSync(stale), "a runner picker entry alone must not protect a worktree");
-  for (const path of [repo, dirty, untracked, ignored, locked, active, idle, unfinished, hidden])
+  for (const path of [repo, dirty, untracked, locked, active, idle, unfinished, hidden])
     assert.ok(existsSync(path), path);
-  assert.equal(readFileSync(join(ignored, ".env"), "utf8"), "SECRET=preserve\n");
+  assert.ok(!existsSync(ignored), "ignored files must not block removal");
   assert.ok(!existsSync(cache), "allowlisted cache should be cleaned");
   assert.ok(
     existsSync(join(home, ".Trash/keep")) && existsSync(join(home, "windmill-postgres/data")),
