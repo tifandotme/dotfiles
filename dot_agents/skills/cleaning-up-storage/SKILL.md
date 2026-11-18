@@ -13,7 +13,7 @@ mise run updater:clean --recover               # Apply until the headroom target
 mise run updater:clean --apply --worktree /absolute/path
 ```
 
-Use this entry point on the host that holds the files. The task runs `~/.agents/skills/cleaning-up-storage/scripts/cleanup.ts` with Bun. Use the approved task and helper, not ad hoc deletion commands or the old worktree audit script. Chezmoi manages the skill and helper; do not create runtime symlinks to source files.
+Use this entry point on the host that holds the files. An audit or apply takes 5 to 8 minutes (per-worktree PR and process scans). Run it in the background with output to a log file, such as `mise run updater:clean --apply > /tmp/clean.txt 2>&1 &`, and read the log; piping it through `tail` hides progress. The task runs `~/.agents/skills/cleaning-up-storage/scripts/cleanup.ts` with Bun. Use the approved task and helper, not ad hoc deletion commands or the old worktree audit script. Chezmoi manages the skill and helper; do not create runtime symlinks to source files.
 
 ## Authorization and limits
 
@@ -37,7 +37,7 @@ The helper must confirm every safety check before removal. A failed or unavailab
 
 ## Cache allowlist
 
-Clean only the Bun download cache, npm cache, uv cache through `uv cache prune`, and Go build cache, and only when owner-process and open-file checks confirm they are unused. For the Bun and npm caches, an owner is a running package-manager command (`bun|npm|pnpm|yarn|vp install/add/ci/update/dlx/x/create/exec`, `bunx`, `npx`), not any `node` or `bun` process. Keep a cache if either check fails or finds use.
+Clean only the Bun download cache, npm cache, uv cache through `uv cache prune`, and Go build cache, and only when owner-process and open-file checks confirm they are unused. For the Bun and npm caches, an owner is a running package-manager command (`bun|npm|pnpm|yarn|vp install/add/ci/update/dlx/x/create/exec`, `bunx`, `npx`), not any `node` or `bun` process. Cleaning the Bun cache is followed by `bun install --frozen-lockfile` in `install/global`, because installed global packages link into the cache and would dangle. Keep a cache if either check fails or finds use.
 
 Do not remove installed versions, packages, or the Go module cache. Do not mutate Docker, empty Trash, run Mole, or make production changes. These are outside the standing authorization, even when the target remains unmet.
 

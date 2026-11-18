@@ -244,7 +244,7 @@ function sessions(scan: ReturnType<typeof activity>) {
           protectedPaths.push(decodeURIComponent(thread.tree.slice(7)));
       }
     } catch {
-      error = "Amp thread inventory unavailable";
+      error = `Amp thread inventory unavailable: ${threads.error.split("\n")[0] || "unexpected output"}`;
     }
   }
   return {
@@ -418,6 +418,8 @@ const cacheSpecs = [
     tool: "bun",
     query: ["pm", "cache"],
     clean: ["pm", "cache", "rm"],
+    // Global packages link into the cache; rebuild them so none dangle.
+    after: ["install", "--frozen-lockfile"],
     paths: [".bun/install/cache", ".local/share/bun/install/cache"],
     busy: JS_INSTALLER,
   },
@@ -548,6 +550,17 @@ if (apply) {
     if (!result.ok) {
       failed = true;
       console.error(`Cache cleanup failed: ${cache.path}: ${result.error}`);
+    } else if (cache.spec.after && existsSync(join(dirname(cache.path), "global"))) {
+      const rebuilt = run(
+        cache.spec.tool,
+        cache.spec.after,
+        join(dirname(cache.path), "global"),
+        600000,
+      );
+      if (!rebuilt.ok) {
+        failed = true;
+        console.error(`Global reinstall failed, run it by hand: ${cache.path}: ${rebuilt.error}`);
+      } else console.log(`cleaned\t${cache.path} (global packages reinstalled)`);
     } else console.log(`cleaned\t${cache.path}`);
     reportSpace("After cache");
   }

@@ -63,6 +63,8 @@ lsof)
   [[ -z \${TEST_WARNING:-} ]] || printf '%s\\n' "$TEST_WARNING" >&2 ;;
 amp)
   if [[ "\${1:-}" == threads ]]; then
+    # The real CLI rejects --limit above 500.
+    [[ " $* " != *' --limit 1000 '* ]] || { printf 'Error: --limit must be an integer <= 500\\n' >&2; exit 1; }
     [[ \${TEST_THREADS_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_THREADS:-[]}"
   else [[ \${TEST_RUNNER_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_RUNNERS:-}"; fi ;;
 du) [[ \${TEST_DU_FAIL:-0} != 1 ]] || exit 1; exec /usr/bin/du "$@" ;;
@@ -72,6 +74,7 @@ docker) [[ "$*" == 'system df' ]] || exit 99; printf 'report only\\n' ;;
 bun)
   if [[ "$*" == 'pm cache' ]]; then printf '%s/.bun/install/cache\\n' "$HOME"
   elif [[ "$*" == 'pm cache rm' ]]; then rm -rf -- "$HOME/.bun/install/cache"
+  elif [[ "$*" == 'install --frozen-lockfile' ]]; then touch "$PWD/reinstalled"
   else exit 99; fi ;;
 npm|uv|go) exit 1 ;;
 git)
@@ -263,8 +266,14 @@ try {
     command(["--apply"], { TEST_PROCESSES: busy });
     assert.ok(existsSync(cache), `${busy} must protect the cache`);
   }
+  const globalInstall = join(home, ".bun/install/global");
+  put(join(globalInstall, "package.json"));
   command(["--apply"], { TEST_PROCESSES: "1 node server.js" });
   assert.ok(!existsSync(cache), "a bare node process must not protect the cache");
+  assert.ok(
+    existsSync(join(globalInstall, "reinstalled")),
+    "cleaning the Bun cache must reinstall global packages",
+  );
   put(join(cache, "download"));
   command(["--apply"], { TEST_DU_FAIL: "1" });
   assert.ok(!existsSync(cache), "a failed size scan must not block cache cleanup");
