@@ -1,13 +1,11 @@
 #!/usr/bin/env bun
 // Public command checks. Git and deletion are real; activity and cache tools are isolated.
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
 import {
   copyFileSync,
   existsSync,
   mkdirSync,
   mkdtempSync,
-  readFileSync,
   realpathSync,
   rmSync,
   statfsSync,
@@ -26,16 +24,17 @@ const home = join(tmp, "home");
 const bin = join(tmp, "bin");
 const repo = join(home, "projects/deep/owner/repo");
 const remote = join(tmp, "origin.git");
-const originalGit = spawnSync("which", ["git"], { encoding: "utf8" }).stdout.trim();
+const originalGit = Bun.which("git");
+assert.ok(originalGit, "git is required for the cleanup fixture");
 mkdirSync(repo, { recursive: true });
 mkdirSync(bin);
 const env = {
-  ...process.env,
+  ...Bun.env,
   HOME: home,
   XDG_STATE_HOME: join(home, ".local/state"),
   XDG_DATA_HOME: join(home, ".local/share"),
   XDG_PROJECTS_DIR: join(home, "projects"),
-  PATH: `${bin}:${process.env.PATH}`,
+  PATH: `${bin}:${Bun.env.PATH}`,
   TEST_REAL_GIT: originalGit,
   GIT_CONFIG_GLOBAL: "/dev/null",
   GIT_CONFIG_NOSYSTEM: "1",
@@ -45,9 +44,9 @@ const env = {
   GIT_COMMITTER_EMAIL: "test@example.invalid",
 };
 function git(directory: string, ...args: string[]) {
-  const result = spawnSync(originalGit, ["-C", directory, ...args], { env, encoding: "utf8" });
-  assert.equal(result.status, 0, result.stderr);
-  return result.stdout.trim();
+  const result = Bun.spawnSync([env.TEST_REAL_GIT, "-C", directory, ...args], { env, stderr: "pipe" });
+  assert.equal(result.exitCode, 0, result.stderr.toString());
+  return result.stdout.toString().trim();
 }
 function put(path: string, data = "keep\n") {
   mkdirSync(resolve(path, ".."), { recursive: true });
@@ -65,7 +64,9 @@ amp)
   if [[ "\${1:-}" == threads ]]; then
     # The real CLI rejects --limit above 500.
     [[ " $* " != *' --limit 1000 '* ]] || { printf 'Error: --limit must be an integer <= 500\\n' >&2; exit 1; }
-    [[ \${TEST_THREADS_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_THREADS:-[]}"
+    [[ \${TEST_THREADS_FAIL:-0} != 1 ]] || exit 1
+    printf '%s\\n' "\${TEST_THREADS:-[]}"
+    if [[ \${TEST_THREADS_OVERFLOW:-0} == 1 ]]; then head -c 33554433 /dev/zero >&2; fi
   else [[ \${TEST_RUNNER_FAIL:-0} != 1 ]] && printf '%s\\n' "\${TEST_RUNNERS:-}"; fi ;;
 du) [[ \${TEST_DU_FAIL:-0} != 1 ]] || exit 1; exec /usr/bin/du "$@" ;;
 tmux) printf '%s\\n' "\${TEST_PANE:-/unrelated}" ;;
@@ -106,16 +107,16 @@ for (const tool of [
   writeFileSync(join(bin, tool), mock.replace("]NAME[", tool), { mode: 0o755 });
 }
 function command(args: string[] = [], extra: Record<string, string> = {}, directory = home) {
-  const result = spawnSync(process.execPath, [script, ...args], {
+  const result = Bun.spawnSync([process.execPath, script, ...args], {
     cwd: directory,
     env: { ...env, ...extra },
-    encoding: "utf8",
+    stderr: "pipe",
   });
   assert.ok(
-    [0, 3].includes(result.status!),
-    `${result.status}: ${result.stderr}\n${result.stdout}`,
+    result.exitCode === 0 || result.exitCode === 3,
+    `${result.exitCode}: ${result.stderr}\n${result.stdout}`,
   );
-  return result.stdout;
+  return result.stdout.toString();
 }
 function tree(name: string) {
   const path = join(home, "projects", name);
@@ -228,6 +229,8 @@ try {
   assert.ok(existsSync(sleeping), "an unarchived thread must protect its worktree");
   command(["--apply", "--worktree", sleeping], { TEST_THREADS_FAIL: "1" });
   assert.ok(existsSync(sleeping), "an unreadable thread list must keep worktrees");
+  command(["--apply", "--worktree", sleeping], { TEST_THREADS_OVERFLOW: "1" });
+  assert.ok(existsSync(sleeping), "a scan over the output limit must keep worktrees");
   command(["--apply", "--worktree", sleeping]);
   assert.ok(!existsSync(sleeping), "an archived thread must not protect its worktree");
   const squash = tree("squash");
@@ -286,29 +289,29 @@ try {
   assert.ok(existsSync(join(documents, "keep")), "symlink target must survive");
   const lock = join(env.XDG_STATE_HOME, "storage-cleanup/lock");
   mkdirSync(lock);
-  const busy = spawnSync(process.execPath, [script, "--apply"], {
+  const busy = Bun.spawnSync([process.execPath, script, "--apply"], {
     cwd: home,
     env,
-    encoding: "utf8",
+    stderr: "pipe",
   });
-  assert.equal(busy.status, 2);
+  assert.equal(busy.exitCode, 2, busy.stderr.toString());
   assert.ok(existsSync(lock));
   rmSync(lock, { recursive: true });
   // Test the installed task interface without applying real dotfiles.
   const installed = join(home, ".agents/skills/cleaning-up-storage/scripts/cleanup.ts");
   mkdirSync(resolve(installed, ".."), { recursive: true });
   copyFileSync(script, installed);
-  const task = spawnSync(
+  const task = Bun.spawnSync([
     "bash",
-    [resolve(import.meta.dir, "../dot_config/mise/tasks/updater/executable_clean"), "--check"],
-    {
-      cwd: home,
-      env: { ...env, PATH: `${resolve(process.execPath, "..")}:${env.PATH}` },
-      encoding: "utf8",
-    },
-  );
-  assert.ok([0, 3].includes(task.status!), task.stderr);
-  assert.match(task.stdout, /Before:/);
+    resolve(import.meta.dir, "../dot_config/mise/tasks/updater/executable_clean"),
+    "--check",
+  ], {
+    cwd: home,
+    env: { ...env, PATH: `${resolve(process.execPath, "..")}:${env.PATH}` },
+    stderr: "pipe",
+  });
+  assert.ok(task.exitCode === 0 || task.exitCode === 3, task.stderr.toString());
+  assert.match(task.stdout.toString(), /Before:/);
   console.log(
     "Storage cleanup checks passed: audit, merge evidence, active/idle ownership, fail-closed guards, races, caches, lock and task interface.",
   );

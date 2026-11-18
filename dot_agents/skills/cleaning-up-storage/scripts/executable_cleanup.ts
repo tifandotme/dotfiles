@@ -1,5 +1,4 @@
 #!/usr/bin/env bun
-import { spawnSync } from "node:child_process";
 import {
   existsSync,
   lstatSync,
@@ -15,8 +14,8 @@ import { basename, dirname, isAbsolute, join, resolve } from "node:path";
 
 const home = realpathSync(homedir());
 const cwd = realpathSync(process.cwd());
-const projects = resolve(process.env.XDG_PROJECTS_DIR || join(home, "projects"));
-const args = process.argv.slice(2);
+const projects = resolve(Bun.env.XDG_PROJECTS_DIR || join(home, "projects"));
+const args = Bun.argv.slice(2);
 const apply = args.includes("--apply") || args.includes("--recover");
 const recover = args.includes("--recover");
 let selected: string | undefined;
@@ -43,23 +42,34 @@ No Docker mutation, package removal, Trash emptying, or process stopping.`);
 }
 
 function run(command: string, argv: string[], directory = cwd, timeout = 20000) {
-  const result = spawnSync(command, argv, {
-    cwd: directory,
-    encoding: "utf8",
-    timeout,
-    maxBuffer: 32 * 1024 * 1024,
-    env: {
-      ...process.env,
-      GIT_TERMINAL_PROMPT: "0",
-      GCM_INTERACTIVE: "never",
-      GH_PROMPT_DISABLED: "1",
-    },
-  });
-  return {
-    ok: result.status === 0 && !result.error,
-    out: result.stdout?.trim() || "",
-    error: result.stderr?.trim() || result.error?.message || "",
-  };
+  // A child can exit 0 as Bun reaches a limit. Never trust that partial scan.
+  const maxBuffer = 32 * 1024 * 1024;
+  const started = performance.now();
+  try {
+    const result = Bun.spawnSync([command, ...argv], {
+      cwd: directory,
+      stdio: ["ignore", "pipe", "pipe"],
+      timeout,
+      maxBuffer,
+      env: {
+        ...Bun.env,
+        GIT_TERMINAL_PROMPT: "0",
+        GCM_INTERACTIVE: "never",
+        GH_PROMPT_DISABLED: "1",
+      },
+    });
+    if (result.stdout.length > maxBuffer || result.stderr.length > maxBuffer)
+      return { ok: false, out: "", error: `${command}: output limit exceeded` };
+    if (performance.now() - started >= timeout)
+      return { ok: false, out: "", error: `${command}: timed out` };
+    return {
+      ok: result.success,
+      out: result.success ? result.stdout.toString().trim() : "",
+      error: result.stderr.toString().trim() || result.signalCode || "",
+    };
+  } catch (error) {
+    return { ok: false, out: "", error: error instanceof Error ? error.message : String(error) };
+  }
 }
 function git(directory: string, ...argv: string[]) {
   return run("git", ["-C", directory, ...argv]);
@@ -119,7 +129,7 @@ const filesystem = run("df", ["-h", cwd]);
 if (filesystem.ok) console.log(filesystem.out);
 
 // mkdir is atomic on Linux and macOS. Never steal a lock from another invocation.
-const state = join(process.env.XDG_STATE_HOME || join(home, ".local/state"), "storage-cleanup");
+const state = join(Bun.env.XDG_STATE_HOME || join(home, ".local/state"), "storage-cleanup");
 const lock = join(state, "lock");
 if (apply) {
   mkdirSync(state, { recursive: true, mode: 0o700 });
@@ -201,7 +211,7 @@ function sessions(scan: ReturnType<typeof activity>) {
       }
       // A runner from another account may not appear in this CLI's response.
       // Keep the working directory of every thread either account's runners serve.
-      const root = join(process.env.XDG_DATA_HOME || join(home, ".local/share"), "amp");
+      const root = join(Bun.env.XDG_DATA_HOME || join(home, ".local/share"), "amp");
       const roots = [join(root, "runner")];
       const accounts = join(root, "accounts");
       if (existsSync(accounts))

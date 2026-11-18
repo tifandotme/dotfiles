@@ -5,9 +5,10 @@
 //MISE quiet=true
 
 import { accessSync, constants, realpathSync } from "node:fs";
-import { homedir } from "node:os";
+import { constants as osConstants, homedir } from "node:os";
 import { join } from "node:path";
 import { createDecipheriv, pbkdf2Sync } from "node:crypto";
+import { $ } from "bun";
 import { Database } from "bun:sqlite";
 
 try {
@@ -17,10 +18,9 @@ try {
       homedir(),
       "Library/Application Support/net.imput.helium/Profile 1/Cookies",
     );
-    const key = Bun.spawnSync(
-      ["security", "find-generic-password", "-a", "Helium", "-s", "Helium Storage Key", "-w"],
-      { stdout: "pipe", stderr: "pipe" },
-    );
+    const key = await $`security find-generic-password -a Helium -s "Helium Storage Key" -w`
+      .quiet()
+      .nothrow();
     if (key.exitCode !== 0) throw new Error("Cannot read Helium Storage Key");
     const db = new Database(database, { readonly: true });
     let row: { encrypted_value: Uint8Array } | null;
@@ -46,7 +46,7 @@ try {
     console.log(value.toString());
   } else {
     const self = realpathSync(Bun.main);
-    const realGh = (process.env.PATH || "")
+    const realGh = (Bun.env.PATH || "")
       .split(":")
       .map((directory) => join(directory || ".", "gh"))
       .find((candidate) => {
@@ -58,11 +58,15 @@ try {
         }
       });
     if (!realGh) throw new Error("Cannot find the real gh executable");
-    process.exitCode = Bun.spawnSync([realGh, ...args], {
+    // Forward terminal streams unchanged, including when gh opens a pager.
+    const result = Bun.spawnSync([realGh, ...args], {
       stdin: "inherit",
       stdout: "inherit",
       stderr: "inherit",
-    }).exitCode;
+    });
+    process.exitCode = result.signalCode
+      ? 128 + osConstants.signals[result.signalCode]
+      : (result.exitCode ?? 1);
   }
 } catch (error) {
   console.error(error instanceof Error ? error.message : error);
