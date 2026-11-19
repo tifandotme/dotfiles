@@ -63,3 +63,7 @@ PATCH
 
 mkdir -p "$install_prefix/bin"
 /usr/bin/make -C "$source_directory" install "PREFIX=$install_prefix"
+
+# The upstream Makefile signs ad hoc, so macOS pins the Accessibility grant to this build's cdhash and drops it on every rebuild.
+# Re-sign with a designated requirement on the identifier alone so the grant survives rebuilds.
+/usr/bin/codesign -f -s - -i local.borders-native -r='designated => identifier "local.borders-native"' "$install_prefix/bin/borders-native"
