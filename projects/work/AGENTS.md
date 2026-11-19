@@ -11,7 +11,7 @@ Hadl.ai builds AI products and expert-labelled data for aquaculture and other ph
 
 ## Production
 
-- Manual changes to production systems or data (a deploy, restart, migration, config or secret change, or data write) need an announcement for Slack #engineering (`C0AEV5BP35W`). Draft it in the user's voice, show it, and post only after the user confirms. Then do the action without waiting for a reply.
+- Manual changes to production systems or data (a deploy, restart, migration, config or secret change, or data write) need an announcement for Slack #engineering (`C0AEV5BP35W`). Start it with `<!here> heads up` (Slack's `@here` mention), draft the rest in the user's voice, show it, and post only after the user confirms. Then do the action without waiting for a reply.
 - A deploy someone triggers (a `workflow_dispatch` run, a tag pick, a rollout or restart workflow, a `kamal` command) is manual, even when it ships an approved PR through CI/CD. A change that reaches production automatically when an approved PR merges needs no announcement; the PR approval is the ack.
 - Personal tools and infrastructure are out of scope, even when they work with `hadl-labs` repositories.
 
