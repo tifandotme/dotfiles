@@ -25,3 +25,7 @@
 .config/claude-hadl/skills/html-wireframe
 .config/claude/skills/design-artifact
 .config/claude-hadl/skills/design-artifact
+.config/codex
+.local/state/codex
+.config/glow
+.config/gcx

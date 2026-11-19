@@ -24,7 +24,7 @@ install_repo_skills() {
 
 		if ((${#missing_skills[@]} > 0)); then
 			printf 'Installing skills from %s into %s\n' "$repo" "$config_dir"
-			CLAUDE_CONFIG_DIR="$config_dir" skills add "$repo" --agent claude-code codex --skill "${missing_skills[@]}" --global --yes --full-depth
+			CLAUDE_CONFIG_DIR="$config_dir" skills add "$repo" --agent claude-code --skill "${missing_skills[@]}" --global --yes --full-depth
 		fi
 	done
 }

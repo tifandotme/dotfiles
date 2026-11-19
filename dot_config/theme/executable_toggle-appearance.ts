@@ -20,7 +20,6 @@ async function replaceRequired(path: string, pattern: RegExp, replacement: strin
 async function updateSourceFiles(isDark: boolean) {
   const root = (await $`chezmoi source-path`.text()).trim();
   const gitConfig = join(root, "dot_config", "git", "config.tmpl");
-  const glowConfig = join(root, "dot_config", "glow", "glow.yml.tmpl");
   const herdrConfig = join(root, "dot_config", "herdr", "config.toml.tmpl");
 
   await replaceRequired(
@@ -28,12 +27,6 @@ async function updateSourceFiles(isDark: boolean) {
     /(\[delta\]\n\s*light = )(true|false)/,
     `$1${isDark ? "false" : "true"}`,
   );
-  await replaceRequired(
-    glowConfig,
-    /^style:.*$/m,
-    isDark ? 'style: "{{ .chezmoi.homeDir }}/.config/glow/gruber-darker.json"' : "style: light",
-  );
-
   await replaceRequired(
     herdrConfig,
     /(\[theme\]\nname = ")(gruvbox|gruvbox-light|terminal)(")/,
@@ -52,7 +45,7 @@ async function main() {
   const isDark = (await $`osascript -e ${`${appearance} get dark mode`}`.text()).trim() !== "true";
   await updateSourceFiles(isDark);
 
-  const targets = ["git/config", "glow/glow.yml", "herdr/config.toml"].map((path) => join(home, ".config", path));
+  const targets = ["git/config", "herdr/config.toml"].map((path) => join(home, ".config", path));
   await $`chezmoi apply --force ${targets} > /dev/null`;
   await $`osascript -e ${`${appearance} set dark mode to ${isDark}`} > /dev/null`;
   await Bun.write(join(home, ".config", "theme", "appearance.changed"), `${Date.now()}\n`);
