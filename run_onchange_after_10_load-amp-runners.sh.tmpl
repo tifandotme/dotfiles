@@ -2,7 +2,7 @@
 
 # chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
 # LaunchAgent hash: # {{ include "Library/LaunchAgents/com.tifan.amp-runners.plist.tmpl" | sha256sum }}
-# Amp task hash: # {{ include "dot_config/mise/tasks/agents/start/executable_amp" | sha256sum }}
+# Amp task hash: # {{ include "dot_config/mise/tasks/agents/executable_start" | sha256sum }}
 # Shared task helper hash: # {{ include "dot_config/mise/tasks/agents/lib.sh" | sha256sum }}
 
 set -Eeuo pipefail

@@ -32,7 +32,7 @@ EOF
 chmod +x "$fake_bin/tmux" "$fake_bin/mise" "$fake_bin/amp"
 export HOME="$fake_home" PATH="$fake_bin:$PATH"
 
-usage_profile=personal bash "$root/dot_config/mise/tasks/agents/start/executable_amp"
+usage_profile=personal bash "$root/dot_config/mise/tasks/agents/executable_start"
 for _ in {1..20}; do
 	[[ -s $TEST_STARTS ]] && break
 	sleep 0.5
@@ -51,7 +51,7 @@ done
 	exit 1
 }
 
-output=$(usage_agent=amp:personal bash "$root/dot_config/mise/tasks/agents/executable_stop")
+output=$(usage_profile=personal bash "$root/dot_config/mise/tasks/agents/executable_stop")
 [[ $output == 'Stopped '* ]] || {
 	echo "Stop failed: $output" >&2
 	exit 1

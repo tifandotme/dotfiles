@@ -47,7 +47,9 @@ if command -v bun &>/dev/null; then
 		"agent-device"
 		"@open-pencil/mcp"
 		# {{ end -}}
+		# {{ if ne .chezmoi.hostname "box" -}}
 		"ccstatusline"
+		# {{ end -}}
 
 		# apps clis
 		"@actual-app/cli"

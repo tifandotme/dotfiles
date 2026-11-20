@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
 set -Eeuo pipefail
 
 # Install standalone CLI tools from their official installers when missing.
@@ -8,7 +9,9 @@ if ! command -v amp >/dev/null 2>&1; then
 	curl -fsSL https://ampcode.com/install.sh | bash
 fi
 
+# {{ if ne .chezmoi.hostname "box" -}}
 if ! command -v claude >/dev/null 2>&1; then
 	printf '%s\n' 'Installing Claude Code'
 	curl -fsSL https://claude.ai/install.sh | bash
 fi
+# {{ end -}}

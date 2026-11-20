@@ -7,11 +7,12 @@
 #USAGE   choices "personal" "work"
 #USAGE }
 set -Eeuo pipefail
-# shellcheck source=../lib.sh
-source "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
+# shellcheck source=lib.sh
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
 profile=${usage_profile?}
 machine=$(agent_machine)
+session="$machine-amp-$profile"
 case $profile in
 personal)
 	cwd="$HOME/.local/share/chezmoi"
@@ -22,9 +23,19 @@ work)
 	discover_dir=$cwd
 	;;
 esac
-runner_id=$machine
 command -v amp >/dev/null
+command -v tmux >/dev/null
+[[ -d $cwd ]] || fail "Missing directory: $cwd"
 [[ -d $discover_dir ]] || fail "Missing directory: $discover_dir"
+if tmux has-session -t "=$session" 2>/dev/null; then
+	printf '%s is already running (attach with: tmux attach -t %s)\n' "$session" "$session"
+	exit 0
+fi
+# shellcheck disable=SC2016
 printf -v launch 'while :; do mise exec -- amp --no-tui --remote-control-portals --runner-id=%q --no-serve-cwd --discover-dirs=%q --dir=%q; status=$?; printf "Amp exited (%%s); restarting in 5 seconds\n" "$status"; sleep 5; done' \
-	"$runner_id" "$discover_dir" "$cwd"
-start_session "$machine-amp-$profile" "$cwd" "$launch"
+	"$machine" "$discover_dir" "$cwd"
+# Refresh inherited mise selection in the launch directory, including when leaving Hadl.
+# shellcheck disable=SC2016
+printf -v launch 'exec bash -c %q' 'mise_env=$(mise hook-env -s bash) && eval "$mise_env" && '"$launch"
+tmux new-session -d -s "$session" -c "$cwd" "$launch"
+printf 'Started %s (attach with: tmux attach -t %s)\n' "$session" "$session"

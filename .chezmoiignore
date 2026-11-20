@@ -53,7 +53,6 @@ Library/LaunchAgents/**
 # {{ if ne .chezmoi.hostname "box" -}}
 
 .inputrc
-.config/mise/tasks/agents/start/claude
 .config/rclone/**
 .config/systemd
 05_configure-agent-browser-sandbox.sh
@@ -65,5 +64,20 @@ Library/LaunchAgents/**
 .local/share/box-agents
 .ssh/id_ed25519_macbook
 .ssh/id_ed25519_macbook.pub
+
+# {{- else }}
+
+# Box runs Amp only; Claude Code is not installed there.
+.config/claude
+.config/claude/**
+.config/claude-hadl
+.config/claude-hadl/**
+.config/ccstatusline
+.config/ccstatusline/**
+.config/mise/tasks/claude
+.config/mise/tasks/claude/**
+06_configure-mcp-servers.sh
+projects/personal/CLAUDE.md
+projects/work/CLAUDE.md
 
 # {{- end -}}
