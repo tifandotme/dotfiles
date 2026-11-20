@@ -32,6 +32,7 @@ Library/LaunchAgents/**
 .cache/sketchybar
 .config/aerospace
 .config/ghostty
+.config/rex
 .config/infat
 .config/finicky
 .config/kanata
