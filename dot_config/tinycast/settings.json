@@ -142,6 +142,7 @@
   "snippets": {
     "showInLauncher": true,
     "folder": null,
+    "defaultAction": "paste",
     "commands": {}
   },
   "navigation": {
