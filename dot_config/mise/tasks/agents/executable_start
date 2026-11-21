@@ -13,10 +13,16 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 profile=${usage_profile?}
 machine=$(agent_machine)
 session="$machine-amp-$profile"
-cwd="$HOME/.local/share/chezmoi"
 case $profile in
-personal) discover_dir="$HOME/projects/personal" ;;
-work) discover_dir="$HOME/projects/work" ;;
+personal)
+	cwd="$HOME/.local/share/chezmoi"
+	discover_dir="$HOME/projects/personal"
+	;;
+work)
+	# Work runs from its own dir so mise applies its AMP_API_KEY and the pid lock differs.
+	cwd="$HOME/projects/work"
+	discover_dir=$cwd
+	;;
 esac
 command -v amp >/dev/null
 command -v tmux >/dev/null
