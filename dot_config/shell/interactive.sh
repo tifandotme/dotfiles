@@ -152,6 +152,15 @@ git() {
 		tag=$(command git describe --tags --abbrev=0 upstream/HEAD) || return
 		command git log --oneline "$tag"
 		;;
+	init)
+		# Work repos start on main; global init.defaultBranch stays master. A conditional
+		# includeIf would force git-twig onto stock git, so the default is set here.
+		shift
+		case $PWD/ in
+		"$HOME"/projects/work/*) command git init --initial-branch=main "$@" ;;
+		*) command git init "$@" ;;
+		esac
+		;;
 	*) command git "$@" ;;
 	esac
 }

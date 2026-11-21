@@ -38,3 +38,4 @@
 .config/claude/hooks/herdr-agent-state.sh
 .agents/skills/herdr
 .config/claude/skills/herdr
+projects/work/.gitconfig

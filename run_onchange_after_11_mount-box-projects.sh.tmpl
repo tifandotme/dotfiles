@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
+# {{ if eq .chezmoi.hostname "box" -}}
+# Mounts the reflink XFS image at ~/projects so git-twig can clone worktrees.
+# Creating the image and moving repos into it is manual; this only persists the mount.
+set -Eeuo pipefail
+
+img=/var/lib/twig.img
+mnt=$HOME/projects
+entry="$img $mnt xfs loop,noatime,nofail 0 0"
+
+[[ -f $img ]] || exit 0
+grep -qsF "$img " /etc/fstab || printf '%s\n' "$entry" | sudo tee -a /etc/fstab >/dev/null
+sudo systemctl daemon-reload
+# findmnt -M matches only an exact mount point, so this is a no-op once mounted.
+findmnt -M "$mnt" >/dev/null || sudo mount "$mnt"
+# {{ end -}}
