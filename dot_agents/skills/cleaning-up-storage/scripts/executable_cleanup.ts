@@ -490,18 +490,39 @@ try {
     return m ? Number(m[1]) * units[m[2]!]! : 0;
   };
   const images = [...df.Images].sort((a, b) => bytesOf(b.UniqueSize) - bytesOf(a.UniqueSize));
+  // Untagged images have no name, so show the first container that uses them.
+  const owners = new Map<string, string>();
+  const ids = run("docker", ["ps", "-aq"]);
+  if (ids.ok && ids.out) {
+    const inspect = run("docker", [
+      "inspect",
+      "-f",
+      "{{.Name}} {{.Image}}",
+      ...ids.out.split("\n"),
+    ]);
+    for (const line of inspect.ok ? inspect.out.split("\n") : []) {
+      const [container, id] = line.split(" ");
+      if (container && id && !owners.has(id)) owners.set(id, container.replace(/^\//, ""));
+    }
+  }
   let unused = 0;
   for (const image of images) {
     const bytes = bytesOf(image.UniqueSize);
     const inUse = Number(image.Containers) > 0;
     if (!inUse) unused += bytes;
     const name =
-      image.Repository === "<none>" ? image.ID.slice(7, 19) : `${image.Repository}:${image.Tag}`;
+      image.Repository === "<none>"
+        ? `${image.ID.slice(7, 19)} (${owners.get(image.ID) ?? "no container"})`
+        : `${image.Repository}:${image.Tag}`;
     console.log(
       `${inUse ? "in use" : "unused"}\t${gib(bytes)}\t${image.Containers} container(s)\t${name}\t${image.CreatedSince}`,
     );
   }
   console.log(`Unused images (no container, running or stopped): ${gib(unused)}`);
+  if (unused > 0)
+    console.log(
+      "  A `docker run --rm` image has no container between runs, so it also shows here; docker-prune.timer removes unused images older than 7 days and the next run re-pulls them.",
+    );
   const stopped = df.Containers.filter((c: { State: string }) => c.State !== "running");
   console.log(`Stopped containers: ${stopped.length}`);
   for (const c of stopped) console.log(`  ${c.Names}\t${c.Image}\t${c.Status}`);
