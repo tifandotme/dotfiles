@@ -36,19 +36,18 @@ prepend_keymap = [
 # {{ end }}
 # Capital letters go to the same place on the other machine.
 # {{ if eq .chezmoi.os "darwin" }}
-  { on = ["g", "H"], run = "cd sftp://box/home/eddies", desc = "Go box ~ over SFTP" },
-  { on = ["g", "C"], run = "cd sftp://box/home/eddies/.config", desc = "Go box ~/.config over SFTP" },
-  { on = ["g", "D"], run = "cd sftp://box/home/eddies/Downloads", desc = "Go box ~/Downloads over SFTP" },
-  { on = ["g", "W"], run = "cd sftp://box/home/eddies/projects/work", desc = "Go box ~/projects/work over SFTP" },
-  { on = ["g", "P"], run = "cd sftp://box/home/eddies/projects/personal", desc = "Go box ~/projects/personal over SFTP" },
-  { on = ["g", "X"], run = "cd sftp://box/home/eddies/.local/share/chezmoi", desc = "Go box ~/.local/share/chezmoi over SFTP" },
+  { on = ["g", "H"], run = "cd sftp://box//home/eddies", desc = "Go box ~ over SFTP" },
+  { on = ["g", "C"], run = "cd sftp://box//home/eddies/.config", desc = "Go box ~/.config over SFTP" },
+  { on = ["g", "W"], run = "cd sftp://box//home/eddies/projects/work", desc = "Go box ~/projects/work over SFTP" },
+  { on = ["g", "P"], run = "cd sftp://box//home/eddies/projects/personal", desc = "Go box ~/projects/personal over SFTP" },
+  { on = ["g", "X"], run = "cd sftp://box//home/eddies/.local/share/chezmoi", desc = "Go box ~/.local/share/chezmoi over SFTP" },
 # {{ else }}
-  { on = ["g", "H"], run = "cd sftp://macbook/Users/tifan", desc = "Go macbook ~ over SFTP" },
-  { on = ["g", "C"], run = "cd sftp://macbook/Users/tifan/.config", desc = "Go macbook ~/.config over SFTP" },
-  { on = ["g", "D"], run = "cd sftp://macbook/Users/tifan/Downloads", desc = "Go macbook ~/Downloads over SFTP" },
-  { on = ["g", "W"], run = "cd sftp://macbook/Users/tifan/projects/work", desc = "Go macbook ~/projects/work over SFTP" },
-  { on = ["g", "P"], run = "cd sftp://macbook/Users/tifan/projects/personal", desc = "Go macbook ~/projects/personal over SFTP" },
-  { on = ["g", "X"], run = "cd sftp://macbook/Users/tifan/.local/share/chezmoi", desc = "Go macbook ~/.local/share/chezmoi over SFTP" },
+  { on = ["g", "H"], run = "cd sftp://macbook//Users/tifan", desc = "Go macbook ~ over SFTP" },
+  { on = ["g", "C"], run = "cd sftp://macbook//Users/tifan/.config", desc = "Go macbook ~/.config over SFTP" },
+  { on = ["g", "D"], run = "cd sftp://macbook//Users/tifan/Downloads", desc = "Go macbook ~/Downloads over SFTP" },
+  { on = ["g", "W"], run = "cd sftp://macbook//Users/tifan/projects/work", desc = "Go macbook ~/projects/work over SFTP" },
+  { on = ["g", "P"], run = "cd sftp://macbook//Users/tifan/projects/personal", desc = "Go macbook ~/projects/personal over SFTP" },
+  { on = ["g", "X"], run = "cd sftp://macbook//Users/tifan/.local/share/chezmoi", desc = "Go macbook ~/.local/share/chezmoi over SFTP" },
 # {{ end }}
   { on = ["g", "e"], run = "arrow bot", desc = "Move cursor to the bottom" },
   { on = "T", run = "plugin toggle-pane max-preview", desc = "Maximize or restore the preview pane" },
