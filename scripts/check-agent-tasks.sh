@@ -49,6 +49,7 @@ assert_launch() {
 	grep -qF -- "--runner-id=$runner" "$capture"
 	grep -qF -- "--discover-dirs=$discover" "$capture"
 	grep -qF -- '--no-tui' "$capture"
+	grep -qF -- '--remote-control-portals' "$capture"
 }
 
 assert_launch Darwin personal macbook macbook-amp-personal "$fake_home/.local/share/chezmoi" "$fake_home/projects/personal"
