@@ -53,9 +53,9 @@ assert_launch() {
 }
 
 assert_launch Darwin personal macbook macbook-amp-personal "$fake_home/projects/personal" "$fake_home/projects/personal"
-assert_launch Darwin work macbook-work macbook-amp-work "$fake_home/projects/work" "$fake_home/projects/work"
+assert_launch Darwin work macbook macbook-amp-work "$fake_home/projects/work" "$fake_home/projects/work"
 assert_launch Linux personal box box-amp-personal "$fake_home/projects/personal" "$fake_home/projects/personal"
-assert_launch Linux work box-work box-amp-work "$fake_home/projects/work" "$fake_home/projects/work"
+assert_launch Linux work box box-amp-work "$fake_home/projects/work" "$fake_home/projects/work"
 printf 'Amp launch selection passed for macOS and Box profiles.\n'
 
 assert_stop() {

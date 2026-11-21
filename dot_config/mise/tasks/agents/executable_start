@@ -23,7 +23,7 @@ personal)
 	;;
 work)
 	cwd="$HOME/projects/work"
-	runner=$machine-work
+	runner=$machine
 	;;
 esac
 discover_dir=$cwd
