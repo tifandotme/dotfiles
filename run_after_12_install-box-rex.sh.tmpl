@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
+# {{ if eq .chezmoi.hostname "box" -}}
+set -Eeuo pipefail
+
+# Install Rex for this account (no sudo) and start its personal server at boot.
+# Upgrades are manual: rerun the installer, then `rex server stop` when no agents run.
+export PATH="$HOME/.local/bin:$PATH"
+
+if ! command -v rex >/dev/null 2>&1; then
+	printf '%s\n' 'Installing Rex'
+	curl -fsSL https://pkgs.superlogical.com/rex/install.sh | sh -s -- --user
+fi
+
+# Idempotent; enables rex.socket and lingering so the server survives logout.
+rex server install
+# {{ end -}}
