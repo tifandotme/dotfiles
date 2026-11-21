@@ -1,0 +1,19 @@
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+# https://yazi-rs.github.io/docs/configuration/vfs
+# Yazi's SFTP provider does not read ~/.ssh/config, so each service repeats host, user and key.
+# {{ if ne .chezmoi.hostname "box" }}
+[services.box]
+type = "sftp"
+host = "box.javanese-pound.ts.net"
+user = "eddies"
+port = 22
+key_file = "~/.ssh/id_ed25519"
+# {{ end }}
+# {{ if ne .chezmoi.os "darwin" }}
+[services.macbook]
+type = "sftp"
+host = "macbookpro"
+user = "tifan"
+port = 22
+key_file = "~/.ssh/id_ed25519_macbook"
+# {{ end }}
