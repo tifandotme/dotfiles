@@ -62,6 +62,7 @@
 
 - Multi-line edits: use the file editing tool, not `sed -i`. BSD `sed` on macOS rejects multi-line patterns.
 - Shell scripts: after modifying one, run `shfmt -w -ln <bash|posix|mksh|bats|zsh> <path-to-script>` with its dialect. Run `shellcheck <path-to-script>` for Bash or POSIX-compatible scripts, `bash -n <path-to-script>` for Bash, and `zsh -n <path-to-script>` for Zsh. Prefer `#!/usr/bin/env <interpreter>` over hardcoded paths like `#!/bin/bash`.
+- Long jobs (audits, copies, builds, installs over about a minute): start them in the background with output to a log file, then read the log. Estimate the duration first and check once near that time, not in repeated short waits. Time a slow command's parts before optimizing it.
 - Code cleanup: after a fix changes direction, audit for speculative or now-dead code from earlier attempts. Remove unused helpers/imports/types before final checks, then rerun the relevant typecheck/lint/format commands.
 - Code comments: say what the code does and why it is that way now. Leave out tombstones (`# foo removed`) and incident history; git blame and commit messages carry that.
 - UI: Keep copy task-focused. Use clear guidance for empty states and errors; avoid decorative narrative.
