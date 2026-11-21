@@ -1,4 +1,6 @@
+import { execFile } from "node:child_process";
 import { existsSync } from "node:fs";
+import { promisify } from "node:util";
 import type { PluginAPI } from "@ampcode/plugin";
 
 export const description =
@@ -8,6 +10,20 @@ type Shell = (
   strings: TemplateStringsArray,
   ...values: unknown[]
 ) => Promise<{ exitCode: number; stdout: string }>;
+
+const execFileAsync = promisify(execFile);
+
+// Twig only saves disk on macOS (APFS) or a Linux reflink filesystem. Elsewhere it
+// falls back to stock git and the runner's own worktree path is better.
+async function canClone(repo: string): Promise<boolean> {
+  if (process.platform === "darwin") return true;
+  try {
+    const { stdout } = await execFileAsync("findmnt", ["-no", "FSTYPE", "-T", repo]);
+    return ["xfs", "btrfs"].includes(stdout.trim());
+  } catch {
+    return false;
+  }
+}
 
 export default function (amp: PluginAPI) {
   amp.on("tool.call", async (event, ctx) => {
@@ -45,6 +61,7 @@ export default function (amp: PluginAPI) {
     const commonDir = await out`git -C ${dir} rev-parse --path-format=absolute --git-common-dir`;
     const repo = await out`git -C ${dir} rev-parse --show-toplevel`;
     if (!gitDir || gitDir !== commonDir || !repo) return { action: "allow" };
+    if (!(await canClone(repo))) return { action: "allow" };
     if ((await run`git twig -h`).exitCode !== 0) return { action: "allow" };
 
     // Same naming rules as the runner: <repo>-<name>, adding -2, -3 on a clash.
@@ -60,7 +77,14 @@ export default function (amp: PluginAPI) {
 
     // Start at the upstream tip when HEAD is behind it, like the runner does.
     let start = "HEAD";
-    if ((await run`git -C ${repo} fetch --quiet`).exitCode === 0) {
+    // A stalled remote must not hang create_thread, so the fetch gets 20 seconds.
+    const fetched = await execFileAsync("git", ["-C", repo, "fetch", "--quiet"], {
+      timeout: 20_000,
+    }).then(
+      () => true,
+      () => false,
+    );
+    if (fetched) {
       const upstream = await out`git -C ${repo} rev-parse --verify --quiet @{u}`;
       if (
         upstream &&
