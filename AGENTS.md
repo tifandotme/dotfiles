@@ -5,6 +5,7 @@ macOS-first dotfiles, chezmoi + age encryption. Shells: system Zsh on macOS and 
 - main macOS: primary, full desktop/dev env.
 - Ubuntu VPS `box`: secondary, headless/server.
 - `box` is reachable at all times with `ssh eddies@box-tailnet` (Tailscale).
+- The main Mac is reachable from box with `ssh macbook` (prefix `PATH=/opt/homebrew/bin:$PATH`). Amp runner ids are `box` and `macbook`.
 - `box` context: read `~/projects/personal/box/GLOSSARY.md` when work concerns the `box` VPS. Read `~/projects/personal/box/AGENTS.md` before changing that repository.
 
 Scoped `AGENTS.md` files are not installed to `$HOME`.
