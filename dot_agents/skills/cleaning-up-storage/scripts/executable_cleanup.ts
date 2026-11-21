@@ -92,10 +92,7 @@ function canonical(path: string) {
 function space() {
   const fs = statfsSync(cwd);
   const free = fs.bavail * fs.bsize;
-  const target = Math.max(
-    (process.platform === "darwin" ? 20 : 10) * 1024 ** 3,
-    fs.blocks * fs.bsize * 0.1,
-  );
+  const target = 10 * 1024 ** 3;
   const inodesLow = fs.files > 0 && fs.ffree / fs.files < 0.01;
   return {
     free,

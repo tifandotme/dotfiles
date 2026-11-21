@@ -18,7 +18,7 @@ Use this entry point on the host that holds the files. An audit or apply takes 5
 
 - Run `--audit` when asked to inspect storage. `--apply` has standing permission to remove strictly eligible inactive merged worktrees and allowlisted safe caches without another approval. Higher-priority and project-specific restrictions still apply.
 - On low space or `ENOSPC`, run `--apply`. Before large builds, pulls, or installs, run `--check`; exit 3 means free space is below target. Treat other failures as errors, not proof of enough space.
-- The headroom target is **10 GiB and 10% on Linux**, or **20 GiB and 10% on Darwin**. Both conditions must hold. `--apply` is not target-limited.
+- The headroom target is **10 GiB free** on every host. `--apply` is not target-limited.
 - `--worktree PATH` restricts worktree selection only. It does not restrict cache cleanup; do not describe it as a worktree-only operation.
 - Identify the host and affected filesystem before acting. Use actual filesystem free space before and after cleanup, not estimated candidate sizes, to judge headroom. Space recovered on another filesystem does not resolve the shortage.
 - If eligible cleanup cannot meet the target, report insufficient headroom and the items kept with reasons. Do not broaden cleanup automatically.
