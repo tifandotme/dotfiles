@@ -40,7 +40,7 @@ EOF
 chmod +x "$fake_bin/uname" "$fake_bin/amp" "$fake_bin/tmux"
 
 assert_launch() {
-	local os=$1 profile=$2 runner=$3 session=$4 directory=$5 discover=$6
+	local os=$1 profile=$2 runner=$3 session=$4 directory=$5 discover=$6 serve=$7
 	: >"$capture"
 	TEST_UNAME=$os TEST_TMUX_CAPTURE=$capture HOME=$fake_home PATH="$fake_bin:$PATH" usage_profile=$profile \
 		bash "$task" >/dev/null
@@ -48,14 +48,15 @@ assert_launch() {
 	grep -qF -- "-c $directory" "$capture"
 	grep -qF -- "--runner-id=$runner" "$capture"
 	grep -qF -- "--discover-dirs=$discover" "$capture"
+	grep -qF -- "--dir=$serve" "$capture"
 	grep -qF -- '--no-tui' "$capture"
 	grep -qF -- '--remote-control-portals' "$capture"
 }
 
-assert_launch Darwin personal macbook macbook-amp-personal "$fake_home/projects/personal" "$fake_home/projects/personal"
-assert_launch Darwin work macbook macbook-amp-work "$fake_home/projects/work" "$fake_home/projects/work"
-assert_launch Linux personal box box-amp-personal "$fake_home/projects/personal" "$fake_home/projects/personal"
-assert_launch Linux work box box-amp-work "$fake_home/projects/work" "$fake_home/projects/work"
+assert_launch Darwin personal macbook macbook-amp-personal "$fake_home/projects/personal" "$fake_home/projects/personal" "$fake_home/.local/share/chezmoi"
+assert_launch Darwin work macbook-work macbook-amp-work "$fake_home/projects/work" "$fake_home/projects/work" "$fake_home/projects/work"
+assert_launch Linux personal box box-amp-personal "$fake_home/projects/personal" "$fake_home/projects/personal" "$fake_home/.local/share/chezmoi"
+assert_launch Linux work box-work box-amp-work "$fake_home/projects/work" "$fake_home/projects/work" "$fake_home/projects/work"
 printf 'Amp launch selection passed for macOS and Box profiles.\n'
 
 assert_stop() {

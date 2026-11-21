@@ -13,17 +13,18 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 profile=${usage_profile?}
 machine=$(agent_machine)
 session="$machine-amp-$profile"
-# Each profile starts in its own directory so mise loads that profile's AMP_API_KEY and the
-# per-directory lock and per-runner socket never collide; chezmoi is added once the runner is up.
-chezmoi_dir="$HOME/.local/share/chezmoi"
+# Each profile starts in its own directory so mise loads that profile's AMP_API_KEY. The runner
+# ids differ because a runner id owns a per-machine socket. Only personal serves chezmoi.
 case $profile in
 personal)
 	cwd="$HOME/projects/personal"
 	runner=$machine
+	serve_dir="$HOME/.local/share/chezmoi"
 	;;
 work)
 	cwd="$HOME/projects/work"
-	runner=$machine
+	runner=$machine-work
+	serve_dir=$cwd
 	;;
 esac
 discover_dir=$cwd
@@ -36,8 +37,8 @@ if tmux has-session -t "=$session" 2>/dev/null; then
 	exit 0
 fi
 # shellcheck disable=SC2016
-printf -v launch '(for _ in $(seq 30); do mise exec -- amp runner dirs add --runner-id=%q %q >/dev/null 2>&1 && break; sleep 2; done) & while :; do mise exec -- amp --no-tui --remote-control-portals --runner-id=%q --no-serve-cwd --discover-dirs=%q --dir=%q; status=$?; printf "Amp exited (%%s); restarting in 5 seconds\n" "$status"; sleep 5; done' \
-	"$runner" "$chezmoi_dir" "$runner" "$discover_dir" "$cwd"
+printf -v launch 'while :; do mise exec -- amp --no-tui --remote-control-portals --runner-id=%q --no-serve-cwd --discover-dirs=%q --dir=%q; status=$?; printf "Amp exited (%%s); restarting in 5 seconds\n" "$status"; sleep 5; done' \
+	"$runner" "$discover_dir" "$serve_dir"
 # Refresh inherited mise selection in the launch directory, including when leaving Hadl.
 # shellcheck disable=SC2016
 printf -v launch 'exec bash -c %q' 'mise_env=$(mise hook-env -s bash) && eval "$mise_env" && '"$launch"
