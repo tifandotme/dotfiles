@@ -13,15 +13,10 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 profile=${usage_profile?}
 machine=$(agent_machine)
 session="$machine-amp-$profile"
+cwd="$HOME/.local/share/chezmoi"
 case $profile in
-personal)
-	cwd="$HOME/.local/share/chezmoi"
-	discover_dir="$HOME/projects/personal"
-	;;
-work)
-	cwd="$HOME/projects/work"
-	discover_dir=$cwd
-	;;
+personal) discover_dir="$HOME/projects/personal" ;;
+work) discover_dir="$HOME/projects/work" ;;
 esac
 command -v amp >/dev/null
 command -v tmux >/dev/null
