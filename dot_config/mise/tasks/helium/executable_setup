@@ -11,6 +11,8 @@ set -Eeuo pipefail
 readonly SOURCE_APP="${HELIUM_APP_PATH:-/Applications/Helium.app}"
 readonly APPS_DIR="$HOME/Applications"
 readonly DATA_DIR="$HOME/Library/Application Support"
+SIGNING_IDENTITY="$(mise run --quiet --raw clone:identity)"
+readonly SIGNING_IDENTITY
 
 fail() {
 	printf '%s\n' "$1" >&2
@@ -79,6 +81,7 @@ instance_is_current() {
 	fi
 
 	codesign --verify --deep --strict "$app_path" >/dev/null 2>&1 || return 1
+	[[ "$(codesign -dvv "$app_path" 2>&1)" == *$'\nAuthority='"$SIGNING_IDENTITY"$'\n'* ]] || return 1
 }
 
 assert_not_running() {
@@ -87,17 +90,6 @@ assert_not_running() {
 	if pgrep -f -- "$app_path/Contents/MacOS/" >/dev/null; then
 		fail "Quit Helium before recreating: $app_path"
 	fi
-}
-
-reset_screen_capture_permission() {
-	local bundle_id="$1"
-
-	if ! /usr/bin/tccutil reset ScreenCapture "$bundle_id" >/dev/null 2>&1; then
-		printf 'Warning: could not reset Screen Recording permission for %s\n' "$bundle_id" >&2
-		return
-	fi
-
-	printf 'Reset Screen Recording permission for %s; re-enable it in System Settings\n' "$bundle_id"
 }
 
 create_instance() {
@@ -170,8 +162,7 @@ LAUNCHER
 	chmod +x "$original_executable"
 
 	xattr -dr com.apple.FinderInfo "$app_path"
-	codesign --force --deep --sign - "$app_path" >/dev/null
-	reset_screen_capture_permission "$bundle_id"
+	codesign --force --deep --sign "$SIGNING_IDENTITY" "$app_path" >/dev/null
 	printf 'Created %s\n' "$app_path"
 }
 

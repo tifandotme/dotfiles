@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#MISE description="Print the local code-signing identity for app clones, creating it when missing"
+#MISE quiet=true
+#MISE raw=true
+set -Eeuo pipefail
+
+# A stable identity keeps the clones' designated requirement the same across
+# rebuilds, so keychain "Always Allow" and TCC grants survive app updates.
+readonly NAME="Local App Clones"
+readonly KEYCHAIN="$HOME/Library/Keychains/login.keychain-db"
+
+if security find-certificate -c "$NAME" "$KEYCHAIN" >/dev/null 2>&1; then
+	printf '%s\n' "$NAME"
+	exit 0
+fi
+
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+
+openssl req -x509 -newkey rsa:2048 -nodes -days 3650 -subj "/CN=$NAME" \
+	-addext 'keyUsage=critical,digitalSignature' \
+	-addext 'extendedKeyUsage=critical,codeSigning' \
+	-keyout "$tmp/key.pem" -out "$tmp/cert.pem" 2>/dev/null
+# SHA1/3DES keeps the bundle importable by macOS's older PKCS#12 reader.
+openssl pkcs12 -export -inkey "$tmp/key.pem" -in "$tmp/cert.pem" -out "$tmp/id.p12" \
+	-passout pass:clone -keypbe PBE-SHA1-3DES -certpbe PBE-SHA1-3DES -macalg sha1
+security import "$tmp/id.p12" -k "$KEYCHAIN" -P clone -T /usr/bin/codesign >/dev/null
+printf '%s\n' "$NAME"

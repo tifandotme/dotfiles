@@ -13,6 +13,8 @@ readonly APP_NAME="Claude Hadl"
 readonly LAUNCHER_NAME="launcher"
 readonly BUNDLE_ID="com.anthropic.claudefordesktop.hadl"
 readonly USER_DATA_DIR="${CLAUDE_HADL_USER_DATA_DIR:-$HOME/Library/Application Support/Claude-Hadl}"
+SIGNING_IDENTITY="$(mise run --quiet --raw clone:identity)"
+readonly SIGNING_IDENTITY
 readonly CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/claude-hadl"
 
 fail() {
@@ -43,7 +45,8 @@ is_current() {
 	[[ -x "$APP_PATH/Contents/MacOS/$(plist_value "$source_plist" CFBundleExecutable)" ]] || return 1
 	grep -Fq -- "$USER_DATA_DIR" "$executable" || return 1
 	grep -Fq -- "$CONFIG_DIR" "$executable" || return 1
-	codesign --verify --deep --strict "$APP_PATH" >/dev/null 2>&1
+	codesign --verify --deep --strict "$APP_PATH" >/dev/null 2>&1 || return 1
+	[[ "$(codesign -dvv "$APP_PATH" 2>&1)" == *$'\nAuthority='"$SIGNING_IDENTITY"$'\n'* ]]
 }
 
 create_app() {
@@ -75,8 +78,7 @@ LAUNCHER
 	chmod +x "$executable"
 
 	xattr -dr com.apple.FinderInfo "$APP_PATH"
-	codesign --force --deep --sign - "$APP_PATH" >/dev/null
-	/usr/bin/tccutil reset ScreenCapture "$BUNDLE_ID" >/dev/null 2>&1 || true
+	codesign --force --deep --sign "$SIGNING_IDENTITY" "$APP_PATH" >/dev/null
 	printf 'Created %s\n' "$APP_PATH"
 }
 
