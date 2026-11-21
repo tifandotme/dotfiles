@@ -19,8 +19,8 @@
 
 ## Storage
 
-- Before large builds, pulls, or installs, run `mise run updater:clean --check`. Exit 3 means below the free-space target. On low space or `ENOSPC`, load `cleaning-up-storage` and run `mise run updater:clean --recover`.
-- Standing authorization covers only strictly eligible inactive merged worktrees and allowlisted safe caches through `mise run updater:clean --apply` or `--recover`, without another approval. The default command audits only. Higher-priority and project-specific restrictions still apply; do not bypass the helper's keep decisions, stop processes, or unregister runner paths to reclaim space.
+- Before large builds, pulls, or installs, run `mise run updater:clean --check`. Exit 3 means below the free-space target. On low space or `ENOSPC`, load `cleaning-up-storage` and run `mise run updater:clean --apply`.
+- Standing authorization covers only strictly eligible inactive merged worktrees and allowlisted safe caches through `mise run updater:clean --apply`, without another approval. `--audit` removes nothing. Higher-priority and project-specific restrictions still apply; do not bypass the helper's keep decisions, stop processes, or unregister runner paths to reclaim space.
 - Verify the host, filesystem, and actual free space. If eligible cleanup leaves insufficient headroom, report it without broadening cleanup.
 
 ## Writing and documentation

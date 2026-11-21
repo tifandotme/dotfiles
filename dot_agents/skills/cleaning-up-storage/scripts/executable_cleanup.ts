@@ -16,23 +16,21 @@ const home = realpathSync(homedir());
 const cwd = realpathSync(process.cwd());
 const projects = resolve(Bun.env.XDG_PROJECTS_DIR || join(home, "projects"));
 const args = Bun.argv.slice(2);
-const apply = args.includes("--apply") || args.includes("--recover");
-const recover = args.includes("--recover");
+const apply = args.includes("--apply");
 let selected: string | undefined;
 for (let i = 0; i < args.length; i++) {
   const arg = args[i];
   if (arg === "--worktree" && args[i + 1] && !args[i + 1]!.startsWith("-")) {
     selected = realpathSync(args[++i]!);
-  } else if (!["--apply", "--recover", "--check", "--help"].includes(arg!)) {
+  } else if (!["--apply", "--audit", "--check", "--help"].includes(arg!)) {
     throw new Error(`Unknown or incomplete argument: ${arg}. Use --help.`);
   }
 }
-if (args.includes("--help")) {
+if (args.length === 0 || args.includes("--help")) {
   console.log(`Storage cleanup on the execution host only.
-  updater:clean                    Audit; remove nothing
+  updater:clean --audit            Audit; remove nothing
   updater:clean --check            Free-space check only (exit 3 when low)
   updater:clean --apply            Clean eligible worktrees and safe caches
-  updater:clean --recover          Apply only until headroom is restored
   updater:clean --apply --worktree PATH
                                   Restrict worktrees, not cache cleanup
 XDG_PROJECTS_DIR narrows repository discovery. Current repository is included.
@@ -120,10 +118,6 @@ reportSpace("Before");
 if (args.includes("--check")) {
   if (args.length !== 1) throw new Error("Use --check alone.");
   process.exit(space().low ? 3 : 0);
-}
-if (recover && !space().low) {
-  console.log("Headroom is sufficient. Nothing removed.");
-  process.exit(0);
 }
 const filesystem = run("df", ["-h", cwd]);
 if (filesystem.ok) console.log(filesystem.out);
@@ -535,12 +529,11 @@ if (process.platform === "darwin") {
 
 if (apply) {
   for (const tree of candidates.sort((a, b) => b.bytes - a.bytes)) {
-    if (recover && !space().low) break;
     if (
       statfsSync(tree.path).type !== statfsSync(cwd).type ||
       lstatSync(tree.path).dev !== lstatSync(cwd).dev
     ) {
-      console.log(`keep\t${tree.path}\tdifferent filesystem from recovery target`);
+      console.log(`keep\t${tree.path}\tdifferent filesystem from the cleanup target`);
       continue;
     }
     const fresh = worktrees(tree.primary).find((fresh) => fresh.path === tree.path);
@@ -572,7 +565,6 @@ if (apply) {
     reportSpace("After worktree");
   }
   for (const cache of caches.sort((a, b) => b.bytes - a.bytes)) {
-    if (recover && !space().low) break;
     if (!existsSync(cache.path)) continue;
     const location = run(cache.spec.tool, cache.spec.query, home);
     const reason =
@@ -605,10 +597,7 @@ if (apply) {
     } else console.log(`cleaned\t${cache.path}`);
     reportSpace("After cache");
   }
-} else
-  console.log(
-    "\nAudit only. Nothing removed. Use --recover for bounded recovery or --apply for all eligible items.",
-  );
+} else console.log("\nAudit only. Nothing removed. Use --apply to clean all eligible items.");
 reportSpace("After");
 if (space().low)
   console.log(

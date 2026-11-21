@@ -8,7 +8,6 @@ import {
   mkdtempSync,
   realpathSync,
   rmSync,
-  statfsSync,
   symlinkSync,
   writeFileSync,
 } from "node:fs";
@@ -44,7 +43,10 @@ const env = {
   GIT_COMMITTER_EMAIL: "test@example.invalid",
 };
 function git(directory: string, ...args: string[]) {
-  const result = Bun.spawnSync([env.TEST_REAL_GIT, "-C", directory, ...args], { env, stderr: "pipe" });
+  const result = Bun.spawnSync([env.TEST_REAL_GIT, "-C", directory, ...args], {
+    env,
+    stderr: "pipe",
+  });
   assert.equal(result.exitCode, 0, result.stderr.toString());
   return result.stdout.toString().trim();
 }
@@ -177,7 +179,7 @@ try {
       runners: [{ workingDirectory: repo, directories: [{ path: idle }, { path: stale }] }],
     }),
   };
-  const audit = command([], protectedEnv);
+  const audit = command(["--audit"], protectedEnv);
   assert.match(audit, /eligible\t[^\n]*safe with spaces/);
   assert.ok(!existsSync(env.XDG_STATE_HOME), "audit should not create cleanup state");
   assert.ok(existsSync(safe) && existsSync(join(cache, "download")), "audit must delete nothing");
@@ -249,15 +251,9 @@ try {
   });
   assert.ok(!existsSync(squash), "exact squash-merged HEAD should be removable");
 
-  const recovery = tree("recovery");
-  const fs = statfsSync(home);
-  const minimum = (process.platform === "darwin" ? 20 : 10) * 1024 ** 3;
-  const low =
-    fs.bavail * fs.bsize < minimum ||
-    fs.bavail / fs.blocks < 0.1 ||
-    (fs.files > 0 && fs.ffree / fs.files < 0.01);
-  command(["--recover", "--worktree", recovery]);
-  assert.equal(existsSync(recovery), !low, "recovery should delete only while headroom is low");
+  const bare = command([]);
+  assert.match(bare, /updater:clean --audit/);
+  assert.ok(!bare.includes("Before:"), "a bare invocation must print help, not scan");
 
   put(join(cache, "download"));
   for (const busy of [
@@ -301,15 +297,18 @@ try {
   const installed = join(home, ".agents/skills/cleaning-up-storage/scripts/cleanup.ts");
   mkdirSync(resolve(installed, ".."), { recursive: true });
   copyFileSync(script, installed);
-  const task = Bun.spawnSync([
-    "bash",
-    resolve(import.meta.dir, "../dot_config/mise/tasks/updater/executable_clean"),
-    "--check",
-  ], {
-    cwd: home,
-    env: { ...env, PATH: `${resolve(process.execPath, "..")}:${env.PATH}` },
-    stderr: "pipe",
-  });
+  const task = Bun.spawnSync(
+    [
+      "bash",
+      resolve(import.meta.dir, "../dot_config/mise/tasks/updater/executable_clean"),
+      "--check",
+    ],
+    {
+      cwd: home,
+      env: { ...env, PATH: `${resolve(process.execPath, "..")}:${env.PATH}` },
+      stderr: "pipe",
+    },
+  );
   assert.ok(task.exitCode === 0 || task.exitCode === 3, task.stderr.toString());
   assert.match(task.stdout.toString(), /Before:/);
   console.log(

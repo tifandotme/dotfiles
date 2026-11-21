@@ -6,10 +6,9 @@ description: Audits storage and safely cleans inactive merged Git worktrees and 
 # Cleaning up storage
 
 ```bash
-mise run updater:clean                         # Audit only
+mise run updater:clean --audit                 # Audit only
 mise run updater:clean --check                 # Cheap free-space check
 mise run updater:clean --apply                 # Clean all strictly eligible items
-mise run updater:clean --recover               # Apply until the headroom target is met
 mise run updater:clean --apply --worktree /absolute/path
 ```
 
@@ -17,9 +16,9 @@ Use this entry point on the host that holds the files. An audit or apply takes 5
 
 ## Authorization and limits
 
-- Default to an audit when asked to inspect storage. `--apply` has standing permission to remove strictly eligible inactive merged worktrees and allowlisted safe caches without another approval. Higher-priority and project-specific restrictions still apply.
-- On low space or `ENOSPC`, run `--recover`. Before large builds, pulls, or installs, run `--check`; exit 3 means free space is below target. Treat other failures as errors, not proof of enough space.
-- Recovery implies apply and stops once free space is at least **10 GiB and 10% on Linux**, or **20 GiB and 10% on Darwin**. Both conditions must hold. `--apply` is not target-limited.
+- Run `--audit` when asked to inspect storage. `--apply` has standing permission to remove strictly eligible inactive merged worktrees and allowlisted safe caches without another approval. Higher-priority and project-specific restrictions still apply.
+- On low space or `ENOSPC`, run `--apply`. Before large builds, pulls, or installs, run `--check`; exit 3 means free space is below target. Treat other failures as errors, not proof of enough space.
+- The headroom target is **10 GiB and 10% on Linux**, or **20 GiB and 10% on Darwin**. Both conditions must hold. `--apply` is not target-limited.
 - `--worktree PATH` restricts worktree selection only. It does not restrict cache cleanup; do not describe it as a worktree-only operation.
 - Identify the host and affected filesystem before acting. Use actual filesystem free space before and after cleanup, not estimated candidate sizes, to judge headroom. Space recovered on another filesystem does not resolve the shortage.
 - If eligible cleanup cannot meet the target, report insufficient headroom and the items kept with reasons. Do not broaden cleanup automatically.

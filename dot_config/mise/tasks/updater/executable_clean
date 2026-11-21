@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-#MISE description="Audit storage; explicitly recover space from inactive merged worktrees and safe caches"
+#MISE description="Audit storage; clean inactive merged worktrees and safe caches with --apply"
 #MISE dir="{{cwd}}"
 #MISE quiet=true
 #MISE raw=true
 #USAGE flag "--apply" help="Clean all eligible worktrees and allowlisted caches"
-#USAGE flag "--recover" help="Clean only until free-space headroom is restored"
+#USAGE flag "--audit" help="Audit storage; remove nothing"
 #USAGE flag "--check" help="Check free space only; exit 3 when low"
 #USAGE flag "--worktree <path>" help="Restrict worktree candidates to this path; caches remain in scope"
 #USAGE flag "-h --help" help="Print help"
