@@ -1,4 +1,13 @@
 require("starship"):setup()
+
+-- Starship only runs locally, so over SFTP show the sftp://host/path instead.
+Header:children_add(function()
+  local cwd = cx.active.current.cwd
+  if cwd.scheme and cwd.scheme.is_virtual then
+    return ui.Line { ui.Span(tostring(cwd)):fg("blue"), ui.Span(" ") }
+  end
+  return ""
+end, 500, Header.LEFT)
 require("full-border"):setup {
   -- Available values: "plain", "rounded"
   set = "plain",
