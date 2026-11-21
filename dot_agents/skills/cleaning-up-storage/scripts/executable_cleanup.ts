@@ -321,6 +321,35 @@ function refresh(repo: string) {
   const head = remote.out.match(/^([0-9a-f]{40,64})\s+HEAD$/)?.[1];
   return remote.ok && head && git(repo, "cat-file", "-e", `${head}^{commit}`).ok ? head : "";
 }
+// Each refresh is two SSH round trips, so fetch every repository at once.
+async function refreshAll(list: string[]) {
+  const env = { ...Bun.env, GIT_TERMINAL_PROMPT: "0", GCM_INTERACTIVE: "never" };
+  const out = async (repo: string, ...argv: string[]) => {
+    const child = Bun.spawn(["git", "-C", repo, ...argv], {
+      stdin: "ignore",
+      stdout: "pipe",
+      stderr: "ignore",
+      timeout: 20000,
+      env,
+    });
+    const text = await new Response(child.stdout).text();
+    return { ok: (await child.exited) === 0, out: text.trim() };
+  };
+  const bases = new Map<string, string>();
+  await Promise.all(
+    list.map(async (repo) => {
+      const [fetched, remote] = await Promise.all([
+        out(repo, "fetch", "--quiet", "origin"),
+        out(repo, "ls-remote", "origin", "HEAD"),
+      ]);
+      const head = remote.out.match(/^([0-9a-f]{40,64})\s+HEAD$/)?.[1];
+      const known =
+        fetched.ok && remote.ok && head && git(repo, "cat-file", "-e", `${head}^{commit}`).ok;
+      bases.set(repo, known ? head : "");
+    }),
+  );
+  return bases;
+}
 function eligibility(
   tree: Worktree,
   base: string,
@@ -400,8 +429,9 @@ const scan = activity();
 const session = sessions(scan);
 const candidates: (Worktree & { bytes: number })[] = [];
 console.log("\nWorktrees (size includes discardable ignored files):");
+const bases = await refreshAll([...repos.values()]);
 for (const repo of repos.values()) {
-  const base = refresh(repo);
+  const base = bases.get(repo) ?? "";
   for (const tree of worktrees(repo)) {
     if (selected && tree.path !== selected) continue;
     const reason = eligibility(tree, base, scan, session);
