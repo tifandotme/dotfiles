@@ -1,7 +1,8 @@
 [Unit]
-Description=Prune Docker build cache and old unused images
+Description=Prune old stopped containers, unused images, and Docker build cache
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/docker builder prune -f --keep-storage 2GB
+ExecStart=/usr/bin/docker container prune -f --filter until=168h
 ExecStart=/usr/bin/docker image prune -a -f --filter until=168h
+ExecStart=/usr/bin/docker builder prune -f --reserved-space 2GB

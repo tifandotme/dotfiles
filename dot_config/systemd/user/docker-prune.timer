@@ -1,8 +1,8 @@
 [Unit]
-Description=Prune Docker build cache and old unused images weekly
+Description=Prune Docker build cache, old stopped containers and unused images daily
 
 [Timer]
-OnCalendar=weekly
+OnCalendar=daily
 Persistent=true
 Unit=docker-prune.service
 
