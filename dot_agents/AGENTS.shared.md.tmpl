@@ -53,7 +53,7 @@
 - OpenPencil (design editor, `openpencil-mcp`, desktop app) runs only on the MacBook. Do not attempt OpenPencil work on `box` or in a Linux or cloud sandbox. Hand it to a session on the MacBook, or ask the user if none is reachable.
 - On `box` (check `hostname`), end any reply that produced an artifact under `$HOME/projects` (HTML, report, screenshot) with its link: `https://box.javanese-pound.ts.net:8443/` plus the URL-encoded path relative to `$HOME/projects`. Tailnet-only; viewers need Tailscale. For files outside that tree, or on any other host, use an attachment. For public sharing, load `sharing-public-files`.
 - For other remote handoffs, deliver reachable URLs or attachments, not executor-local paths or `localhost`. If unavailable, give exact SSH forwarding or file-transfer commands for the viewing device.
-- For watchers, dev servers, and background shells, use task-owned Herdr panes when inside Herdr (load its skill); otherwise use harness-supported long-running processes. Match the pane's shell. Report temporary previews' URLs, access requirements, lifetime, and stop commands.
+- For watchers, dev servers, and background shells, use task-owned Rex panes when inside Rex (load its skill); otherwise use harness-supported long-running processes. Match the pane's shell. Report temporary previews' URLs, access requirements, lifetime, and stop commands.
 - Verify artifact URLs, assets, and interactions using the browser workflow above. Distinguish server checks from confirmed device access; request a device check only when troubleshooting access.
 - Use documented device-code or remote OAuth flows; loopback callbacks target the execution host. Keep credentials out of artifacts and URLs. Replace desktop-only `open` commands, clipboard writes, and notifications with conversation content or links. Finish headless checks, then hand off native-app, simulator, desktop-session, or hardware checks to a capable machine.
 
@@ -69,8 +69,8 @@
 
 ## Worktrees
 
-- When running in Herdr, prefer `herdr worktree` for a separate write-owning task that needs its own checkout; let native subagents share their parent checkout. Create the worktree beside the source checkout as `<repo-name>-<branch-name>`, with `/` in the branch replaced by `-`. Pass the absolute path to `--path` and the branch to `--branch`. If the destination exists, stop and report the collision.
-- When a task wraps up (its PR is merged, or the user closes it), stop the agent sessions you started there, run `herdr worktree remove --workspace <id>` without `--force`, and delete the merged local branch. If the worktree is dirty or holds commits the merged PR lacks, stop and report instead.
+- Prefer `git worktree add` for a separate write-owning task that needs its own checkout; let native subagents share their parent checkout. Create the worktree beside the source checkout as `<repo-name>-<branch-name>`, with `/` in the branch replaced by `-`. Pass the absolute path and the new branch (`-b`). If the destination exists, stop and report the collision.
+- When a task wraps up (its PR is merged, or the user closes it), stop the agent sessions you started there, run `git worktree remove <path>` without `--force`, and delete the merged local branch. If the worktree is dirty or holds commits the merged PR lacks, stop and report instead.
 - Keep one writing agent per worktree. To move a task to another agent, stop the first session and start the next one in the same worktree.
 - Do not move or edit harness session files to imitate a migration.
 - When a task spans several checkouts, pass the target to every git and gh command (`git -C <path>`, `gh --repo <owner/name>`).

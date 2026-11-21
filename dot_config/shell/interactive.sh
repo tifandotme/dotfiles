@@ -29,73 +29,8 @@ alias rg="rg --smart-case --glob '!{.git/*,out/*,**/node_modules/**}' --max-colu
 alias _ncu='command ncu'
 alias ncu='ncu --format group --root --cache --cacheFile "$XDG_CACHE_HOME/.ncu-cache.json"'
 
-herdr-wrap() (
-	label=$1
-	shift
-	pane=${HERDR_PANE_ID:-}
-	previous='' tab='' tab_label=''
-
-	if [ -n "$pane" ]; then
-		previous=$(command herdr pane get "$pane" | jq -r '.result.pane.label // empty')
-		tab=$(command herdr pane get "$pane" | jq -r '.result.pane.tab_id // empty')
-
-		if [ -n "$tab" ]; then
-			tab_state=$(command herdr tab get "$tab")
-			if [ "$(printf '%s' "$tab_state" | jq -r '.result.tab.pane_count')" = 1 ]; then
-				tab_label=$(printf '%s' "$tab_state" | jq -r '.result.tab.label // empty')
-			else
-				tab=''
-			fi
-		fi
-
-		command herdr pane rename "$pane" "$label" >/dev/null
-		[ -z "$tab" ] || command herdr tab rename "$tab" "$label" >/dev/null
-	fi
-
-	# shellcheck disable=SC2329
-	restore_label() {
-		if [ -n "$pane" ] && [ "$(command herdr pane get "$pane" | jq -r '.result.pane.label // empty')" = "$label" ]; then
-			if [ -n "$previous" ]; then
-				command herdr pane rename "$pane" "$previous" >/dev/null
-			else
-				command herdr pane rename "$pane" --clear >/dev/null
-			fi
-		fi
-
-		if [ -n "$tab" ] && [ "$(command herdr tab get "$tab" | jq -r '.result.tab.label // empty')" = "$label" ]; then
-			command herdr tab rename "$tab" "$tab_label" >/dev/null
-		fi
-	}
-
-	trap restore_label EXIT
-	export HERDR_TEMPORARY_LABEL="$label"
-	"$@"
-)
-
 tv() { command tv --color-always --extend-width-and-length "$@" | bat --style plain; }
-lazygit() {
-	if [ "${HERDR_ENV:-}" = 1 ]; then
-		herdr-wrap "${PWD##*/} (lzg)" env LG_CONFIG_FILE="$XDG_CONFIG_HOME/lazygit/config.yml,$XDG_CONFIG_HOME/lazygit/herdr.yml" lazygit "$@"
-	else
-		herdr-wrap "${PWD##*/} (lzg)" command lazygit "$@"
-	fi
-}
-lazydocker() { herdr-wrap "${PWD##*/} (lzd)" command lazydocker "$@"; }
-backlog() { herdr-wrap "${PWD##*/} (backlog)" command backlog "$@"; }
-nvim() { herdr-wrap "${PWD##*/} (nvim)" command nvim "$@"; }
-pi() { herdr-wrap "${PWD##*/} (pi)" command pi "$@"; }
-btm() { herdr-wrap btm command btm "$@"; }
-amp() {
-	local close=0 rc=0
-	[ "$#" -eq 0 ] && [ -t 0 ] && [ -t 1 ] && close=1
-	AMP_REMOTE_CONTROL_TERMINAL=1 herdr-wrap "${PWD##*/} (amp)" command mise exec -- amp "$@" || rc=$?
-	# tmux can inherit the ID of a different Herdr pane.
-	if [ "$close" = 1 ] && [ "${HERDR_ENV:-}" = 1 ] && [ -n "${HERDR_PANE_ID:-}" ] && [ -z "${TMUX:-}" ]; then
-		command herdr pane close "$HERDR_PANE_ID" >/dev/null || return "$rc"
-	fi
-	return "$rc"
-}
-gdu-go() { herdr-wrap "${1:-$PWD} (gdu-go)" command gdu-go "$@"; }
+amp() { AMP_REMOTE_CONTROL_TERMINAL=1 command mise exec -- amp "$@"; }
 ssh() { TERM=xterm-256color command ssh "$@"; }
 sshs() { TERM=xterm-256color command sshs "$@"; }
 
@@ -108,14 +43,12 @@ nvimg() (
 gh() { command mise run --quiet --raw gh -- "$@"; }
 
 claude() {
-	local close=0 rc=0
-	[ "$#" -eq 0 ] && [ -t 0 ] && [ -t 1 ] && close=1
 	case ${1:-} in
 	remote-control | rc) ;;
 	*) set -- --no-chrome "$@" ;;
 	esac
 	# shellcheck disable=SC2016
-	herdr-wrap "${PWD##*/} (claude)" command mise exec -- bash -c '
+	command mise exec -- bash -c '
 		if common=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null); then
 			root=$(dirname "$common")
 		else
@@ -135,12 +68,7 @@ claude() {
 			esac
 		fi
 		exec claude --dangerously-skip-permissions "$@"
-	' _ "$@" || rc=$?
-	# tmux can inherit the ID of a different Herdr pane.
-	if [ "$close" = 1 ] && [ "${HERDR_ENV:-}" = 1 ] && [ -n "${HERDR_PANE_ID:-}" ] && [ -z "${TMUX:-}" ]; then
-		command herdr pane close "$HERDR_PANE_ID" >/dev/null || return "$rc"
-	fi
-	return "$rc"
+	' _ "$@"
 }
 
 dotenvx() { DOTENVX_NO_ARMOR=true DOTENVX_NO_1PASSWORD=true command dotenvx "$@"; }
@@ -196,7 +124,7 @@ yazi() {
 	local tmp cwd result
 	tmp=$(mktemp "${TMPDIR:-/tmp}/yazi-cwd.XXXXXX") || return
 
-	herdr-wrap "${PWD##*/} (yazi)" command yazi "$@" --cwd-file "$tmp"
+	command yazi "$@" --cwd-file "$tmp"
 	result=$?
 
 	cwd=$(command cat -- "$tmp")

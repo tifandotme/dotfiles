@@ -27,7 +27,6 @@
     "npm:pi-rtk-optimizer",
     "npm:pi-subdir-context",
     "npm:@ff-labs/pi-fff@nightly",
-    "npm:pi-herdr-subagents",
     "npm:pi-clarify",
     "npm:@pi-kaush/pi-tool-call-markers"
   ],

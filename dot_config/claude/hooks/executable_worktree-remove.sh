@@ -7,7 +7,6 @@ die() {
 }
 
 command -v jq >/dev/null 2>&1 || die "jq is required"
-command -v herdr >/dev/null 2>&1 || die "Herdr CLI is required"
 
 input="$(cat)"
 worktree_path="$(jq -er '.worktree_path | select(type == "string" and length > 0)' <<<"$input")" ||
@@ -25,22 +24,11 @@ case "$worktree_path" in
 *) die "worktree must be under $projects_dir/work or $projects_dir/personal: $worktree_path" ;;
 esac
 
-lookup="$(herdr worktree list --cwd "$worktree_path")" ||
-	die "cannot find the Herdr worktree: $worktree_path"
-workspace="$(jq -cer --arg path "$worktree_path" \
-	'.result.worktrees | map(select(.path == $path)) | if length == 1 then .[0] else error("expected one matching worktree") end' \
-	<<<"$lookup")" || die "Herdr did not return exactly one matching worktree"
-workspace_id="$(jq -r '.open_workspace_id // ""' <<<"$workspace")"
-
-if [[ -n "$workspace_id" ]]; then
-	herdr worktree remove --workspace "$workspace_id" >&2 ||
-		die "Herdr could not remove the worktree"
-else
-	repo="$(git -C "$worktree_path" rev-parse --show-toplevel)" ||
-		die "not a Git worktree: $worktree_path"
-	git -C "$repo" worktree remove "$worktree_path" >&2 ||
-		die "Git could not remove the worktree"
-fi
+common="$(git -C "$worktree_path" rev-parse --path-format=absolute --git-common-dir)" ||
+	die "not a Git worktree: $worktree_path"
+repo="$(dirname "$common")"
+git -C "$repo" worktree remove "$worktree_path" >&2 ||
+	die "Git could not remove the worktree"
 
 [[ ! -e "$worktree_path" && ! -L "$worktree_path" ]] ||
 	die "worktree still exists after removal: $worktree_path"

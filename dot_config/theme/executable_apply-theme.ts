@@ -134,7 +134,6 @@ async function applyTheme() {
   const targets = [
     join(home, ".config", "theme"),
     join(home, ".config", "sketchybar"),
-    join(home, ".config", "herdr"),
   ];
   // An edited target can make chezmoi prompt on the caller's terminal.
   const result = Bun.spawnSync(["chezmoi", "apply", ...targets], {
@@ -147,7 +146,6 @@ async function applyTheme() {
     const uid = (await $`/usr/bin/id -u`.text()).trim();
     await $`/bin/launchctl kickstart -k ${`gui/${uid}/local.borders-native`}`.quiet().nothrow();
   }
-  await $`herdr server reload-config`.quiet().nothrow();
 }
 
 async function main() {

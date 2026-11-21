@@ -30,8 +30,7 @@ The helper must confirm every safety check before removal. A failed or unavailab
 
 - Keep primary, current, locked, dirty, and untracked worktrees. Ignored files (build output, `.amp/`, caches, `.env*`, `node_modules/`) are discarded with an otherwise eligible worktree.
 - Require merge evidence: HEAD is already on the remote base, or a merged PR's head SHA exactly matches local HEAD. The exact PR head match supports squash merges; a similar patch or a merged PR for an older head does not. Keep worktrees with open PRs.
-- Keep worktrees in use by processes, open files, tmux panes, or threads a runner is serving. A runner's plain served-directory list only fills the new-thread picker and does not protect a checkout.
-- Herdr panes are covered by the process check: a shell or agent whose working directory is inside a worktree keeps it. Herdr itself is not inspected.
+- Keep worktrees in use by processes, open files, terminal panes, or threads a runner is serving. A runner's plain served-directory list only fills the new-thread picker and does not protect a checkout.
 - Keep worktrees where an unarchived Amp thread started (`amp threads list`, personal and `~/projects/work` accounts). Archive a finished thread to release its worktree. If the list is unavailable, keep worktrees.
 - Do not stop processes, close sessions, or unregister runner paths to make a worktree eligible. Do not force removal of a kept worktree. Let the helper remove only eligible worktrees and their eligible merged local branches.
 

@@ -29,3 +29,12 @@
 .local/state/codex
 .config/glow
 .config/gcx
+.config/herdr
+.local/share/herdr-plugins
+.config/lazygit/herdr.yml
+.config/lazygit/edit-in-pane
+.config/claude/hooks/herdr-worktree-create.sh
+.config/claude/hooks/herdr-worktree-remove.sh
+.config/claude/hooks/herdr-agent-state.sh
+.agents/skills/herdr
+.config/claude/skills/herdr

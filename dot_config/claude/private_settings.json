@@ -30,16 +30,6 @@
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-agent-state.sh\" session",
-            "timeout": 10
-          }
-        ]
-      },
-      {
         "hooks": [
           {
             "type": "command",
@@ -65,7 +55,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-worktree-create.sh\""
+            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/worktree-create.sh\""
           }
         ]
       }
@@ -75,7 +65,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/herdr-worktree-remove.sh\""
+            "command": "bash \"$XDG_CONFIG_HOME/claude/hooks/worktree-remove.sh\""
           }
         ]
       }

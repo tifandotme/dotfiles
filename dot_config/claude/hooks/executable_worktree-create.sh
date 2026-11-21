@@ -7,7 +7,6 @@ die() {
 }
 
 command -v jq >/dev/null 2>&1 || die "jq is required"
-command -v herdr >/dev/null 2>&1 || die "Herdr CLI is required"
 
 input="$(cat)"
 cwd="$(jq -er '.cwd | select(type == "string" and length > 0)' <<<"$input")" ||
@@ -37,11 +36,7 @@ destination="$project_group/${repo##*/}-$branch_slug"
 [[ ! -e "$destination" && ! -L "$destination" ]] ||
 	die "worktree destination already exists: $destination"
 
-herdr worktree create \
-	--cwd "$repo" \
-	--branch "$branch" \
-	--path "$destination" \
-	--no-focus >&2 || die "Herdr could not create the worktree"
-[[ -d "$destination" ]] || die "Herdr did not create the expected path: $destination"
+git -C "$repo" worktree add -b "$branch" "$destination" >&2 ||
+	die "Git could not create the worktree"
 
 printf '%s\n' "$destination"
