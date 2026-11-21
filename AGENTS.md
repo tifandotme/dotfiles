@@ -74,6 +74,7 @@ macos-only-value
 - Do not create runtime symlinks to source files. Let chezmoi manage target files.
 - Before editing a nested area, read the nearest scoped `AGENTS.md`; it overrides or extends this root guidance.
 - When adding, renaming, or converting a managed file to `.tmpl`, check the Neovim IDE setup: filetype detection in `dot_config/nvim/init.lua`, formatting in `dot_config/nvim/lua/formatting.lua`, and language servers in `dot_config/nvim/lua/lsp.lua`. Verify the source filename gets the intended filetype and that tools can handle its template directives.
+- `dot_agents/AGENTS.shared.md.tmpl` is included in the guidance for Amp (`dot_config/private_amp/AGENTS.md.tmpl`), Claude (`dot_agents/CLAUDE.shared.md.tmpl`) and Pi (`dot_config/pi/AGENTS.md.tmpl`). Keep it harness-neutral. Put guidance that names one harness's tools or features (for example Amp's `create_thread` or the runner's New Worktree button) in that harness's own file, not in the shared file.
 - Remove stale targets with `.chezmoiremove`; when a source file now targets that path, delete the target by hand instead.
 - For changes to user workflows or shortcuts, check `docs/dotfiles-workflows.html` and update affected cards. Verify steps against source files and keep each card's `<!-- Sources: ... -->` pointer current.
 

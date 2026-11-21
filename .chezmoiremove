@@ -39,3 +39,4 @@
 .agents/skills/herdr
 .config/claude/skills/herdr
 projects/work/.gitconfig
+.config/amp/plugins/twig-worktree.ts

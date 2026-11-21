@@ -70,4 +70,5 @@
 ## Worktrees
 
 - Keep one writing agent per worktree. To move a task to another agent, stop the first session and start the next one in the same worktree.
+- To create a worktree, run `git twig skill` first and follow it; use `git twig new` instead of `git worktree add`. On `box`, only repos under `~/projects` get copy-on-write.
 - When a task spans several checkouts, pass the target to every git and gh command (`git -C <path>`, `gh --repo <owner/name>`).

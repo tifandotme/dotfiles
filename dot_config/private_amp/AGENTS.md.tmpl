@@ -1,1 +1,5 @@
 {{ includeTemplate "dot_agents/AGENTS.shared.md.tmpl" . }}
+
+## Worktrees
+
+- `create_thread`'s `worktree` option and the picker's New Worktree button use plain `git worktree add`, with no copy-on-write. Create the worktree with `git twig new` first and pass it as `working_directory` when disk savings matter.
