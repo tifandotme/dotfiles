@@ -485,11 +485,42 @@ for (const spec of cacheSpecs) {
   );
   if (!reason) caches.push({ spec, path, bytes: Math.max(bytes, 0) });
 }
-console.log("\nDocker (report only; reclaimable does not mean safe):");
-const docker = run("docker", ["system", "df"]);
-console.log(
-  docker.ok ? docker.out : "Docker unavailable or inventory timed out; no Docker changes.",
-);
+console.log("\nDocker (report only; unique size, not Docker's reclaimable column):");
+const docker = run("docker", ["system", "df", "-v", "--format", "{{json .}}"], cwd, 60000);
+try {
+  if (!docker.ok) throw new Error("unavailable");
+  const df = JSON.parse(docker.out);
+  const units: Record<string, number> = { B: 1, kB: 1e3, MB: 1e6, GB: 1e9, TB: 1e12 };
+  const bytesOf = (text: string) => {
+    const m = /^([\d.]+)\s*([kMGT]?B)$/.exec(text);
+    return m ? Number(m[1]) * units[m[2]!]! : 0;
+  };
+  const images = [...df.Images].sort((a, b) => bytesOf(b.UniqueSize) - bytesOf(a.UniqueSize));
+  let unused = 0;
+  for (const image of images) {
+    const bytes = bytesOf(image.UniqueSize);
+    const inUse = Number(image.Containers) > 0;
+    if (!inUse) unused += bytes;
+    const name =
+      image.Repository === "<none>" ? image.ID.slice(7, 19) : `${image.Repository}:${image.Tag}`;
+    console.log(
+      `${inUse ? "in use" : "unused"}\t${gib(bytes)}\t${image.Containers} container(s)\t${name}\t${image.CreatedSince}`,
+    );
+  }
+  console.log(`Unused images (no container, running or stopped): ${gib(unused)}`);
+  const stopped = df.Containers.filter((c: { State: string }) => c.State !== "running");
+  console.log(`Stopped containers: ${stopped.length}`);
+  for (const c of stopped) console.log(`  ${c.Names}\t${c.Image}\t${c.Status}`);
+  const idle = df.Volumes.filter((v: { Links: string }) => Number(v.Links) === 0);
+  console.log(`Unused volumes: ${idle.length}`);
+  for (const v of idle) {
+    const anonymous = /^[0-9a-f]{64}$/.test(v.Name);
+    console.log(`  ${anonymous ? "anonymous" : "named"}\t${v.Size}\t${v.Name}`);
+  }
+  console.log(`Build cache: ${df.BuildCache.length} entries`);
+} catch {
+  console.log("Docker unavailable or inventory timed out; no Docker changes.");
+}
 if (process.platform === "darwin") {
   for (const path of [
     "Library/Developer/Xcode/DerivedData",
