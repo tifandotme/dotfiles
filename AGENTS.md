@@ -7,6 +7,7 @@ macOS-first dotfiles, chezmoi + age encryption. Shells: system Zsh on macOS and 
 - `box` is reachable at all times with `ssh eddies@box-tailnet` (Tailscale).
 - The main Mac is reachable from box with `ssh macbook` (prefix `PATH=/opt/homebrew/bin:$PATH`). Amp runner ids are `box` and `macbook` (personal account) and `box-work` and `macbook-work` (work account).
 - `box` context: read `~/projects/personal/box/GLOSSARY.md` when work concerns the `box` VPS. Read `~/projects/personal/box/AGENTS.md` before changing that repository.
+- `box` disk space, empty `~/projects`, or worktree copy-on-write: `~/projects` is a reflink XFS loop-mounted from the sparse file `/var/lib/twig.img`, and `git twig` needs source, destination and `.git` inside it. Root (`/`) backs the image, so `df -h ~/projects` can overstate free space; run `df -h / ~/projects` and use the smaller number. An empty `~/projects` means the mount is down (check `findmnt ~/projects`); the repos are in the image. Grow only while root has more free space than the growth: `truncate`, `losetup -c` (loop number changes per boot), `xfs_growfs`. XFS cannot shrink.
 
 Scoped `AGENTS.md` files are not installed to `$HOME`.
 
