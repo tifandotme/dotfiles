@@ -298,14 +298,10 @@ try {
   mkdirSync(resolve(installed, ".."), { recursive: true });
   copyFileSync(script, installed);
   const task = Bun.spawnSync(
-    [
-      "bash",
-      resolve(import.meta.dir, "../dot_config/mise/tasks/updater/executable_clean"),
-      "--check",
-    ],
+    ["bash", resolve(import.meta.dir, "../dot_config/mise/tasks/updater/executable_clean")],
     {
       cwd: home,
-      env: { ...env, PATH: `${resolve(process.execPath, "..")}:${env.PATH}` },
+      env: { ...env, usage_check: "true", PATH: `${resolve(process.execPath, "..")}:${env.PATH}` },
       stderr: "pipe",
     },
   );

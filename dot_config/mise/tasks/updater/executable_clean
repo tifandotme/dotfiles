@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 #MISE description="Audit storage; clean inactive merged worktrees and safe caches with --apply"
+#USAGE long_about "XDG_PROJECTS_DIR narrows repository discovery. Exit: 0 success/audit, 1 failed operation, 2 busy, 3 insufficient headroom. No Docker mutation, package removal, Trash emptying, or process stopping."
 #MISE dir="{{cwd}}"
 #MISE quiet=true
-#MISE raw=true
 #USAGE flag "--apply" help="Clean all eligible worktrees and allowlisted caches"
 #USAGE flag "--audit" help="Audit storage; remove nothing"
 #USAGE flag "--check" help="Check free space only; exit 3 when low"
 #USAGE flag "--worktree <path>" help="Restrict worktree candidates to this path; caches remain in scope"
-#USAGE flag "-h --help" help="Print help"
 set -Eeuo pipefail
 
-exec bun "$HOME/.agents/skills/cleaning-up-storage/scripts/cleanup.ts" "$@"
+args=()
+[ "${usage_apply:-}" = true ] && args+=(--apply)
+[ "${usage_audit:-}" = true ] && args+=(--audit)
+[ "${usage_check:-}" = true ] && args+=(--check)
+[ -n "${usage_worktree:-}" ] && args+=(--worktree "$usage_worktree")
+
+exec bun "$HOME/.agents/skills/cleaning-up-storage/scripts/cleanup.ts" ${args[@]+"${args[@]}"}
