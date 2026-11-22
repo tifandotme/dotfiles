@@ -111,13 +111,72 @@ function reportSpace(label: string) {
     `${label}: ${hostname()} (${process.platform}), ${cwd}: ${gib(s.free)} free (${s.free} bytes, ${s.percent.toFixed(1)}%); target ${gib(s.target)}${s.inodesLow ? "; low free inodes" : ""}`,
   );
 }
-reportSpace("Before");
+// Disks that matter: the one cleanup measures (cwd), plus home and projects when they differ.
+function disks() {
+  const found: { dev: number; path: string; names: string[]; free: number; total: number }[] = [];
+  for (const [name, path] of [
+    ["cwd", cwd],
+    ["home", home],
+    ["projects", projects],
+  ] as const) {
+    if (!existsSync(path)) continue;
+    const dev = lstatSync(path).dev;
+    const known = found.find((disk) => disk.dev === dev);
+    if (known) {
+      known.names.push(name);
+      continue;
+    }
+    const fs = statfsSync(path);
+    found.push({
+      dev,
+      path,
+      names: [name],
+      free: fs.bavail * fs.bsize,
+      total: fs.blocks * fs.bsize,
+    });
+  }
+  return found;
+}
+function sameDisk(path: string) {
+  return (
+    statfsSync(path).type === statfsSync(cwd).type && lstatSync(path).dev === lstatSync(cwd).dev
+  );
+}
+function heading(title: string) {
+  console.log(`\n=== ${title} ${"=".repeat(Math.max(3, 70 - title.length))}`);
+}
+// One aligned row: status, size, path, then the reason or action.
+function row(status: string, bytes: number | undefined, path: string, note: string) {
+  const sized = bytes === undefined ? "" : bytes < 0 ? "size unknown" : gib(bytes);
+  console.log(`  ${status.padEnd(10)} ${sized.padStart(11)}  ${path}\n${" ".repeat(25)}${note}`);
+}
+function diskSummary(label: string) {
+  heading(`DISKS (${label})`);
+  console.log(
+    `${hostname()} (${process.platform}). Target: ${gib(space().target)} free on the measured disk.`,
+  );
+  for (const disk of disks()) {
+    const measured = disk.dev === lstatSync(cwd).dev;
+    console.log(
+      `  ${gib(disk.free).padStart(11)} free of ${gib(disk.total)}  ${disk.path}  [${disk.names.join(", ")}]${measured ? "  <- measured by this run" : ""}`,
+    );
+  }
+}
+const startFree = space().free;
 if (args.includes("--check")) {
   if (args.length !== 1) throw new Error("Use --check alone.");
+  reportSpace("Before");
   process.exit(space().low ? 3 : 0);
 }
-const filesystem = run("df", ["-h", cwd]);
-if (filesystem.ok) console.log(filesystem.out);
+diskSummary("Before");
+console.log(
+  "Only items on the measured disk are removed. Items on another disk are listed as 'other disk'; run from that disk to include them.",
+);
+const otherDisk = new Map<number, number>();
+function noteOtherDisk(path: string, bytes: number) {
+  const dev = lstatSync(path).dev;
+  otherDisk.set(dev, (otherDisk.get(dev) ?? 0) + Math.max(bytes, 0));
+}
 
 // mkdir is atomic on Linux and macOS. Never steal a lock from another invocation.
 const state = join(Bun.env.XDG_STATE_HOME || join(home, ".local/state"), "storage-cleanup");
@@ -425,7 +484,7 @@ function size(path: string) {
 const scan = activity();
 const session = sessions(scan);
 const candidates: (Worktree & { bytes: number })[] = [];
-console.log("\nWorktrees (size includes discardable ignored files):");
+heading("WORKTREES (size includes discardable ignored files)");
 const bases = await refreshAll([...repos.values()]);
 for (const repo of repos.values()) {
   const base = bases.get(repo) ?? "";
@@ -433,8 +492,13 @@ for (const repo of repos.values()) {
     if (selected && tree.path !== selected) continue;
     const reason = eligibility(tree, base, scan, session);
     const bytes = existsSync(tree.path) ? size(tree.path) : -1;
-    console.log(
-      `${reason ? "keep" : "eligible"}\t${bytes < 0 ? "size unknown" : gib(bytes)}\t${tree.path}\t${reason || "merged and inactive"}`,
+    const other = !reason && existsSync(tree.path) && !sameDisk(tree.path);
+    if (other) noteOtherDisk(tree.path, bytes);
+    row(
+      reason ? "keep" : other ? "other disk" : "eligible",
+      bytes,
+      tree.path,
+      reason || "merged and inactive",
     );
     // Size only orders candidates; a failed scan must not block cleanup.
     if (!reason) candidates.push({ ...tree, bytes: Math.max(bytes, 0) });
@@ -493,7 +557,7 @@ function cacheReason(
   if (running) return "cache owner is running";
   return processReason(path, scan);
 }
-console.log("\nSafe cache allowlist:");
+heading("SAFE CACHES (rebuildable)");
 const caches: { spec: (typeof cacheSpecs)[number]; path: string; bytes: number }[] = [];
 for (const spec of cacheSpecs) {
   const location = run(spec.tool, spec.query, home);
@@ -501,12 +565,17 @@ for (const spec of cacheSpecs) {
   const path = location.out;
   const reason = cacheReason(path, spec, scan);
   const bytes = size(path);
-  console.log(
-    `${reason ? "keep" : "eligible"}\t${bytes < 0 ? "size unknown" : gib(bytes)}\t${path}\t${reason || spec.clean.join(" ")}`,
+  const other = !reason && !sameDisk(path);
+  if (other) noteOtherDisk(path, bytes);
+  row(
+    reason ? "keep" : other ? "other disk" : "eligible",
+    bytes,
+    path,
+    reason || `${spec.tool} ${spec.clean.join(" ")}`,
   );
   if (!reason) caches.push({ spec, path, bytes: Math.max(bytes, 0) });
 }
-console.log("\nDocker (report only; unique size, not Docker's reclaimable column):");
+heading("DOCKER (report only; unique size, not Docker's reclaimable column)");
 const docker = run("docker", ["system", "df", "-v", "--format", "{{json .}}"], cwd, 60000);
 try {
   if (!docker.ok) throw new Error("unavailable");
@@ -541,8 +610,11 @@ try {
       image.Repository === "<none>"
         ? `${image.ID.slice(7, 19)} (${owners.get(image.ID) ?? "no container"})`
         : `${image.Repository}:${image.Tag}`;
-    console.log(
-      `${inUse ? "in use" : "unused"}\t${gib(bytes)}\t${image.Containers} container(s)\t${name}\t${image.CreatedSince}`,
+    row(
+      inUse ? "in use" : "unused",
+      bytes,
+      name,
+      `${image.Containers} container(s), created ${image.CreatedSince}`,
     );
   }
   console.log(`Unused images (no container, running or stopped): ${gib(unused)}`);
@@ -571,17 +643,15 @@ if (process.platform === "darwin") {
     ".colima",
   ]) {
     if (existsSync(join(home, path)))
-      console.log(`review only\t${gib(size(join(home, path)))}\t${join(home, path)}`);
+      row("review", size(join(home, path)), join(home, path), "review manually");
   }
 }
 
+heading(apply ? "ACTIONS" : "RESULT");
 if (apply) {
   for (const tree of candidates.sort((a, b) => b.bytes - a.bytes)) {
-    if (
-      statfsSync(tree.path).type !== statfsSync(cwd).type ||
-      lstatSync(tree.path).dev !== lstatSync(cwd).dev
-    ) {
-      console.log(`keep\t${tree.path}\tdifferent filesystem from the cleanup target`);
+    if (!sameDisk(tree.path)) {
+      row("other disk", undefined, tree.path, "not on the measured disk; skipped");
       continue;
     }
     const fresh = worktrees(tree.primary).find((fresh) => fresh.path === tree.path);
@@ -592,7 +662,7 @@ if (apply) {
     // Network/PR checks can take time. Recheck ownership after them, before removal.
     if (!reason) reason = activityReason(realpathSync(tree.path), activity());
     if (reason) {
-      console.log(`keep\t${tree.path}\t${reason}`);
+      row("keep", undefined, tree.path, reason);
       continue;
     }
     const removed = git(tree.primary, "worktree", "remove", "--", tree.path);
@@ -601,7 +671,7 @@ if (apply) {
       console.error(`Removal refused: ${tree.path}: ${removed.error}`);
       continue;
     }
-    console.log(`removed\t${tree.path}`);
+    row("removed", tree.bytes, tree.path, "worktree and merged branch");
     if (tree.branch && git(tree.primary, "rev-parse", "--verify", tree.branch).out === tree.head) {
       // Compare-and-delete avoids deleting a branch that moved after removal.
       const deleted = git(tree.primary, "update-ref", "-d", tree.branch, tree.head);
@@ -620,11 +690,11 @@ if (apply) {
         ? "cache location changed"
         : cacheReason(cache.path, cache.spec, activity());
     if (reason) {
-      console.log(`keep\t${cache.path}\t${reason}`);
+      row("keep", undefined, cache.path, reason);
       continue;
     }
-    if (lstatSync(cache.path).dev !== lstatSync(cwd).dev) {
-      console.log(`keep\t${cache.path}\tdifferent filesystem`);
+    if (!sameDisk(cache.path)) {
+      row("other disk", undefined, cache.path, "not on the measured disk; skipped");
       continue;
     }
     const result = run(cache.spec.tool, cache.spec.clean, home, 120000);
@@ -641,14 +711,23 @@ if (apply) {
       if (!rebuilt.ok) {
         failed = true;
         console.error(`Global reinstall failed, run it by hand: ${cache.path}: ${rebuilt.error}`);
-      } else console.log(`cleaned\t${cache.path} (global packages reinstalled)`);
-    } else console.log(`cleaned\t${cache.path}`);
+      } else row("cleaned", cache.bytes, cache.path, "global packages reinstalled");
+    } else row("cleaned", cache.bytes, cache.path, "cache emptied");
     reportSpace("After cache");
   }
-} else console.log("\nAudit only. Nothing removed. Use --apply to clean all eligible items.");
-reportSpace("After");
+} else console.log("Audit only. Nothing removed. Use --apply to clean all eligible items.");
+diskSummary("After");
+const freed = space().free - startFree;
+console.log(`Freed ${gib(Math.max(freed, 0))} on the measured disk (${cwd}).`);
+for (const [dev, bytes] of otherDisk) {
+  const disk = disks().find((disk) => disk.dev === dev);
+  if (bytes > 1024 ** 2 && disk)
+    console.log(
+      `${gib(bytes)} more is eligible on ${disk.path}. Run from there to include it: cd ${disk.path} && mise run updater:clean --apply`,
+    );
+}
 if (space().low)
   console.log(
-    "Headroom target not reached. Review reported consumers or increase capacity; do not broaden deletion automatically.",
+    "Target not reached (this is why the task exits 3, not a failure). Review the consumers above or increase capacity; do not broaden deletion automatically.",
   );
 process.exitCode = failed ? 1 : apply && space().low ? 3 : 0;

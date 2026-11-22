@@ -180,7 +180,7 @@ try {
     }),
   };
   const audit = command(["--audit"], protectedEnv);
-  assert.match(audit, /eligible\t[^\n]*safe with spaces/);
+  assert.match(audit, /eligible +[^\n]*safe with spaces/);
   assert.ok(!existsSync(env.XDG_STATE_HOME), "audit should not create cleanup state");
   assert.ok(existsSync(safe) && existsSync(join(cache, "download")), "audit must delete nothing");
   command(["--apply"], protectedEnv);
