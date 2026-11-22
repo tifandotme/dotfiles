@@ -78,12 +78,15 @@
     "command": "ccstatusline --config \"$XDG_CONFIG_HOME/ccstatusline/settings.json\"",
     "padding": 0
   },
+  "extraKnownMarketplaces": {},
   "outputStyle": "Concise",
   "feedbackSurveyRate": 0,
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
-    "verbs": ["Working"]
+    "verbs": [
+      "Working"
+    ]
   },
   "effortLevel": "medium",
   "modelSettings": {
@@ -114,5 +117,6 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": false,
-  "ui.showBanner": false
+  "ui.showBanner": false,
+  "enabledPlugins": {}
 }
