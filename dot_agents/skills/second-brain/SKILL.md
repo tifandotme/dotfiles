@@ -10,7 +10,7 @@ Markdown syntax comes from the `obsidian-markdown` and `obsidian-bases` skills. 
 ## Access
 
 - Use the `mcpvault` MCP for note reads and writes when present; otherwise filesystem tools.
-- `move_note` and `mv` leave links to the old name intact. After a move or rename, `rg` the vault for the old name and fix the links.
+- `move_note` and `mv` do not rewrite links in other notes, so they keep pointing at the old name. After a move or rename, `rg` the vault for the old name and fix the links.
 
 ## Sync
 
