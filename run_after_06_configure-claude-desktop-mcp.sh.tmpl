@@ -1,0 +1,29 @@
+# {{ if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+
+# Claude Desktop rewrites its config with app state, so only merge the
+# tolaria entry into mcpServers and leave every other key alone.
+set -Eeuo pipefail
+
+config="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
+node_bin="$HOME/.local/share/mise/shims/node"
+server="$HOME/.local/share/tolaria-mcp/mcp-server/index.js"
+
+if [[ ! -f "$config" ]] || ! command -v jq >/dev/null 2>&1; then
+	exit 0
+fi
+
+want="$(jq -n --arg command "$node_bin" --arg server "$server" \
+	'{command: $command, args: [$server], env: {WS_UI_PORT: "9711"}}')"
+
+if jq -e --argjson want "$want" '.mcpServers.tolaria == $want' "$config" >/dev/null 2>&1; then
+	exit 0
+fi
+
+tmp="$(mktemp "$config.XXXXXXXX")"
+trap 'rm -f "$tmp"' EXIT
+jq --argjson want "$want" '.mcpServers.tolaria = $want' "$config" >"$tmp"
+mv "$tmp" "$config"
+printf '%s\n' 'Updated Claude Desktop tolaria MCP entry; restart Claude Desktop to apply'
+# {{- end }}
