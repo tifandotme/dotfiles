@@ -9,7 +9,7 @@ skills_dir="$HOME/.agents/skills"
 # {{ if eq .chezmoi.hostname "box" -}}
 skill_targets=("amp:")
 # {{ else -}}
-skill_targets=("claude-code:${XDG_CONFIG_HOME:-$HOME/.config}/claude" "claude-code:${XDG_CONFIG_HOME:-$HOME/.config}/claude-hadl")
+skill_targets=("amp:" "claude-code:${XDG_CONFIG_HOME:-$HOME/.config}/claude" "claude-code:${XDG_CONFIG_HOME:-$HOME/.config}/claude-hadl")
 # {{ end -}}
 
 desired_skills=()
