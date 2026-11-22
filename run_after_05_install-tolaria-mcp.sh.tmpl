@@ -20,9 +20,9 @@ fi
 
 cd "$tolaria_dir"
 # {{ if eq .chezmoi.os "darwin" -}}
-lock_hash="$(shasum -a 256 package.json package-lock.json | shasum -a 256 | awk '{print $1}')"
+lock_hash="$({ cat package.json package-lock.json; echo hoisted; } | shasum -a 256 | awk '{print $1}')"
 # {{ else -}}
-lock_hash="$(sha256sum package.json package-lock.json | sha256sum | awk '{print $1}')"
+lock_hash="$({ cat package.json package-lock.json; echo hoisted; } | sha256sum | awk '{print $1}')"
 # {{ end -}}
 installed_hash=""
 if [[ -f .chezmoi-package-lock-hash ]]; then
@@ -38,7 +38,7 @@ if [[ ! -d node_modules || "$installed_hash" != "$lock_hash" ]]; then
 		rm -rf "$install_dir"
 	' EXIT
 	cp package.json package-lock.json "$install_dir/"
-	if bun install --cwd "$install_dir" --no-save --production >"$install_dir/bun.log" 2>&1; then
+	if bun install --cwd "$install_dir" --no-save --production --linker hoisted >"$install_dir/bun.log" 2>&1; then
 		cat "$install_dir/bun.log"
 	else
 		cat "$install_dir/bun.log" >&2
@@ -51,7 +51,7 @@ if [[ ! -d node_modules || "$installed_hash" != "$lock_hash" ]]; then
 			exit 1
 		fi
 		(cd "$install_dir" && npm install --package-lock-only --ignore-scripts --no-audit --no-fund)
-		bun install --cwd "$install_dir" --no-save --production
+		bun install --cwd "$install_dir" --no-save --production --linker hoisted
 	fi
 	if [[ -e node_modules || -L node_modules ]]; then
 		mv node_modules "$install_dir/previous-node_modules"
