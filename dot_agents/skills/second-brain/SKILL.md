@@ -5,8 +5,6 @@ description: "Reads, writes, moves, and organizes notes in Tifan's Obsidian vaul
 
 # Notes vault
 
-First read `AGENTS.md` in the vault (`read_note`) for the layout and note conventions.
-
 Markdown syntax comes from the `obsidian-markdown` and `obsidian-bases` skills. Web pages and YouTube transcripts: `defuddle parse <url> --md`.
 
 ## Access
@@ -17,3 +15,22 @@ Markdown syntax comes from the `obsidian-markdown` and `obsidian-bases` skills. 
 ## Sync
 
 Drive for desktop syncs the MacBook; `rclone bisync` runs on box every 5 minutes (`notes-drive-sync.timer`). Edit a given note on one machine at a time, because bisync writes conflict copies. Before a bulk delete of over 50% of the files, stop the timer on box and run one manual bisync with `--max-delete 100` (a percentage).
+
+## Layout
+
+List folders with `list_directory`. What the names don't say:
+
+- `hadl/archive/` holds Tifan's finished Hadl work. It stays frozen.
+- `hadl/` is active Hadl work only.
+- `attachments/hadl/` holds Hadl artifacts and diagrams.
+- `Clippings/` receives web clips from the Obsidian Web Clipper.
+- `reference/` also holds Tifan's dev workflow notes.
+
+When you create, rename, or retire a top-level folder, update this section in the same change.
+
+## Conventions
+
+- Filenames are kebab-case, followed by a `# H1` title.
+- Frontmatter holds `type:` (`Area`, `Person`, `Meeting`, `SOP`, `Research`, `Reference`, `Note`), existing `tags`, and `aliases:` for real alternate names.
+- Relationships live in wikilinks and in Bases filtered by folder and `type`.
+- Retire notes by moving them to `hadl/archive/` or setting `_archived: true`. Ask Tifan before deleting.
