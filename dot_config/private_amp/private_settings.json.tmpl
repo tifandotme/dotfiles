@@ -54,17 +54,12 @@
       "args": ["{{ .chezmoi.homeDir }}/.local/share/bun/bin/openpencil-mcp"]
     },
     {{ end -}}
-    "tolaria": {
-      "command": "{{ if eq .chezmoi.os "darwin" }}{{ .chezmoi.homeDir }}/.local/share/mise/shims/node{{ else }}node{{ end }}",
+    "mcpvault": {
+      "command": "{{ if eq .chezmoi.os "darwin" }}{{ .chezmoi.homeDir }}/.local/share/mise/shims/bunx{{ else }}bunx{{ end }}",
       "args": [
-        "{{ .chezmoi.homeDir }}/.local/share/tolaria-mcp/mcp-server/index.js"
-      ],
-      "env": {
-        {{ if eq .chezmoi.hostname "box" -}}
-        "VAULT_PATH": "{{ .chezmoi.homeDir }}/projects/personal/notes",
-        {{ end -}}
-        "WS_UI_PORT": "9711"
-      }
+        "@bitbonsai/mcpvault@latest",
+        "{{ .chezmoi.homeDir }}/projects/personal/notes"
+      ]
     }
   },
   {{ end -}}

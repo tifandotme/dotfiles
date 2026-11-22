@@ -24,12 +24,3 @@ url = "https://github.com/kosuketut/tinycast-screenshot-search/releases/download
 checksum.sha256 = "c5e6a4b18a8c29b4274e9cc378d4a6c3560fe98be84013b05aa969c354538c6a"
 
 # {{ end -}}
-
-[".local/share/tolaria-mcp"]
-type = "archive"
-# {{ with gitHubLatestRelease "refactoringhq/tolaria" -}}
-url = "https://github.com/refactoringhq/tolaria/archive/refs/tags/# {{ .TagName }}.tar.gz"
-# {{ end -}}
-stripComponents = 1
-include = ["*/mcp-server/**", "*/src", "*/src/utils", "*/src/utils/typeInstanceDefaults.mjs"]
-refreshPeriod = "168h"

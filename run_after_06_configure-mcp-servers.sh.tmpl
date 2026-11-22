@@ -57,15 +57,12 @@ prune_mcps() {
 	done <<<"$names"
 }
 
-tolaria_node=
-tolaria_vault_path=
 # {{ if eq .chezmoi.os "darwin" -}}
-tolaria_node="$HOME/.local/share/mise/shims/node"
-# {{ else if eq .chezmoi.hostname "box" -}}
-tolaria_node=node
-tolaria_vault_path="$HOME/projects/personal/notes"
+bunx_shim="$HOME/.local/share/mise/shims/bunx"
+# {{ else -}}
+bunx_shim=bunx
 # {{ end -}}
-tolaria_server="$HOME/.local/share/tolaria-mcp/mcp-server/index.js"
+vault_path="$HOME/projects/personal/notes"
 
 for config_dir in "${XDG_CONFIG_HOME:-$HOME/.config}/claude" "${XDG_CONFIG_HOME:-$HOME/.config}/claude-hadl"; do
 	export CLAUDE_CONFIG_DIR="$config_dir"
@@ -78,15 +75,11 @@ for config_dir in "${XDG_CONFIG_HOME:-$HOME/.config}/claude" "${XDG_CONFIG_HOME:
 		warn 'cannot add Claude MCP server fff; fff-mcp is not installed'
 	fi
 
-	if [[ -n "$tolaria_node" ]]; then
-		if tolaria_bin="$(command -v "$tolaria_node")"; then
-			add_mcp tolaria "$(jq -n --arg command "$tolaria_bin" --arg server "$tolaria_server" \
-				--arg vault "$tolaria_vault_path" \
-				'{type: "stdio", command: $command, args: [$server],
-					env: ({WS_UI_PORT: "9711"} + (if $vault == "" then {} else {VAULT_PATH: $vault} end))}')"
-		else
-			warn "cannot add Claude MCP server tolaria; $tolaria_node is not installed"
-		fi
+	if bunx_bin="$(command -v "$bunx_shim")"; then
+		add_mcp mcpvault "$(jq -n --arg command "$bunx_bin" --arg vault "$vault_path" \
+			'{type: "stdio", command: $command, args: ["@bitbonsai/mcpvault@latest", $vault]}')"
+	else
+		warn 'cannot add Claude MCP server mcpvault; bunx is not installed'
 	fi
 
 	prune_mcps

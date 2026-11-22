@@ -41,3 +41,6 @@
 .config/pi/extensions/herdr-agent-state.ts
 projects/work/.gitconfig
 .config/amp/plugins/twig-worktree.ts
+.local/share/tolaria-mcp
+.agents/skills/journaling
+Library/Application Support/com.tolaria.app
