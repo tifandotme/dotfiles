@@ -1,0 +1,29 @@
+# {{ if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+# chezmoi:template:left-delimiter="# {{" right-delimiter=}}
+
+# Claude Desktop rewrites its config with app state, so only merge the
+# mcpvault entry into mcpServers and leave every other key alone.
+set -Eeuo pipefail
+
+config="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
+bunx_bin="$HOME/.local/share/mise/shims/bunx"
+vault="$HOME/projects/personal/notes"
+
+if [[ ! -f "$config" ]] || ! command -v jq >/dev/null 2>&1; then
+	exit 0
+fi
+
+want="$(jq -n --arg command "$bunx_bin" --arg vault "$vault" \
+	'{command: $command, args: ["@bitbonsai/mcpvault@latest", $vault]}')"
+
+if jq -e --argjson want "$want" '.mcpServers.mcpvault == $want' "$config" >/dev/null 2>&1; then
+	exit 0
+fi
+
+tmp="$(mktemp "$config.XXXXXXXX")"
+trap 'rm -f "$tmp"' EXIT
+jq --argjson want "$want" '.mcpServers.mcpvault = $want' "$config" >"$tmp"
+mv "$tmp" "$config"
+printf '%s\n' 'Updated Claude Desktop mcpvault MCP entry; restart Claude Desktop to apply'
+# {{- end }}
