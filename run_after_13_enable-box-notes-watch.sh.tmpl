@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# chezmoi:template:left-delimiter="# {{" right-delimiter="}}"
+# {{ if eq .chezmoi.hostname "box" -}}
+set -Eeuo pipefail
+
+systemctl --user daemon-reload
+systemctl --user restart notes-drive-sync.timer
+systemctl --user enable --now notes-drive-watch.service
+# {{ end -}}

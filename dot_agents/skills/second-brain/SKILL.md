@@ -14,7 +14,7 @@ Markdown syntax comes from the `obsidian-markdown` and `obsidian-bases` skills. 
 
 ## Sync
 
-Drive for desktop syncs the MacBook; `rclone bisync` runs on box every 5 minutes (`notes-drive-sync.timer`). Edit a given note on one machine at a time, because bisync writes conflict copies. Before a bulk delete of over 50% of the files, stop the timer on box and run one manual bisync with `--max-delete 100` (a percentage).
+Drive for desktop syncs the MacBook; `rclone bisync` runs on box 3 s after the last local edit (`notes-drive-watch.service`) and every minute (`notes-drive-sync.timer`), which also pulls MacBook edits. Edit a given note on one machine at a time, because bisync writes conflict copies. Before a bulk delete of over 50% of the files, stop the timer on box and run one manual bisync with `--max-delete 100` (a percentage).
 
 ## Layout
 

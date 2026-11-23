@@ -1,0 +1,11 @@
+[Unit]
+Description=Sync notes to Google Drive after local edits
+
+[Service]
+Environment=PATH=/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=%h/.local/bin/notes-drive-watch
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

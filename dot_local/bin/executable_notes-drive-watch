@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Starts notes-drive-sync.service once the notes vault has been quiet for $quiet seconds.
+set -Eeuo pipefail
+
+dir="$HOME/projects/personal/notes"
+quiet=3
+# shellcheck disable=SC2054 # the commas are inotifywait event syntax
+watch=(-r -q -e close_write,create,delete,move
+	--exclude '(^|/)(\.git|\.tmp\.drive(download|upload))(/|$)|\.DS_Store$' "$dir")
+
+while true; do
+	inotifywait "${watch[@]}" >/dev/null
+	# inotifywait exits 2 when no event arrived within the quiet period.
+	while inotifywait -t "$quiet" "${watch[@]}" >/dev/null; do :; done
+	systemctl --user start notes-drive-sync.service || true
+done
