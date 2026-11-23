@@ -1,0 +1,87 @@
+#!/usr/bin/env bun
+//MISE description="Copy X cookies from Helium into ~/.secrets for bird, then sync box"
+//MISE dir="{{cwd}}"
+//MISE raw=true
+//MISE quiet=true
+//USAGE flag "--no-sync" help="Update ~/.secrets only; skip commit, push and the box update"
+
+import { createDecipheriv, pbkdf2Sync } from "node:crypto";
+import { chmodSync, readFileSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
+import { $ } from "bun";
+import { Database } from "bun:sqlite";
+
+const COOKIES = { auth_token: "AUTH_TOKEN", ct0: "CT0" } as const;
+const SECRETS = join(homedir(), ".secrets");
+const SECRETS_SOURCE = "encrypted_private_dot_secrets.age";
+
+// Same Helium profile and keychain item as `mise run gh image extract-token`.
+function readCookies(): Record<string, string> {
+  const key = Bun.spawnSync(["security", "find-generic-password", "-a", "Helium", "-s", "Helium Storage Key", "-w"]);
+  if (key.exitCode !== 0) throw new Error("Cannot read Helium Storage Key");
+  const derived = pbkdf2Sync(key.stdout.toString().trim(), "saltysalt", 1003, 16, "sha1");
+  const db = new Database(join(homedir(), "Library/Application Support/net.imput.helium/Profile 1/Cookies"), {
+    readonly: true,
+  });
+  const found: Record<string, string> = {};
+  try {
+    for (const name of Object.keys(COOKIES)) {
+      const row = db
+        .query<{ encrypted_value: Uint8Array }, [string]>(
+          `select encrypted_value from cookies
+           where name = ? and host_key in ('.x.com', 'x.com', '.twitter.com')
+           order by last_update_utc desc limit 1`,
+        )
+        .get(name);
+      if (!row) throw new Error(`Helium has no x.com ${name} cookie; log in to x.com in Helium first`);
+      const decipher = createDecipheriv("aes-128-cbc", derived, Buffer.alloc(16, 0x20));
+      const value = Buffer.concat([decipher.update(row.encrypted_value.subarray(3)), decipher.final()]).subarray(32);
+      if (!value.length || !value.every((byte) => byte >= 32 && byte < 127)) throw new Error(`Invalid ${name} cookie`);
+      found[name] = value.toString();
+    }
+  } finally {
+    db.close();
+  }
+  return found;
+}
+
+function updateSecrets(values: Record<string, string>): boolean {
+  const original = readFileSync(SECRETS, "utf8");
+  let text = original;
+  for (const [cookie, variable] of Object.entries(COOKIES)) {
+    const line = `export ${variable}=${values[cookie]}`;
+    const pattern = new RegExp(`^export ${variable}=.*$`, "m");
+    text = pattern.test(text) ? text.replace(pattern, line) : `${text.replace(/\n*$/, "\n")}\n${line}\n`;
+  }
+  if (text === original) return false;
+  writeFileSync(SECRETS, text);
+  chmodSync(SECRETS, 0o600);
+  return true;
+}
+
+try {
+  if (process.platform !== "darwin") throw new Error("Run this on the Mac; box has no logged-in browser");
+  const changed = updateSecrets(readCookies());
+  if (!changed) {
+    console.error("X cookies already up to date");
+  } else {
+    await $`chezmoi re-add ${SECRETS}`;
+    console.error("Updated ~/.secrets");
+  }
+
+  if (!Bun.argv.includes("--no-sync") && Bun.env.usage_no_sync !== "true") {
+    const source = (await $`chezmoi source-path`.text()).trim();
+    if (changed) {
+      await $`git -C ${source} add ${SECRETS_SOURCE}`;
+      await $`git -C ${source} commit -m "chore: refresh x cookies" -- ${SECRETS_SOURCE}`;
+      await $`git -C ${source} push`;
+    }
+    // Idempotent: also catches a box that missed an earlier push.
+    await $`ssh eddies@box-tailnet zsh -lc "chezmoi update --force"`;
+    console.error("box is up to date");
+  }
+} catch (error) {
+  console.error(error instanceof Error ? error.message : error);
+  process.exitCode = 1;
+}
