@@ -22,6 +22,16 @@ Hadl.ai builds AI products and expert-labelled data for aquaculture and other ph
 - If credentials are missing, run `mise -C ~/projects/work run gcloud-login`.
 - If gcloud reports `Reauthentication failed`, run `mise -C ~/projects/work run gcloud-auth-check`, which reauthenticates on its own. Never read `~/.secrets` or type the password yourself.
 
+## Windmill
+
+- Use the Hadl Windmill token in `~/.config/windmill-hadl/windmill/remotes.ndjson` (instance `windmill.hadl.ai`, workspace `staging`). `mise.toml` sets `WMILL_CONFIG_DIR` to this directory.
+- The default `~/.config/windmill` is a personal instance (`windmill.tifan.me`) with no Hadl scripts. Never print the token.
+
+## BigQuery
+
+- The warehouse is in project `hadl-staging`. Always pass `--location=asia-southeast1`. Datasets: `marts`, `raw_internal_db`, `staging`, `intermediate`.
+- `hadl-production` has no BigQuery datasets.
+
 ## Amp links
 
 - PRs, Linear issues/documents, Slack messages must not mention or include Amp artifacts, thread URLs, or other `ampcode.com` links. The team cannot open them; the user is the only active Amp user.
