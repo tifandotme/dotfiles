@@ -24,6 +24,7 @@ docs/
 08_install-borders-native.sh
 09_load-borders-native.sh
 10_load-amp-runners.sh
+10_load-bird-refresh.sh
 work/
 personal/
 .zprofile

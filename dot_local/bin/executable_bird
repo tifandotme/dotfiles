@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# Wraps the real bird CLI. On an X auth failure it refreshes the cookies once
+# (see `mise run bird:refresh`) and retries. On box, the Mac does the refresh.
+set -Eeuo pipefail
+
+readonly LABEL="com.tifan.bird-refresh"
+readonly AUTH_FAILURE='HTTP 401|Could not authenticate|Missing required credentials'
+
+self="$(realpath "$0")"
+real=""
+IFS=: read -ra dirs <<<"$PATH"
+for dir in "${dirs[@]}"; do
+	candidate="${dir:-.}/bird"
+	if [[ -x "$candidate" && "$(realpath "$candidate")" != "$self" ]]; then
+		real="$candidate"
+		break
+	fi
+done
+[[ -n "$real" ]] || {
+	printf 'bird: cannot find the real bird executable\n' >&2
+	exit 1
+}
+
+# Mac (GUI session): run the task directly. Over ssh the keychain is locked,
+# and box has no browser, so both ask the Mac's LaunchAgent instead.
+refresh() {
+	if [[ "$(uname)" == Darwin && -z "${SSH_CONNECTION:-}" ]]; then
+		mise run --quiet --raw bird:refresh
+		return
+	fi
+	local remote=(bash -c)
+	[[ "$(uname)" == Darwin ]] || remote=(ssh -o BatchMode=yes -o ConnectTimeout=10 macbook)
+	"${remote[@]}" "
+		uid=\$(id -u)
+		/bin/launchctl kickstart gui/\$uid/$LABEL || exit 1
+		sleep 1
+		for _ in \$(seq 120); do
+			state=\$(/bin/launchctl print gui/\$uid/$LABEL)
+			grep -q 'state = running' <<<\"\$state\" || break
+			sleep 1
+		done
+		grep -q 'last exit code = 0' <<<\"\$state\"
+	" || return 1
+	if [[ "$(uname)" != Darwin ]]; then
+		git -C "$HOME/.local/share/chezmoi" pull --ff-only
+		chezmoi apply --force "$HOME/.secrets"
+	fi
+}
+
+errors="$(mktemp)"
+trap 'rm -f "$errors"' EXIT
+
+status=0
+"$real" "$@" 2> >(tee "$errors" >&2) || status=$?
+wait
+
+if ((status != 0)) && grep -Eq "$AUTH_FAILURE" "$errors"; then
+	printf 'bird: X auth failed, refreshing cookies\n' >&2
+	if refresh; then
+		set -a
+		# shellcheck source=/dev/null
+		. "$HOME/.secrets"
+		set +a
+		status=0
+		"$real" "$@" 2> >(tee "$errors" >&2) || status=$?
+		wait
+		if ((status != 0)) && grep -Eq "$AUTH_FAILURE" "$errors"; then
+			refresh=failed
+		fi
+	else
+		refresh=failed
+	fi
+	if [[ "${refresh:-}" == failed ]]; then
+		printf 'bird: still not authenticated. Log in to x.com in Helium on the Mac, then run: mise run bird:refresh\n' >&2
+	fi
+fi
+exit "$status"

@@ -4,6 +4,7 @@
 //MISE raw=true
 //MISE quiet=true
 //USAGE flag "--no-sync" help="Update ~/.secrets only; skip commit, push and the box update"
+//USAGE flag "--no-box" help="Commit and push, but skip the box update (box pulls it itself)"
 
 import { createDecipheriv, pbkdf2Sync } from "node:crypto";
 import { chmodSync, readFileSync, writeFileSync } from "node:fs";
@@ -75,11 +76,14 @@ try {
     if (changed) {
       await $`git -C ${source} add ${SECRETS_SOURCE}`;
       await $`git -C ${source} commit -m "chore: refresh x cookies" -- ${SECRETS_SOURCE}`;
+      await $`git -C ${source} pull --ff-only`;
       await $`git -C ${source} push`;
     }
-    // Idempotent: also catches a box that missed an earlier push.
-    await $`ssh eddies@box-tailnet zsh -lc "chezmoi update --force"`;
-    console.error("box is up to date");
+    if (!Bun.argv.includes("--no-box") && Bun.env.usage_no_box !== "true") {
+      // Idempotent: also catches a box that missed an earlier push.
+      await $`ssh eddies@box-tailnet zsh -lc ${`git -C ~/.local/share/chezmoi pull --ff-only && chezmoi apply --force ~/.secrets`}`;
+      console.error("box is up to date");
+    }
   }
 } catch (error) {
   console.error(error instanceof Error ? error.message : error);
