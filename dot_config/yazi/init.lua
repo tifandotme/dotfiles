@@ -3,7 +3,7 @@ require("starship"):setup()
 -- Starship only runs locally, so over SFTP show the sftp://host/path instead.
 Header:children_add(function()
   local cwd = cx.active.current.cwd
-  if cwd.scheme and cwd.scheme.is_virtual then
+  if not cwd.spec.is_regular and not cwd.spec.is_search then
     return ui.Line { ui.Span(tostring(cwd)):fg("blue"), ui.Span(" ") }
   end
   return ""
