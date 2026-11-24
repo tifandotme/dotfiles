@@ -4,6 +4,7 @@ README.md
 key.txt.age
 mise-tasks/
 scripts/
+ship-prompts/
 
 **/node_modules
 .config/pi/extensions/tsconfig.json

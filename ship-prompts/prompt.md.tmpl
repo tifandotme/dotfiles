@@ -1,0 +1,10 @@
+{{- /* One repo's Ship prompt. A step is a block name under steps/ or {"text": "..."} for a step only that repo has. */ -}}
+{{- if get . "file" -}}
+{{ include .file | trim }}
+{{- else -}}
+Ship this thread's changes to {{ .repo }} through a PR, keeping any intentional stack{{ with get . "stack" }} ({{ . }}){{ end }}. Load the pr skill.
+{{ $r := . -}}
+{{ range $i, $s := .steps }}
+{{ add1 $i }}. {{ if kindIs "map" $s }}{{ $s.text }}{{ else }}{{ includeTemplate (printf "ship-prompts/steps/%s.md.tmpl" $s) $r | trim }}{{ end }}
+{{- end }}
+{{- end }}

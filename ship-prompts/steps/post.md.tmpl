@@ -1,0 +1,1 @@
+Leave {{ .post.leave }} to me, along with moving Linear issues to Done.{{ with get .post "note" }} {{ . }}{{ end }} Report {{ join ", " (get .post "report" | default (list "the PR URL" "merge commit" "final check status")) }}, and the post-merge steps I need to run{{ get .post "then" }}.

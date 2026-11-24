@@ -1,0 +1,87 @@
+{
+  "repos": [
+    {
+      "repo": "tifandotme/dotfiles",
+      "project": "tifan/dotfiles",
+      "file": "ship-prompts/dotfiles.md"
+    },
+    {
+      "repo": "hadl-labs/haul",
+      "project": "tifan-hadl/haul",
+      "stack": "`gh stack`",
+      "conventionalTitle": true,
+      "strict": false,
+      "steps": ["commit", "push", "feedback", "update", "approval", "merge", "stop", "post"],
+      "post": {
+        "leave": "deploys, workflow dispatches, and EAS builds or updates",
+        "then": ", such as the API deploy with the new `api-v*` tag or an OTA update for the merge commit. Say if the merge changed `apps/mobile/app.json`, which starts the native APK build on its own"
+      }
+    },
+    {
+      "repo": "hadl-labs/backoffice-windmill",
+      "project": "tifan-hadl/backoffice-windmill",
+      "strict": true,
+      "steps": [
+        "commit",
+        "push",
+        "feedback",
+        "update",
+        "approval",
+        "merge",
+        { "text": "If `sync-gate` is blocked by an open `chore/wmill-staging-sync` PR, report it and wait; leave that PR untouched." },
+        "stop",
+        "post"
+      ],
+      "post": {
+        "leave": "deploys, workflow dispatches, and Windmill jobs such as dbt refreshes",
+        "note": "The merge triggers the staging deploy."
+      }
+    },
+    {
+      "repo": "hadl-labs/aquasense-app",
+      "project": "tifan-hadl/aquasense-app",
+      "pushNotes": "Labels set the release version: add `patch` for a fix, no label for a feature (minor), and ask me before adding `major`.",
+      "strict": false,
+      "steps": ["commit", "push", "feedback", "update", "approval", "merge", "stop", "post"],
+      "post": {
+        "leave": "builds, rollouts, and reverts",
+        "then": ", such as the staging build"
+      }
+    },
+    {
+      "repo": "hadl-labs/core-service",
+      "project": "tifan-hadl/core-service",
+      "conventionalTitle": true,
+      "strict": true,
+      "steps": ["commit", "push", "feedback", "update", "approval", "merge", "stop", "post"],
+      "post": {
+        "leave": "deploys, workflow dispatches, and pushes to `production`",
+        "note": "The merge tags a release and deploys staging without migrations.",
+        "report": ["the PR URL", "merge commit", "release tag", "final check status"],
+        "then": ": `Deploy Staging` with `migrate` when the PR adds a migration, and `Deploy Production` with the tag"
+      }
+    },
+    {
+      "repo": "hadl-labs/gcp-terraform",
+      "approvalNote": "`main` requires approval after the last push from someone other than me",
+      "stopAlso": "a plan destroys, replaces, or changes a resource the PR did not mean to touch",
+      "steps": [
+        "commit",
+        "push",
+        "feedback",
+        { "text": "Read every plan on the head commit (Staging, Prod, BetterStack, PostHog) and check that each changes only what the PR intends." },
+        { "text": "Keep the branch *current*: free of conflicts with `main` (or its stack parent), and not behind it right before merging, so the plans run against current `main`. Update with `gh pr update-branch` or by merging `origin/main` into the branch and pushing. Resolve mechanical conflicts yourself, then read the new plans again." },
+        "approval",
+        "merge",
+        { "text": "Merging applies Terraform: the Apply workflow for each touched environment runs on merge with no manual gate. After the merge, wait for the apply runs and report each result. They run on the PR's head commit, not the merge commit, so `gh run list --branch <PR branch>` finds them. If one fails, report it and stop there; leave reruns and local applies to me." },
+        "stop",
+        "post"
+      ],
+      "post": {
+        "leave": "`terraform apply`, workflow dispatches, and console changes",
+        "report": ["the PR URL", "merge commit", "final check status", "apply results"],
+        "then": ", such as a local plan and apply of `environments/github`, which has no CI apply"
+      }
+    }
+  ]
+}

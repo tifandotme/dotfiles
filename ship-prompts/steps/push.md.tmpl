@@ -1,0 +1,3 @@
+Push and open or update the PR against `main` (or its stack parent).
+{{- if get . "conventionalTitle" }} The squash commit takes the PR title and semantic-release reads it, so write the title as a Conventional Commit.{{ end }}
+{{- with get . "pushNotes" }} {{ . }}{{ end }} While waiting on CI or review, end your turn; the subscriptions wake you.

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+#MISE description="Render ship prompts into the notes vault; --push also sets each Amp project's Custom Ship prompt"
+#USAGE flag "--push" help="Set the Custom Ship prompt on each project in repos.json that the active Amp account owns; run once per account"
+set -euo pipefail
+cd "$(dirname "$0")/../.."
+
+note="$HOME/projects/personal/notes/reference/ship-prompt.md"
+chezmoi execute-template <ship-prompts/note.md.tmpl >"$note"
+echo "Wrote $note"
+
+[[ ${usage_push:-false} == true ]] || exit 0
+
+# AMP_API_KEY depends on mise hooks and ~/.secrets, so ask Amp which account is active.
+projects=$(amp projects list | awk 'NR > 1 { print $1 }')
+account=$(cut -d/ -f1 <<<"$projects" | sort -u | paste -sd, -)
+echo "Amp account namespaces: ${account:-none}"
+
+push=()
+i=0
+while IFS=$'\t' read -r repo project; do
+	if [[ -z $project ]]; then
+		echo "Skip $repo: no Amp project in repos.json"
+	elif grep -qxF "$project" <<<"$projects"; then
+		push+=("$i:$project")
+	else
+		echo "Skip $repo: $project is not in this account"
+	fi
+	i=$((i + 1))
+done < <(jq -r '.repos[] | [.repo, .project // ""] | @tsv' ship-prompts/repos.json)
+
+if ((${#push[@]} == 0)); then
+	echo "Nothing to push for this account" >&2
+	exit 1
+fi
+
+prompt=$(mktemp)
+trap 'rm -f "$prompt"' EXIT
+for entry in "${push[@]}"; do
+	index=${entry%%:*}
+	project=${entry#*:}
+	chezmoi execute-template "{{ includeTemplate \"ship-prompts/prompt.md.tmpl\" (index (include \"ship-prompts/repos.json\" | fromJson).repos $index) | trim }}" >"$prompt"
+	amp projects update "$project" --ship-behavior custom --custom-ship-prompt-file "$prompt" >/dev/null
+	echo "Pushed $project ($(wc -l <"$prompt" | tr -d ' ') lines, $(git hash-object "$prompt" | cut -c1-8))"
+done

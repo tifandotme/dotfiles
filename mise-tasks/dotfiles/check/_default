@@ -46,6 +46,7 @@ step 'JSON files' check_json
 step 'Amp task profile selection' bash scripts/check-agent-tasks.sh
 step 'Amp runner restart' bash scripts/test-amp-runner-restart.sh
 step 'Storage cleanup safety' bun scripts/test-storage-cleanup.ts
+step 'Ship prompts render' bash -c 'chezmoi execute-template <ship-prompts/note.md.tmpl >/dev/null'
 step 'Mise task references' mise run dotfiles:check:task-refs
 # --force: a drifted target must not open a TTY prompt, which agents cannot answer.
 step 'chezmoi apply --dry-run' chezmoi apply --dry-run --force

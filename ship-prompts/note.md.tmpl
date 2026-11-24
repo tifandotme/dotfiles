@@ -1,0 +1,13 @@
+---
+type: Note
+_width: normal
+---
+
+# Ship prompt
+{{ range (include "ship-prompts/repos.json" | fromJson).repos }}
+## `{{ .repo }}`
+
+```
+{{ includeTemplate "ship-prompts/prompt.md.tmpl" . | trim }}
+```
+{{ end -}}

@@ -1,0 +1,5 @@
+{{ if .strict -}}
+Keep the branch *current*: not behind `main` (or its stack parent). Update-branch is disabled, so merge `origin/main` into the branch and push. Resolve mechanical conflicts yourself.
+{{- else -}}
+Keep the branch *current*: free of conflicts with `main` (or its stack parent). `main` accepts a branch that is only behind, so update on conflict only, with `gh pr update-branch` or by merging `origin/main` into the branch and pushing. Resolve mechanical conflicts yourself.
+{{- end }}
