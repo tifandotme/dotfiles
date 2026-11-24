@@ -63,6 +63,7 @@
     },
     {
       "repo": "hadl-labs/gcp-terraform",
+      "project": "tifan-hadl/gcp-terraform",
       "approvalNote": "`main` requires approval after the last push from someone other than me",
       "stopAlso": "a plan destroys, replaces, or changes a resource the PR did not mean to touch",
       "steps": [
