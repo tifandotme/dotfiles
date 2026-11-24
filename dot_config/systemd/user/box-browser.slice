@@ -1,0 +1,6 @@
+[Unit]
+Description=Shared memory budget for Box browser sessions
+
+[Slice]
+MemoryMax=1G
+MemorySwapMax=0

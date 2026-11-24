@@ -57,6 +57,7 @@ Library/LaunchAgents/**
 .inputrc
 .config/rclone/**
 .config/systemd
+.local/bin/agent-browser
 05_configure-agent-browser-sandbox.sh
 08_set-box-login-shell.sh
 09_enable-box-agents-autostart.sh

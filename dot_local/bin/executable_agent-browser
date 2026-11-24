@@ -1,0 +1,132 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+browser=${BUN_INSTALL:-${XDG_DATA_HOME:-$HOME/.local/share}/bun}/install/global/node_modules/.bin/agent-browser
+slice=box-browser.slice
+
+fail() {
+	printf 'agent-browser: %s\n' "$1" >&2
+	exit 1
+}
+
+[[ -x $browser ]] || fail "Bun executable not found: $browser"
+
+# Pass session-selection flags to the CLI's own config resolver. Preserve the
+# original arguments for the real command, including flags after the command.
+selector=()
+command=
+close_all=false
+args=("$@")
+for ((i = 0; i < $#; i++)); do
+	case ${args[i]} in
+	--help | -h | --version | -V) exec "$browser" "$@" ;;
+	--session | --namespace | --config)
+		((i + 1 < $#)) || fail "${args[i]} requires a value"
+		selector+=("${args[i]}" "${args[i + 1]}")
+		i=$((i + 1))
+		;;
+	--idle-timeout | --args | --state | --profile | --provider | --cdp | --proxy | --proxy-bypass | --executable-path | --headers | --cdp-headers | --user-agent | -p | --device | --extension | --init-script | --enable | --session-name | --color-scheme | --download-path | --max-output | --allowed-domains | --action-policy | --confirm-actions | --engine | --input-mode | --screenshot-dir | --screenshot-quality | --screenshot-format | --restore-save | --restore-check-url | --restore-check-text | --restore-check-fn | --ca-cert | --model)
+		i=$((i + 1))
+		;;
+	--all) close_all=true ;;
+	-* | true | false) ;;
+	*) [[ -n $command ]] || command=${args[i]} ;;
+	esac
+done
+case $command in
+'' | help | skills | session | install) exec "$browser" "$@" ;;
+close | quit | exit) [[ $close_all == false ]] || fail 'close --all is not supported; close the named session instead' ;;
+esac
+
+runtime=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/box-browser
+(
+	umask 077
+	mkdir -p -- "$runtime"
+)
+exec 9>"$runtime/lock"
+
+oom_count() {
+	awk '$1 == "oom_kill" {print $2}' "$cg/memory.events"
+}
+
+in_slice() {
+	[[ $1 =~ ^[0-9]+$ ]] && grep -Fq "0::$group/" "/proc/$1/cgroup" 2>/dev/null
+}
+
+deadline=$((SECONDS + 30))
+while :; do
+	remaining=$((deadline - SECONDS))
+	if ((remaining <= 0)) || ! flock -w "$remaining" 9; then
+		fail 'browser busy after 30s; wait for the active session to close'
+	fi
+
+	# Re-read after acquiring the lock: another command can stop the slice
+	# while this one is waiting to take the slot.
+	systemctl --user start "$slice"
+	group=$(systemctl --user show "$slice" --property=ControlGroup --value)
+	[[ -n $group ]] || fail 'could not locate the browser cgroup'
+	cg=/sys/fs/cgroup$group
+	read -r cap <"$cg/memory.max"
+	read -r swap <"$cg/memory.swap.max"
+	[[ $cap =~ ^[0-9]+$ && $cap -le 1073741824 && $swap == 0 ]] || fail 'browser memory limit is missing; not starting Chrome'
+
+	info=$("$browser" "${selector[@]}" --json session info 9>&-)
+	key=$(jq -ce 'select(.success) | .data | [.namespace // "", .session]' <<<"$info")
+	pid=$(jq -r '.data.pid // empty' <<<"$info")
+	# doctor starts an independent probe browser rather than using this session.
+	if [[ $command == doctor ]]; then
+		key=doctor
+		pid=
+	fi
+	owner='' owner_pid=''
+	if [[ -f $runtime/session ]]; then
+		{
+			IFS= read -r owner || true
+			IFS= read -r owner_pid || true
+		} <"$runtime/session"
+	fi
+	if (($(oom_count) > 0)); then
+		# A browser can hit the limit even when no command is in flight.
+		systemctl --user stop "$slice"
+		[[ $owner != "$key" ]] || fail 'browser ran out of memory; no automatic retry'
+		flock -u 9
+		continue
+	fi
+	empty=false
+	if grep -qx 'populated 0' "$cg/cgroup.events"; then
+		empty=true
+	elif ! in_slice "$owner_pid"; then
+		# The daemon can crash while its Chrome children remain in the slice.
+		systemctl --user stop "$slice"
+		flock -u 9
+		continue
+	fi
+	if [[ -n $pid ]]; then
+		if [[ -r /proc/$pid/cgroup ]] && ! in_slice "$pid"; then
+			fail 'this session is already running outside the memory limit; close it before using the shim'
+		fi
+	elif [[ $command == close || $command == quit || $command == exit ]]; then
+		exit 0
+	fi
+
+	if [[ $empty == true || $owner == "$key" ]]; then
+		printf '%s\n' "$key" >"$runtime/session"
+		status=0
+		# Headless Chrome otherwise uses the session bus to move itself into
+		# an uncapped desktop scope. Keep the real bus for systemd-run itself.
+		/usr/bin/systemd-run --user --scope --quiet --slice="$slice" -- \
+			env DBUS_SESSION_BUS_ADDRESS=unix:path=/dev/null \
+			"$browser" "$@" --idle-timeout 3m 9>&- || status=$?
+		if (($(oom_count) > 0)); then
+			# A renderer-only kill can leave the daemon alive. Free the slot
+			# only after all remaining browser processes have been stopped.
+			systemctl --user stop "$slice"
+			fail 'browser ran out of memory; no automatic retry'
+		fi
+		pid=$("$browser" "${selector[@]}" --json session info 9>&- | jq -r '.data.pid // empty') || pid=
+		printf '%s\n%s\n' "$key" "$pid" >"$runtime/session"
+		exit "$status"
+	fi
+	flock -u 9
+	sleep 0.2
+done
