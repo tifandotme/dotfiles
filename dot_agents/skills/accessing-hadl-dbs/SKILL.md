@@ -39,6 +39,10 @@ The task starts only tunnels whose local ports are not already listening. It use
 
 Entries on the same instance (for example `core_db_staging` and `aquasense_db_staging`) share one local port and tunnel.
 
+When finished, press Ctrl+C in the tunnel's terminal. If you started it in the background, send `kill -TERM <mise-pid>` using the PID saved from `$!`.
+
+If a tunnel you started still listens, run `lsof -nP -iTCP:<port> -sTCP:LISTEN` to find its SSH PID. Check `ps -p <ssh-pid> -o command=` for the matching `-L` forward, then list its children with `pgrep -P <ssh-pid> -fl start-iap-tunnel`. Send `kill -TERM` to the verified SSH PID and any matching proxy PIDs. Rerun `lsof` for that port to confirm it is free.
+
 When a `db:*` task reports that reauthentication is required, it runs `mise -C ~/projects/work run gcloud-reauth`. That task is defined in the work `mise.toml`, so `~/projects/work` must exist on the machine. To check the gcloud state, run `mise -C ~/projects/work run gcloud-auth-check`. Never read or type the password.
 
 Do not paste passwords, access tokens, or sensitive query results into chat unless the user explicitly asks.

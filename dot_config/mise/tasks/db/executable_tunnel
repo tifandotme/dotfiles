@@ -38,7 +38,17 @@ else
 	done < <(jq -r '.connections | keys[]' "$catalog")
 fi
 
+launcher=$PPID
 pids=()
+stop=0
+trap 'stop=130' INT
+trap 'stop=143' TERM
+trap '
+	for pid in ${pids[@]+"${pids[@]}"}; do
+		kill -TERM -- "-$pid" 2>/dev/null || :
+	done
+' EXIT
+
 for key in "${entries[@]}"; do
 	{
 		IFS=$'\t' read -r port instance project zone remote
@@ -57,19 +67,29 @@ for key in "${entries[@]}"; do
 		# Reauthenticate once up front; parallel gcloud children would each prompt.
 		db_access_token "$account" >/dev/null
 		authenticated=1
+		# Give each tunnel a process group so cleanup reaches SSH and its IAP proxy.
+		set -m
 	fi
 
+	if ((stop)); then exit "$stop"; fi
 	echo "localhost:$port ($key)" >&2
 	gcloud --account="$account" compute ssh "$instance" \
 		--project "$project" \
 		--zone "$zone" \
 		--tunnel-through-iap \
-		-- -L "$port:$remote" -N &
+		-- -L "$port:$remote" -N </dev/null &
 	pids+=("$!")
 done
 
 status=0
 for pid in ${pids[@]+"${pids[@]}"}; do
+	# mise may exit on SIGTERM without forwarding it to this task.
+	while kill -0 "$pid" 2>/dev/null; do
+		if ((stop)); then exit "$stop"; fi
+		kill -0 "$launcher" 2>/dev/null || exit 143
+		sleep 0.2
+	done
 	wait "$pid" || status=1
 done
+if ((stop)); then exit "$stop"; fi
 exit "$status"
