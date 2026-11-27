@@ -6,6 +6,21 @@
       "file": "ship-prompts/dotfiles.md"
     },
     {
+      "repo": "tifandotme/box",
+      "project": "tifan/box",
+      "file": "ship-prompts/box.md"
+    },
+    {
+      "repo": "tifandotme/tifan.me",
+      "project": "tifan/tifan.me",
+      "file": "ship-prompts/tifan.me.md"
+    },
+    {
+      "repo": "tifandotme/resume",
+      "project": "tifan/resume",
+      "file": "ship-prompts/resume.md"
+    },
+    {
       "repo": "hadl-labs/haul",
       "project": "tifan-hadl/haul",
       "stack": "`gh stack`",
