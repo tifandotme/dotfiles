@@ -157,7 +157,23 @@ run = "move-node-to-workspace 2_dev_personal"
 
 [[on-window-detected]]
 if.app-id = "com.ampcode.amp.macos"
-run = "move-node-to-workspace 2_dev_personal"
+if.window-title-regex-substring = " — tifan-hadl$"
+run = "move-node-to-workspace 4_dev_work"
+
+[[on-window-detected]]
+if.app-id = "com.ampcode.amp.macos"
+run = [
+  "move-node-to-workspace 2_dev_personal",
+  # Amp can take more than a second to set the account suffix.
+  '''exec-and-forget
+    for attempt in 1 2 3 4 5; do
+      sleep 1
+      title=$(/opt/homebrew/bin/aerospace list-windows --workspace 2_dev_personal --app-bundle-id com.ampcode.amp.macos --format '%{window-id} %{window-title}' | grep "^${AEROSPACE_WINDOW_ID} ") || exit 0
+      case "$title" in
+        *' — tifan-hadl') exec /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$AEROSPACE_WINDOW_ID" 4_dev_work ;;
+      esac
+    done''',
+]
 
 [[on-window-detected]]
 if.app-id = "com.anthropic.claudefordesktop"

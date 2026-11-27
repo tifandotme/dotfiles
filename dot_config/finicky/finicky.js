@@ -9,6 +9,10 @@ export default {
   defaultBrowser: "/Applications/Helium.app",
   handlers: [
     {
+      match: () => finicky.getModifierKeys().option,
+      browser: "net.imput.helium.work",
+    },
+    {
       match: "*.hadl.ai*",
       browser: "net.imput.helium.work",
     },
