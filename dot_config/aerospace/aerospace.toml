@@ -34,7 +34,7 @@ outer.left = 7
 outer.right = 7
 
 [workspace-to-monitor-force-assignment]
-6_aux = "secondary"
+7_aux = "secondary"
 
 # All possible keys:
 # - Letters.        a, b, c, ..., z
@@ -75,35 +75,25 @@ alt-shift-0 = "balance-sizes"
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 # alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 cmd-backtick = "workspace 0_misc"
-cmd-1 = "workspace 1_personal"
-cmd-2 = "workspace 2_work"  # Helium Work profile
-cmd-3 = "workspace 3_dev"
-cmd-4 = "workspace 4_terminal"
-cmd-5 = "workspace 5_notes"
-cmd-6 = "workspace 6_aux"
-# corne (conflict, comment for now)
-# ctrl-a = 'workspace 1_personal'
-# ctrl-s = 'workspace 2_work' # Electron/Android Studio development, or else
-# ctrl-d = 'workspace 3_dev'
-# ctrl-f = 'workspace 4_terminal'
-# ctrl-g = 'workspace 5_notes'
+cmd-1 = "workspace 1_browser_personal"
+cmd-2 = "workspace 2_dev_personal"
+cmd-3 = "workspace 3_browser_work"
+cmd-4 = "workspace 4_dev_work"
+cmd-5 = "workspace 5_terminal"
+cmd-6 = "workspace 6_notes"
+cmd-7 = "workspace 7_aux"
 # alt-w = [
 #     'workspace W',
 #     'layout accordion horizontal',
 # ] # (W)eb browser (Chromium)
 cmd-shift-backtick = ["move-node-to-workspace 0_misc", "workspace 0_misc"]
-cmd-shift-1 = ["move-node-to-workspace 1_personal", "workspace 1_personal"]
-cmd-shift-2 = ["move-node-to-workspace 2_work", "workspace 2_work"]
-cmd-shift-3 = ["move-node-to-workspace 3_dev", "workspace 3_dev"]
-cmd-shift-4 = ["move-node-to-workspace 4_terminal", "workspace 4_terminal"]
-cmd-shift-5 = ["move-node-to-workspace 5_notes", "workspace 5_notes"]
-cmd-shift-6 = ["move-node-to-workspace 6_aux", "workspace 6_aux"]
-# corne (nah, confict)
-# ctrl-shift-a = ['move-node-to-workspace 1_personal', 'workspace 1_personal']
-# ctrl-shift-s = ['move-node-to-workspace 2_projects', 'workspace 2_projects']
-# ctrl-shift-d = ['move-node-to-workspace 3_dev', 'workspace 3_dev']
-# ctrl-shift-f = ['move-node-to-workspace 4_terminal', 'workspace 4_terminal']
-# ctrl-shift-g = ['move-node-to-workspace 5_notes', 'workspace 5_notes']
+cmd-shift-1 = ["move-node-to-workspace 1_browser_personal", "workspace 1_browser_personal"]
+cmd-shift-2 = ["move-node-to-workspace 2_dev_personal", "workspace 2_dev_personal"]
+cmd-shift-3 = ["move-node-to-workspace 3_browser_work", "workspace 3_browser_work"]
+cmd-shift-4 = ["move-node-to-workspace 4_dev_work", "workspace 4_dev_work"]
+cmd-shift-5 = ["move-node-to-workspace 5_terminal", "workspace 5_terminal"]
+cmd-shift-6 = ["move-node-to-workspace 6_notes", "workspace 6_notes"]
+cmd-shift-7 = ["move-node-to-workspace 7_aux", "workspace 7_aux"]
 # Change modes
 cmd-shift-semicolon = [
   "mode service",
@@ -142,76 +132,76 @@ enter = ["mode main", "exec-and-forget sketchybar --trigger hide_message"]
 
 # ------------------------------------------------------------------------------
 
-# Move to 1_personal workspace
+# Personal browser
 [[on-window-detected]]
 if.app-id = "net.imput.helium"
-run = ["move-node-to-workspace 1_personal", "layout tiling"]
+run = ["move-node-to-workspace 1_browser_personal", "layout tiling"]
 
-# Move to 2_work workspace
+# Work browser
 [[on-window-detected]]
 if.app-id = "net.imput.helium.work"
-run = ["move-node-to-workspace 2_work", "layout tiling"]
+run = ["move-node-to-workspace 3_browser_work", "layout tiling"]
 
-# Move to 3_dev workspace
+# Default development workspace for apps without a dedicated work app ID
 [[on-window-detected]]
 if.app-id = "com.github.Electron"
-run = "move-node-to-workspace 3_dev"
+run = "move-node-to-workspace 2_dev_personal"
 
 [[on-window-detected]]
 if.app-id = "com.microsoft.VSCode"
-run = "move-node-to-workspace 3_dev"
+run = "move-node-to-workspace 2_dev_personal"
 
 [[on-window-detected]]
 if.app-id = "com.todesktop.230313mzl4w4u92"  # Cursor
-run = "move-node-to-workspace 3_dev"
+run = "move-node-to-workspace 2_dev_personal"
 
 [[on-window-detected]]
 if.app-id = "com.ampcode.amp.macos"
-run = "move-node-to-workspace 3_dev"
+run = "move-node-to-workspace 2_dev_personal"
 
 [[on-window-detected]]
 if.app-id = "com.anthropic.claudefordesktop"
-run = "move-node-to-workspace 3_dev"
+run = "move-node-to-workspace 2_dev_personal"
 
 [[on-window-detected]]
 if.app-id = "com.anthropic.claudefordesktop.hadl"
-run = "move-node-to-workspace 3_dev"
+run = "move-node-to-workspace 4_dev_work"
 
 # Database clients
 [[on-window-detected]]
 if.app-id = "org.RedisLabs.RedisInsight-V2"
-run = "move-node-to-workspace 3_dev"
+run = "move-node-to-workspace 2_dev_personal"
 
 [[on-window-detected]]
 if.app-id = "com.tinyapp.TablePlus"
-run = "move-node-to-workspace 3_dev"
+run = "move-node-to-workspace 2_dev_personal"
 
-# Move to 4_terminal workspace
+# Terminal
 [[on-window-detected]]
 if.app-id = "com.mitchellh.ghostty"
-run = "move-node-to-workspace 4_terminal"
+run = "move-node-to-workspace 5_terminal"
 
 [[on-window-detected]]
 if.app-id = "com.superlogical.rex"
-run = "move-node-to-workspace 4_terminal"
+run = "move-node-to-workspace 5_terminal"
 
 [[on-window-detected]]
 if.app-id = "com.apple.Terminal"
-run = "move-node-to-workspace 4_terminal"
+run = "move-node-to-workspace 5_terminal"
 
-# Move to 5_notes workspace
+# Notes
 [[on-window-detected]]
 if.app-id = "md.obsidian"
-run = "move-node-to-workspace 5_notes"
+run = "move-node-to-workspace 6_notes"
 
-# Move to 6_aux workspace
+# Auxiliary display
 [[on-window-detected]]
 if.app-id = "net.dannote.open-pencil"
-run = "move-node-to-workspace 6_aux"
+run = "move-node-to-workspace 7_aux"
 
 [[on-window-detected]]
 if.app-id = "net.imput.helium.foragents"
-run = ["move-node-to-workspace 6_aux", "layout tiling"]
+run = ["move-node-to-workspace 7_aux", "layout tiling"]
 
 # Move to 0_misc workspace
 [[on-window-detected]]
